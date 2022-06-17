@@ -1,4 +1,4 @@
-# The HPC part
+# The Parallel computing part
 
 bla
 
