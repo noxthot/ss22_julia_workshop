@@ -1,4 +1,0 @@
-# The HPC part
-
-bla
-
