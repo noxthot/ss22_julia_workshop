@@ -54,3 +54,5 @@ Follow the instructions on [https://code.visualstudio.com/][https://code.visuals
 Follow the instructions on [VSCode Julia extension](https://www.julia-vscode.org/docs/dev/gettingstarted/#Installing-the-Julia-extension) to install and configure the extension. You find the basic instructions from above here as well.
 
 Please try the small test example from [here](https://www.julia-vscode.org/docs/dev/gettingstarted/#Creating-Your-First-Julia-Hello-World-program) to see if everything works. 
+
+\example{Please write something in `julia`}
