@@ -17,7 +17,7 @@ you will get a build folder with the html or pdf for LaTeX (not tried by now).
 We use [Franklin.jl](https://franklinjl.org) to generate the lecture material. To do so, simply activate the environment (in the subfolder `SS22_julia_workshop`), use Franklin and run the local server:
 ```
 activate .
-useing Franklin
+using Franklin
 serve()
 ```
 
