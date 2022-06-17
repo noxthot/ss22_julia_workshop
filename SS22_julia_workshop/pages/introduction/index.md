@@ -28,7 +28,7 @@ Now you can use all functionalities of the `FastGaussQuadrature` package wheneve
 ```julia:./exdot.jl
 using FastGaussQuadrature
 nv = 10
-v,w = gausslegendre(nv)
+v, w = gausslegendre(nv)
 ```
 You can print out your velocity grid by typing `v` in the Julia environment or by adding `println(v)`. 
 
@@ -37,15 +37,15 @@ You can print out your velocity grid by typing `v` in the Julia environment or b
 Now, to generate the spatial positions on which we want to evaluate the solution we can use the built-in `range` command
 ```julia:./exdot.jl
 nx = 101
-x = collect(range(0,1,nx))
+x = collect(range(0, 1; length=nx))
 ```
 The `range` command will generate $\operatorname{nx}$ values from 0 to 1. We use the `collect` command to store these values into a vector. Now we know how to use Julia packages and Julia built-in functions to generate our velocity and spatial grid. The next step is to set up our solution matrix $\bm{\psi}$. For this we can use the `zeros(n, m)` command, which generates a matrix with dimension $n\times m$ that has entries of zero everywhere. Hence, to create a matrix with dimension $\operatorname{nx} \times \operatorname{nv}$ type
 ```julia:./exdot.jl
-psi = zeros(nx,nv)
+psi = zeros(nx, nv)
 ```
 Now to access this matrix at spatial index $j$ and velocity index $i$, we can type `psi[j, i]`. Moreover, if we do not want to access a single index, but let's say indices $5$ to $10$ in the spatial domain at all indices in velocity, we can write `psi[5:10,:]`. Note that Julia uses indices starting at index $1$, not $0$. Now, put particles in the center of the domain having all possible velocities. That is,
 ```julia:./exdot.jl
-psi[50,:] = ones(nv)
+psi[50, :] = ones(nv)
 ```
 A next step would be to evolve these particles in time. This is done by solving an ordinary differential equation of the form
 $$  \bm{\dot \psi} = -\mathbf{D}^+\bm{\psi}\mathbf{V}^+ - \mathbf{D}^-\bm{\psi}\mathbf{V}^- + \bm{\psi}\mathbf{G}  \label{eq:ODE1} $$
@@ -55,25 +55,25 @@ $$  \bm{\dot \psi} = -\mathbf{D}^+\bm{\psi}\mathbf{V}^+ - \mathbf{D}^-\bm{\psi}\
 Here $\mathbf{D}^{\pm}$ are tridiagonal matrices. To setup tridiagonal matrices you need to load the `LinearAlgebra` package. You already know how to install this package and use it in your code. Then the tridiagonal matrices are defined as
 ```
 using LinearAlgebra
-dx = 1/(nx-1)
-DPlus = (1/dx)*Tridiagonal(-ones(nx-1),ones(nx),zeros(nx-1))
-DMinus = (1/dx)*Tridiagonal(zeros(nx-1),-ones(nx),ones(nx-1))
+dx = 1 / (nx - 1)
+DPlus = (1 / dx) * Tridiagonal(-ones(nx - 1), ones(nx), zeros(nx - 1))
+DMinus = (1 / dx) * Tridiagonal(zeros(nx - 1), -ones(nx), ones(nx - 1))
 ```
 The matrices $\mathbf{V}^{\pm}\in\mathbb{R}^{n_v\times n_v}$ are diagonal matrices, where $\mathbf{V}^-$ collects all negative velocities on the diagonal, i.e., $\mathbf{V}^- = \text{diag}(v_1,\cdots,v_{5},0,\cdots,0)$ and $\mathbf{V}^+$ collects all positive velocities, i.e., $\mathbf{V}^+ = \text{diag}(0,\cdots,0,v_{6},\cdots,v_{10})$. The command to create a diagonal matrix with diagonal $y$ is `Diagonal(y)`. You can append two vectors $a$ and $b$ by `[a; b]`. Set up $\mathbf{V}^{\pm}$. If you want to later change the number of velocity points you can work with the `ceil` and `floor` commands to determine the midpoint of your velocity vector by e.g. `Int(ceil(nv))`. This determines $\operatorname{ceil}{n_v}$ and then transforms the resuling floating point number to an integer.
 ```
-midMinus = Int(ceil(nv/2))
-midPlus = Int(floor(nv/2))
-VMinus = Diagonal([v[1:midMinus];zeros(midPlus)])
-VPlus = Diagonal([zeros(midMinus);v[(midPlus+1):end]])
+midMinus = Int(ceil(nv / 2))
+midPlus = Int(floor(nv / 2))
+VMinus = Diagonal([v[1:midMinus]; zeros(midPlus)])
+VPlus = Diagonal([zeros(midMinus); v[(midPlus + 1):end]])
 ```
 Lastly, the so called scattering matrix $\mathbf{G}$ is given as 
 ```
-G = ones(nv,nv).*w-I
+G = ones(nv, nv) .* w-I
 ```
 Now, to update your solution $\bm\psi$ from $t=0$ to $t = \Delta t$, we approximate the time derivative by $\bm{\dot \psi} \approx (\bm\psi_{\mathrm{new}}-\bm\psi)/\Delta t$. Hence, we then get
 ```
 dt = 0.01;
-psiNew = psi + dt*(-DPlus*psi*VPlus - DMinus*psi*VMinus + psi*G)
+psiNew = psi + dt * (-DPlus * psi * VPlus - DMinus * psi * VMinus + psi * G)
 ```
 You can already check how the solution has changed by inspecting psiNew in the center. You already know how this works. If you want you can interpret the physical process that you observe. 
 
@@ -82,16 +82,18 @@ You can already check how the solution has changed by inspecting psiNew in the c
 Now, we do not want to know the solution at $\Delta t$, but at $t_{\mathrm{end}}=1.0$. If we just choose $\Delta t=0.4$ our approximation of the time derivative is inaccurate. Therefore, we wish to repeat the update with $\Delta t = 0.01$ fourty times. For this we can use a for loop:
 ```
 nT = 40
-for n = 1:nT
-    psiNew = psi + dt*(-DPlus*psi*VPlus - DMinus*psi*VMinus + psi*G)
+
+for n=1:nT
+    psiNew = psi + dt * (-DPlus * psi * VPlus - DMinus * psi * VMinus + psi * G)
     psi .= psiNew
 end
 ```
 Note that we are using `.=` insead of `=` to copy values from `psiNew` to `psi`. This is a pointwise operation and we will discuss later how this works. Now, we are interested in plotting $\phi(t_{\mathrm{end}},x) := \int_{-1}^1 \psi(t_{\mathrm{end}},x,v)\, \mathrm{d}v$. On a numerical level, we can compute this via
 ```
 phi = zeros(nx)
-for j = 1:nx
-    phi = sum(psi[j,:].*w)
+
+for j=1:nx
+    phi = sum(psi[j, :] .* w)
 end
 ```
 
@@ -101,11 +103,11 @@ Luckily Julia can include the `PyPlot` package. Install and add it to your code.
 ```
 using PyPlot
 fig, ax = subplots()
-ax.plot(x,phi, "b-.", linewidth=2, label=L"\Phi", alpha=0.9)
-ax.legend(loc="upper left",fontsize=15)
-xlabel("x",fontsize=15)
+ax.plot(x, phi, "b-.", linewidth=2, label=L"\Phi", alpha=0.9)
+ax.legend(loc="upper left", fontsize=15)
+xlabel("x", fontsize=15)
 ax.set_xlim([0,1])
-ax.tick_params("both",labelsize=15) 
+ax.tick_params("both", labelsize=15) 
 show()
 ```
 The output that you should get is
@@ -126,8 +128,9 @@ Let us remark a few things that we did not discuss before
 To better understand element-wise operations, see how we computed the scattering matrix $\mathbf{G}$ and see if you can write this as a for-loop. You can use the `if` command.
 ```
 G = zeros(nv,nv);
-for i = 1:nv
-    for j = 1:nv
+
+for i=1:nv
+    for j=1:nv
         G[i,j] = w[i]
         if i == j
             G[i,j] = G[i,j] - 1
@@ -175,41 +178,43 @@ function runPlaneSource()::Tuple{Vector{Float64}, Vector{Float64}}
     nv = 10
     v,w = gausslegendre(nv)
     nx = 101
-    x = collect(range(0,1,nx))
+    x = collect(range(0, 1; length=nx))
 
     # setup initial condition
-    psi = zeros(nx,nv)
-    psi[50,:] = ones(nv)
+    psi = zeros(nx, nv)
+    psi[50, :] = ones(nv)
 
     # create stencil matrices
-    dx = 1/(nx-1)
-    DPlus = (1/dx)*Tridiagonal(-ones(nx-1),ones(nx),zeros(nx-1))
-    DMinus = (1/dx)*Tridiagonal(zeros(nx-1),-ones(nx),ones(nx-1))
+    dx = 1 / (nx - 1)
+    DPlus = (1 / dx) * Tridiagonal(-ones(nx - 1), ones(nx), zeros(nx - 1))
+    DMinus = (1 / dx) * Tridiagonal(zeros(nx - 1), -ones(nx), ones(nx - 1))
 
     # create system matrices
-    midMinus = Int(ceil(nv/2))
-    midPlus = Int(floor(nv/2))
-    VMinus = Diagonal([v[1:midMinus];zeros(midPlus)])
-    VPlus = Diagonal([zeros(midMinus);v[(midPlus+1):end]])
+    midMinus = Int(ceil(nv / 2))
+    midPlus = Int(floor(nv / 2))
+    VMinus = Diagonal([v[1:midMinus]; zeros(midPlus)])
+    VPlus = Diagonal([zeros(midMinus); v[(midPlus + 1):end]])
 
     # create scattering matrix
-    G = ones(nv,nv).*w-I
+    G = ones(nv, nv) .* w - I
 
     # advance in time
-    dt = 0.01;
-    nT =40
-    for n = 1:nT
-        psiNew = psi + dt*(-DPlus*psi*VPlus - DMinus*psi*VMinus + psi*G)
+    dt = 0.01
+    nT = 40
+
+    for n=1:nT
+        psiNew = psi + dt * (-DPlus * psi * VPlus - DMinus * psi * VMinus + psi * G)
         psi .= psiNew
     end
 
     # store phi for plotting
-    phi = zeros(nx);
-    for j = 1:nx
-        phi[j] = sum(psi[j,:].*w)
+    phi = zeros(nx)
+
+    for j=1:nx
+        phi[j] = sum(psi[j, :] .* w)
     end
 
-    return x,phi
+    return x, phi
 end
 
 # run code and store final phi
@@ -217,11 +222,11 @@ x, phi = runPlaneSource()
 
 # plot phi
 fig, ax = subplots()
-ax.plot(x,phi, "b-.", linewidth=2, label=L"\Phi", alpha=0.9)
-ax.legend(loc="upper left",fontsize=15)
-xlabel("x",fontsize=15)
-ax.set_xlim([0,1])
-ax.tick_params("both",labelsize=15)
+ax.plot(x, phi, "b-.", linewidth=2, label=L"\Phi", alpha=0.9)
+ax.legend(loc="upper left", fontsize=15)
+xlabel("x", fontsize=15)
+ax.set_xlim([0, 1])
+ax.tick_params("both", labelsize=15)
 show()
 ```
 
@@ -237,39 +242,43 @@ function IC(x::Float64)::Float64
   sigma2 = 0.0009
   floor = 1e-4
   x0 = 0.0
-  return max(floor,1.0/(sqrt(2*pi*sigma2)) *exp(-(x-0.5)^2/2.0/sigma2))
+
+  return max(floor, 1.0 / (sqrt(2 * pi * sigma2)) * exp(-(x - 0.5)^2 / (2.0 * sigma2)))
 end
 ```
 Then replace your initial condition from Sheet 1 by the above function call, which you need to evaluate at all spatial cells and all velocity points.
 ```
 # setup initial condition
-psi = zeros(nx,nv)
-for j = 1:nx
-  for i = 1:nv
-    psi[j,i] = IC(x[j])
+psi = zeros(nx, nv)
+
+for j=1:nx
+  for i=1:nv
+    psi[j, i] = IC(x[j])
   end
 end
 ```
 To check your element-wise operation skills, see if you can remove one of the for loops. This can either take the form
 ```
-psi = zeros(nx,nv)
-for j = 1:nx
+psi = zeros(nx, nv)
+
+for j=1:nx
     psi[j,:] .= IC(x[j])
 end
 ```
 or
 ```
-psi = zeros(nx,nv)
-for i = 1:nv
-  psi[:,i] .= IC.(x)
+psi = zeros(nx, nv)
+
+for i=1:nv
+  psi[:, i] .= IC.(x)
 end
 ```
 Now, note that we have fixed $\sigma$ insice the `IC` function. Very often, you want to use $\sigma = 0.0009$, but sometimes you want to change this sigma to test your code. See if you can rewrite your `IC` function to include this option.
 ```
-function IC(x::Float64,sigma2::Float64=0.0009)::Float64
+function IC(x::Float64, sigma2::Float64=0.0009)::Float64
   floor = 1e-4
   x0 = 0.0
-  return max(floor,1.0/(sqrt(2*pi*sigma2)) *exp(-(x-0.5)^2/2.0/sigma2))
+  return max(floor, 1.0 / (sqrt(2 * pi * sigma2)) * exp(-(x - 0.5)^2 / (2.0 * sigma2)))
 end
 ```
 In the same manner, we would like to change the number of spatial grid cells `nx` and the number of velocities `nv`. Change your `runPlaneSource` function such that it can pick varying inputs for $n_x$ and $n_v$. If no input is specified, it should pick the previously defined values.
@@ -279,64 +288,67 @@ using LinearAlgebra
 using PyPlot
 
 # definition of the initial condition
-function IC(x::Float64,sigma2::Float64=0.0009)::Float64
-  floor = 1e-4
-  x0 = 0.0
-  return max(floor,1.0/(sqrt(2*pi*sigma2)) *exp(-(x-0.5)^2/2.0/sigma2))
+function IC(x::Float64, sigma2::Float64=0.0009)::Float64
+    floor = 1e-4
+    x0 = 0.0
+    return max(floor, 1.0 / (sqrt(2 * pi * sigma2)) * exp(-(x - 0.5)^2 / (2.0 * sigma2)))
 end
 
-function runPlaneSource(nv::Int=10,nx::Int=101)::Tuple{Vector{Float64}, Vector{Float64}}
+function runPlaneSource(nv::Int=10, nx::Int=101)::Tuple{Vector{Float64}, Vector{Float64}}
     # define velocity grid according to gauss quadrature
-    v,w = gausslegendre(nv)
-    x = collect(range(0,1,nx))
+    v, w = gausslegendre(nv)
+    x = collect(range(0, 1; length=nx))
 
     # setup initial condition
-    psi = zeros(nx,nv)
-    for j = 1:nx
-        psi[j,:] .= IC(x[j])
+    psi = zeros(nx, nv)
+
+    for j=1:nx
+        psi[j, :] .= IC(x[j])
     end
 
     # create stencil matrices
-    dx = 1/(nx-1)
-    DPlus = (1/dx)*Tridiagonal(-ones(nx-1),ones(nx),zeros(nx-1))
-    DMinus = (1/dx)*Tridiagonal(zeros(nx-1),-ones(nx),ones(nx-1))
+    dx = 1 / (nx - 1)
+    DPlus = (1 / dx) * Tridiagonal(-ones(nx - 1), ones(nx), zeros(nx - 1))
+    DMinus = (1 / dx) * Tridiagonal(zeros(nx - 1), -ones(nx), ones(nx - 1))
 
     # create system matrices
-    midMinus = Int(ceil(nv/2))
-    midPlus = Int(floor(nv/2))
-    VMinus = Diagonal([v[1:midMinus];zeros(midPlus)])
-    VPlus = Diagonal([zeros(midMinus);v[(midPlus+1):end]])
+    midMinus = Int(ceil(nv / 2))
+    midPlus = Int(floor(nv / 2))
+    VMinus = Diagonal([v[1:midMinus]; zeros(midPlus)])
+    VPlus = Diagonal([zeros(midMinus); v[(midPlus + 1):end]])
 
     # create scattering matrix
-    G = ones(nv,nv).*w-I
+    G = ones(nv, nv) .* w - I
 
     # advance in time
-    dt = 0.01;
-    nT =40
-    for n = 1:nT
-        psiNew = psi + dt*(-DPlus*psi*VPlus - DMinus*psi*VMinus + psi*G)
+    dt = 0.01
+    nT = 40
+
+    for n=1:nT
+        psiNew = psi + dt * (-DPlus * psi * VPlus - DMinus * psi * VMinus + psi * G)
         psi .= psiNew
     end
 
     # store phi for plotting
-    phi = zeros(nx);
-    for j = 1:nx
-        phi[j] = sum(psi[j,:].*w)
+    phi = zeros(nx)
+
+    for j=1:nx
+        phi[j] = sum(psi[j, :] .* w)
     end
 
-    return x,phi
+    return x, phi
 end
 
 # run code and store final phi
-x,phi = runPlaneSource()
+x, phi = runPlaneSource()
 
 # plot phi
 fig, ax = subplots()
 ax.plot(x,phi, "b-.", linewidth=2, label=L"\Phi", alpha=0.9)
-ax.legend(loc="upper left",fontsize=15)
-xlabel("x",fontsize=15)
-ax.set_xlim([0,1])
-ax.tick_params("both",labelsize=15)
+ax.legend(loc="upper left", fontsize=15)
+xlabel("x", fontsize=15)
+ax.set_xlim([0, 1])
+ax.tick_params("both", labelsize=15)
 show()
 ```
 You can now try out different numbers of velocities and spatial cells. See how the solution changes and think about what might be the reason for this.
@@ -347,11 +359,11 @@ You might have observed that the solution crashes if you are choosing too many s
 struct Test
   a::Float64
   b::Float64
-  c::Float64;
+  c::Float64
 
-  Settings(a::Float64=0.1,b::Float64=0.2)
-    c = a+b
-    new(a,b,c)
+  Settings(a::Float64=0.1, b::Float64=0.2)
+    c = a + b
+    new(a, b, c)
   end
 end
 ```
@@ -368,14 +380,14 @@ struct Settings
   b::Float64 # end point of spatial domain
   sigma2::Float64 # variance of initial condition
 
-  function Settings(nx::Int=101,nv::Int=10,sigma2::Float64=0.0009)
+  function Settings(nx::Int=101, nv::Int=10, sigma2::Float64=0.0009)
     tEnd = 0.4
     a = -1.0;
     b = 1.0;
-    dx = (b-a)/(nx-1)
-    dt = dx;
-    nt = Int(floor(tEnd/dt))
-    new(nx,nv,nt,dt,dx,tEnd,a,b,sigma2)
+    dx = (b - a) / (nx - 1)
+    dt = dx
+    nt = Int(floor(tEnd / dt))
+    new(nx, nv, nt, dt, dx, tEnd, a, b, sigma2)
   end
 end
 ```
@@ -396,80 +408,84 @@ struct Settings
   b::Float64 # end point of spatial domain
   sigma2::Float64 # variance of initial condition
 
-  function Settings(nx::Int=101,nv::Int=10,sigma2::Float64=0.0009)
+  function Settings(nx::Int=101, nv::Int=10,sigma2::Float64=0.0009)
     tEnd = 0.4
     a = -1.0;
     b = 1.0;
-    dx = (b-a)/(nx-1)
-    dt = dx;
-    nt = Int(floor(tEnd/dt))
-    new(nx,nv,nt,dt,dx,tEnd,a,b,sigma2)
+    dx = (b - a) / (nx - 1)
+    dt = dx
+    nt = Int(floor(tEnd / dt))
+    new(nx, nv, nt, dt, dx, tEnd, a, b, sigma2)
   end
 end
 
 # definition of the initial condition
-function IC(obj::Settings,x::Float64)
+function IC(obj::Settings, x::Float64)
   floor = 1e-4
-  return max(floor,1.0/(sqrt(2*pi*obj.sigma2)) *exp(-(x-0.5*(obj.b-obj.a)-obj.a)^2/2.0/obj.sigma2))
+  return max(floor, 1.0 / (sqrt(2 * pi * obj.sigma2)) * exp(-(x - 0.5 * (obj.b - obj.a) - obj.a)^2 / (2.0 * obj.sigma2)))
 end
 
 function runPlaneSource(obj::Settings)::Tuple{Vector{Float64}, Vector{Float64}}
     nx = obj.nx
     nv = obj.nv
+
     # define velocity grid according to gauss quadrature
-    v,w = gausslegendre(nv)
-    x = collect(range(obj.a,obj.b,nx))
+    v, w = gausslegendre(nv)
+    x = collect(range(obj.a, obj.b; length=nx))
 
     # setup initial condition
-    psi = zeros(nx,nv)
-    for j = 1:nx
-        psi[j,:] .= IC(obj,x[j])
+    psi = zeros(nx, nv)
+
+    for j=1:nx
+        psi[j, :] .= IC(obj, x[j])
     end
 
     # create stencil matrices
     dx = obj.dx
-    DPlus = (1/dx)*Tridiagonal(-ones(nx-1),ones(nx),zeros(nx-1))
-    DMinus = (1/dx)*Tridiagonal(zeros(nx-1),-ones(nx),ones(nx-1))
+    DPlus = (1 / dx) * Tridiagonal(-ones(nx - 1), ones(nx), zeros(nx - 1))
+    DMinus = (1 / dx) * Tridiagonal(zeros(nx - 1), -ones(nx), ones(nx - 1))
 
     # create system matrices
-    midMinus = Int(ceil(nv/2))
-    midPlus = Int(floor(nv/2))
-    VMinus = Diagonal([v[1:midMinus];zeros(midPlus)])
-    VPlus = Diagonal([zeros(midMinus);v[(midPlus+1):end]])
+    midMinus = Int(ceil(nv / 2))
+    midPlus = Int(floor(nv / 2))
+    VMinus = Diagonal([v[1:midMinus]; zeros(midPlus)])
+    VPlus = Diagonal([zeros(midMinus); v[(midPlus + 1):end]])
 
     # create scattering matrix
-    G = ones(nv,nv).*w-I
+    G = ones(nv, nv) .* w - I
 
     # advance in time
-    dt = obj.dt;
-    nT = obj.nt;
-    for n = 1:nT
-        psiNew = psi + dt*(-DPlus*psi*VPlus - DMinus*psi*VMinus + psi*G)
+    dt = obj.dt
+    nT = obj.nt
+
+    for n=1:nT
+        psiNew = psi + dt * (-DPlus * psi * VPlus - DMinus * psi * VMinus + psi * G)
         psi .= psiNew
     end
 
     # store phi for plotting
-    phi = zeros(nx);
-    for j = 1:nx
-        phi[j] = sum(psi[j,:].*w)
+    phi = zeros(nx)
+
+    for j=1:nx
+        phi[j] = sum(psi[j, :] .* w)
     end
 
-    return x,phi
+    return x, phi
 end
 
 # generate setup
-settings = Settings();
+settings = Settings()
 
 # run code and store final phi
-x,phi = runPlaneSource(settings)
+x, phi = runPlaneSource(settings)
 
 # plot phi
 fig, ax = subplots()
-ax.plot(x,phi, "b-.", linewidth=2, label=L"\Phi", alpha=0.9)
-ax.legend(loc="upper left",fontsize=15)
-xlabel("x",fontsize=15)
-ax.set_xlim([settings.a,settings.b])
-ax.tick_params("both",labelsize=15)
+ax.plot(x, phi, "b-.", linewidth=2, label=L"\Phi", alpha=0.9)
+ax.legend(loc="upper left", fontsize=15)
+xlabel("x", fontsize=15)
+ax.set_xlim([settings.a, settings.b])
+ax.tick_params("both", labelsize=15)
 show()
 ```
 
