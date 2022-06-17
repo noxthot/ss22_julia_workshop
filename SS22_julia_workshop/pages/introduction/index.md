@@ -16,7 +16,7 @@ In this workshop, we wish to use a programming example from radiation transport.
 
 So let us give a little bit of background: The radiation transport equation describes radiation particles moving through a background material. In a one-dimensional geometry, particles can travel into directions $v\in [-1,1]$ and are located at a spatial position $x\in[0,1]$. One application which requires the simulation of radiation particles is radiation therapy, where photons are shot at the tumor to destroy cancerous cells. The radiation received by the patient is stored in a matrix $\bm{\psi}\in\R^{n_x \times n_{v}}$, where $n_x$ is the number of spatial cells and $n_v$ is the number of velocities. Below you for example find a treatment planning result from radiation oncology. The treatment is chosen to destroy the lung tumor without harming important organs.
 
-![radiation therapy](radiationTransport.png)
+\figalt{radiation therapy}{radiationTransport.png}
 
 ## Adding packages
 
@@ -109,7 +109,7 @@ ax.tick_params("both",labelsize=15)
 show()
 ```
 The output that you should get is
-![radiation therapy](Sheet1Result.png)
+\figalt{radiation therapy}{Sheet1Result.png}
 
 What you see is the particle density $\Phi$ over the spatial domain. Congratulations, you have just computed your first radiation transport problem using Julia. If you look at your code, you will see that it looks quite messy. you can add a comment *test comment* with `# test comment`. Use the comment command to explain what you did and double check if you understood everything. Also, commonly the `using` commands are executed in the first lines of the code, so move all these commands to the top.
 
