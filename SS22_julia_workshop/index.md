@@ -16,9 +16,9 @@ Pay extra attention to the content here.
 @@
 
 We also have various environments with different color coding that usually are collapsed to not hinder the reading process:
-- Examples are blue
+- Examples are green
 \example{Examples are also quite nice because they make sure you have an idea what is happening.}
-- Exercises are green
+- Exercises are blue
 \exercise{Exercises are here for you to work on, no worries not at home or in your off hours but with us in the workshop.}
 
 That is about all we wanted to let you know, so let us get into it.
