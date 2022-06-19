@@ -5,6 +5,8 @@ Add here global page variables to use throughout your website.
 author = "Gregor Ehrensperger, Peter Kandolf, Jonas Kusch"
 mintoclevel = 2
 
+@def prepath = "ss22_julia_workshop"
+
 # Add here files or directories that should be ignored by Franklin, otherwise
 # these files might be copied and, if markdown, processed by Franklin which
 # you might not want. Indicate directories by ending the name with a `/`.
