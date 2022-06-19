@@ -14,7 +14,7 @@ If you are already familiar with another programming language it might be worth 
 
 In this workshop, we wish to use a programming example from radiation transport. Do not worry, if you do not understand all details. Essentially everything boils down to solving  a simple matrix ordinary differential equation. And if that sounds complicated, we can also say it boils down to matrix vector multiplications that your code should execute in the end. 
 
-So let us give a little bit of background: The radiation transport equation describes radiation particles moving through a background material. In a one-dimensional geometry, particles can travel into directions $v\in [-1,1]$ and are located at a spatial position $x\in[0,1]$. One application which requires the simulation of radiation particles is radiation therapy, where photons are shot at the tumor to destroy cancerous cells. The radiation received by the patient is stored in a matrix $\bm{\psi}\in\R^{n_x \times n_{v}}$, where $n_x$ is the number of spatial cells and $n_v$ is the number of velocities. Below you for example find a treatment planning result from radiation oncology. The treatment is chosen to destroy the lung tumor without harming important organs.
+So let us give a little bit of background: The radiation transport equation describes radiation particles moving through a background material. In a one-dimensional geometry, particles can travel into directions $v\in [-1, 1]$ and are located at a spatial position $x\in[0, 1]$. One application which requires the simulation of radiation particles is radiation therapy, where photons are shot at the tumor to destroy cancerous cells. The radiation received by the patient is stored in a matrix $\bm{\psi}\in\R^{n_x \times n_{v}}$, where $n_x$ is the number of spatial cells and $n_v$ is the number of velocities. Below you for example find a treatment planning result from radiation oncology. The treatment is chosen to destroy the lung tumor without harming important organs.
 
 \figalt{radiation therapy}{radiationTransport.png}
 
@@ -43,7 +43,7 @@ The `range` command will generate $\operatorname{nx}$ values from 0 to 1. We use
 ```julia:./exdot.jl
 psi = zeros(nx, nv)
 ```
-Now to access this matrix at spatial index $j$ and velocity index $i$, we can type `psi[j, i]`. Moreover, if we do not want to access a single index, but let's say indices $5$ to $10$ in the spatial domain at all indices in velocity, we can write `psi[5:10,:]`. Note that Julia uses indices starting at index $1$, not $0$. Now, put particles in the center of the domain having all possible velocities. That is,
+Now to access this matrix at spatial index $j$ and velocity index $i$, we can type `psi[j, i]`. Moreover, if we do not want to access a single index, but let's say indices $5$ to $10$ in the spatial domain at all indices in velocity, we can write `psi[5:10, :]`. Note that Julia uses indices starting at index $1$, not $0$. Now, put particles in the center of the domain having all possible velocities. That is,
 ```julia:./exdot.jl
 psi[50, :] = ones(nv)
 ```
@@ -106,7 +106,7 @@ fig, ax = subplots()
 ax.plot(x, phi, "b-.", linewidth=2, label=L"\Phi", alpha=0.9)
 ax.legend(loc="upper left", fontsize=15)
 xlabel("x", fontsize=15)
-ax.set_xlim([0,1])
+ax.set_xlim([0, 1])
 ax.tick_params("both", labelsize=15) 
 show()
 ```
@@ -127,13 +127,13 @@ Let us remark a few things that we did not discuss before
 
 To better understand element-wise operations, see how we computed the scattering matrix $\mathbf{G}$ and see if you can write this as a for-loop. You can use the `if` command.
 ```
-G = zeros(nv,nv);
+G = zeros(nv, nv);
 
 for i in 1:nv
     for j in 1:nv
-        G[i,j] = w[i]
+        G[i, j] = w[i]
         if i == j
-            G[i,j] = G[i,j] - 1
+            G[i, j] = G[i, j] - 1
         end
     end
 end
@@ -176,7 +176,7 @@ using PyPlot
 function runPlaneSource()::Tuple{Vector{Float64}, Vector{Float64}}
     # define velocity grid according to gauss quadrature
     nv = 10
-    v,w = gausslegendre(nv)
+    v, w = gausslegendre(nv)
     nx = 101
     x = collect(range(0, 1; length=nx))
 
@@ -262,7 +262,7 @@ To check your element-wise operation skills, see if you can remove one of the fo
 psi = zeros(nx, nv)
 
 for j in 1:nx
-    psi[j,:] .= IC(x[j])
+    psi[j, :] .= IC(x[j])
 end
 ```
 or
@@ -344,7 +344,7 @@ x, phi = runPlaneSource()
 
 # plot phi
 fig, ax = subplots()
-ax.plot(x,phi, "b-.", linewidth=2, label=L"\Phi", alpha=0.9)
+ax.plot(x, phi, "b-.", linewidth=2, label=L"\Phi", alpha=0.9)
 ax.legend(loc="upper left", fontsize=15)
 xlabel("x", fontsize=15)
 ax.set_xlim([0, 1])
@@ -391,7 +391,7 @@ struct Settings
   end
 end
 ```
-Go over your code and use the variables from the struct. Now it should be easy to for example change the length of the spatial domain. Use $x\in[-1,1]$. Make sure that the position of the Gaussian in your `IC` function remains in the center. We then get
+Go over your code and use the variables from the struct. Now it should be easy to for example change the length of the spatial domain. Use $x\in[-1, 1]$. Make sure that the position of the Gaussian in your `IC` function remains in the center. We then get
 ```
 using FastGaussQuadrature
 using LinearAlgebra
@@ -408,7 +408,7 @@ struct Settings
   b::Float64 # end point of spatial domain
   sigma2::Float64 # variance of initial condition
 
-  function Settings(nx::Int=101, nv::Int=10,sigma2::Float64=0.0009)
+  function Settings(nx::Int=101, nv::Int=10, sigma2::Float64=0.0009)
     tEnd = 0.4
     a = -1.0;
     b = 1.0;
