@@ -69,3 +69,5 @@ Visual Studio Code or for short VSCode is a fully fledged Interactive Developmen
 Follow the instructions on [VSCode Julia extension](https://www.julia-vscode.org/docs/dev/gettingstarted/#Installing-the-Julia-extension) to install and configure the extension. You find the basic instructions from above here as well.
 
 \exercise{Please try the small test example from [here](https://www.julia-vscode.org/docs/dev/gettingstarted/#Creating-Your-First-Julia-Hello-World-program) to see if everything works.}
+
+If you run into difficulties with VSCode in connection to Julia, the [documentation](https://www.julia-vscode.org/docs/dev/) of the Julia extension is an excellent source for help. You can also find a list of [keybindings](https://www.julia-vscode.org/docs/dev/userguide/keybindings/), once you are more familiar with the IDE and you want to get fully never get you hands of the keyboard. 
