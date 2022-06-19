@@ -1,0 +1,4 @@
+Sitemap: https://noxthot.github.io/ss22_julia_workshop/sitemap.xml
+
+User-agent: *
+Disallow:

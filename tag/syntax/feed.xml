@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<rss version="2.0"
+  xmlns:content="http://purl.org/rss/1.0/modules/content/"
+  xmlns:dc="http://purl.org/dc/elements/1.1/"
+  xmlns:media="http://search.yahoo.com/mrss/"
+  xmlns:atom="http://www.w3.org/2005/Atom"
+  xmlns:georss="http://www.georss.org/georss">
+
+  <channel>
+    <title>
+      <![CDATA[  SS22 Julia Workshop  ]]>
+    </title>
+    <link> https://noxthot.github.io/ss22_julia_workshop/ </link>
+    <description>
+      <![CDATA[  Lecture Material | Introduction to Julia  ]]>
+    </description>
+    <atom:link
+      href="https://noxthot.github.io/ss22_julia_workshop/feed.xml"
+      rel="self"
+      type="application/rss+xml" />
+
+
+<item>
+  <title>
+    <![CDATA[  More goodies  ]]>
+  </title>
+  <link> https://noxthot.github.io/ss22_julia_workshop/pages/introduction/index.html </link>
+  <guid> https://noxthot.github.io/ss22_julia_workshop/pages/introduction/index.html </guid>
+  <description>
+    <![CDATA[  Refining the code by using functions  ]]>
+  </description>  
+    
+  <pubDate>Wed, 01 May 2019 00:00:00 +0000</pubDate>  
+  
+  
+  <atom:author>
+    <atom:name>Gregor Ehrensperger, Peter Kandolf, Jonas Kusch</atom:name>
+  </atom:author>
+        
+</item>
+</channel></rss>
