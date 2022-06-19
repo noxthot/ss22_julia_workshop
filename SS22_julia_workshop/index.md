@@ -5,17 +5,30 @@
 
 Julia is a free and open source scientific programming language with a vast ecosystem of libraries that aim towards scientific computing. Visit [julialang.org](https://julialang.org) for the download, documentation, learning materials and much more. Julia manages allow the best of both worlds, high-level interpreter and low-level compiler languages. It offers the high performance of compiled languages like C or Fortran by still bringing in the simplicity of dynamic languages like Python or R. Julia recently entered its teens and for this occasion a blog post was published with the title [Why We Use Julia, 10 Years Later](https://julialang.org/blog/2022/02/10years/) as a follow up to the [Why We Created Julia](https://julialang.org/blog/2012/02/why-we-created-julia/). Both entries are a good read and give you an insight into the language and its creators.
 
-In this workshop we are going to take a look at Julia by starting to the basics and working our way up to advanced topics like multi processor programming and DataFrames.
+In this workshop we are going to take a look at Julia by starting with the basics and working our way up to advanced topics like multi processor programming and DataFrames.
 
-Below you find the the schedule, where each section corresponds to one workshop session. 
+## Some general words on the the organisation of this workshop
+
+For this workshop you do not need to be an Julia expert, not even a programming expert. We will introduce programming and Julia concepts along with examples. For this purpose you will find code blocs that you can copy if necessary (top right corner `copy`). Furthermore, if we think something is very important we will highlight it with a box:
 
 @@important
-We ask you to install Julia, VSCode and the Julia plug-in for VSCode before the workshop so we can get right into the lecture. 
+Pay extra attention to the content here.
 @@
 
-Please find some instructions here: 
+We also have various environments with different color coding that usually are collapsed to not hinder the reading process:
+- Examples are blue
+\example{Examples are also quite nice because they make sure you have an idea what is happening.}
+- Exercises are green
+\exercise{Exercises are her for you to work on, no worries not at home or in your off hours but with us in the workshop.}
+
+That is about all we wanted to let you know, so lets get into it.
 
 ## Setup
+
+@@important
+We ask you to install Julia, VSCode and the Julia plug-in for VSCode **before** the workshop so we can get right into the lecture, if you have difficulties please let us know and we update the content on this page. 
+@@
+
 Follow the following setup to install everything that is required to get started with the workshop.
 
 ### Julia 
@@ -38,7 +51,7 @@ tar -xvzf julia-1.7.3-linux-x86_64.tar.gz
 ```
 copy the folder to `/opt/`
 ```bash
-sudo cp julia-1.7.3 /opt/
+sudo cp -r julia-1.7.3 /opt/
 ```
 and link the binary
 ```bash
@@ -47,12 +60,10 @@ sudo ln -s /opt/julia-1.7.3/bin/julia /usr/local/bin/julia
 
 ### Visual Studio Code
 
-Follow the instructions on [https://code.visualstudio.com/][https://code.visualstudio.com/] to install Visual Studio Code. 
+Follow the instructions on [https://code.visualstudio.com/](https://code.visualstudio.com/) to install Visual Studio Code. 
 
 ### Installing the Julia extension for Visual Studio Code
 
 Follow the instructions on [VSCode Julia extension](https://www.julia-vscode.org/docs/dev/gettingstarted/#Installing-the-Julia-extension) to install and configure the extension. You find the basic instructions from above here as well.
 
-Please try the small test example from [here](https://www.julia-vscode.org/docs/dev/gettingstarted/#Creating-Your-First-Julia-Hello-World-program) to see if everything works. 
-
-\example{Please write something in `julia`}
+\exercise{Please try the small test example from [here](https://www.julia-vscode.org/docs/dev/gettingstarted/#Creating-Your-First-Julia-Hello-World-program) to see if everything works.}
