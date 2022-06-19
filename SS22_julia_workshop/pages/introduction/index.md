@@ -83,7 +83,7 @@ Now, we do not want to know the solution at $\Delta t$, but at $t_{\mathrm{end}}
 ```
 nT = 40
 
-for n=1:nT
+for n in 1:nT
     psiNew = psi + dt * (-DPlus * psi * VPlus - DMinus * psi * VMinus + psi * G)
     psi .= psiNew
 end
@@ -92,7 +92,7 @@ Note that we are using `.=` insead of `=` to copy values from `psiNew` to `psi`.
 ```
 phi = zeros(nx)
 
-for j=1:nx
+for j in 1:nx
     phi = sum(psi[j, :] .* w)
 end
 ```
@@ -129,8 +129,8 @@ To better understand element-wise operations, see how we computed the scattering
 ```
 G = zeros(nv,nv);
 
-for i=1:nv
-    for j=1:nv
+for i in 1:nv
+    for j in 1:nv
         G[i,j] = w[i]
         if i == j
             G[i,j] = G[i,j] - 1
@@ -202,7 +202,7 @@ function runPlaneSource()::Tuple{Vector{Float64}, Vector{Float64}}
     dt = 0.01
     nT = 40
 
-    for n=1:nT
+    for n in 1:nT
         psiNew = psi + dt * (-DPlus * psi * VPlus - DMinus * psi * VMinus + psi * G)
         psi .= psiNew
     end
@@ -210,7 +210,7 @@ function runPlaneSource()::Tuple{Vector{Float64}, Vector{Float64}}
     # store phi for plotting
     phi = zeros(nx)
 
-    for j=1:nx
+    for j in 1:nx
         phi[j] = sum(psi[j, :] .* w)
     end
 
@@ -251,8 +251,8 @@ Then replace your initial condition from Sheet 1 by the above function call, whi
 # setup initial condition
 psi = zeros(nx, nv)
 
-for j=1:nx
-  for i=1:nv
+for j in 1:nx
+  for i in 1:nv
     psi[j, i] = IC(x[j])
   end
 end
@@ -261,7 +261,7 @@ To check your element-wise operation skills, see if you can remove one of the fo
 ```
 psi = zeros(nx, nv)
 
-for j=1:nx
+for j in 1:nx
     psi[j,:] .= IC(x[j])
 end
 ```
@@ -269,7 +269,7 @@ or
 ```
 psi = zeros(nx, nv)
 
-for i=1:nv
+for i in 1:nv
   psi[:, i] .= IC.(x)
 end
 ```
@@ -302,7 +302,7 @@ function runPlaneSource(nv::Int=10, nx::Int=101)::Tuple{Vector{Float64}, Vector{
     # setup initial condition
     psi = zeros(nx, nv)
 
-    for j=1:nx
+    for j in 1:nx
         psi[j, :] .= IC(x[j])
     end
 
@@ -324,7 +324,7 @@ function runPlaneSource(nv::Int=10, nx::Int=101)::Tuple{Vector{Float64}, Vector{
     dt = 0.01
     nT = 40
 
-    for n=1:nT
+    for n in 1:nT
         psiNew = psi + dt * (-DPlus * psi * VPlus - DMinus * psi * VMinus + psi * G)
         psi .= psiNew
     end
@@ -332,7 +332,7 @@ function runPlaneSource(nv::Int=10, nx::Int=101)::Tuple{Vector{Float64}, Vector{
     # store phi for plotting
     phi = zeros(nx)
 
-    for j=1:nx
+    for j in 1:nx
         phi[j] = sum(psi[j, :] .* w)
     end
 
@@ -436,7 +436,7 @@ function runPlaneSource(obj::Settings)::Tuple{Vector{Float64}, Vector{Float64}}
     # setup initial condition
     psi = zeros(nx, nv)
 
-    for j=1:nx
+    for j in 1:nx
         psi[j, :] .= IC(obj, x[j])
     end
 
@@ -458,7 +458,7 @@ function runPlaneSource(obj::Settings)::Tuple{Vector{Float64}, Vector{Float64}}
     dt = obj.dt
     nT = obj.nt
 
-    for n=1:nT
+    for n in 1:nT
         psiNew = psi + dt * (-DPlus * psi * VPlus - DMinus * psi * VMinus + psi * G)
         psi .= psiNew
     end
@@ -466,7 +466,7 @@ function runPlaneSource(obj::Settings)::Tuple{Vector{Float64}, Vector{Float64}}
     # store phi for plotting
     phi = zeros(nx)
 
-    for j=1:nx
+    for j in 1:nx
         phi[j] = sum(psi[j, :] .* w)
     end
 
