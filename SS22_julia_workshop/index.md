@@ -62,6 +62,8 @@ sudo ln -s /opt/julia-1.7.3/bin/julia /usr/local/bin/julia
 
 Follow the instructions on [https://code.visualstudio.com/](https://code.visualstudio.com/) to install Visual Studio Code. 
 
+Visual Studio Code or for short VSCode is a fully fledged Interactive Development Environment (IDE), complete with code highlighting, auto complete, Debugger, git integration and so much more. In order to make VSCode fully compatible with Julia we need to install the Julia extension. 
+
 ### Installing the Julia extension for Visual Studio Code
 
 Follow the instructions on [VSCode Julia extension](https://www.julia-vscode.org/docs/dev/gettingstarted/#Installing-the-Julia-extension) to install and configure the extension. You find the basic instructions from above here as well.
