@@ -17,7 +17,7 @@ ignore = ["node_modules/"]
 generate_rss = true
 website_title = "SS22 Julia Workshop"
 website_descr = "Lecture Material | Introduction to Julia"
-website_url   = "https://git.uibk.ac.at/c7021138/ss22_julia_workshop/"
+website_url   = "https://noxthot.github.io/ss22_julia_workshop/"
 +++
 
 <!--
