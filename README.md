@@ -22,3 +22,5 @@ Have a look at the documentation of [Franklin.jl](https://franklinjl.org) for mo
 # Publishing
 
 Simply push the content to `origin_gh` by calling `git pu`. It will be deployed automatically (takes a few minutes).
+
+The published website will be available at [noxthot.github.io/ss22_julia_workshop](https://noxthot.github.io/ss22_julia_workshop/).
