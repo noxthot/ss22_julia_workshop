@@ -6,7 +6,7 @@
 
 @def tags = ["syntax", "code", "image"]
 
-<> A hidden code block to prevent PyPlot from opening figure
+<-- A hidden code block to prevent PyPlot from opening figure -->
 ```julia:./code/worksheet_2.jl
 #hideall
 using PyPlot
