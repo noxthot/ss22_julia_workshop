@@ -39,6 +39,12 @@ jobs:
             using NodeJS; run(`$(npm_cmd()) install highlight.js`);
             using Franklin;
             optimize()'
+      env:
+        # Allows the use of unicode characters in Plots.jl
+        GKS_ENCODING: "utf8"
+        # Fixes 'GKS: can't connect to GKS socket application' errors
+        # and quality of output plots in GR back end.
+        GKSwstype: "100"
     - name: Build and Deploy
       uses: JamesIves/github-pages-deploy-action@releases/v3
       with:
