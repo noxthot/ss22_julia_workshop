@@ -13,7 +13,8 @@
 ## Functions
 
 The previously presented example is similar to the (in the radiation transport community) famous planesource benchmark, which has an analytic solution. We simply need to redefine the initial condition, which is chosen as a narrow Gaussian instead of a peak. To define this initial condition, we need to use functions. In general, it is a good idea to call functions instead of executing plain code in Julia, since Julia is inefficient if you execute your code as a top level program. Therefore, first put your entire code except for loading of packages and plotting into a function 
-```
+
+```julia
 function runPlaneSource()
   ...
   return x, phi
@@ -21,7 +22,8 @@ end
 ```
 
 This can look like
-```
+
+```julia:./code/worksheet_2.jl
 using FastGaussQuadrature
 using LinearAlgebra
 using PyPlot
@@ -90,7 +92,8 @@ $$
 \psi_{jk}(t=0) = \max\left(10^{-4},\frac{1}{\sqrt{2\pi\sigma^2}}\exp\left(-\frac{(x_j-0.5)^2}{2\sigma^2}\right)\right),
 $$
 where $\sigma = 0.03^2$. Write an initial condition that you can call for a given $x$ and specify that $x$ is a real scalar.
-```
+
+```julia:./code/worksheet_2.jl
 function IC(x::Float64)::Float64
   sigma2 = 0.0009
   floor = 1e-4
@@ -99,8 +102,10 @@ function IC(x::Float64)::Float64
   return max(floor, 1.0 / (sqrt(2 * pi * sigma2)) * exp(-(x - 0.5)^2 / (2.0 * sigma2)))
 end
 ```
+
 Then replace your initial condition from Sheet 1 by the above function call, which you need to evaluate at all spatial cells and all velocity points.
-```
+
+```julia
 # setup initial condition
 psi = zeros(nx, nv)
 
@@ -110,32 +115,40 @@ for j in 1:nx
   end
 end
 ```
+
 To check your element-wise operation skills, see if you can remove one of the for loops. This can either take the form
-```
+
+```julia
 psi = zeros(nx, nv)
 
 for j in 1:nx
     psi[j, :] .= IC(x[j])
 end
 ```
+
 or
-```
+
+```julia
 psi = zeros(nx, nv)
 
 for i in 1:nv
   psi[:, i] .= IC.(x)
 end
 ```
+
 Now, note that we have fixed $\sigma$ insice the `IC` function. Very often, you want to use $\sigma = 0.0009$, but sometimes you want to change this sigma to test your code. See if you can rewrite your `IC` function to include this option.
-```
+
+```julia:./code/worksheet_2.jl
 function IC(x::Float64, sigma2::Float64=0.0009)::Float64
   floor = 1e-4
   x0 = 0.0
   return max(floor, 1.0 / (sqrt(2 * pi * sigma2)) * exp(-(x - 0.5)^2 / (2.0 * sigma2)))
 end
 ```
+
 In the same manner, we would like to change the number of spatial grid cells `nx` and the number of velocities `nv`. Change your `runPlaneSource` function such that it can pick varying inputs for $n_x$ and $n_v$. If no input is specified, it should pick the previously defined values.
-```
+
+```julia:./code/worksheet_2.jl
 using FastGaussQuadrature
 using LinearAlgebra
 using PyPlot
@@ -208,7 +221,8 @@ You can now try out different numbers of velocities and spatial cells. See how t
 
 ## Structs
 You might have observed that the solution crashes if you are choosing too many spatial cells. The reason for this is that the chosen $\Delta t$ must fulfill $\Delta t \leq \Delta x$, otherwise the method is unstable. Also, you have maybe observed that a lot of parameters cannot be changed from outside the function call and you might want to add further parameters like the end time `tEnd`, the time step size `dt` or the variance of the initial condition `sigma2` to the input arguments of the function. To structure the input we can create a new object, which stores all these values, called a `struct`. A `struct` of the name *Test* which stores Floats $a=0.1$, $b=0.2$ and $c = a+b$ has the form
-```
+
+```julia:./code/worksheet_2.jl
 struct Test
   a::Float64
   b::Float64
@@ -220,8 +234,10 @@ struct Test
   end
 end
 ```
+
 You can create this object by `testobject = Test(0.1, 0.2)` and then access elements such as $a$ with `testobject.a`. Use this to define a struct which stores all relevant information and use it as an input.
-```
+
+```julia
 struct Settings
   nx::Int # number of spatial cells
   nv::Int # number of velocity points
@@ -244,8 +260,10 @@ struct Settings
   end
 end
 ```
+
 Go over your code and use the variables from the struct. Now it should be easy to for example change the length of the spatial domain. Use $x\in[-1, 1]$. Make sure that the position of the Gaussian in your `IC` function remains in the center. We then get
-```
+
+```julia:./code/worksheet_2.jl
 using FastGaussQuadrature
 using LinearAlgebra
 using PyPlot
