@@ -1,7 +1,8 @@
 # This file was generated, do not modify it. # hide
 using FastGaussQuadrature
+using LaTeXStrings
 using LinearAlgebra
-using PyPlot
+using Plots; gr()
 
 struct Settings
   nx::Int # number of spatial cells
@@ -87,9 +88,5 @@ settings = Settings()
 x, phi = runPlaneSource(settings)
 
 # plot phi
-fig, ax = subplots()
-ax.plot(x, phi, "b-.", linewidth=2, label=L"\Phi", alpha=0.9)
-ax.legend(loc="upper left", fontsize=15)
-xlabel("x", fontsize=15)
-ax.set_xlim([settings.a, settings.b])
-ax.tick_params("both", labelsize=15)
+plot(x, phi, labels=L"\Phi")
+xlabel!("x")
