@@ -77,8 +77,8 @@ If you run into difficulties with VSCode in connection to Julia, the [documentat
 There is no better resource than [https://www.julia-vscode.org](https://www.julia-vscode.org) to explain how to program Julia with VSCode, you also get an interactive view that explains some of the following items. Nevertheless, we recall the most basic setup. 
 
 - On the left you have the navigational panel where you can switch between context of the viewer. Specifically you will need the **Explorer** and **Julia**. 
-- Right next to it you get additional information with regards to the current context. For example you will see files, when your are in **Explorer** or you see your *Workshpace*, *Documentation*, and *Plot Navigation* in the **Julia** context.
+- Right next to it you get additional information with regards to the current context. For example you will see files, when you are in **Explorer** or you see your *Workspace*, *Documentation*, and *Plot Navigation* in the **Julia** context.
 - When opening a Julia file (ending in `.jl`) (double click in the **Explorer** - single click only give you a quick view and the file will not stay open if you click another file) you have syntax highlighting and auto complete right away. 
 - To run a Julia program, click the small arrow on the top left or `Ctrl+F5` if you prefer keyboard shortcuts. Both will run the code in the Julia REPL and you see the output on the bottom.
 
-With these short basics and [https://www.julia-vscode.org](https://www.julia-vscode.org) you are good to go for the workshop. You can also find a list of [keybindings](https://www.julia-vscode.org/docs/dev/userguide/keybindings/), once you are more familiar with the IDE and you never want to get you hands off the keyboard. 
+With these short basics and [https://www.julia-vscode.org](https://www.julia-vscode.org) you are good to go for the workshop. You can also find a list of [keybindings](https://www.julia-vscode.org/docs/dev/userguide/keybindings/), once you are more familiar with the IDE and you never want to get your hands off the keyboard. 
