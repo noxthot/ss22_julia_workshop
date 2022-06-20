@@ -10,7 +10,7 @@
 There are several ways to write and run Julia code:
 
 1. The Julia [REPL](https://docs.julialang.org/en/v1/stdlib/REPL/) (read-evaluate-print-loop): you can start it by typing `julia` (or the full path to the executable) on the command line. The REPL itself comes with four distinct modes that can be very useful to know:
-- **Julia mode** This is the default mode when you start julia. You prompt starts with `julia>` and you can type Julia expressions and by pressing enter you see the output of the command.
+- **Julia mode** This is the default mode when you start julia. The prompt starts with `julia>`. There you may type Julia expressions which get evaluated when pressing enter. The resulting output will be presented immediately after evaluation.
 \example{```julia
 julia> 1+1
 2
