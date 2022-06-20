@@ -106,7 +106,7 @@ Note that we are using `.=` insead of `=` to copy values from `psiNew` to `psi`.
 phi = zeros(nx)
 
 for j in 1:nx
-    phi = sum(psi[j, :] .* w)
+    phi[j] = sum(psi[j, :] .* w)
 end
 ```
 

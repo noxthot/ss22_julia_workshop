@@ -224,14 +224,14 @@ You might have observed that the solution crashes if you are choosing too many s
 
 ```julia:./code/worksheet_2.jl
 struct Test
-  a::Float64
-  b::Float64
-  c::Float64
+    a::Float64
+    b::Float64
+    c::Float64
 
-  Settings(a::Float64=0.1, b::Float64=0.2)
-    c = a + b
-    new(a, b, c)
-  end
+    function Test(a::Float64=0.1, b::Float64=0.2)
+        c = a + b
+        return new(a, b, c)
+    end
 end
 ```
 
@@ -256,7 +256,8 @@ struct Settings
     dx = (b - a) / (nx - 1)
     dt = dx
     nt = Int(floor(tEnd / dt))
-    new(nx, nv, nt, dt, dx, tEnd, a, b, sigma2)
+
+    return new(nx, nv, nt, dt, dx, tEnd, a, b, sigma2)
   end
 end
 ```
@@ -286,7 +287,8 @@ struct Settings
     dx = (b - a) / (nx - 1)
     dt = dx
     nt = Int(floor(tEnd / dt))
-    new(nx, nv, nt, dt, dx, tEnd, a, b, sigma2)
+
+    return new(nx, nv, nt, dt, dx, tEnd, a, b, sigma2)
   end
 end
 
