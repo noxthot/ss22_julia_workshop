@@ -2,19 +2,19 @@
 <span class=hljs-number >3</span>-element <span class=hljs-built_in >Vector</span>{<span class=hljs-built_in >Int64</span>}:
  <span class=hljs-number >1</span>
  <span class=hljs-number >2</span>
- <span class=hljs-number >3</span></code></pre> <p>As you can see, Julia found out that all the numbers are integers and therefore you have now a 3-element Vector of the type Int64 defined. You can now do operations on this vector in the usual fashion:</p> <pre><code class="julia hljs">julia&gt; v*<span class=hljs-number >2</span>
+ <span class=hljs-number >3</span></code></pre> <p>As you can see, Julia found out that all the numbers are integers and therefore you have now defined a 3-element Vector of type <code>Int64</code>. You can now do operations on this vector in the usual fashion:</p> <pre><code class="julia hljs">julia&gt; v * <span class=hljs-number >2</span>
 <span class=hljs-number >3</span>-element <span class=hljs-built_in >Vector</span>{<span class=hljs-built_in >Int64</span>}:
  <span class=hljs-number >2</span>
  <span class=hljs-number >4</span>
  <span class=hljs-number >6</span>
 
-julia&gt; v/<span class=hljs-number >2</span>
+julia&gt; v / <span class=hljs-number >2</span>
 <span class=hljs-number >3</span>-element <span class=hljs-built_in >Vector</span>{<span class=hljs-built_in >Float64</span>}:
  <span class=hljs-number >0.5</span>
  <span class=hljs-number >1.0</span>
  <span class=hljs-number >1.5</span>
 
-julia&gt; v//<span class=hljs-number >2</span>
+julia&gt; v // <span class=hljs-number >2</span>
 <span class=hljs-number >3</span>-element <span class=hljs-built_in >Vector</span>{<span class=hljs-built_in >Rational</span>{<span class=hljs-built_in >Int64</span>}}:
  <span class=hljs-number >1</span>//<span class=hljs-number >2</span>
  <span class=hljs-number >1</span>//<span class=hljs-number >1</span>
@@ -28,43 +28,43 @@ julia&gt; v//<span class=hljs-number >2</span>
 <span class=hljs-number >3</span>×<span class=hljs-number >3</span> <span class=hljs-built_in >Matrix</span>{<span class=hljs-built_in >Int64</span>}:
  <span class=hljs-number >1</span>  <span class=hljs-number >4</span>  <span class=hljs-number >7</span>
  <span class=hljs-number >2</span>  <span class=hljs-number >5</span>  <span class=hljs-number >8</span>
- <span class=hljs-number >3</span>  <span class=hljs-number >6</span>  <span class=hljs-number >9</span></code></pre> <p>Note, that we specified the three column vectors and combined them into a 3x3 matrix. The row wise definition looks like this:</p> <pre><code class="julia hljs">julia&gt; B = [<span class=hljs-number >1</span> <span class=hljs-number >2</span> <span class=hljs-number >3</span>; <span class=hljs-number >4</span> <span class=hljs-number >5</span> <span class=hljs-number >6</span>; <span class=hljs-number >7</span> <span class=hljs-number >8</span> <span class=hljs-number >9</span>]
+ <span class=hljs-number >3</span>  <span class=hljs-number >6</span>  <span class=hljs-number >9</span></code></pre> <p>Note, that we specified the three column vectors and combined them into a <span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>3</mn><mo>×</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">3 \times 3</annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:0.7278em;vertical-align:-0.0833em;"></span><span class=mord >3</span><span class=mspace  style="margin-right:0.2222em;"></span><span class=mbin >×</span><span class=mspace  style="margin-right:0.2222em;"></span></span><span class=base ><span class=strut  style="height:0.6444em;"></span><span class=mord >3</span></span></span></span> matrix. The row wise definition looks like this:</p> <pre><code class="julia hljs">julia&gt; B = [<span class=hljs-number >1</span> <span class=hljs-number >2</span> <span class=hljs-number >3</span>; <span class=hljs-number >4</span> <span class=hljs-number >5</span> <span class=hljs-number >6</span>; <span class=hljs-number >7</span> <span class=hljs-number >8</span> <span class=hljs-number >9</span>]
 <span class=hljs-number >3</span>×<span class=hljs-number >3</span> <span class=hljs-built_in >Matrix</span>{<span class=hljs-built_in >Int64</span>}:
  <span class=hljs-number >1</span>  <span class=hljs-number >2</span>  <span class=hljs-number >3</span>
  <span class=hljs-number >4</span>  <span class=hljs-number >5</span>  <span class=hljs-number >6</span>
- <span class=hljs-number >7</span>  <span class=hljs-number >8</span>  <span class=hljs-number >9</span></code></pre> <p>where we use <code>;</code> to separate the rows.</p> <p>Again, the basic operations ship with Julia and you need not additional packages. </p> <pre><code class="julia hljs">julia&gt; A+A*<span class=hljs-number >2</span><span class=hljs-literal >im</span>
+ <span class=hljs-number >7</span>  <span class=hljs-number >8</span>  <span class=hljs-number >9</span></code></pre> <p>where we use semicolon <code>;</code> to separate the rows.</p> <p>Again, the basic operations ship with Julia and you need no additional packages. </p> <pre><code class="julia hljs">julia&gt; A + A * <span class=hljs-number >2</span><span class=hljs-literal >im</span>
 <span class=hljs-number >3</span>×<span class=hljs-number >3</span> <span class=hljs-built_in >Matrix</span>{<span class=hljs-built_in >Complex</span>{<span class=hljs-built_in >Int64</span>}}:
  <span class=hljs-number >1</span>+<span class=hljs-number >2</span><span class=hljs-literal >im</span>  <span class=hljs-number >4</span>+<span class=hljs-number >8</span><span class=hljs-literal >im</span>   <span class=hljs-number >7</span>+<span class=hljs-number >14</span><span class=hljs-literal >im</span>
  <span class=hljs-number >2</span>+<span class=hljs-number >4</span><span class=hljs-literal >im</span>  <span class=hljs-number >5</span>+<span class=hljs-number >10</span><span class=hljs-literal >im</span>  <span class=hljs-number >8</span>+<span class=hljs-number >16</span><span class=hljs-literal >im</span>
- <span class=hljs-number >3</span>+<span class=hljs-number >6</span><span class=hljs-literal >im</span>  <span class=hljs-number >6</span>+<span class=hljs-number >12</span><span class=hljs-literal >im</span>  <span class=hljs-number >9</span>+<span class=hljs-number >18</span><span class=hljs-literal >im</span></code></pre> <p>It comes to not much surprise that the matrix-vector multiplication is </p> <pre><code class="julia hljs">julia&gt; A*v
+ <span class=hljs-number >3</span>+<span class=hljs-number >6</span><span class=hljs-literal >im</span>  <span class=hljs-number >6</span>+<span class=hljs-number >12</span><span class=hljs-literal >im</span>  <span class=hljs-number >9</span>+<span class=hljs-number >18</span><span class=hljs-literal >im</span></code></pre> <p>It comes to not much surprise that the matrix-vector multiplication is </p> <pre><code class="julia hljs">julia&gt; A * v
 <span class=hljs-number >3</span>-element <span class=hljs-built_in >Vector</span>{<span class=hljs-built_in >Int64</span>}:
  <span class=hljs-number >30</span>
  <span class=hljs-number >36</span>
- <span class=hljs-number >42</span></code></pre> <h2 id=point-wise_operations ><a href="#point-wise_operations" class=header-anchor >Point-wise operations</a></h2> <p>Quite often it is necessary to do point-wise operations on matrices. In order to do so we prepend a <code>.</code> before the operation:</p> <pre><code class="julia hljs">julia&gt; A*v
+ <span class=hljs-number >42</span></code></pre> <h2 id=point-wise_operations ><a href="#point-wise_operations" class=header-anchor >Point-wise operations</a></h2> <p>Quite often it is necessary to do point-wise operations on matrices. In order to do so we prepend a dot <code>.</code> before the operation:</p> <pre><code class="julia hljs">julia&gt; A * v
 <span class=hljs-number >3</span>-element <span class=hljs-built_in >Vector</span>{<span class=hljs-built_in >Int64</span>}:
  <span class=hljs-number >30</span>
  <span class=hljs-number >36</span>
  <span class=hljs-number >42</span>
- julia&gt; A.*v
+ julia&gt; A .* v
 <span class=hljs-number >3</span>×<span class=hljs-number >3</span> <span class=hljs-built_in >Matrix</span>{<span class=hljs-built_in >Int64</span>}:
  <span class=hljs-number >1</span>   <span class=hljs-number >4</span>   <span class=hljs-number >7</span>
  <span class=hljs-number >4</span>  <span class=hljs-number >10</span>  <span class=hljs-number >16</span>
  <span class=hljs-number >9</span>  <span class=hljs-number >18</span>  <span class=hljs-number >27</span>
- julia&gt; A.^<span class=hljs-number >2</span>
+ julia&gt; A .^ <span class=hljs-number >2</span>
 <span class=hljs-number >3</span>×<span class=hljs-number >3</span> <span class=hljs-built_in >Matrix</span>{<span class=hljs-built_in >Int64</span>}:
  <span class=hljs-number >1</span>  <span class=hljs-number >16</span>  <span class=hljs-number >49</span>
  <span class=hljs-number >4</span>  <span class=hljs-number >25</span>  <span class=hljs-number >64</span>
  <span class=hljs-number >9</span>  <span class=hljs-number >36</span>  <span class=hljs-number >81</span>
-julia&gt; A^<span class=hljs-number >2</span>
+julia&gt; A ^ <span class=hljs-number >2</span>
 <span class=hljs-number >3</span>×<span class=hljs-number >3</span> <span class=hljs-built_in >Matrix</span>{<span class=hljs-built_in >Int64</span>}:
  <span class=hljs-number >30</span>  <span class=hljs-number >66</span>  <span class=hljs-number >102</span>
  <span class=hljs-number >36</span>  <span class=hljs-number >81</span>  <span class=hljs-number >126</span>
- <span class=hljs-number >42</span>  <span class=hljs-number >96</span>  <span class=hljs-number >150</span></code></pre> <h2 id=access_specific_elements ><a href="#access_specific_elements" class=header-anchor >Access specific elements</a></h2> <p>Indexing in Julia starts with 1 and we use <code>&#91;&#93;</code>. So in order to compute <span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>v</mi><mn>2</mn></msub><msub><mi>A</mi><mrow><mn>1</mn><mo separator=true >,</mo><mn>2</mn></mrow></msub></mrow><annotation encoding="application/x-tex">v_2 A_{1,2}</annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:0.9694em;vertical-align:-0.2861em;"></span><span class=mord ><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class=msupsub ><span class="vlist-t vlist-t2"><span class=vlist-r ><span class=vlist  style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class=pstrut  style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class=vlist-s >​</span></span><span class=vlist-r ><span class=vlist  style="height:0.15em;"><span></span></span></span></span></span></span><span class=mord ><span class="mord mathnormal">A</span><span class=msupsub ><span class="vlist-t vlist-t2"><span class=vlist-r ><span class=vlist  style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class=pstrut  style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span><span class="mpunct mtight">,</span><span class="mord mtight">2</span></span></span></span></span><span class=vlist-s >​</span></span><span class=vlist-r ><span class=vlist  style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span> we say</p> <pre><code class="julia hljs">julia&gt; v[<span class=hljs-number >2</span>]
+ <span class=hljs-number >42</span>  <span class=hljs-number >96</span>  <span class=hljs-number >150</span></code></pre> <h2 id=access_specific_elements ><a href="#access_specific_elements" class=header-anchor >Access specific elements</a></h2> <p>Indexing in Julia starts with 1 and we use square brackets <code>&#91;&#93;</code>. So in order to compute <span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>v</mi><mn>2</mn></msub><msub><mi>A</mi><mrow><mn>1</mn><mo separator=true >,</mo><mn>2</mn></mrow></msub></mrow><annotation encoding="application/x-tex">v_2 A_{1,2}</annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:0.9694em;vertical-align:-0.2861em;"></span><span class=mord ><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class=msupsub ><span class="vlist-t vlist-t2"><span class=vlist-r ><span class=vlist  style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class=pstrut  style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class=vlist-s >​</span></span><span class=vlist-r ><span class=vlist  style="height:0.15em;"><span></span></span></span></span></span></span><span class=mord ><span class="mord mathnormal">A</span><span class=msupsub ><span class="vlist-t vlist-t2"><span class=vlist-r ><span class=vlist  style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class=pstrut  style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span><span class="mpunct mtight">,</span><span class="mord mtight">2</span></span></span></span></span><span class=vlist-s >​</span></span><span class=vlist-r ><span class=vlist  style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span> we say</p> <pre><code class="julia hljs">julia&gt; v[<span class=hljs-number >2</span>]
 <span class=hljs-number >2</span>
-julia&gt; A[<span class=hljs-number >1</span>,<span class=hljs-number >2</span>]
+julia&gt; A[<span class=hljs-number >1</span>, <span class=hljs-number >2</span>]
 <span class=hljs-number >4</span>
-julia&gt; v[<span class=hljs-number >2</span>] * A[<span class=hljs-number >1</span>,<span class=hljs-number >2</span>]
-<span class=hljs-number >8</span></code></pre> <p>You can also use the <code>end</code> keyword and the <code>:</code> placeholder to access a range of elements:</p> <pre><code class="julia hljs">julia&gt; A[:,<span class=hljs-keyword >end</span>-<span class=hljs-number >2</span>]
+julia&gt; v[<span class=hljs-number >2</span>] * A[<span class=hljs-number >1</span>, <span class=hljs-number >2</span>]
+<span class=hljs-number >8</span></code></pre> <p>You can also use the <code>end</code> keyword and the colon <code>:</code> placeholder to access a range of elements:</p> <pre><code class="julia hljs">julia&gt; A[:,<span class=hljs-keyword >end</span>-<span class=hljs-number >2</span>]
 <span class=hljs-number >3</span>-element <span class=hljs-built_in >Vector</span>{<span class=hljs-built_in >Int64</span>}:
  <span class=hljs-number >1</span>
  <span class=hljs-number >2</span>
@@ -81,7 +81,7 @@ julia&gt; sA = Symmetric(A)
  <span class=hljs-number >1</span>  <span class=hljs-number >4</span>  <span class=hljs-number >7</span>
  <span class=hljs-number >4</span>  <span class=hljs-number >5</span>  <span class=hljs-number >8</span>
  <span class=hljs-number >7</span>  <span class=hljs-number >8</span>  <span class=hljs-number >9</span>
-julia&gt; sA\v
+julia&gt; sA \ v
 <span class=hljs-number >3</span>-element <span class=hljs-built_in >Vector</span>{<span class=hljs-built_in >Float64</span>}:
  <span class=hljs-number >0.29999999999999993</span>
  <span class=hljs-number >1.1102230246251565e-16</span>
