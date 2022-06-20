@@ -1,0 +1,275 @@
+<!doctype html> <html lang=en > <script src="/ss22_julia_workshop/libs/clipboard.min.js"></script> <meta charset=UTF-8 > <meta name=viewport  content="width=device-width, initial-scale=1"> <link rel=stylesheet  href="/ss22_julia_workshop/libs/katex/katex.min.css"> <link rel=stylesheet  href="/ss22_julia_workshop/libs/highlight/github.min.css"> <link rel=stylesheet  href="/ss22_julia_workshop/css/jtd.css"> <link rel=stylesheet  href="/ss22_julia_workshop/css/extras.css"> <link rel=icon  href="/ss22_julia_workshop/assets/favicon.ico"> <style> /* #148 wrap long header */ .franklin-content a.header-anchor, .franklin-toc li a { word-wrap: break-word; white-space: normal; } </style> <title>Sheet 2</title> <div class=page-wrap > <div class=side-bar > <div class=header > <a href="/ss22_julia_workshop/" class=title > Julia </a> </div> <label for=show-menu  class=show-menu >MENU</label> <input type=checkbox  id=show-menu  role=button > <div class=menu  id=side-menu > <ul class=menu-list > <li class="menu-list-item "><a href="/ss22_julia_workshop/" class="menu-list-link ">Start</a> <li class="menu-list-item active"><a href="/ss22_julia_workshop/pages/introduction/" class="menu-list-link active">Introduction</a> <ul class="menu-list-child-list "> <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/basis_datatypes_and_operations" class=menu-list-link >Basic Datatypes and Operations</a> <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/worksheet_1" class=menu-list-link >Worksheet 1</a> <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/worksheet_2" class=menu-list-link >Worksheet 2</a> </ul> <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/hpc/" class="menu-list-link ">Parallel computing</a> <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/datascience/" class="menu-list-link ">Data Science</a> </ul> </div> <div class=footer > This is <em>Just the docs</em>, adapted from the <a href="https://github.com/pmarsceill/just-the-docs" target=_blank >Jekyll theme</a>. </div> </div> <div class=main-content-wrap > <div class=main-content > <div class=main-header > SS22 Julia Workshop Obergurgl </div> <div class=franklin-content ><h1 id=the_planesource_benchmark_with_julia ><a href="#the_planesource_benchmark_with_julia" class=header-anchor >The Planesource benchmark with Julia</a></h1> <div class=franklin-toc ><ol><li><a href="#functions">Functions</a><li><a href="#input_arguments">Input arguments</a><li><a href="#structs">Structs</a></ol></div> <h2 id=functions ><a href="#functions" class=header-anchor >Functions</a></h2> <p>The previously presented example is similar to the &#40;in the radiation transport community&#41; famous planesource benchmark, which has an analytic solution. We simply need to redefine the initial condition, which is chosen as a narrow Gaussian instead of a peak. To define this initial condition, we need to use functions. In general, it is a good idea to call functions instead of executing plain code in Julia, since Julia is inefficient if you execute your code as a top level program. Therefore, first put your entire code except for loading of packages and plotting into a function </p> <pre><code class="julia hljs"><span class=hljs-keyword >function</span> runPlaneSource()
+  ...
+  <span class=hljs-keyword >return</span> x, phi
+<span class=hljs-keyword >end</span></code></pre> <p>This can look like</p> <pre><code class="julia hljs"><span class=hljs-keyword >using</span> FastGaussQuadrature
+<span class=hljs-keyword >using</span> LinearAlgebra
+<span class=hljs-keyword >using</span> PyPlot
+
+<span class=hljs-keyword >function</span> runPlaneSource()::<span class=hljs-built_in >Tuple</span>{<span class=hljs-built_in >Vector</span>{<span class=hljs-built_in >Float64</span>}, <span class=hljs-built_in >Vector</span>{<span class=hljs-built_in >Float64</span>}}
+    <span class=hljs-comment ># define velocity grid according to gauss quadrature</span>
+    nv = <span class=hljs-number >10</span>
+    v, w = gausslegendre(nv)
+    nx = <span class=hljs-number >101</span>
+    x = collect(range(<span class=hljs-number >0</span>, <span class=hljs-number >1</span>; length=nx))
+
+    <span class=hljs-comment ># setup initial condition</span>
+    psi = zeros(nx, nv)
+    psi[<span class=hljs-number >50</span>, :] = ones(nv)
+
+    <span class=hljs-comment ># create stencil matrices</span>
+    dx = <span class=hljs-number >1</span> / (nx - <span class=hljs-number >1</span>)
+    DPlus = (<span class=hljs-number >1</span> / dx) * Tridiagonal(-ones(nx - <span class=hljs-number >1</span>), ones(nx), zeros(nx - <span class=hljs-number >1</span>))
+    DMinus = (<span class=hljs-number >1</span> / dx) * Tridiagonal(zeros(nx - <span class=hljs-number >1</span>), -ones(nx), ones(nx - <span class=hljs-number >1</span>))
+
+    <span class=hljs-comment ># create system matrices</span>
+    midMinus = <span class=hljs-built_in >Int</span>(ceil(nv / <span class=hljs-number >2</span>))
+    midPlus = <span class=hljs-built_in >Int</span>(floor(nv / <span class=hljs-number >2</span>))
+    VMinus = Diagonal([v[<span class=hljs-number >1</span>:midMinus]; zeros(midPlus)])
+    VPlus = Diagonal([zeros(midMinus); v[(midPlus + <span class=hljs-number >1</span>):<span class=hljs-keyword >end</span>]])
+
+    <span class=hljs-comment ># create scattering matrix</span>
+    G = ones(nv, nv) .* w - I
+
+    <span class=hljs-comment ># advance in time</span>
+    dt = <span class=hljs-number >0.01</span>
+    nT = <span class=hljs-number >40</span>
+
+    <span class=hljs-keyword >for</span> n <span class=hljs-keyword >in</span> <span class=hljs-number >1</span>:nT
+        psiNew = psi + dt * (-DPlus * psi * VPlus - DMinus * psi * VMinus + psi * G)
+        psi .= psiNew
+    <span class=hljs-keyword >end</span>
+
+    <span class=hljs-comment ># store phi for plotting</span>
+    phi = zeros(nx)
+
+    <span class=hljs-keyword >for</span> j <span class=hljs-keyword >in</span> <span class=hljs-number >1</span>:nx
+        phi[j] = sum(psi[j, :] .* w)
+    <span class=hljs-keyword >end</span>
+
+    <span class=hljs-keyword >return</span> x, phi
+<span class=hljs-keyword >end</span>
+
+<span class=hljs-comment ># run code and store final phi</span>
+x, phi = runPlaneSource()
+
+<span class=hljs-comment ># plot phi</span>
+fig, ax = subplots()
+ax.plot(x, phi, <span class=hljs-string >&quot;b-.&quot;</span>, linewidth=<span class=hljs-number >2</span>, label=<span class=hljs-string >L&quot;\Phi&quot;</span>, alpha=<span class=hljs-number >0.9</span>)
+ax.legend(loc=<span class=hljs-string >&quot;upper left&quot;</span>, fontsize=<span class=hljs-number >15</span>)
+xlabel(<span class=hljs-string >&quot;x&quot;</span>, fontsize=<span class=hljs-number >15</span>)
+ax.set_xlim([<span class=hljs-number >0</span>, <span class=hljs-number >1</span>])
+ax.tick_params(<span class=hljs-string >&quot;both&quot;</span>, labelsize=<span class=hljs-number >15</span>)
+show()</code></pre> <h2 id=input_arguments ><a href="#input_arguments" class=header-anchor >Input arguments</a></h2> <p>Then, write a new function for the initial condition and use it in your code. The new initial condition takes the form</p> <span class=katex-display ><span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML" display=block ><semantics><mrow><msub><mi>ψ</mi><mrow><mi>j</mi><mi>k</mi></mrow></msub><mo stretchy=false >(</mo><mi>t</mi><mo>=</mo><mn>0</mn><mo stretchy=false >)</mo><mo>=</mo><mi>max</mi><mo>⁡</mo><mrow><mo fence=true >(</mo><mn>1</mn><msup><mn>0</mn><mrow><mo>−</mo><mn>4</mn></mrow></msup><mo separator=true >,</mo><mfrac><mn>1</mn><msqrt><mrow><mn>2</mn><mi>π</mi><msup><mi>σ</mi><mn>2</mn></msup></mrow></msqrt></mfrac><mi>exp</mi><mo>⁡</mo><mrow><mo fence=true >(</mo><mo>−</mo><mfrac><mrow><mo stretchy=false >(</mo><msub><mi>x</mi><mi>j</mi></msub><mo>−</mo><mn>0.5</mn><msup><mo stretchy=false >)</mo><mn>2</mn></msup></mrow><mrow><mn>2</mn><msup><mi>σ</mi><mn>2</mn></msup></mrow></mfrac><mo fence=true >)</mo></mrow><mo fence=true >)</mo></mrow><mo separator=true >,</mo></mrow><annotation encoding="application/x-tex"> \psi_{jk}(t=0) = \max\left(10^{-4},\frac{1}{\sqrt{2\pi\sigma^2}}\exp\left(-\frac{(x_j-0.5)^2}{2\sigma^2}\right)\right), </annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:1.0361em;vertical-align:-0.2861em;"></span><span class=mord ><span class="mord mathnormal" style="margin-right:0.03588em;">ψ</span><span class=msupsub ><span class="vlist-t vlist-t2"><span class=vlist-r ><span class=vlist  style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class=pstrut  style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.03148em;">jk</span></span></span></span></span><span class=vlist-s >​</span></span><span class=vlist-r ><span class=vlist  style="height:0.2861em;"><span></span></span></span></span></span></span><span class=mopen >(</span><span class="mord mathnormal">t</span><span class=mspace  style="margin-right:0.2778em;"></span><span class=mrel >=</span><span class=mspace  style="margin-right:0.2778em;"></span></span><span class=base ><span class=strut  style="height:1em;vertical-align:-0.25em;"></span><span class=mord >0</span><span class=mclose >)</span><span class=mspace  style="margin-right:0.2778em;"></span><span class=mrel >=</span><span class=mspace  style="margin-right:0.2778em;"></span></span><span class=base ><span class=strut  style="height:2.4411em;vertical-align:-0.95em;"></span><span class=mop >max</span><span class=mspace  style="margin-right:0.1667em;"></span><span class=minner ><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size3">(</span></span><span class=mord >1</span><span class=mord ><span class=mord >0</span><span class=msupsub ><span class=vlist-t ><span class=vlist-r ><span class=vlist  style="height:0.8641em;"><span style="top:-3.113em;margin-right:0.05em;"><span class=pstrut  style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">−</span><span class="mord mtight">4</span></span></span></span></span></span></span></span></span><span class=mpunct >,</span><span class=mspace  style="margin-right:0.1667em;"></span><span class=mord ><span class="mopen nulldelimiter"></span><span class=mfrac ><span class="vlist-t vlist-t2"><span class=vlist-r ><span class=vlist  style="height:1.3214em;"><span style="top:-2.1549em;"><span class=pstrut  style="height:3em;"></span><span class=mord ><span class="mord sqrt"><span class="vlist-t vlist-t2"><span class=vlist-r ><span class=vlist  style="height:0.9551em;"><span class=svg-align  style="top:-3em;"><span class=pstrut  style="height:3em;"></span><span class=mord  style="padding-left:0.833em;"><span class=mord >2</span><span class="mord mathnormal" style="margin-right:0.03588em;">π</span><span class=mord ><span class="mord mathnormal" style="margin-right:0.03588em;">σ</span><span class=msupsub ><span class=vlist-t ><span class=vlist-r ><span class=vlist  style="height:0.7401em;"><span style="top:-2.989em;margin-right:0.05em;"><span class=pstrut  style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span><span style="top:-2.9151em;"><span class=pstrut  style="height:3em;"></span><span class=hide-tail  style="min-width:0.853em;height:1.08em;"><svg xmlns="http://www.w3.org/2000/svg" width='400em' height='1.08em' viewBox='0 0 400000 1080' preserveAspectRatio='xMinYMin slice'><path d='M95,702 c-2.7,0,-7.17,-2.7,-13.5,-8c-5.8,-5.3,-9.5,-10,-9.5,-14 c0,-2,0.3,-3.3,1,-4c1.3,-2.7,23.83,-20.7,67.5,-54 c44.2,-33.3,65.8,-50.3,66.5,-51c1.3,-1.3,3,-2,5,-2c4.7,0,8.7,3.3,12,10 s173,378,173,378c0.7,0,35.3,-71,104,-213c68.7,-142,137.5,-285,206.5,-429 c69,-144,104.5,-217.7,106.5,-221 l0 -0 c5.3,-9.3,12,-14,20,-14 H400000v40H845.2724 s-225.272,467,-225.272,467s-235,486,-235,486c-2.7,4.7,-9,7,-19,7 c-6,0,-10,-1,-12,-3s-194,-422,-194,-422s-65,47,-65,47z M834 80h400000v40h-400000z'/></svg></span></span></span><span class=vlist-s >​</span></span><span class=vlist-r ><span class=vlist  style="height:0.0849em;"><span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class=pstrut  style="height:3em;"></span><span class=frac-line  style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class=pstrut  style="height:3em;"></span><span class=mord ><span class=mord >1</span></span></span></span><span class=vlist-s >​</span></span><span class=vlist-r ><span class=vlist  style="height:0.93em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class=mspace  style="margin-right:0.1667em;"></span><span class=mop >exp</span><span class=mspace  style="margin-right:0.1667em;"></span><span class=minner ><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size3">(</span></span><span class=mord >−</span><span class=mord ><span class="mopen nulldelimiter"></span><span class=mfrac ><span class="vlist-t vlist-t2"><span class=vlist-r ><span class=vlist  style="height:1.4911em;"><span style="top:-2.314em;"><span class=pstrut  style="height:3em;"></span><span class=mord ><span class=mord >2</span><span class=mord ><span class="mord mathnormal" style="margin-right:0.03588em;">σ</span><span class=msupsub ><span class=vlist-t ><span class=vlist-r ><span class=vlist  style="height:0.7401em;"><span style="top:-2.989em;margin-right:0.05em;"><span class=pstrut  style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class=pstrut  style="height:3em;"></span><span class=frac-line  style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class=pstrut  style="height:3em;"></span><span class=mord ><span class=mopen >(</span><span class=mord ><span class="mord mathnormal">x</span><span class=msupsub ><span class="vlist-t vlist-t2"><span class=vlist-r ><span class=vlist  style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class=pstrut  style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span></span></span></span><span class=vlist-s >​</span></span><span class=vlist-r ><span class=vlist  style="height:0.2861em;"><span></span></span></span></span></span></span><span class=mspace  style="margin-right:0.2222em;"></span><span class=mbin >−</span><span class=mspace  style="margin-right:0.2222em;"></span><span class=mord >0.5</span><span class=mclose ><span class=mclose >)</span><span class=msupsub ><span class=vlist-t ><span class=vlist-r ><span class=vlist  style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class=pstrut  style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span><span class=vlist-s >​</span></span><span class=vlist-r ><span class=vlist  style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mclose delimcenter" style="top:0em;"><span class="delimsizing size3">)</span></span></span><span class="mclose delimcenter" style="top:0em;"><span class="delimsizing size3">)</span></span></span><span class=mspace  style="margin-right:0.1667em;"></span><span class=mpunct >,</span></span></span></span></span> <p>where <span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>σ</mi><mo>=</mo><mn>0.0</mn><msup><mn>3</mn><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">\sigma = 0.03^2</annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">σ</span><span class=mspace  style="margin-right:0.2778em;"></span><span class=mrel >=</span><span class=mspace  style="margin-right:0.2778em;"></span></span><span class=base ><span class=strut  style="height:0.8141em;"></span><span class=mord >0.0</span><span class=mord ><span class=mord >3</span><span class=msupsub ><span class=vlist-t ><span class=vlist-r ><span class=vlist  style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class=pstrut  style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span>. Write an initial condition that you can call for a given <span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:0.4306em;"></span><span class="mord mathnormal">x</span></span></span></span> and specify that <span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:0.4306em;"></span><span class="mord mathnormal">x</span></span></span></span> is a real scalar.</p> <pre><code class="julia hljs"><span class=hljs-keyword >function</span> IC(x::<span class=hljs-built_in >Float64</span>)::<span class=hljs-built_in >Float64</span>
+  sigma2 = <span class=hljs-number >0.0009</span>
+  floor = <span class=hljs-number >1e-4</span>
+  x0 = <span class=hljs-number >0.0</span>
+
+  <span class=hljs-keyword >return</span> max(floor, <span class=hljs-number >1.0</span> / (sqrt(<span class=hljs-number >2</span> * <span class=hljs-literal >pi</span> * sigma2)) * exp(-(x - <span class=hljs-number >0.5</span>)^<span class=hljs-number >2</span> / (<span class=hljs-number >2.0</span> * sigma2)))
+<span class=hljs-keyword >end</span></code></pre> <p>Then replace your initial condition from Sheet 1 by the above function call, which you need to evaluate at all spatial cells and all velocity points.</p> <pre><code class="julia hljs"><span class=hljs-comment ># setup initial condition</span>
+psi = zeros(nx, nv)
+
+<span class=hljs-keyword >for</span> j <span class=hljs-keyword >in</span> <span class=hljs-number >1</span>:nx
+  <span class=hljs-keyword >for</span> i <span class=hljs-keyword >in</span> <span class=hljs-number >1</span>:nv
+    psi[j, i] = IC(x[j])
+  <span class=hljs-keyword >end</span>
+<span class=hljs-keyword >end</span></code></pre> <p>To check your element-wise operation skills, see if you can remove one of the for loops. This can either take the form</p> <pre><code class="julia hljs">psi = zeros(nx, nv)
+
+<span class=hljs-keyword >for</span> j <span class=hljs-keyword >in</span> <span class=hljs-number >1</span>:nx
+    psi[j, :] .= IC(x[j])
+<span class=hljs-keyword >end</span></code></pre> <p>or</p> <pre><code class="julia hljs">psi = zeros(nx, nv)
+
+<span class=hljs-keyword >for</span> i <span class=hljs-keyword >in</span> <span class=hljs-number >1</span>:nv
+  psi[:, i] .= IC.(x)
+<span class=hljs-keyword >end</span></code></pre> <p>Now, note that we have fixed <span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>σ</mi></mrow><annotation encoding="application/x-tex">\sigma</annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">σ</span></span></span></span> insice the <code>IC</code> function. Very often, you want to use <span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>σ</mi><mo>=</mo><mn>0.0009</mn></mrow><annotation encoding="application/x-tex">\sigma = 0.0009</annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">σ</span><span class=mspace  style="margin-right:0.2778em;"></span><span class=mrel >=</span><span class=mspace  style="margin-right:0.2778em;"></span></span><span class=base ><span class=strut  style="height:0.6444em;"></span><span class=mord >0.0009</span></span></span></span>, but sometimes you want to change this sigma to test your code. See if you can rewrite your <code>IC</code> function to include this option.</p> <pre><code class="julia hljs"><span class=hljs-keyword >function</span> IC(x::<span class=hljs-built_in >Float64</span>, sigma2::<span class=hljs-built_in >Float64</span>=<span class=hljs-number >0.0009</span>)::<span class=hljs-built_in >Float64</span>
+  floor = <span class=hljs-number >1e-4</span>
+  x0 = <span class=hljs-number >0.0</span>
+  <span class=hljs-keyword >return</span> max(floor, <span class=hljs-number >1.0</span> / (sqrt(<span class=hljs-number >2</span> * <span class=hljs-literal >pi</span> * sigma2)) * exp(-(x - <span class=hljs-number >0.5</span>)^<span class=hljs-number >2</span> / (<span class=hljs-number >2.0</span> * sigma2)))
+<span class=hljs-keyword >end</span></code></pre> <p>In the same manner, we would like to change the number of spatial grid cells <code>nx</code> and the number of velocities <code>nv</code>. Change your <code>runPlaneSource</code> function such that it can pick varying inputs for <span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>n</mi><mi>x</mi></msub></mrow><annotation encoding="application/x-tex">n_x</annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:0.5806em;vertical-align:-0.15em;"></span><span class=mord ><span class="mord mathnormal">n</span><span class=msupsub ><span class="vlist-t vlist-t2"><span class=vlist-r ><span class=vlist  style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class=pstrut  style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">x</span></span></span></span><span class=vlist-s >​</span></span><span class=vlist-r ><span class=vlist  style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> and <span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>n</mi><mi>v</mi></msub></mrow><annotation encoding="application/x-tex">n_v</annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:0.5806em;vertical-align:-0.15em;"></span><span class=mord ><span class="mord mathnormal">n</span><span class=msupsub ><span class="vlist-t vlist-t2"><span class=vlist-r ><span class=vlist  style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class=pstrut  style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.03588em;">v</span></span></span></span><span class=vlist-s >​</span></span><span class=vlist-r ><span class=vlist  style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>. If no input is specified, it should pick the previously defined values.</p> <pre><code class="julia hljs"><span class=hljs-keyword >using</span> FastGaussQuadrature
+<span class=hljs-keyword >using</span> LinearAlgebra
+<span class=hljs-keyword >using</span> PyPlot
+
+<span class=hljs-comment ># definition of the initial condition</span>
+<span class=hljs-keyword >function</span> IC(x::<span class=hljs-built_in >Float64</span>, sigma2::<span class=hljs-built_in >Float64</span>=<span class=hljs-number >0.0009</span>)::<span class=hljs-built_in >Float64</span>
+    floor = <span class=hljs-number >1e-4</span>
+    x0 = <span class=hljs-number >0.0</span>
+    <span class=hljs-keyword >return</span> max(floor, <span class=hljs-number >1.0</span> / (sqrt(<span class=hljs-number >2</span> * <span class=hljs-literal >pi</span> * sigma2)) * exp(-(x - <span class=hljs-number >0.5</span>)^<span class=hljs-number >2</span> / (<span class=hljs-number >2.0</span> * sigma2)))
+<span class=hljs-keyword >end</span>
+
+<span class=hljs-keyword >function</span> runPlaneSource(nv::<span class=hljs-built_in >Int</span>=<span class=hljs-number >10</span>, nx::<span class=hljs-built_in >Int</span>=<span class=hljs-number >101</span>)::<span class=hljs-built_in >Tuple</span>{<span class=hljs-built_in >Vector</span>{<span class=hljs-built_in >Float64</span>}, <span class=hljs-built_in >Vector</span>{<span class=hljs-built_in >Float64</span>}}
+    <span class=hljs-comment ># define velocity grid according to gauss quadrature</span>
+    v, w = gausslegendre(nv)
+    x = collect(range(<span class=hljs-number >0</span>, <span class=hljs-number >1</span>; length=nx))
+
+    <span class=hljs-comment ># setup initial condition</span>
+    psi = zeros(nx, nv)
+
+    <span class=hljs-keyword >for</span> j <span class=hljs-keyword >in</span> <span class=hljs-number >1</span>:nx
+        psi[j, :] .= IC(x[j])
+    <span class=hljs-keyword >end</span>
+
+    <span class=hljs-comment ># create stencil matrices</span>
+    dx = <span class=hljs-number >1</span> / (nx - <span class=hljs-number >1</span>)
+    DPlus = (<span class=hljs-number >1</span> / dx) * Tridiagonal(-ones(nx - <span class=hljs-number >1</span>), ones(nx), zeros(nx - <span class=hljs-number >1</span>))
+    DMinus = (<span class=hljs-number >1</span> / dx) * Tridiagonal(zeros(nx - <span class=hljs-number >1</span>), -ones(nx), ones(nx - <span class=hljs-number >1</span>))
+
+    <span class=hljs-comment ># create system matrices</span>
+    midMinus = <span class=hljs-built_in >Int</span>(ceil(nv / <span class=hljs-number >2</span>))
+    midPlus = <span class=hljs-built_in >Int</span>(floor(nv / <span class=hljs-number >2</span>))
+    VMinus = Diagonal([v[<span class=hljs-number >1</span>:midMinus]; zeros(midPlus)])
+    VPlus = Diagonal([zeros(midMinus); v[(midPlus + <span class=hljs-number >1</span>):<span class=hljs-keyword >end</span>]])
+
+    <span class=hljs-comment ># create scattering matrix</span>
+    G = ones(nv, nv) .* w - I
+
+    <span class=hljs-comment ># advance in time</span>
+    dt = <span class=hljs-number >0.01</span>
+    nT = <span class=hljs-number >40</span>
+
+    <span class=hljs-keyword >for</span> n <span class=hljs-keyword >in</span> <span class=hljs-number >1</span>:nT
+        psiNew = psi + dt * (-DPlus * psi * VPlus - DMinus * psi * VMinus + psi * G)
+        psi .= psiNew
+    <span class=hljs-keyword >end</span>
+
+    <span class=hljs-comment ># store phi for plotting</span>
+    phi = zeros(nx)
+
+    <span class=hljs-keyword >for</span> j <span class=hljs-keyword >in</span> <span class=hljs-number >1</span>:nx
+        phi[j] = sum(psi[j, :] .* w)
+    <span class=hljs-keyword >end</span>
+
+    <span class=hljs-keyword >return</span> x, phi
+<span class=hljs-keyword >end</span>
+
+<span class=hljs-comment ># run code and store final phi</span>
+x, phi = runPlaneSource()
+
+<span class=hljs-comment ># plot phi</span>
+fig, ax = subplots()
+ax.plot(x, phi, <span class=hljs-string >&quot;b-.&quot;</span>, linewidth=<span class=hljs-number >2</span>, label=<span class=hljs-string >L&quot;\Phi&quot;</span>, alpha=<span class=hljs-number >0.9</span>)
+ax.legend(loc=<span class=hljs-string >&quot;upper left&quot;</span>, fontsize=<span class=hljs-number >15</span>)
+xlabel(<span class=hljs-string >&quot;x&quot;</span>, fontsize=<span class=hljs-number >15</span>)
+ax.set_xlim([<span class=hljs-number >0</span>, <span class=hljs-number >1</span>])
+ax.tick_params(<span class=hljs-string >&quot;both&quot;</span>, labelsize=<span class=hljs-number >15</span>)
+show()</code></pre> <p>You can now try out different numbers of velocities and spatial cells. See how the solution changes and think about what might be the reason for this.</p> <h2 id=structs ><a href="#structs" class=header-anchor >Structs</a></h2> <p>You might have observed that the solution crashes if you are choosing too many spatial cells. The reason for this is that the chosen <span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant=normal >Δ</mi><mi>t</mi></mrow><annotation encoding="application/x-tex">\Delta t</annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:0.6833em;"></span><span class=mord >Δ</span><span class="mord mathnormal">t</span></span></span></span> must fulfill <span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant=normal >Δ</mi><mi>t</mi><mo>≤</mo><mi mathvariant=normal >Δ</mi><mi>x</mi></mrow><annotation encoding="application/x-tex">\Delta t \leq \Delta x</annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:0.8193em;vertical-align:-0.136em;"></span><span class=mord >Δ</span><span class="mord mathnormal">t</span><span class=mspace  style="margin-right:0.2778em;"></span><span class=mrel >≤</span><span class=mspace  style="margin-right:0.2778em;"></span></span><span class=base ><span class=strut  style="height:0.6833em;"></span><span class=mord >Δ</span><span class="mord mathnormal">x</span></span></span></span>, otherwise the method is unstable. Also, you have maybe observed that a lot of parameters cannot be changed from outside the function call and you might want to add further parameters like the end time <code>tEnd</code>, the time step size <code>dt</code> or the variance of the initial condition <code>sigma2</code> to the input arguments of the function. To structure the input we can create a new object, which stores all these values, called a <code>struct</code>. A <code>struct</code> of the name <em>Test</em> which stores Floats <span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mo>=</mo><mn>0.1</mn></mrow><annotation encoding="application/x-tex">a=0.1</annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:0.4306em;"></span><span class="mord mathnormal">a</span><span class=mspace  style="margin-right:0.2778em;"></span><span class=mrel >=</span><span class=mspace  style="margin-right:0.2778em;"></span></span><span class=base ><span class=strut  style="height:0.6444em;"></span><span class=mord >0.1</span></span></span></span>, <span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>b</mi><mo>=</mo><mn>0.2</mn></mrow><annotation encoding="application/x-tex">b=0.2</annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:0.6944em;"></span><span class="mord mathnormal">b</span><span class=mspace  style="margin-right:0.2778em;"></span><span class=mrel >=</span><span class=mspace  style="margin-right:0.2778em;"></span></span><span class=base ><span class=strut  style="height:0.6444em;"></span><span class=mord >0.2</span></span></span></span> and <span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>c</mi><mo>=</mo><mi>a</mi><mo>+</mo><mi>b</mi></mrow><annotation encoding="application/x-tex">c = a+b</annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:0.4306em;"></span><span class="mord mathnormal">c</span><span class=mspace  style="margin-right:0.2778em;"></span><span class=mrel >=</span><span class=mspace  style="margin-right:0.2778em;"></span></span><span class=base ><span class=strut  style="height:0.6667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal">a</span><span class=mspace  style="margin-right:0.2222em;"></span><span class=mbin >+</span><span class=mspace  style="margin-right:0.2222em;"></span></span><span class=base ><span class=strut  style="height:0.6944em;"></span><span class="mord mathnormal">b</span></span></span></span> has the form</p> <pre><code class="julia hljs"><span class=hljs-keyword >struct</span> Test
+  a::<span class=hljs-built_in >Float64</span>
+  b::<span class=hljs-built_in >Float64</span>
+  c::<span class=hljs-built_in >Float64</span>
+
+  Settings(a::<span class=hljs-built_in >Float64</span>=<span class=hljs-number >0.1</span>, b::<span class=hljs-built_in >Float64</span>=<span class=hljs-number >0.2</span>)
+    c = a + b
+    new(a, b, c)
+  <span class=hljs-keyword >end</span>
+<span class=hljs-keyword >end</span></code></pre> <p>You can create this object by <code>testobject &#61; Test&#40;0.1, 0.2&#41;</code> and then access elements such as <span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi></mrow><annotation encoding="application/x-tex">a</annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:0.4306em;"></span><span class="mord mathnormal">a</span></span></span></span> with <code>testobject.a</code>. Use this to define a struct which stores all relevant information and use it as an input.</p> <pre><code class="julia hljs"><span class=hljs-keyword >struct</span> Settings
+  nx::<span class=hljs-built_in >Int</span> <span class=hljs-comment ># number of spatial cells</span>
+  nv::<span class=hljs-built_in >Int</span> <span class=hljs-comment ># number of velocity points</span>
+  nt::<span class=hljs-built_in >Int</span> <span class=hljs-comment ># number of time steps</span>
+  dt::<span class=hljs-built_in >Float64</span> <span class=hljs-comment ># time step size</span>
+  dx::<span class=hljs-built_in >Float64</span> <span class=hljs-comment ># spatial grid cell size</span>
+  tEnd::<span class=hljs-built_in >Float64</span> <span class=hljs-comment ># end time of simulation</span>
+  a::<span class=hljs-built_in >Float64</span> <span class=hljs-comment ># start point of spatial domain</span>
+  b::<span class=hljs-built_in >Float64</span> <span class=hljs-comment ># end point of spatial domain</span>
+  sigma2::<span class=hljs-built_in >Float64</span> <span class=hljs-comment ># variance of initial condition</span>
+
+  <span class=hljs-keyword >function</span> Settings(nx::<span class=hljs-built_in >Int</span>=<span class=hljs-number >101</span>, nv::<span class=hljs-built_in >Int</span>=<span class=hljs-number >10</span>, sigma2::<span class=hljs-built_in >Float64</span>=<span class=hljs-number >0.0009</span>)
+    tEnd = <span class=hljs-number >0.4</span>
+    a = -<span class=hljs-number >1.0</span>;
+    b = <span class=hljs-number >1.0</span>;
+    dx = (b - a) / (nx - <span class=hljs-number >1</span>)
+    dt = dx
+    nt = <span class=hljs-built_in >Int</span>(floor(tEnd / dt))
+    new(nx, nv, nt, dt, dx, tEnd, a, b, sigma2)
+  <span class=hljs-keyword >end</span>
+<span class=hljs-keyword >end</span></code></pre> <p>Go over your code and use the variables from the struct. Now it should be easy to for example change the length of the spatial domain. Use <span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo>∈</mo><mo stretchy=false >[</mo><mo>−</mo><mn>1</mn><mo separator=true >,</mo><mn>1</mn><mo stretchy=false >]</mo></mrow><annotation encoding="application/x-tex">x\in[-1, 1]</annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:0.5782em;vertical-align:-0.0391em;"></span><span class="mord mathnormal">x</span><span class=mspace  style="margin-right:0.2778em;"></span><span class=mrel >∈</span><span class=mspace  style="margin-right:0.2778em;"></span></span><span class=base ><span class=strut  style="height:1em;vertical-align:-0.25em;"></span><span class=mopen >[</span><span class=mord >−</span><span class=mord >1</span><span class=mpunct >,</span><span class=mspace  style="margin-right:0.1667em;"></span><span class=mord >1</span><span class=mclose >]</span></span></span></span>. Make sure that the position of the Gaussian in your <code>IC</code> function remains in the center. We then get</p> <pre><code class="julia hljs"><span class=hljs-keyword >using</span> FastGaussQuadrature
+<span class=hljs-keyword >using</span> LinearAlgebra
+<span class=hljs-keyword >using</span> PyPlot
+
+<span class=hljs-keyword >struct</span> Settings
+  nx::<span class=hljs-built_in >Int</span> <span class=hljs-comment ># number of spatial cells</span>
+  nv::<span class=hljs-built_in >Int</span> <span class=hljs-comment ># number of velocity points</span>
+  nt::<span class=hljs-built_in >Int</span> <span class=hljs-comment ># number of time steps</span>
+  dt::<span class=hljs-built_in >Float64</span> <span class=hljs-comment ># time step size</span>
+  dx::<span class=hljs-built_in >Float64</span> <span class=hljs-comment ># spatial grid cell size</span>
+  tEnd::<span class=hljs-built_in >Float64</span> <span class=hljs-comment ># end time of simulation</span>
+  a::<span class=hljs-built_in >Float64</span> <span class=hljs-comment ># start point of spatial domain</span>
+  b::<span class=hljs-built_in >Float64</span> <span class=hljs-comment ># end point of spatial domain</span>
+  sigma2::<span class=hljs-built_in >Float64</span> <span class=hljs-comment ># variance of initial condition</span>
+
+  <span class=hljs-keyword >function</span> Settings(nx::<span class=hljs-built_in >Int</span>=<span class=hljs-number >101</span>, nv::<span class=hljs-built_in >Int</span>=<span class=hljs-number >10</span>, sigma2::<span class=hljs-built_in >Float64</span>=<span class=hljs-number >0.0009</span>)
+    tEnd = <span class=hljs-number >0.4</span>
+    a = -<span class=hljs-number >1.0</span>;
+    b = <span class=hljs-number >1.0</span>;
+    dx = (b - a) / (nx - <span class=hljs-number >1</span>)
+    dt = dx
+    nt = <span class=hljs-built_in >Int</span>(floor(tEnd / dt))
+    new(nx, nv, nt, dt, dx, tEnd, a, b, sigma2)
+  <span class=hljs-keyword >end</span>
+<span class=hljs-keyword >end</span>
+
+<span class=hljs-comment ># definition of the initial condition</span>
+<span class=hljs-keyword >function</span> IC(obj::Settings, x::<span class=hljs-built_in >Float64</span>)
+  floor = <span class=hljs-number >1e-4</span>
+  <span class=hljs-keyword >return</span> max(floor, <span class=hljs-number >1.0</span> / (sqrt(<span class=hljs-number >2</span> * <span class=hljs-literal >pi</span> * obj.sigma2)) * exp(-(x - <span class=hljs-number >0.5</span> * (obj.b - obj.a) - obj.a)^<span class=hljs-number >2</span> / (<span class=hljs-number >2.0</span> * obj.sigma2)))
+<span class=hljs-keyword >end</span>
+
+<span class=hljs-keyword >function</span> runPlaneSource(obj::Settings)::<span class=hljs-built_in >Tuple</span>{<span class=hljs-built_in >Vector</span>{<span class=hljs-built_in >Float64</span>}, <span class=hljs-built_in >Vector</span>{<span class=hljs-built_in >Float64</span>}}
+    nx = obj.nx
+    nv = obj.nv
+
+    <span class=hljs-comment ># define velocity grid according to gauss quadrature</span>
+    v, w = gausslegendre(nv)
+    x = collect(range(obj.a, obj.b; length=nx))
+
+    <span class=hljs-comment ># setup initial condition</span>
+    psi = zeros(nx, nv)
+
+    <span class=hljs-keyword >for</span> j <span class=hljs-keyword >in</span> <span class=hljs-number >1</span>:nx
+        psi[j, :] .= IC(obj, x[j])
+    <span class=hljs-keyword >end</span>
+
+    <span class=hljs-comment ># create stencil matrices</span>
+    dx = obj.dx
+    DPlus = (<span class=hljs-number >1</span> / dx) * Tridiagonal(-ones(nx - <span class=hljs-number >1</span>), ones(nx), zeros(nx - <span class=hljs-number >1</span>))
+    DMinus = (<span class=hljs-number >1</span> / dx) * Tridiagonal(zeros(nx - <span class=hljs-number >1</span>), -ones(nx), ones(nx - <span class=hljs-number >1</span>))
+
+    <span class=hljs-comment ># create system matrices</span>
+    midMinus = <span class=hljs-built_in >Int</span>(ceil(nv / <span class=hljs-number >2</span>))
+    midPlus = <span class=hljs-built_in >Int</span>(floor(nv / <span class=hljs-number >2</span>))
+    VMinus = Diagonal([v[<span class=hljs-number >1</span>:midMinus]; zeros(midPlus)])
+    VPlus = Diagonal([zeros(midMinus); v[(midPlus + <span class=hljs-number >1</span>):<span class=hljs-keyword >end</span>]])
+
+    <span class=hljs-comment ># create scattering matrix</span>
+    G = ones(nv, nv) .* w - I
+
+    <span class=hljs-comment ># advance in time</span>
+    dt = obj.dt
+    nT = obj.nt
+
+    <span class=hljs-keyword >for</span> n <span class=hljs-keyword >in</span> <span class=hljs-number >1</span>:nT
+        psiNew = psi + dt * (-DPlus * psi * VPlus - DMinus * psi * VMinus + psi * G)
+        psi .= psiNew
+    <span class=hljs-keyword >end</span>
+
+    <span class=hljs-comment ># store phi for plotting</span>
+    phi = zeros(nx)
+
+    <span class=hljs-keyword >for</span> j <span class=hljs-keyword >in</span> <span class=hljs-number >1</span>:nx
+        phi[j] = sum(psi[j, :] .* w)
+    <span class=hljs-keyword >end</span>
+
+    <span class=hljs-keyword >return</span> x, phi
+<span class=hljs-keyword >end</span>
+
+<span class=hljs-comment ># generate setup</span>
+settings = Settings()
+
+<span class=hljs-comment ># run code and store final phi</span>
+x, phi = runPlaneSource(settings)
+
+<span class=hljs-comment ># plot phi</span>
+fig, ax = subplots()
+ax.plot(x, phi, <span class=hljs-string >&quot;b-.&quot;</span>, linewidth=<span class=hljs-number >2</span>, label=<span class=hljs-string >L&quot;\Phi&quot;</span>, alpha=<span class=hljs-number >0.9</span>)
+ax.legend(loc=<span class=hljs-string >&quot;upper left&quot;</span>, fontsize=<span class=hljs-number >15</span>)
+xlabel(<span class=hljs-string >&quot;x&quot;</span>, fontsize=<span class=hljs-number >15</span>)
+ax.set_xlim([settings.a, settings.b])
+ax.tick_params(<span class=hljs-string >&quot;both&quot;</span>, labelsize=<span class=hljs-number >15</span>)
+show()</code></pre> <div class=page-foot > <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> Gregor Ehrensperger, Peter Kandolf, Jonas Kusch. Last modified: June 20, 2022. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>. </div> </div> </div> </div> </div> <!-- end of class page-wrap--> <script> (function(){ // Get the elements. // - the 'pre' element. // - the 'div' with the 'paste-content' id. var pre = document.getElementsByTagName('pre'); // Add a copy button in the 'pre' element. // which only has the className of 'language-'. for (var i = 0; i < pre.length; i++) { var isLanguage = pre[i].children[0].className.indexOf('language-'); if ( isLanguage === 0 ) { var button = document.createElement('button'); button.className = 'copy-button'; button.textContent = 'Copy'; pre[i].appendChild(button); } }; // Run Clipboard var copyCode = new Clipboard('.copy-button', { target: function(trigger) { return trigger.previousElementSibling; } }); // On success: // - Change the "Copy" text to "Copied". // - Swap it to "Copy" in 2s. // - Lead user to the "contenteditable" area with Velocity scroll. copyCode.on('success', function(event) { event.clearSelection(); event.trigger.textContent = 'Copied'; window.setTimeout(function() { event.trigger.textContent = 'Copy'; }, 2000); }); // On error (Safari): // - Change the "Press Ctrl+C to copy" // - Swap it to "Copy" in 2s. copyCode.on('error', function(event) { event.trigger.textContent = 'Press "Ctrl + C" to copy'; window.setTimeout(function() { event.trigger.textContent = 'Copy'; }, 5000); }); })(); </script> <script> var coll = document.getElementsByClassName("collapsible"); var i; for (i = 0; i < coll.length; i++) { coll[i].addEventListener("click", function() { this.classList.toggle("active"); var content = this.nextElementSibling; if (content.style.display === "block") { content.style.display = "none"; } else { content.style.display = "block"; } }); } </script>

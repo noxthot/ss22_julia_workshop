@@ -3,31 +3,49 @@
 
 <url>
     <loc>https://noxthot.github.io/ss22_julia_workshop/index.html</loc>
-    <lastmod>2022-06-19</lastmod>
+    <lastmod>2022-06-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
 <url>
     <loc>https://noxthot.github.io/ss22_julia_workshop/pages/introduction/index.html</loc>
-    <lastmod>2022-06-19</lastmod>
+    <lastmod>2022-06-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
+    <loc>https://noxthot.github.io/ss22_julia_workshop/pages/introduction/worksheet_2/index.html</loc>
+    <lastmod>2022-06-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
 <url>
     <loc>https://noxthot.github.io/ss22_julia_workshop/404/index.html</loc>
-    <lastmod>2022-06-19</lastmod>
+    <lastmod>2022-06-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
 <url>
     <loc>https://noxthot.github.io/ss22_julia_workshop/pages/datascience/index.html</loc>
-    <lastmod>2022-06-19</lastmod>
+    <lastmod>2022-06-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
 <url>
     <loc>https://noxthot.github.io/ss22_julia_workshop/pages/hpc/index.html</loc>
-    <lastmod>2022-06-19</lastmod>
+    <lastmod>2022-06-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
+    <loc>https://noxthot.github.io/ss22_julia_workshop/pages/introduction/basis_datatypes_and_operations/index.html</loc>
+    <lastmod>2022-06-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
+    <loc>https://noxthot.github.io/ss22_julia_workshop/pages/introduction/worksheet_1/index.html</loc>
+    <lastmod>2022-06-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
