@@ -1,10 +1,7 @@
 @def title = "Sheet 2"
 @def hascode = true
-@def rss = "Refining the code by using functions"
-@def rss_title = "More goodies"
-@def rss_pubdate = Date(2019, 5, 1)
 
-@def tags = ["syntax", "code", "image"]
+@def tags = ["introduction", "worksheet"]
 
 <!-- A hidden code block to prevent PyPlot from opening figure -->
 ```julia:./code/worksheet_2.jl

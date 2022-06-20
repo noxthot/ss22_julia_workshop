@@ -1,3 +1,8 @@
+@def title = "Sheet 1"
+@def hascode = true
+
+@def tags = ["introduction", "worksheet"]
+
 <!-- A hidden code block to prevent PyPlot from opening figure -->
 ```julia:./code/worksheet_2.jl
 #hideall
