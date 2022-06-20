@@ -88,7 +88,6 @@ ax.legend(loc="upper left", fontsize=15)
 xlabel("x", fontsize=15)
 ax.set_xlim([0, 1])
 ax.tick_params("both", labelsize=15)
-show()
 ```
 
 ## Input arguments
@@ -221,8 +220,8 @@ ax.legend(loc="upper left", fontsize=15)
 xlabel("x", fontsize=15)
 ax.set_xlim([0, 1])
 ax.tick_params("both", labelsize=15)
-show()
 ```
+
 You can now try out different numbers of velocities and spatial cells. See how the solution changes and think about what might be the reason for this.
 
 ## Structs
@@ -365,5 +364,4 @@ ax.legend(loc="upper left", fontsize=15)
 xlabel("x", fontsize=15)
 ax.set_xlim([settings.a, settings.b])
 ax.tick_params("both", labelsize=15)
-show()
 ```
