@@ -3,13 +3,6 @@
 
 @def tags = ["introduction", "worksheet"]
 
-<!-- A hidden code block to prevent PyPlot from opening figure -->
-```julia:./code/worksheet_2.jl
-#hideall
-using PyPlot
-ioff()
-```
-
 # The Planesource benchmark with Julia
 
 \toc
@@ -29,8 +22,9 @@ This can look like
 
 ```julia:./code/worksheet_2.jl
 using FastGaussQuadrature
+using LaTeXStrings
 using LinearAlgebra
-using PyPlot
+using Plots; gr()
 
 function runPlaneSource()::Tuple{Vector{Float64}, Vector{Float64}}
     # define velocity grid according to gauss quadrature
@@ -80,12 +74,8 @@ end
 x, phi = runPlaneSource()
 
 # plot phi
-fig, ax = subplots()
-ax.plot(x, phi, "b-.", linewidth=2, label=L"\Phi", alpha=0.9)
-ax.legend(loc="upper left", fontsize=15)
-xlabel("x", fontsize=15)
-ax.set_xlim([0, 1])
-ax.tick_params("both", labelsize=15)
+plot(x, phi, labels=L"\Phi")
+xlabel!("x")
 ```
 
 ## Input arguments
@@ -153,8 +143,9 @@ In the same manner, we would like to change the number of spatial grid cells `nx
 
 ```julia:./code/worksheet_2.jl
 using FastGaussQuadrature
+using LaTeXStrings
 using LinearAlgebra
-using PyPlot
+using Plots; gr()
 
 # definition of the initial condition
 function IC(x::Float64, sigma2::Float64=0.0009)::Float64
@@ -212,12 +203,8 @@ end
 x, phi = runPlaneSource()
 
 # plot phi
-fig, ax = subplots()
-ax.plot(x, phi, "b-.", linewidth=2, label=L"\Phi", alpha=0.9)
-ax.legend(loc="upper left", fontsize=15)
-xlabel("x", fontsize=15)
-ax.set_xlim([0, 1])
-ax.tick_params("both", labelsize=15)
+plot(x, phi, labels=L"\Phi")
+xlabel!("x")
 ```
 
 You can now try out different numbers of velocities and spatial cells. See how the solution changes and think about what might be the reason for this.
@@ -269,8 +256,9 @@ Go over your code and use the variables from the struct. Now it should be easy t
 
 ```julia:./code/worksheet_2.jl
 using FastGaussQuadrature
+using LaTeXStrings
 using LinearAlgebra
-using PyPlot
+using Plots; gr()
 
 struct Settings
   nx::Int # number of spatial cells
@@ -356,10 +344,6 @@ settings = Settings()
 x, phi = runPlaneSource(settings)
 
 # plot phi
-fig, ax = subplots()
-ax.plot(x, phi, "b-.", linewidth=2, label=L"\Phi", alpha=0.9)
-ax.legend(loc="upper left", fontsize=15)
-xlabel("x", fontsize=15)
-ax.set_xlim([settings.a, settings.b])
-ax.tick_params("both", labelsize=15)
+plot(x, phi, labels=L"\Phi")
+xlabel!("x")
 ```

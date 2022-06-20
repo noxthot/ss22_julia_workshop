@@ -3,13 +3,6 @@
 
 @def tags = ["introduction", "worksheet"]
 
-<!-- A hidden code block to prevent PyPlot from opening figure -->
-```julia:./code/worksheet_2.jl
-#hideall
-using PyPlot
-ioff()
-```
-
 # Radiation Transport with Julia
 
 \toc
@@ -125,21 +118,19 @@ end
 
 ## Plotting
 
-Luckily Julia can include the `PyPlot` package. Install and add it to your code. Then run
+Luckily Julia can include the `Plots` package. Install and add it to your code. Then run
 
 ```julia:./code/worksheet_1.jl
-using PyPlot
-fig, ax = subplots()
-ax.plot(x, phi, "b-.", linewidth=2, label=L"\Phi", alpha=0.9)
-ax.legend(loc="upper left", fontsize=15)
-xlabel("x", fontsize=15)
-ax.set_xlim([0, 1])
-ax.tick_params("both", labelsize=15) 
-savefig(joinpath(@OUTPUT, "worksheet_1.svg")) # hide
+using LaTeXStrings
+using Plots; gr()
+
+plot(x, phi, labels=L"\Phi")
+xlabel!("x")
+savefig(joinpath(@OUTPUT, "worksheet_1.png")) # hide
 ```
 
 The output that you should get is
-\figalt{radiation therapy}{/assets/pages/introduction/worksheet_1/code/output/worksheet_1.svg}
+\figalt{radiation therapy}{/assets/pages/introduction/worksheet_1/code/output/worksheet_1.png}
 
 What you see is the particle density $\Phi$ over the spatial domain. Congratulations, you have just computed your first radiation transport problem using Julia. If you look at your code, you will see that it looks quite messy. you can add a comment *test comment* with `# test comment`. Use the comment command to explain what you did and double check if you understood everything. Also, commonly the `using` commands are executed in the first lines of the code, so move all these commands to the top.
 
