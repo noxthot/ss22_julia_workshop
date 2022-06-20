@@ -95,8 +95,8 @@ Now, we do not want to know the solution at $\Delta t$, but at $t_{\mathrm{end}}
 nT = 40
 
 for n in 1:nT
-    psiNew = psi + dt * (-DPlus * psi * VPlus - DMinus * psi * VMinus + psi * G)
-    psi .= psiNew
+    psiCurr = psi + dt * (-DPlus * psi * VPlus - DMinus * psi * VMinus + psi * G)
+    psi .= psiCurr
 end
 ```
 
