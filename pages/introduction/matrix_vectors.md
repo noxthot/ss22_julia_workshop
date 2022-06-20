@@ -16,7 +16,7 @@ julia> v = [1, 2, 3]
  2
  3
 ```
-As you can see, Julia found out that all the numbers are integers and therefore you have now a 3-element Vector of the type Int64 defined. You can now do operations on this vector in the usual fashion:
+As you can see, Julia found out that all the numbers are integers and therefore you have now defined a 3-element Vector of type `Int64`. You can now do operations on this vector in the usual fashion:
 ```julia
 julia> v * 2
 3-element Vector{Int64}:
@@ -66,7 +66,7 @@ julia> w'
  2  5  8
  3  6  9
  ```
- Note, that we specified the three column vectors and combined them into a 3x3 matrix. 
+ Note, that we specified the three column vectors and combined them into a $3 \times 3$ matrix. 
  The row wise definition looks like this:
  ```julia
 julia> B = [1 2 3; 4 5 6; 7 8 9]
@@ -75,17 +75,17 @@ julia> B = [1 2 3; 4 5 6; 7 8 9]
  4  5  6
  7  8  9
  ```
- where we use `;` to separate the rows.
+ where we use semicolon `;` to separate the rows.
 
-Again, the basic operations ship with Julia and you need not additional packages. 
+Again, the basic operations ship with Julia and you need no additional packages. 
 ```julia
 julia> A + A * 2im
 3×3 Matrix{Complex{Int64}}:
  1+2im  4+8im   7+14im
  2+4im  5+10im  8+16im
  3+6im  6+12im  9+18im
-
  ```
+
  It comes to not much surprise that the matrix-vector multiplication is 
  ```julia
 julia> A * v
@@ -95,7 +95,7 @@ julia> A * v
  42
  ```
 ## Point-wise operations
- Quite often it is necessary to do point-wise operations on matrices. In order to do so we prepend a `.` before the operation:
+ Quite often it is necessary to do point-wise operations on matrices. In order to do so we prepend a dot `.` before the operation:
  ```julia
  julia> A * v
 3-element Vector{Int64}:
@@ -121,7 +121,7 @@ julia> A ^ 2
 
 ## Access specific elements
 
-Indexing in Julia starts with 1 and we use `[]`. So in order to compute $v_2 A_{1,2}$ we say
+Indexing in Julia starts with 1 and we use square brackets `[]`. So in order to compute $v_2 A_{1,2}$ we say
 ```julia
 julia> v[2]
 2
@@ -130,7 +130,8 @@ julia> A[1, 2]
 julia> v[2] * A[1, 2]
 8
 ```
-You can also use the `end` keyword and the `:` placeholder to access a range of elements:
+
+You can also use the `end` keyword and the colon `:` placeholder to access a range of elements:
 ```julia
 julia> A[:,end-2]
 3-element Vector{Int64}:
