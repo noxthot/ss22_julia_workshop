@@ -83,4 +83,4 @@ There is no better resource than [https://www.julia-vscode.org](https://www.juli
 
 With these short basics and [https://www.julia-vscode.org](https://www.julia-vscode.org) you are good to go for the workshop. You can also find a list of [keybindings](https://www.julia-vscode.org/docs/dev/userguide/keybindings/), once you are more familiar with the IDE and you never want to get your hands off the keyboard. 
 
-In VSCode you can always type `Strg + Shift + P` to get access to the prompt and execute commands within VSCode.
+In VSCode you can always type `CTRL + SHIFT + P` to get access to the prompt and execute commands within VSCode.
