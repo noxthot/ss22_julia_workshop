@@ -82,3 +82,5 @@ There is no better resource than [https://www.julia-vscode.org](https://www.juli
 - To run a Julia program, click the small arrow on the top left or `Ctrl+F5` if you prefer keyboard shortcuts. Both will run the code in the Julia REPL and you see the output on the bottom.
 
 With these short basics and [https://www.julia-vscode.org](https://www.julia-vscode.org) you are good to go for the workshop. You can also find a list of [keybindings](https://www.julia-vscode.org/docs/dev/userguide/keybindings/), once you are more familiar with the IDE and you never want to get your hands off the keyboard. 
+
+In VSCode you can always type `Strg+Shif+P` to get access to the prompt and execute commands within VSCode.
