@@ -80,7 +80,7 @@ julia>
 (@v1.7) pkg> 
 ```
 }
-- **Help mode** You can switch to this mode by typing `?` and the prompt will change to `help?>`. Julia will print the help and documentation for everything you ask for (with relation to Julia).
+- **Help mode** You can switch to this mode by typing `?` and the prompt will change to `help?>`. Julia will print the help and documentation for everything you ask for (related to Julia).
 \example{
 ```julia
 help?> +
