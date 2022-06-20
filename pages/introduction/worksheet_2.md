@@ -6,6 +6,12 @@
 
 @def tags = ["syntax", "code", "image"]
 
+<> A hidden code block to prevent PyPlot from opening figure
+```julia:./code/worksheet_2.jl
+#hideall
+ioff()
+```
+
 # The Planesource benchmark with Julia
 
 \toc
