@@ -118,6 +118,7 @@ shell> pwd
 shell>
 ```
 }
+
 **You exit all of the (non) Julia modes by pressing Backspace.**
 2. Visual Studio Code - see [Main introduction](../../index.html#julia_and_vscode)
 3. A lot of other IDEs or text editors like Jupyter, Sublime Text, Nano, vim and many more can also be used in connection with Julia. Some integrate the evaluation inside the editor for others you will have to do this in the command line. You can always run Julia code from command line by typing `julia myProgram.jl`
