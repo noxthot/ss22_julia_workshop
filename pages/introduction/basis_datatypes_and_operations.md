@@ -93,7 +93,7 @@ julia> typeof(3//5)
 Rational{Int64}
 ```
 
-And with `::` it is possible to explicitly specify the type of a value / variable:
+And with `::` it is possible to explicitly specify the type of a value or variable:
 ```julia-repl
 julia> 10.0::Float64
 10.0
@@ -114,10 +114,10 @@ julia> typeof(x + y)
 Int64
 ```
 
-You may ask yourself: Why is this important when Julia is dynamically typed and thus not requires types to be explicitly set? Among others, there are two primary purposes for using types: improve human readability and catch programmer errors. It may also get important when high precision, memory constraints or fast computation gets really important.
+You may ask yourself: Why is this important when Julia is dynamically typed and thus not requires types to be explicitly set? Among others, there are two primary purposes for using types: improve human readability and catch programmer errors. It may also get important when high precision, memory constraints or fast computation is required.
 
-For now we did not speak about basic mathematical operations which are of course defined for all primitive numeric types. `+` corresponds to the addition, `-` to the subtraction, `*` to the multiplication, `/` to the division and `x ^ y` raises `x` to the `y`th power:
-```julia
+For now we did not speak about basic mathematical operations which are of course defined for all primitive numeric types. `+` corresponds to addition, `-` to subtraction, `*` to multiplication, `/` to division, `÷` for integer division and `x ^ y` raises `x` to the `y`th power:
+```julia-repl
 julia> x = 3 + 2im
 3 + 2im
 
@@ -135,6 +135,9 @@ julia> x * y
 
 julia> x / y
 0.5769230769230769 + 0.3846153846153846im
+
+julia> y ÷ 3    # to type ÷, simply enter \div followed by tab
+1.0
 
 julia> x ^ y
 -784.728604218539 + 66.05617374305294im
