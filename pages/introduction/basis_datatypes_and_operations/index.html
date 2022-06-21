@@ -34,23 +34,7 @@
 </span>Complex{Int64}
 
 <span class="hljs-meta prompt_">julia&gt;</span><span class=language-julia > typeof(<span class=hljs-number >3</span>//<span class=hljs-number >5</span>)
-</span>Rational{Int64}</code></pre> <p>And with <code>::</code> it is possible to explicitly specify the type of a value or variable:</p> <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class=language-julia > <span class=hljs-number >10.0</span>::<span class=hljs-built_in >Float64</span>
-</span>10.0
-
-<span class="hljs-meta prompt_">julia&gt;</span><span class=language-julia > <span class=hljs-literal >true</span>::<span class=hljs-built_in >Bool</span>
-</span>true
-
-<span class="hljs-meta prompt_">julia&gt;</span><span class=language-julia > <span class=hljs-keyword >local</span> x::<span class=hljs-built_in >Int32</span> = <span class=hljs-number >10</span>
-</span>10
-
-<span class="hljs-meta prompt_">julia&gt;</span><span class=language-julia > <span class=hljs-keyword >local</span> y::<span class=hljs-built_in >Int64</span> = <span class=hljs-number >10</span>
-</span>10
-
-<span class="hljs-meta prompt_">julia&gt;</span><span class=language-julia > x + y
-</span>8
-
-<span class="hljs-meta prompt_">julia&gt;</span><span class=language-julia > typeof(x + y)
-</span>Int64</code></pre> <p>You may ask yourself: Why is this important when Julia is dynamically typed and thus not requires types to be explicitly set? Among others, there are three primary purposes for using types: improve human readability, catch programmer errors and for making use of a concept called multiple dispatch &#40;which we will talk about later in this workshop&#41;. It may also get important when high precision, memory constraints or fast computation is required.</p> <p>For now we did not speak about basic mathematical operations which are of course defined for all primitive numeric types. <code>&#43;</code> corresponds to addition, <code>-</code> to subtraction, <code>*</code> to multiplication, <code>/</code> to division, <code>÷</code> for integer division and <code>x ^ y</code> raises <code>x</code> to the <code>y</code>th power:</p> <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class=language-julia > x = <span class=hljs-number >3</span> + <span class=hljs-number >2</span><span class=hljs-literal >im</span>
+</span>Rational{Int64}</code></pre> <p>You may ask yourself: Why is this important when Julia is dynamically typed and thus not requires types to be explicitly set? Among others, there are three primary purposes for using types: improve human readability, catch programmer errors and for making use of a concept called multiple dispatch &#40;which we will talk about later in this workshop&#41;. It may also get important when high precision, memory constraints or fast computation is required.</p> <p>For now we did not speak about basic mathematical operations which are of course defined for all primitive numeric types. <code>&#43;</code> corresponds to addition, <code>-</code> to subtraction, <code>*</code> to multiplication, <code>/</code> to division, <code>÷</code> for integer division and <code>x ^ y</code> raises <code>x</code> to the <code>y</code>th power:</p> <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class=language-julia > x = <span class=hljs-number >3</span> + <span class=hljs-number >2</span><span class=hljs-literal >im</span>
 </span>3 + 2im
 
 <span class="hljs-meta prompt_">julia&gt;</span><span class=language-julia > y = <span class=hljs-number >5.2</span>
