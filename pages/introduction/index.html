@@ -1,8 +1,8 @@
-<!doctype html> <html lang=en > <script src="/ss22_julia_workshop/libs/clipboard.min.js"></script> <meta charset=UTF-8 > <meta name=viewport  content="width=device-width, initial-scale=1"> <link rel=stylesheet  href="/ss22_julia_workshop/libs/highlight/github.min.css"> <link rel=stylesheet  href="/ss22_julia_workshop/css/jtd.css"> <link rel=stylesheet  href="/ss22_julia_workshop/css/extras.css"> <link rel=icon  href="/ss22_julia_workshop/assets/favicon.ico"> <style> /* #148 wrap long header */ .franklin-content a.header-anchor, .franklin-toc li a { word-wrap: break-word; white-space: normal; } </style> <title>Introduction</title> <div class=page-wrap > <div class=side-bar > <div class=header > <a href="/ss22_julia_workshop/" class=title > Julia </a> </div> <label for=show-menu  class=show-menu >MENU</label> <input type=checkbox  id=show-menu  role=button > <div class=menu  id=side-menu > <ul class=menu-list > <li class="menu-list-item "><a href="/ss22_julia_workshop/" class="menu-list-link ">Start</a> <li class="menu-list-item active"><a href="/ss22_julia_workshop/pages/introduction/" class="menu-list-link active">Introduction</a> <ul class="menu-list-child-list "> <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/basis_datatypes_and_operations" class=menu-list-link >Basic Datatypes and Operations</a> <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/matrix_vectors" class=menu-list-link >Matrix and Vector Operations</a> <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/worksheet_1" class=menu-list-link >Worksheet 1</a> <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/worksheet_2" class=menu-list-link >Worksheet 2</a> </ul> <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/hpc/" class="menu-list-link ">Parallel computing</a> <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/datascience/" class="menu-list-link ">Data Science</a> </ul> </div> <div class=footer > This is <em>Just the docs</em>, adapted from the <a href="https://github.com/pmarsceill/just-the-docs" target=_blank >Jekyll theme</a>. </div> </div> <div class=main-content-wrap > <div class=main-content > <div class=main-header > SS22 Julia Workshop Obergurgl </div> <div class=franklin-content ><h1 id=introduction_to_julia ><a href="#introduction_to_julia" class=header-anchor >Introduction to Julia </a></h1> <h2 id=running_julia_code ><a href="#running_julia_code" class=header-anchor >Running Julia code</a></h2> <p>There are several ways to write and run Julia code:</p> <ol> <li><p>The Julia <a href="https://docs.julialang.org/en/v1/stdlib/REPL/">REPL</a> &#40;read-evaluate-print-loop&#41;: you can start it by typing <code>julia</code> &#40;or the full path to the executable&#41; on the command line. The REPL itself comes with four distinct modes that can be very useful to know:</p> </ol> <ul> <li><p><strong>Julia mode</strong> This is the default mode when you start julia. The prompt starts with <code>julia&gt;</code>. There you may type Julia expressions which get evaluated when pressing enter. The resulting output will be presented immediately after evaluation.</p> </ul> <button type=button  class=collapsible  style="background-color:#56d100"> Example </button><div class=collapsiblecontent > </p> <pre><code class="julia hljs">julia&gt; <span class=hljs-number >1</span>+<span class=hljs-number >1</span>
-<span class=hljs-number >2</span>
+<!doctype html> <html lang=en > <script src="/ss22_julia_workshop/libs/clipboard.min.js"></script> <meta charset=UTF-8 > <meta name=viewport  content="width=device-width, initial-scale=1"> <link rel=stylesheet  href="/ss22_julia_workshop/libs/highlight/github.min.css"> <link rel=stylesheet  href="/ss22_julia_workshop/css/jtd.css"> <link rel=stylesheet  href="/ss22_julia_workshop/css/extras.css"> <link rel=icon  href="/ss22_julia_workshop/assets/favicon.ico"> <style> /* #148 wrap long header */ .franklin-content a.header-anchor, .franklin-toc li a { word-wrap: break-word; white-space: normal; } </style> <title>Introduction</title> <div class=page-wrap > <div class=side-bar > <div class=header > <a href="/ss22_julia_workshop/" class=title > Julia </a> </div> <label for=show-menu  class=show-menu >MENU</label> <input type=checkbox  id=show-menu  role=button > <div class=menu  id=side-menu > <ul class=menu-list > <li class="menu-list-item "><a href="/ss22_julia_workshop/" class="menu-list-link ">Start</a> <li class="menu-list-item active"><a href="/ss22_julia_workshop/pages/introduction/" class="menu-list-link active">Introduction</a> <ul class="menu-list-child-list "> <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/basis_datatypes_and_operations" class=menu-list-link >Basic Datatypes and Operations</a> <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/matrix_vectors" class=menu-list-link >Matrix and Vector Operations</a> <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/worksheet_1" class=menu-list-link >Worksheet 1</a> <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/worksheet_2" class=menu-list-link >Worksheet 2</a> </ul> <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/hpc/" class="menu-list-link ">Parallel computing</a> <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/datascience/" class="menu-list-link ">Data Science</a> </ul> </div> <div class=footer > This is <em>Just the docs</em>, adapted from the <a href="https://github.com/pmarsceill/just-the-docs" target=_blank >Jekyll theme</a>. </div> </div> <div class=main-content-wrap > <div class=main-content > <div class=main-header > SS22 Julia Workshop Obergurgl </div> <div class=franklin-content ><h1 id=introduction_to_julia ><a href="#introduction_to_julia" class=header-anchor >Introduction to Julia </a></h1> <h2 id=running_julia_code ><a href="#running_julia_code" class=header-anchor >Running Julia code</a></h2> <p>There are several ways to write and run Julia code:</p> <ol> <li><p>The Julia <a href="https://docs.julialang.org/en/v1/stdlib/REPL/">REPL</a> &#40;read-evaluate-print-loop&#41;: you can start it by typing <code>julia</code> &#40;or the full path to the executable&#41; on the command line. The REPL itself comes with four distinct modes that can be very useful to know:</p> </ol> <ul> <li><p><strong>Julia mode</strong> This is the default mode when you start julia. The prompt starts with <code>julia&gt;</code>. There you may type Julia expressions which get evaluated when pressing enter. The resulting output will be presented immediately after evaluation.</p> </ul> <button type=button  class=collapsible  style="background-color:#56d100"> Example </button><div class=collapsiblecontent > </p> <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class=language-julia > <span class=hljs-number >1</span>+<span class=hljs-number >1</span>
+</span>2
 
-julia&gt;</code></pre> <p></div> <ul> <li><p><strong>Package mode</strong> You can switch to this mode by typing <code>&#93;</code> and the prompt will change to <code>&#40;@v1.7&#41; pkg&gt;</code> &#40;the version number will depend on your installation&#41;. Here you can directly interact with the package manager and add or update packages. To get a complete list of possibilities type <code>?</code></p> </ul> <button type=button  class=collapsible  style="background-color:#56d100"> Example </button><div class=collapsiblecontent > </p> <pre><code class="julia hljs">(<span class=hljs-meta >@v1</span><span class=hljs-number >.7</span>) pkg&gt; ?
-  Welcome to the Pkg REPL-mode. To <span class=hljs-keyword >return</span> to the julia&gt; prompt, either press backspace when the input line is empty or press Ctrl+C.
+<span class="hljs-meta prompt_">julia&gt;</span></code></pre> <p></div> <ul> <li><p><strong>Package mode</strong> You can switch to this mode by typing <code>&#93;</code> and the prompt will change to <code>&#40;@v1.7&#41; pkg&gt;</code> &#40;the version number will depend on your installation&#41;. Here you can directly interact with the package manager and add or update packages. To get a complete list of possibilities type <code>?</code></p> </ul> <button type=button  class=collapsible  style="background-color:#56d100"> Example </button><div class=collapsiblecontent > </p> <pre><code class="julia-repl hljs"><span class=hljs-metap>(@v1.7) pkg&gt;</span> ?
+  Welcome to the Pkg REPL-mode. To return to the julia&gt; prompt, either press backspace when the input line is empty or press Ctrl+C.
 
   Full documentation available at https://pkgdocs.julialang.org/
 
@@ -10,7 +10,7 @@ julia&gt;</code></pre> <p></div> <ul> <li><p><strong>Package mode</strong> You c
 
   pkg&gt; cmd [opts] [args]
 
-  Multiple commands can be given on the same line by interleaving a ; between the commands. <span class=hljs-built_in >Some</span> commands have an alias, indicated below.
+  Multiple commands can be given on the same line by interleaving a ; between the commands. Some commands have an alias, indicated below.
 
   Commands
 
@@ -18,19 +18,19 @@ julia&gt;</code></pre> <p></div> <ul> <li><p><strong>Package mode</strong> You c
 
   add: add packages to project
 
-  build: run the build script <span class=hljs-keyword >for</span> packages
+  build: run the build script for packages
 
-  develop, dev: clone the full package repo locally <span class=hljs-keyword >for</span> development
+  develop, dev: clone the full package repo locally for development
 
   free: undoes a pin, develop, or stops tracking a repo
 
-  gc: garbage collect packages not used <span class=hljs-keyword >for</span> a significant time
+  gc: garbage collect packages not used for a significant time
 
-  generate: generate files <span class=hljs-keyword >for</span> a new project
+  generate: generate files for a new project
 
   help, ?: show this message
 
-  instantiate: downloads all the dependencies <span class=hljs-keyword >for</span> the project
+  instantiate: downloads all the dependencies for the project
 
   pin: pins the version of packages
 
@@ -40,15 +40,15 @@ julia&gt;</code></pre> <p></div> <ul> <li><p><strong>Package mode</strong> You c
 
   remove, rm: remove packages from project or manifest
 
-  resolve: resolves to update the manifest from changes <span class=hljs-keyword >in</span> dependencies of developed packages
+  resolve: resolves to update the manifest from changes in dependencies of developed packages
 
   status, st: summarize contents of and changes to environment
 
-  test: run tests <span class=hljs-keyword >for</span> packages
+  test: run tests for packages
 
   undo: undo the latest change to the active project
 
-  update, up: update packages <span class=hljs-keyword >in</span> manifest
+  update, up: update packages in manifest
 
   registry add: add package registries
 
@@ -58,30 +58,30 @@ julia&gt;</code></pre> <p></div> <ul> <li><p><strong>Package mode</strong> You c
 
   registry update, up: update package registries
 
-(<span class=hljs-meta >@v1</span><span class=hljs-number >.7</span>) pkg&gt;</code></pre> <p></div> <ul> <li><p><strong>Help mode</strong> You can switch to this mode by typing <code>?</code> and the prompt will change to <code>help?&gt;</code>. Julia will print the help and documentation for everything you ask for &#40;related to Julia&#41;.</p> </ul> <button type=button  class=collapsible  style="background-color:#56d100"> Example </button><div class=collapsiblecontent > </p> <pre><code class="julia hljs">help?&gt; +
+<span class=hljs-metap>(@v1.7) pkg&gt;</span></code></pre> <p></div> <ul> <li><p><strong>Help mode</strong> You can switch to this mode by typing <code>?</code> and the prompt will change to <code>help?&gt;</code>. Julia will print the help and documentation for everything you ask for &#40;related to Julia&#41;.</p> </ul> <button type=button  class=collapsible  style="background-color:#56d100"> Example </button><div class=collapsiblecontent > </p> <pre><code class="julia-repl hljs">help?&gt; +
 search: +
 
   +(x, y...)
 
-  Addition operator. x+y+z+... calls this <span class=hljs-keyword >function</span> with all arguments, i.e. +(x, y, z, ...).
+  Addition operator. x+y+z+... calls this function with all arguments, i.e. +(x, y, z, ...).
 
   Examples
   ≡≡≡≡≡≡≡≡≡≡
 
-  julia&gt; <span class=hljs-number >1</span> + <span class=hljs-number >20</span> + <span class=hljs-number >4</span>
-  <span class=hljs-number >25</span>
+  julia&gt; 1 + 20 + 4
+  25
   
-  julia&gt; +(<span class=hljs-number >1</span>, <span class=hljs-number >20</span>, <span class=hljs-number >4</span>)
-  <span class=hljs-number >25</span>
+  julia&gt; +(1, 20, 4)
+  25
 
   ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 
   dt::Date + t::Time -&gt; DateTime
 
   The addition of a Date with a Time produces a DateTime. The hour, minute, second, and millisecond parts of the Time are used along with the year, month, and day of the Date to create the new DateTime. Non-zero microseconds
-  or nanoseconds <span class=hljs-keyword >in</span> the Time type will result <span class=hljs-keyword >in</span> an <span class=hljs-built_in >InexactError</span> being thrown.
+  or nanoseconds in the Time type will result in an InexactError being thrown.
 
-julia&gt;</code></pre> <p></div> <ul> <li><p><strong>Shell mode</strong> You can switch to this mode by typing <code>;</code> and the prompt will change to <code>shell&gt;</code>. Now you are in the usual shell and you can type any commands you need to evaluate.</p> </ul> <button type=button  class=collapsible  style="background-color:#56d100"> Example </button><div class=collapsiblecontent > </p> <pre><code class="julia hljs">shell&gt; pwd
+<span class="hljs-meta prompt_">julia&gt;</span></code></pre> <p></div> <ul> <li><p><strong>Shell mode</strong> You can switch to this mode by typing <code>;</code> and the prompt will change to <code>shell&gt;</code>. Now you are in the usual shell and you can type any commands you need to evaluate.</p> </ul> <button type=button  class=collapsible  style="background-color:#56d100"> Example </button><div class=collapsiblecontent > </p> <pre><code class="julia hljs">shell&gt; pwd
 /home/user/ws22_julia_workshop
 
 shell&gt;</code></pre> <p></div> <p><strong>You exit all of the &#40;non&#41; Julia modes by pressing Backspace.</strong></p> <ol start=2 > <li><p>Visual Studio Code - see <a href="../../index.html#julia_and_vscode">Main introduction</a></p> <li><p>A lot of other IDEs or text editors like Jupyter, Sublime Text, Nano, vim and many more can also be used in connection with Julia. Some integrate the evaluation inside the editor for others you will have to do this in the command line. You can always run Julia code from command line by typing <code>julia myProgram.jl</code></p> </ol> <p>If your are just exploring some possibilities the REPL is very useful, once you try running some program or simply want to repeat a process you will have to switch to running code from a file. In the REPL you can use the arrow keys <em>up</em> and <em>down</em> to navigate through previous calls &#40;if your command line allows this&#41;.</p> <h2 id=additional_sources ><a href="#additional_sources" class=header-anchor >Additional sources</a></h2> <p>If you are already familiar with another programming language it might be worth visiting <a href="https://docs.julialang.org/en/v1/manual/noteworthy-differences/">Noteworthy Differences from other Languages</a> from the Julia documentation. </p> <h2 id=reading_and_writing ><a href="#reading_and_writing" class=header-anchor >Reading and writing</a></h2> <div class=page-foot > <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> Gregor Ehrensperger, Peter Kandolf, Jonas Kusch. Last modified: June 21, 2022. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>. </div> </div> </div> </div> </div> <!-- end of class page-wrap--> <script> (function(){ // Get the elements. // - the 'pre' element. // - the 'div' with the 'paste-content' id. var pre = document.getElementsByTagName('pre'); // Add a copy button in the 'pre' element. // which only has the className of 'language-'. for (var i = 0; i < pre.length; i++) { var isLanguage = pre[i].children[0].className.indexOf('language-'); if ( isLanguage === 0 ) { var button = document.createElement('button'); button.className = 'copy-button'; button.textContent = 'Copy'; pre[i].appendChild(button); } }; // Run Clipboard var copyCode = new Clipboard('.copy-button', { target: function(trigger) { return trigger.previousElementSibling; } }); // On success: // - Change the "Copy" text to "Copied". // - Swap it to "Copy" in 2s. // - Lead user to the "contenteditable" area with Velocity scroll. copyCode.on('success', function(event) { event.clearSelection(); event.trigger.textContent = 'Copied'; window.setTimeout(function() { event.trigger.textContent = 'Copy'; }, 2000); }); // On error (Safari): // - Change the "Press Ctrl+C to copy" // - Swap it to "Copy" in 2s. copyCode.on('error', function(event) { event.trigger.textContent = 'Press "Ctrl + C" to copy'; window.setTimeout(function() { event.trigger.textContent = 'Copy'; }, 5000); }); })(); </script> <script> var coll = document.getElementsByClassName("collapsible"); var i; for (i = 0; i < coll.length; i++) { coll[i].addEventListener("click", function() { this.classList.toggle("active"); var content = this.nextElementSibling; if (content.style.display === "block") { content.style.display = "none"; } else { content.style.display = "block"; } }); } </script>
