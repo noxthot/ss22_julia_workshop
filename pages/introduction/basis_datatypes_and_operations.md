@@ -27,7 +27,7 @@ julia> greekText = "Στυπιδ Ρ"
 
 ## Datatypes
 
-Julia supports basic data types like Integers, Floating-Point Numbers, Strings and many more. The most generic type is called `Any` and thus every type is a subtype of `Any`. Types are built in a hierarchical manner and can be visualized as a type graph (examples for partial type graphs are given in [Wikibooks - Introducing Julia](https://en.wikibooks.org/wiki/Introducing_Julia/Types)).
+Julia supports basic data types like Integers, Floating-Point Numbers, [Strings and many more](https://docs.julialang.org/en/v1/manual/types/). The most generic type is called `Any` and thus every type is a subtype of `Any`. Types are built in a hierarchical manner and can be visualized as a type graph (examples for partial type graphs are given in [Wikibooks - Introducing Julia](https://en.wikibooks.org/wiki/Introducing_Julia/Types)).
 
 Although Julia's type system is dynamic, it also allows to explicitly set a specific type for certain values and thus also gains advantages of static type systems.
 
@@ -35,7 +35,7 @@ In the following we will briefly look into some basic data types and the operati
 
 ### Numeric types
 
-Integers and Floating-Point Numbers are the building blocks for arithmetic and computation. They are both subtypes of the more general type `Real` and come in different primitive numeric types:
+Integers and Floating-Point Numbers are the building blocks for arithmetic and computational operations. They are both subtypes of the more general type `Real` and come in different primitive numeric types:
 - Integer types:
 Type     | Signed   | Number of bits
 -------- | -------- | --------
@@ -114,7 +114,7 @@ julia> typeof(x + y)
 Int64
 ```
 
-You may ask yourself: Why is this important when Julia is dynamically typed and thus not requires types to be explicitly set? Among others, there are two primary purposes for using types: improve human readability and catch programmer errors. It may also get important when high precision, memory constraints or fast computation is required.
+You may ask yourself: Why is this important when Julia is dynamically typed and thus not requires types to be explicitly set? Among others, there are three primary purposes for using types: improve human readability, catch programmer errors and for making use of a concept called multiple dispatch (which we will talk about later in this workshop). It may also get important when high precision, memory constraints or fast computation is required.
 
 For now we did not speak about basic mathematical operations which are of course defined for all primitive numeric types. `+` corresponds to addition, `-` to subtraction, `*` to multiplication, `/` to division, `÷` for integer division and `x ^ y` raises `x` to the `y`th power:
 ```julia-repl
