@@ -165,3 +165,80 @@ false
 ```
 
 Integer types additionally offer [bitwise operators](https://docs.julialang.org/en/v1/manual/mathematical-operations/#Bitwise-Operators) which will not be discussed in this workshop.
+
+
+### Characters and Strings
+
+Strings are finite sequences of characters. But what is a character? Julia's built-in concrete type used for strings is `String` and this type supports the whole range of [Unicode](https://www.unicode.org/versions/latest/) characters via UTF-8 encoding. Possible characters include latin and greek letters, aswell as emoji and many many [more](https://www.unicode.org/charts/).
+
+A single character can be stored as a `Char` type using single quotation marks `''` while a `String` type uses double quotation marks `""`:
+```julia-repl
+julia> x = 'α'
+'α': Unicode U+03B1 (category Ll: Letter, lowercase)
+
+julia> y = "α"
+"α"
+
+julia> z = "αγ"
+"αγ"
+
+julia> cantdo = 'αγ'
+ERROR: syntax: character literal contains multiple characters
+Stacktrace:
+ [1] top-level scope
+   @ none:1
+```
+
+And Julia even supports the use of Unicode as variable names which for example allows to use the same notation as the one used for scientific work. To add some Unicode math symbol, type the backslashed $\LaTeX$ symbol name followed by a tab. E.g. `\alpha` turns into `α`:
+```julia-repl
+julia> α = 10
+10
+
+julia> β = 20
+20
+
+julia> γ = α + β
+30
+```
+
+We bet you are now curious about adding some emojis to spice up your code. In a similar manner we use `\:smile_cat:` followed by a tab to get 😸. To view the list of all the available emojis simply type `\:` followed by a tab in your REPL. Here is an emoji example which demonstrates why you can not compare apples and pears (spoiler: they are of different types):
+```julia-repl
+julia> 🍎 = "nobody likes me"
+"nobody likes me"
+
+julia> 🍐 = 'Ω'
+'Ω': Unicode U+03A9 (category Lu: Letter, uppercase)
+
+julia> 🍎 > 🍐
+ERROR: MethodError: no method matching isless(::Char, ::String)
+```
+
+Since strings are sequences, they also allow indexing (note that indexing in Julia starts with `1`):
+```julia-repl
+julia> mytext = "I am a String"
+"I am a String"
+
+julia> mytext[1]
+'I': ASCII/Unicode U+0049 (category Lu: Letter, uppercase)
+
+julia> mytext[8]
+'S': ASCII/Unicode U+0053 (category Lu: Letter, uppercase)
+```
+
+Common operations on strings are e.g. `a * b` for concatenating two strings `a` and `b`, `length(a)` to get the number of characters of a string `a`, `occursin(a, b)` to find out whether `a` is a substring of `b` and [more](https://docs.julialang.org/en/v1/manual/strings/#Common-Operations):
+```julia-repl
+julia> mystring = "Mathematik"
+"Mathematik"
+
+julia> mystring = "julialang"
+"julialang"
+
+julia> mystring * " is my favourite language"
+"julialang is my favourite language"
+
+julia> length(mystring)
+9
+
+julia> occursin("alan", mystring)
+true
+```
