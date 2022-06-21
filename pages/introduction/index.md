@@ -11,7 +11,7 @@ There are several ways to write and run Julia code:
 
 1. The Julia [REPL](https://docs.julialang.org/en/v1/stdlib/REPL/) (read-evaluate-print-loop): you can start it by typing `julia` (or the full path to the executable) on the command line. The REPL itself comes with four distinct modes that can be very useful to know:
 - **Julia mode** This is the default mode when you start julia. The prompt starts with `julia>`. There you may type Julia expressions which get evaluated when pressing enter. The resulting output will be presented immediately after evaluation.
-\example{```julia
+\example{```julia-repl
 julia> 1+1
 2
 
@@ -19,7 +19,7 @@ julia>
 ```
 }
 - **Package mode** You can switch to this mode by typing `]` and the prompt will change to `(@v1.7) pkg>` (the version number will depend on your installation). Here you can directly interact with the package manager and add or update packages. To get a complete list of possibilities type `?`
-\example{```julia
+\example{```julia-repl
 (@v1.7) pkg> ?
   Welcome to the Pkg REPL-mode. To return to the julia> prompt, either press backspace when the input line is empty or press Ctrl+C.
 
@@ -82,7 +82,7 @@ julia>
 }
 - **Help mode** You can switch to this mode by typing `?` and the prompt will change to `help?>`. Julia will print the help and documentation for everything you ask for (related to Julia).
 \example{
-```julia
+```julia-repl
 help?> +
 search: +
 

@@ -9,7 +9,7 @@ In Julia vectors and matrices are derived from the basic [`Core.AbstracArray`](h
 
 ## Vectors
 You can allocate a vector by typing:
-```julia
+```julia-repl
 julia> v = [1, 2, 3]
 3-element Vector{Int64}:
  1
@@ -17,7 +17,7 @@ julia> v = [1, 2, 3]
  3
 ```
 As you can see, Julia found out that all the numbers are integers and therefore you have now defined a 3-element Vector of type `Int64`. You can now do operations on this vector in the usual fashion:
-```julia
+```julia-repl
 julia> v * 2
 3-element Vector{Int64}:
  2
@@ -41,7 +41,7 @@ Note that the type of your vector changes with regards to the result of the oper
 @@
 
 If you try to define the vector without the `,` you will generate a 1x3 Matrix:
-```julia
+```julia-repl
 julia> w = [1 2 3]
 1×3 Matrix{Int64}:
  1  2  3
@@ -49,7 +49,7 @@ julia> w = [1 2 3]
  Julia was designed by mathematicians, this might explain some of the notions regarding the conventions in Julia.
 
  We can also do the *adjoined* operation but note that Julia will remember this:
- ```julia
+ ```julia-repl
 julia> w'
 3×1 adjoint(::Matrix{Int64}) with eltype Int64:
  1
@@ -59,7 +59,7 @@ julia> w'
 
 ## Matrices
  If we have vectors the jump to matrices is not very far. Simply wrap everything in another set of brackets and we are good to go:
- ```julia
+ ```julia-repl
  julia> A = [[1, 2, 3] [4, 5, 6] [7, 8, 9]]
 3×3 Matrix{Int64}:
  1  4  7
@@ -68,7 +68,7 @@ julia> w'
  ```
  Note, that we specified the three column vectors and combined them into a $3 \times 3$ matrix. 
  The row wise definition looks like this:
- ```julia
+ ```julia-repl
 julia> B = [1 2 3; 4 5 6; 7 8 9]
 3×3 Matrix{Int64}:
  1  2  3
@@ -78,7 +78,7 @@ julia> B = [1 2 3; 4 5 6; 7 8 9]
  where we use semicolon `;` to separate the rows.
 
 Again, the basic operations ship with Julia and you need no additional packages. 
-```julia
+```julia-repl
 julia> A + A * 2im
 3×3 Matrix{Complex{Int64}}:
  1+2im  4+8im   7+14im
@@ -87,7 +87,7 @@ julia> A + A * 2im
  ```
 
  It comes to not much surprise that the matrix-vector multiplication is 
- ```julia
+ ```julia-repl
 julia> A * v
 3-element Vector{Int64}:
  30
@@ -96,18 +96,18 @@ julia> A * v
  ```
 ## Point-wise operations
  Quite often it is necessary to do point-wise operations on matrices. In order to do so we prepend a dot `.` before the operation:
- ```julia
- julia> A * v
+ ```julia-repl
+julia> A * v
 3-element Vector{Int64}:
  30
  36
  42
- julia> A .* v
+julia> A .* v
 3×3 Matrix{Int64}:
  1   4   7
  4  10  16
  9  18  27
- julia> A .^ 2
+julia> A .^ 2
 3×3 Matrix{Int64}:
  1  16  49
  4  25  64
@@ -122,7 +122,7 @@ julia> A ^ 2
 ## Access specific elements
 
 Indexing in Julia starts with 1 and we use square brackets `[]`. So in order to compute $v_2 A_{1,2}$ we say
-```julia
+```julia-repl
 julia> v[2]
 2
 julia> A[1, 2]
@@ -132,7 +132,7 @@ julia> v[2] * A[1, 2]
 ```
 
 You can also use the `end` keyword and the colon `:` placeholder to access a range of elements:
-```julia
+```julia-repl
 julia> A[:,end-2]
 3-element Vector{Int64}:
  1
@@ -144,7 +144,7 @@ To find the entire list of operations that can be performed and a lot more on ar
 # Linear Algebra
 
 As soon as you include the [`LinearAlgebra`](https://docs.julialang.org/en/v1/stdlib/LinearAlgebra/) or the [`SparseLinearAlgebra`](https://docs.julialang.org/en/v1/stdlib/SuiteSparse/) package you have a lot more operations available, both are part of the Julia Standard Library.
-```julia
+```julia-repl
 julia> using LinearAlgebra
 julia> tr(A)
 15
