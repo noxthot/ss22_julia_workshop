@@ -8,7 +8,7 @@
 ## Variables
 
 A variable is a name that is bound to a value and is used to store a value for later use. See the following examples:
-```julia
+```julia-repl
 julia> x = 5
 5
 
@@ -61,7 +61,7 @@ Float64  | double    | 64
 Additionally, Julia also offers support for Complex and Rational Numbers. The according types are given by e.g. `Complex{Int64}` and `Rational{Int64}`. On a side note, there is also support for [arbitrary precision arithmetic](https://docs.julialang.org/en/v1/manual/integers-and-floating-point-numbers/#Arbitrary-Precision-Arithmetic) and of course you are also able to define your [own types](https://docs.julialang.org/en/v1/manual/types/#Primitive-Types).
 
 The type hierarchy can be investigated with the commands `subtypes()` and `supertype()`:
-```julia
+```julia-repl
 julia> supertype(Complex{Int64})
 Number
 
@@ -79,7 +79,7 @@ julia> subtypes(Real)
 ```
 
 There is also a command for checking the type of a value or variable:
-```julia
+```julia-repl
 julia> typeof(10)
 Int64
 
@@ -94,7 +94,7 @@ Rational{Int64}
 ```
 
 And with `::` it is possible to explicitly specify the type of a value / variable:
-```julia
+```julia-repl
 julia> 10.0::Float64
 10.0
 
@@ -141,13 +141,13 @@ julia> x ^ y
 ```
 
 Julia of course also deals with brackets and chained operations:
-```julia
+```julia-repl
 julia> 1 + 5 * (3 - 2.1) + (2 ^ 5)
 37.5
 ```
 
 `Bool` types are designed to build logical expressions and only carry two possible values `true` (`1`) and `false` (`0`). They offer the following Boolean operators: `!x` (negation), `x && y` (logical AND), `x || y` (logical OR). Note that `Bool` is still an integer type and and thus all the numerical operations are also defined for this type:
-```julia
+```julia-repl
 julia> true && false
 false
 
