@@ -5,7 +5,7 @@
 
 # Basic Matrix and Vector Operations
 
-In Julia vectors and matrices are derived from the basic [`Core.AbstracArray`](https://docs.julialang.org/en/v1/base/arrays/#lib-arrays) type. To get a better idea on what is happening we show the examples when typed into Julia REPL. 
+In Julia vectors and matrices are derived from the basic [`Core.AbstracArray`](https://docs.julialang.org/en/v1/base/arrays/#lib-arrays) type. To get a better idea on what is happening we use the Julia REPL to show the examples. 
 
 ## Vectors
 You can allocate a vector by typing:
