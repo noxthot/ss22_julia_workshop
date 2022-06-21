@@ -93,27 +93,6 @@ julia> typeof(3//5)
 Rational{Int64}
 ```
 
-And with `::` it is possible to explicitly specify the type of a value or variable:
-```julia-repl
-julia> 10.0::Float64
-10.0
-
-julia> true::Bool
-true
-
-julia> local x::Int32 = 10
-10
-
-julia> local y::Int64 = 10
-10
-
-julia> x + y
-8
-
-julia> typeof(x + y)
-Int64
-```
-
 You may ask yourself: Why is this important when Julia is dynamically typed and thus not requires types to be explicitly set? Among others, there are three primary purposes for using types: improve human readability, catch programmer errors and for making use of a concept called multiple dispatch (which we will talk about later in this workshop). It may also get important when high precision, memory constraints or fast computation is required.
 
 For now we did not speak about basic mathematical operations which are of course defined for all primitive numeric types. `+` corresponds to addition, `-` to subtraction, `*` to multiplication, `/` to division, `÷` for integer division and `x ^ y` raises `x` to the `y`th power:
