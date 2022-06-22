@@ -25,7 +25,7 @@ Result:
 ```julia
 function mysum1(V)
     s = zero(eltype(V))
-    for i in 1:length(V)
+    for i in eachindex(V)
         s += V[i]
     end
     return s
