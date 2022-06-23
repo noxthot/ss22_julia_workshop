@@ -16,7 +16,7 @@ julia> v = [1, 2, 3]
  2
  3
 ```
-As you can see, Julia found out that all the numbers are integers and therefore you have now defined a 3-element Vector of type `Int64`. You can now do operations on this vector in the usual fashion:
+As you can see, Julia found out that all the numbers are integers and therefore you have now defined a 3-element vector of type `Int64`. You can now do operations on this vector in the usual fashion:
 ```julia-repl
 julia> v * 2
 3-element Vector{Int64}:
@@ -40,7 +40,7 @@ julia> v // 2
 Note that the type of your vector changes with regards to the result of the operation. 
 @@
 
-If you try to define the vector without the `,` you will generate a 1x3 Matrix:
+If you try to define the vector without the `,` you will generate a $1 \times 3$ matrix:
 ```julia-repl
 julia> w = [1 2 3]
 1×3 Matrix{Int64}:
