@@ -1,4 +1,4 @@
 
-Simple sum:
+Simple mysum(a) = 49915.855696922314
 LoadError: UndefVarError: @btime not defined
 in expression starting at none:1
