@@ -21,7 +21,7 @@ For a vector $V\in\mathrm{R}^n$ with elements $v$ compute the sum of all the ele
     
 Extra: Check the `@inbounds` macro for the first version.
 
-Result:
+\solution{
 ```julia
 function mysum1(V)
     s = zero(eltype(V))
@@ -42,4 +42,5 @@ end
 V = rand(100_000)
 mysum1(V) ≈ mysum2(V)
 ```
+}
 }
