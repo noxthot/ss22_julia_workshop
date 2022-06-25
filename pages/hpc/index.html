@@ -6,7 +6,7 @@
     <span class=hljs-keyword >return</span> result
 <span class=hljs-keyword >end</span>
 a = rand(<span class=hljs-number >100_000</span>)
-mysum(a)</code></pre> <pre><code class="plaintext hljs">50035.37786881735</code></pre>
+mysum(a)</code></pre> <pre><code class="plaintext hljs">49953.08629759779</code></pre>
 <h2 id=how_to_measure_performance_in_julia ><a href="#how_to_measure_performance_in_julia" class=header-anchor >How to measure performance in Julia</a></h2>
 <p>You should always measure performance with the <a href="https://juliaci.github.io/BenchmarkTools.jl/stable/"><code>BenchmarkTools</code></a>. So to measure the performance of the above code we do the following:</p>
 <pre><code class="julia hljs"><span class=hljs-keyword >using</span> BenchmarkTools
@@ -52,7 +52,7 @@ Profile.print(maxdepth=<span class=hljs-number >15</span>)</code></pre>
     ╎    ╎    ╎     8279  @Base/range.jl:837; iterate
 Total snapshots: 16562</code></pre>
 <div class=page-foot >
-    <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> Gregor Ehrensperger, Peter Kandolf, Jonas Kusch. Last modified: June 23, 2022.
+    <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> Gregor Ehrensperger, Peter Kandolf, Jonas Kusch. Last modified: June 25, 2022.
     Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
 </div>
 </div>
@@ -146,5 +146,18 @@ Total snapshots: 16562</code></pre>
         content.style.display = "block";
       }
     });
+  }
+</script>
+
+<script>
+  var coll = document.getElementsByClassName("solution");
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  const myVar = urlParams.get('solution')
+  console.log(myVar);
+  if ( myVar == 'true') {
+    for (i = 0; i < coll.length; i++) {
+      coll[i].style.display = "block";
+    }
   }
 </script>
