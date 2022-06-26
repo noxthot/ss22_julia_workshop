@@ -1,4 +1,15 @@
 
-Simple mysum(a) = 49915.855696922314
-LoadError: UndefVarError: @btime not defined
-in expression starting at none:1
+Simple mysum(a) = 50038.031430868476
+  133.601 μs (0 allocations: 0 bytes)
+
+Built in sum(a) = 50038.03143086767
+  11.500 μs (0 allocations: 0 bytes)
+
+Simple mysimdsum = 50038.03143086769
+  8.800 μs (0 allocations: 0 bytes)
+
+Simple mysum2 = 50038.031430868476
+  133.603 μs (0 allocations: 0 bytes)
+
+Simple mysimdsum2 = 50038.03143086769
+  8.800 μs (0 allocations: 0 bytes)

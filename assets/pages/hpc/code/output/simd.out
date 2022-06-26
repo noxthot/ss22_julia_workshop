@@ -1,4 +1,6 @@
 
 Simple sum:
-LoadError: UndefVarError: @btime not defined
-in expression starting at none:1
+  133.602 μs (0 allocations: 0 bytes)
+
+Built in sum:
+  11.500 μs (0 allocations: 0 bytes)
