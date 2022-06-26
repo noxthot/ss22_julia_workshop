@@ -7,18 +7,18 @@
 <span class=hljs-keyword >end</span>
 a = rand(<span class=hljs-number >100_000</span>)
 <span class=hljs-meta >@time</span> mysum(a)
-<span class=hljs-meta >@time</span> mysum(a)</code></pre> <pre><code class="plaintext hljs">  0.007389 seconds (4.16 k allocations: 222.597 KiB, 97.49% compilation time)
-  0.000176 seconds (1 allocation: 16 bytes)
-50071.648018810425</code></pre> <p>The downside with the <code>@time</code> macro is, that it really just measures the execution time of what is given to it. This means if the function is not already compiled this might include compiling or if the CPU is busy with something else it is often not accurate. </p> <p>Therefore, if you are serious about measuring performance you should stick to the <a href="https://juliaci.github.io/BenchmarkTools.jl/stable/"><code>BenchmarkTools</code></a>. It comes with a couple of macros that you should test out:</p> <button type=button  class=collapsible  style="background-color:#0089ff"> Exercise </button><div class=collapsiblecontent > In order to use the BenchmarkTools you need to include it with <code>using BenchmarkTools</code>, as any other package. Benchmark your <code>mysum</code> function with the following macros:</p> <ol> <li><p><code>@benchmark</code></p> <li><p><code>@btime</code> </p> <li><p>Look at the detailed output of your benchmark with <code>dump&#40;t&#41;</code>, where <code>t</code> is the output result of a <code>@benchmark</code> run.</p> </ol> <p>and compare the output and results. <div class=solution > Solution </div><div class=solution > To measure the performance of the above code we do the following:</p> <pre><code class="julia hljs"><span class=hljs-keyword >using</span> BenchmarkTools
+<span class=hljs-meta >@time</span> mysum(a)</code></pre> <pre><code class="plaintext hljs">  0.009042 seconds (4.16 k allocations: 222.597 KiB, 98.49% compilation time)
+  0.000120 seconds (1 allocation: 16 bytes)
+49950.92856401521</code></pre> <p>The downside with the <code>@time</code> macro is, that it really just measures the execution time of what is given to it. This means if the function is not already compiled this might include compiling or if the CPU is busy with something else it is often not accurate. </p> <p>Therefore, if you are serious about measuring performance you should stick to the <a href="https://juliaci.github.io/BenchmarkTools.jl/stable/"><code>BenchmarkTools</code></a>. It comes with a couple of macros that you should test out:</p> <button type=button  class=collapsible  style="background-color:#0089ff"> Exercise </button><div class=collapsiblecontent > In order to use the BenchmarkTools you need to include it with <code>using BenchmarkTools</code>, as any other package. Benchmark your <code>mysum</code> function with the following macros:</p> <ol> <li><p><code>@benchmark</code></p> <li><p><code>@btime</code> </p> <li><p>Look at the detailed output of your benchmark with <code>dump&#40;t&#41;</code>, where <code>t</code> is the output result of a <code>@benchmark</code> run.</p> </ol> <p>and compare the output and results. <div class=solution > Solution </div><div class=solution > To measure the performance of the above code we do the following:</p> <pre><code class="julia hljs"><span class=hljs-keyword >using</span> BenchmarkTools
 
 <span class=hljs-meta >@benchmark</span> mysum($a)</code></pre> <p><pre><code class="plaintext hljs">BenchmarkTools.Trial: 10000 samples with 1 evaluation.
- Range (min … max):  133.602 μs … 175.103 μs  ┊ GC (min … max): 0.00% … 0.00%
- Time  (median):     133.702 μs               ┊ GC (median):    0.00%
- Time  (mean ± σ):   133.931 μs ±   1.263 μs  ┊ GC (mean ± σ):  0.00% ± 0.00%
+ Range (min … max):  103.701 μs …  1.088 ms  ┊ GC (min … max): 0.00% … 0.00%
+ Time  (median):     103.802 μs              ┊ GC (median):    0.00%
+ Time  (mean ± σ):   108.852 μs ± 20.175 μs  ┊ GC (mean ± σ):  0.00% ± 0.00%
 
-  ▅█                                                            ▁
-  ███▇▇▆▅▅▄▁▃▁▃▄▃▅▅▅▆▇█▇▅▅▄▄▄▄▁▃▁▃▁▁▃▁▁▁▁▁▁▁▁▁▁▁▁▁▁▃▁▅▆▆▇███▇▆▅ █
-  134 μs        Histogram: log(frequency) by time        140 μs &lt;
+  █  ▆  ▆  ▁▂▁▁▁▁▁▁                                            ▁
+  █▁██▄██▆▆████████▇▅▆▆▇▇▇▆▆▇▅▄▄▄▄▄▄▄▃▃▄▃▅▅▁▄▃▄▄▄▅▄▄▁▁▁▄▄▃▃▄▁▅ █
+  104 μs        Histogram: log(frequency) by time       174 μs &lt;
 
  Memory estimate: 0 bytes, allocs estimate: 0.</code></pre> the full details with </p> <pre><code class="julia hljs">t = <span class=hljs-meta >@benchmark</span> mysum($a)
 dump(t)</code></pre> <p><pre><code class="plaintext hljs">BenchmarkTools.Trial
@@ -31,13 +31,13 @@ dump(t)</code></pre> <p><pre><code class="plaintext hljs">BenchmarkTools.Trial
     gcsample: Bool false
     time_tolerance: Float64 0.05
     memory_tolerance: Float64 0.01
-  times: Array{Float64}((10000,)) [174203.0, 138302.0, 134002.0, 146603.0, 134803.0, 133702.0, 133703.0, 133702.0, 133703.0, 133702.0  …  133703.0, 133702.0, 133703.0, 133702.0, 133703.0, 133702.0, 133603.0, 133603.0, 133702.0, 133703.0]
+  times: Array{Float64}((10000,)) [116902.0, 107502.0, 107401.0, 107502.0, 119702.0, 124202.0, 111401.0, 123302.0, 107502.0, 107501.0  …  361106.0, 111701.0, 111502.0, 123702.0, 107401.0, 107502.0, 107402.0, 107501.0, 107502.0, 107501.0]
   gctimes: Array{Float64}((10000,)) [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0  …  0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
   memory: Int64 0
   allocs: Int64 0
 </code></pre> and the often used sanity check, that actually also shows you the output of your code.</p> <pre><code class="julia hljs"><span class=hljs-meta >@btime</span> mysum($a)</code></pre>
-<p><pre><code class="plaintext hljs">  133.602 μs (0 allocations: 0 bytes)
-50071.648018810425</code></pre> </div> </div>
+<p><pre><code class="plaintext hljs">  103.701 μs (0 allocations: 0 bytes)
+49950.92856401521</code></pre> </div> </div>
 <p>We can also use the <a href="https://docs.julialang.org/en/v1/manual/profile/#Profiling"><code>Profiler</code></a> package to really dig into profiling the code but this is a bit too much of a deep dive for this class, it would look like this:</p>
 <pre><code class="julia hljs"><span class=hljs-keyword >using</span> Profile
 
@@ -104,11 +104,11 @@ println(<span class=hljs-string >&quot;\nBuilt in sum:&quot;</span>)
 <span class=hljs-meta >@btime</span> sum($a)</code></pre>
 <p><pre><code class="plaintext hljs">
 Simple sum:
-  133.602 μs (0 allocations: 0 bytes)
+  103.701 μs (0 allocations: 0 bytes)
 
 Built in sum:
-  11.800 μs (0 allocations: 0 bytes)
-50071.64801881029</code></pre> As we can see, we are slower, exactly how much slower depends on the architecture of your CPU but it is usually between 2 to 16 times. </p>
+  25.500 μs (0 allocations: 0 bytes)
+49950.928564015754</code></pre> As we can see, we are slower, exactly how much slower depends on the architecture of your CPU but it is usually between 2 to 16 times. </p>
 <p>In order to enable simd in a program &#40;if it is not done by library calls anyway&#41; you can use the <code>@simd</code> macro, this works if you loop over the indices or the elements, Julia is quite flexible there. </p>
 <pre><code class="julia hljs"><span class=hljs-keyword >function</span> mysimdsum(a)
     result = zero(eltype(a))
@@ -145,23 +145,147 @@ println(<span class=hljs-string >&quot;\nSimple mysum2 = &quot;</span>, mysum2(a
 println(<span class=hljs-string >&quot;\nSimple mysimdsum2 = &quot;</span>, mysimdsum2(a))
 <span class=hljs-meta >@btime</span> mysimdsum2($a)</code></pre>
 <p><pre><code class="plaintext hljs">
-Simple mysum(a) = 50071.648018810425
-  133.602 μs (0 allocations: 0 bytes)
+Simple mysum(a) = 49950.92856401521
+  103.701 μs (0 allocations: 0 bytes)
 
-Built in sum(a) = 50071.64801881029
-  11.800 μs (0 allocations: 0 bytes)
+Built in sum(a) = 49950.928564015754
+  25.600 μs (0 allocations: 0 bytes)
 
-Simple mysimdsum = 50071.64801881029
-  8.800 μs (0 allocations: 0 bytes)
+Simple mysimdsum = 49950.92856401579
+  24.700 μs (0 allocations: 0 bytes)
 
-Simple mysum2 = 50071.648018810425
-  133.602 μs (0 allocations: 0 bytes)
+Simple mysum2 = 49950.92856401521
+  103.701 μs (0 allocations: 0 bytes)
 
-Simple mysimdsum2 = 50071.64801881029
-  8.800 μs (0 allocations: 0 bytes)
-50071.64801881029</code></pre> We can see a massive speed up &#40;that will depend on the CPU architecture you are running your code on&#41;. What is interesting is, that the results of the three function calls are not the same. </p>
+Simple mysimdsum2 = 49950.92856401579
+  24.500 μs (0 allocations: 0 bytes)
+49950.92856401579</code></pre> We can see a massive speed up &#40;that will depend on the CPU architecture you are running your code on&#41;. What is interesting is, that the results of the three function calls are not the same. </p>
 <p>This is do to the fact that the numerics involved are are a bit tricky. In short, when adding floating point numbers you loose accuracy when adding a large number to a small number. This is exactly what is happening for our first example as we add all the numbers in one long sequence. </p>
 <p>The build in <code>sum</code> function as well as the <code>@simd</code> macro allow Julia to change the order of the operations. What it does is creating a results for the even and odd entries separately and therefore gaining a bit of accuracy.</p>
+<p>If your are not sure if something is vectorized you can check out the LLVM code:</p>
+<pre><code class="julia hljs"><span class=hljs-keyword >using</span> InteractiveUtils
+
+<span class=hljs-meta >@code_llvm</span> mysimdsum(a)</code></pre>
+<pre><code class="plaintext hljs">;  @ none:1 within `mysimdsum`
+define double @julia_mysimdsum_4948({}* nonnull align 16 dereferenceable(40) %0) #0 {
+top:
+;  @ none:3 within `mysimdsum`
+; ┌ @ simdloop.jl:69 within `macro expansion`
+; │┌ @ abstractarray.jl:279 within `eachindex`
+; ││┌ @ abstractarray.jl:116 within `axes1`
+; │││┌ @ abstractarray.jl:95 within `axes`
+; ││││┌ @ array.jl:151 within `size`
+       %1 = bitcast {}* %0 to {}**
+       %2 = getelementptr inbounds {}*, {}** %1, i64 3
+       %3 = bitcast {}** %2 to i64*
+       %4 = load i64, i64* %3, align 8
+; └└└└└
+; ┌ @ simdloop.jl:72 within `macro expansion`
+; │┌ @ int.jl:83 within `&lt;`
+    %.not = icmp eq i64 %4, 0
+; │└
+   br i1 %.not, label %L30, label %L13.lr.ph
+
+L13.lr.ph:                                        ; preds = %top
+   %5 = bitcast {}* %0 to double**
+   %6 = load double*, double** %5, align 8
+; └
+; ┌ @ simdloop.jl:75 within `macro expansion`
+   %min.iters.check = icmp ult i64 %4, 16
+   br i1 %min.iters.check, label %L13, label %vector.ph
+
+vector.ph:                                        ; preds = %L13.lr.ph
+   %n.vec = and i64 %4, 9223372036854775792
+   br label %vector.body
+
+vector.body:                                      ; preds = %vector.body, %vector.ph
+; └
+; ┌ @ simdloop.jl:78 within `macro expansion`
+; │┌ @ int.jl:87 within `+`
+    %index = phi i64 [ 0, %vector.ph ], [ %index.next, %vector.body ]
+    %vec.phi = phi &lt;4 x double&gt; [ zeroinitializer, %vector.ph ], [ %15, %vector.body ]
+    %vec.phi9 = phi &lt;4 x double&gt; [ zeroinitializer, %vector.ph ], [ %16, %vector.body ]
+    %vec.phi10 = phi &lt;4 x double&gt; [ zeroinitializer, %vector.ph ], [ %17, %vector.body ]
+    %vec.phi11 = phi &lt;4 x double&gt; [ zeroinitializer, %vector.ph ], [ %18, %vector.body ]
+; └└
+; ┌ @ simdloop.jl:77 within `macro expansion` @ none:4
+; │┌ @ array.jl:861 within `getindex`
+    %7 = getelementptr inbounds double, double* %6, i64 %index
+    %8 = bitcast double* %7 to &lt;4 x double&gt;*
+    %wide.load = load &lt;4 x double&gt;, &lt;4 x double&gt;* %8, align 8
+    %9 = getelementptr inbounds double, double* %7, i64 4
+    %10 = bitcast double* %9 to &lt;4 x double&gt;*
+    %wide.load12 = load &lt;4 x double&gt;, &lt;4 x double&gt;* %10, align 8
+    %11 = getelementptr inbounds double, double* %7, i64 8
+    %12 = bitcast double* %11 to &lt;4 x double&gt;*
+    %wide.load13 = load &lt;4 x double&gt;, &lt;4 x double&gt;* %12, align 8
+    %13 = getelementptr inbounds double, double* %7, i64 12
+    %14 = bitcast double* %13 to &lt;4 x double&gt;*
+    %wide.load14 = load &lt;4 x double&gt;, &lt;4 x double&gt;* %14, align 8
+; │└
+; │┌ @ float.jl:399 within `+`
+    %15 = fadd fast &lt;4 x double&gt; %vec.phi, %wide.load
+    %16 = fadd fast &lt;4 x double&gt; %vec.phi9, %wide.load12
+    %17 = fadd fast &lt;4 x double&gt; %vec.phi10, %wide.load13
+    %18 = fadd fast &lt;4 x double&gt; %vec.phi11, %wide.load14
+; └└
+; ┌ @ simdloop.jl:78 within `macro expansion`
+; │┌ @ int.jl:87 within `+`
+    %index.next = add i64 %index, 16
+    %19 = icmp eq i64 %index.next, %n.vec
+    br i1 %19, label %middle.block, label %vector.body
+
+middle.block:                                     ; preds = %vector.body
+; └└
+; ┌ @ simdloop.jl:75 within `macro expansion`
+   %bin.rdx = fadd fast &lt;4 x double&gt; %16, %15
+   %bin.rdx15 = fadd fast &lt;4 x double&gt; %17, %bin.rdx
+   %bin.rdx16 = fadd fast &lt;4 x double&gt; %18, %bin.rdx15
+   %20 = call fast double @llvm.vector.reduce.fadd.v4f64(double -0.000000e+00, &lt;4 x double&gt; %bin.rdx16)
+   %cmp.n = icmp eq i64 %4, %n.vec
+   br i1 %cmp.n, label %L30, label %L13
+
+L13:                                              ; preds = %L13, %middle.block, %L13.lr.ph
+   %value_phi18 = phi i64 [ %24, %L13 ], [ %n.vec, %middle.block ], [ 0, %L13.lr.ph ]
+   %value_phi7 = phi double [ %23, %L13 ], [ %20, %middle.block ], [ 0.000000e+00, %L13.lr.ph ]
+; └
+; ┌ @ simdloop.jl:77 within `macro expansion` @ none:4
+; │┌ @ array.jl:861 within `getindex`
+    %21 = getelementptr inbounds double, double* %6, i64 %value_phi18
+    %22 = load double, double* %21, align 8
+; │└
+; │┌ @ float.jl:399 within `+`
+    %23 = fadd fast double %value_phi7, %22
+; └└
+; ┌ @ simdloop.jl:78 within `macro expansion`
+; │┌ @ int.jl:87 within `+`
+    %24 = add nuw nsw i64 %value_phi18, 1
+; └└
+; ┌ @ simdloop.jl:75 within `macro expansion`
+; │┌ @ int.jl:83 within `&lt;`
+    %exitcond.not = icmp eq i64 %24, %4
+; │└
+   br i1 %exitcond.not, label %L30, label %L13
+
+L30:                                              ; preds = %L13, %middle.block, %top
+   %value_phi2 = phi double [ 0.000000e+00, %top ], [ %20, %middle.block ], [ %23, %L13 ]
+; └
+;  @ none:6 within `mysimdsum`
+  ret double %value_phi2
+}
+</code></pre>
+<pre><code class="julia hljs">a32 = rand(<span class=hljs-built_in >Float32</span>, length(a)*<span class=hljs-number >2</span>)
+println(<span class=hljs-string >&quot;\nBuilt in sum(FLOAT64) = &quot;</span>, sum(a))
+<span class=hljs-meta >@btime</span> sum($a32)
+println(<span class=hljs-string >&quot;\nBuild in sum(FLOAT32) = &quot;</span>, sum(a32))
+<span class=hljs-meta >@btime</span> sum($a32)</code></pre>
+<pre><code class="plaintext hljs">
+Built in sum(FLOAT64) = 49950.928564015754
+  26.600 μs (0 allocations: 0 bytes)
+
+Build in sum(FLOAT32) = 100154.18
+  26.600 μs (0 allocations: 0 bytes)
+100154.18f0</code></pre>
 <h1 id=multiple_dispatch ><a href="#multiple_dispatch" class=header-anchor >Multiple dispatch? </a></h1>
 <pre><code class="julia hljs"><span class=hljs-keyword >using</span> InteractiveUtils
 
