@@ -17,7 +17,7 @@ For a vector $V\in\mathrm{R}^n$ with elements $v$ compute the sum of all the ele
 2. Sum over the elements (hint `for each`):
     $$s_2 = \sum_{v\in V} v$$
 3. Transform these loops into functions
-4. Test against `V = rand(100_000)` and `mysum1(V) ≈ mysum2(s_2)` (use `\approx + TAB` for ≈)
+4. Test against `V = rand(100_000)` and `s_1 ≈ s_2` (use `\approx + TAB` for ≈)
     
 Extra: Check the `@inbounds` macro for the first version.
 
@@ -40,6 +40,7 @@ function mysum2(V)
 end
 
 V = rand(100_000)
+mysum1(V) ≈ mysum2(V)
 isapprox(mysum1(V),  mysum2(V); atol=1e-10, rtol=1e-10)
 ```
 }
