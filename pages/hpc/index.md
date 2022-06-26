@@ -196,3 +196,14 @@ using InteractiveUtils
 @code_typed optimize=false mysum([1, 2, 3])
 ```
 \show{./code/simd_3.jl}
+
+
+# Concept for how to go further
+
+- introduce $\pi$ example and let them program it
+- introduce multithreading and adapt the $\pi$ example
+- introduce multiple processes and adapt the $\pi$ example
+- introduce "cluster" and adapt $\pi$ example
+- bring it to the GPU - show and tell, if the have gpus let them test
+- Repeat what we learned today
+- If on last day Q/A section
