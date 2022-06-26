@@ -173,6 +173,22 @@ This is do to the fact that the numerics involved are are a bit tricky. In short
 
 The build in `sum` function as well as the `@simd` macro allow Julia to change the order of the operations. What it does is creating a results for the even and odd entries separately and therefore gaining a bit of accuracy.
 
+If your are not sure if something is vectorized you can check out the LLVM code:
+```julia:./code/simd_2.jl
+using InteractiveUtils
+
+@code_llvm mysimdsum(a)
+```
+\show{./code/simd_2.jl}
+
+```julia:./code/simd_2.jl
+a32 = rand(Float32, length(a)*2)
+println("\nBuilt in sum(FLOAT64) = ", sum(a))
+@btime sum($a32)
+println("\nBuild in sum(FLOAT32) = ", sum(a32))
+@btime sum($a32)
+```
+\show{./code/simd_2.jl}
 # Multiple dispatch? 
 ```julia:./code/simd_3.jl
 using InteractiveUtils
