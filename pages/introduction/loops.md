@@ -40,10 +40,7 @@ function mysum2(V)
 end
 
 V = rand(100_000)
-mysum1(V) ≈ mysum2(V)
+isapprox(mysum1(V),  mysum2(V); atol=1e-10, rtol=1e-10)
 ```
 }
-Maybe something here as well.
 }
-
-Write something here to not cause an error
