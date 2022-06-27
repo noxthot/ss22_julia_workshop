@@ -1,6 +1,6 @@
 
-Built-in sum(FLOAT64) = 49971.45739458889
-  15.500 μs (0 allocations: 0 bytes)
+Built-in sum(FLOAT64) = 49930.269443853176
+  15.200 μs (0 allocations: 0 bytes)
 
-Build-in sum(FLOAT32) = 99990.29
-  15.400 μs (0 allocations: 0 bytes)
+Build-in sum(FLOAT32) = 100020.984
+  15.200 μs (0 allocations: 0 bytes)
