@@ -10,11 +10,14 @@ For that, we recall the loops example from the introduction to [loops](../../int
 ```julia:./code/simd.jl
 function mysum(a)
     result = zero(eltype(a))
+
     for i in eachindex(a)
         @inbounds result += a[i]
     end
+
     return result
 end
+
 a = rand(100_000)
 @time mysum(a)
 @time mysum(a)
