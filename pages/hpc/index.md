@@ -1,6 +1,6 @@
 # Parallel computing with Julia
 
-Since modern laptops and computers come with multiple cores parallel computing is not just something for High Performance Computing systems. The general idea is to not only use a single computational thread (linear programming) but run concurring tasks at the same time that solve the task you set them. Julia by default supports different ways for active [parallel or concurring computing](https://docs.julialang.org/en/v1/manual/parallel-computing/). In this section we follow some of the examples given on [Julia Academy - JuliaTutorials](https://github.com/JuliaAcademy/JuliaTutorials).
+Since modern laptops and computers come with multiple cores parallel computing is not just something for High Performance Computing systems. The general idea is to not only use a single computational thread (linear programming) but run concurring threads at the same time that solve the given task at hand in parallel. Julia by default supports different ways for active [parallel or concurring computing](https://docs.julialang.org/en/v1/manual/parallel-computing/). In this section we follow some of the examples given on [Julia Academy - JuliaTutorials](https://github.com/JuliaAcademy/JuliaTutorials).
 
 Before we are are going into the details of parallel coding we need to talk about how to measure performance in Julia.
 
@@ -122,7 +122,7 @@ z_3\\
 z_4
 \end{pmatrix}
 \end{align*}
-This looks otley familiar, as this is our sum example. We can modify our sum over a vector, and learn how Julia is including the SIMD concept and why it is most of the time better to call library functions than programming them on your own. As we know how to do benchmarking lets try to figure out if our sum function is doing a good job.
+Even if you don't see it right away, we can modify our sum over a vector, and learn how Julia is including the SIMD concept and why it is most of the time better to call library functions than programming them on your own. As we know how to do benchmarking lets try to figure out if our sum function is doing a good job.
 ```julia:./code/simd.jl
 println("\nSimple sum:")
 @btime mysum($a)
@@ -132,7 +132,7 @@ println("\nBuilt-in sum:")
 \show{./code/simd.jl}
 As we can see, we are slower, exactly how much slower depends on the architecture of your CPU but it is usually between 2 to 16 times. 
 
-In order to enable simd in a program (if it is not done by library calls anyway) you can use the `@simd` macro, this works if you loop over the indices or the elements, Julia is quite flexible there. 
+In order to enable SIMD in a program (if it is not done by library calls anyway) you can use the `@simd` macro, this works if you loop over the indices or the elements, Julia is quite flexible there. 
 ```julia:./code/simd_2.jl
 function mysimdsum(a)
     result = zero(eltype(a))
@@ -180,15 +180,19 @@ We can see a massive speed up (that will depend on the CPU architecture you are 
 
 This is do to the fact that the numerics involved are are a bit tricky. In short, when adding floating point numbers you loose accuracy when adding a large number to a small number. This is exactly what is happening for our first example as we add all the numbers in one long sequence. 
 
-The built-in `sum` function as well as the `@simd` macro allow Julia to change the order of the operations. What it does is computing the result for the even and odd entries separately and therefore gaining a bit of accuracy.
+The built-in `sum` function as well as the `@simd` macro allow Julia to change the order of the operations. In this specific case, it is boils down to computing the result for the even and odd entries separately and therefore gaining a bit of accuracy.
 
-If you are not sure if something is vectorized you can check out the LLVM code:
+If you are not sure if something is vectorized you can check out the LLVM code for the two versions and see the difference. Hint: look out for something called `vector.ph`.
 ```julia:./code/simd_2.jl
 using InteractiveUtils
 
+@code_llvm mysum(a)
+printstyled("\n------Separator-------\n\n"; color = :red)
 @code_llvm mysimdsum(a)
 ```
 \show{./code/simd_2.jl}
+
+The [LLVM](https://llvm.org/) Project is the compiler toolchain technology that Julia uses for its *Just in Time* (JIT) compilation. Basically, it translates the Julia code into a machine language close to Assembler (but quite readable, if you get used to it) and this is compiled when needed. We could se JIT doing its magic in the beginning of the [Benchmark](#how-to-measure-performance-in-julia) section, as the function `mysum` was compiled on its fist run. Note: in general packages get precompiled before they are used to gain performance.
 
 ```julia:./code/simd_2.jl
 a32 = rand(Float32, length(a)*2)
