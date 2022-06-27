@@ -1,24 +1,27 @@
 <!doctype html> <html lang=en > <script src="/ss22_julia_workshop/libs/clipboard.min.js"></script> <meta charset=UTF-8 > <meta name=viewport  content="width=device-width, initial-scale=1"> <link rel=stylesheet  href="/ss22_julia_workshop/libs/katex/katex.min.css"> <link rel=stylesheet  href="/ss22_julia_workshop/libs/highlight/github.min.css"> <link rel=stylesheet  href="/ss22_julia_workshop/css/jtd.css"> <link rel=stylesheet  href="/ss22_julia_workshop/css/extras.css"> <link rel=icon  href="/ss22_julia_workshop/assets/favicon.ico"> <style> /* #148 wrap long header */ .franklin-content a.header-anchor, .franklin-toc li a { word-wrap: break-word; white-space: normal; } </style> <title>Parallel computing with Julia</title> <div class=page-wrap > <div class=side-bar > <div class=header > <a href="/ss22_julia_workshop/" class=title > Julia </a> </div> <label for=show-menu  class=show-menu >MENU</label> <input type=checkbox  id=show-menu  role=button > <div class=menu  id=side-menu > <ul class=menu-list > <li class="menu-list-item "><a href="/ss22_julia_workshop/" class="menu-list-link ">Start</a> <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/" class="menu-list-link ">Introduction</a> <ul class="menu-list-child-list "> <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/basis_datatypes_and_operations" class=menu-list-link >Basic Datatypes and Operations</a> <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/matrix_vectors" class=menu-list-link >Matrix and Vector Operations</a> <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/loops" class=menu-list-link >Loops</a <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/worksheet_1" class=menu-list-link >Worksheet 1</a> <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/worksheet_2" class=menu-list-link >Worksheet 2</a> </ul> <li class="menu-list-item active"><a href="/ss22_julia_workshop/pages/hpc/" class="menu-list-link active">Parallel computing</a> <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/datascience/" class="menu-list-link ">Data Science</a> </ul> </div> <div class=footer > This is <em>Just the docs</em>, adapted from the <a href="https://github.com/pmarsceill/just-the-docs" target=_blank >Jekyll theme</a>. </div> </div> <div class=main-content-wrap > <div class=main-content > <div class=main-header > SS22 Julia Workshop Obergurgl </div> <div class=franklin-content ><h1 id=parallel_computing_with_julia ><a href="#parallel_computing_with_julia" class=header-anchor >Parallel computing with Julia</a></h1> <p>Since modern laptops and computers come with multiple cores parallel computing is not just something for High Performance Computing systems. The general idea is to not only use a single computational thread &#40;linear programming&#41; but run concurring tasks at the same time that solve the task you set them. Julia by default supports different ways for active <a href="https://docs.julialang.org/en/v1/manual/parallel-computing/">parallel or concurring computing</a>. In this section we follow some of the examples given on <a href="https://github.com/JuliaAcademy/JuliaTutorials">Julia Academy - JuliaTutorials</a>.</p> <p>Before we are are going into the details of parallel coding we need to talk about how to measure performance in Julia.</p> <h2 id=how_to_measure_performance_in_julia ><a href="#how_to_measure_performance_in_julia" class=header-anchor >How to measure performance in Julia</a></h2> <p>For that, we recall the loops example from the introduction to <a href="../../introduction/loops.html">loops</a> and include the simple <code>@time</code> macro.</p> <pre><code class="julia hljs"><span class=hljs-keyword >function</span> mysum(a)
     result = zero(eltype(a))
+
     <span class=hljs-keyword >for</span> i <span class=hljs-keyword >in</span> eachindex(a)
         <span class=hljs-meta >@inbounds</span> result += a[i]
     <span class=hljs-keyword >end</span>
+
     <span class=hljs-keyword >return</span> result
 <span class=hljs-keyword >end</span>
+
 a = rand(<span class=hljs-number >100_000</span>)
 <span class=hljs-meta >@time</span> mysum(a)
-<span class=hljs-meta >@time</span> mysum(a)</code></pre> <pre><code class="plaintext hljs">  0.007530 seconds (4.16 k allocations: 222.597 KiB, 97.58% compilation time)
-  0.000175 seconds (1 allocation: 16 bytes)
-49905.394883616704</code></pre> <p>The downside with the <code>@time</code> macro is, that it really just measures the execution time of what is given to it. This means if the function is not already compiled this might include compiling or if the CPU is busy with something else it is often not accurate. </p> <p>Therefore, if you are serious about measuring performance you should stick to the <a href="https://juliaci.github.io/BenchmarkTools.jl/stable/"><code>BenchmarkTools</code></a>. It comes with a couple of macros that you should test out:</p> <button type=button  class=collapsible  style="background-color:#0089ff"> Exercise </button><div class=collapsiblecontent > In order to use the BenchmarkTools you need to include it with <code>using BenchmarkTools</code>, as any other package. Benchmark your <code>mysum</code> function with the following macros:</p> <ol> <li><p><code>@benchmark</code></p> <li><p><code>@btime</code> </p> <li><p>Look at the detailed output of your benchmark with <code>dump&#40;t&#41;</code>, where <code>t</code> is the output result of a <code>@benchmark</code> run.</p> </ol> <p>and compare the output and results. <div class=solution > Solution </div><div class=solution > To measure the performance of the above code we do the following:</p> <pre><code class="julia hljs"><span class=hljs-keyword >using</span> BenchmarkTools
+<span class=hljs-meta >@time</span> mysum(a)</code></pre> <pre><code class="plaintext hljs">  0.009301 seconds (4.16 k allocations: 222.597 KiB, 97.88% compilation time)
+  0.000204 seconds (1 allocation: 16 bytes)
+49967.817924236435</code></pre> <p>The downside with the <code>@time</code> macro is, that it really just measures the execution time of what is given to it. This means if the function is not already compiled this might include compiling or if the CPU is busy with something else it is often not accurate. </p> <p>Therefore, if you are serious about measuring performance you should stick to the <a href="https://juliaci.github.io/BenchmarkTools.jl/stable/"><code>BenchmarkTools</code></a>. It comes with a couple of macros that you should test out:</p> <button type=button  class=collapsible  style="background-color:#0089ff"> Exercise </button><div class=collapsiblecontent > In order to use the BenchmarkTools you need to include it with <code>using BenchmarkTools</code>, as any other package. Benchmark your <code>mysum</code> function with the following macros:</p> <ol> <li><p><code>@benchmark</code></p> <li><p><code>@btime</code> </p> <li><p>Look at the detailed output of your benchmark with <code>dump&#40;t&#41;</code>, where <code>t</code> is the output result of a <code>@benchmark</code> run.</p> </ol> <p>and compare the output and results. <div class=solution > Solution </div><div class=solution > To measure the performance of the above code we do the following:</p> <pre><code class="julia hljs"><span class=hljs-keyword >using</span> BenchmarkTools
 
 <span class=hljs-meta >@benchmark</span> mysum($a)</code></pre> <p><pre><code class="plaintext hljs">BenchmarkTools.Trial: 10000 samples with 1 evaluation.
- Range (min … max):  133.602 μs … 201.804 μs  ┊ GC (min … max): 0.00% … 0.00%
- Time  (median):     133.703 μs               ┊ GC (median):    0.00%
- Time  (mean ± σ):   133.966 μs ±   1.658 μs  ┊ GC (mean ± σ):  0.00% ± 0.00%
+ Range (min … max):  133.601 μs … 199.703 μs  ┊ GC (min … max): 0.00% … 0.00%
+ Time  (median):     133.702 μs               ┊ GC (median):    0.00%
+ Time  (mean ± σ):   134.029 μs ±   1.724 μs  ┊ GC (mean ± σ):  0.00% ± 0.00%
 
-  █▂                                                            ▁
-  ██▇▇▆▆▆▅▅▄▃▄▄▁▃▇▇▇▆▄▃▃▁▃▁▁▁▁▁▁▁▁▃▁▃▁▁▃▁▁▁▁▁▁▃▅▄▅▇██▇▇▇▆▅▆▅▅▅▆ █
-  134 μs        Histogram: log(frequency) by time        140 μs &lt;
+  █▃                                                            ▁
+  ███▇▆▆▆▄▆▆▅▆▆▅▆▆█▅▅▆▄▄▅▁▃▄▃▄▄▃▄▃▄▅▃▃▃▃▄▄▁▆▆▆█▇▇▆▆▅▆▇▅▅▇▅▅▆▃▄▆ █
+  134 μs        Histogram: log(frequency) by time        142 μs &lt;
 
  Memory estimate: 0 bytes, allocs estimate: 0.</code></pre> the full details with </p> <pre><code class="julia hljs">t = <span class=hljs-meta >@benchmark</span> mysum($a)
 dump(t)</code></pre> <p><pre><code class="plaintext hljs">BenchmarkTools.Trial
@@ -31,13 +34,13 @@ dump(t)</code></pre> <p><pre><code class="plaintext hljs">BenchmarkTools.Trial
     gcsample: Bool false
     time_tolerance: Float64 0.05
     memory_tolerance: Float64 0.01
-  times: Array{Float64}((10000,)) [166604.0, 136003.0, 133602.0, 133703.0, 133603.0, 133702.0, 133603.0, 133703.0, 133702.0, 133703.0  …  133703.0, 133702.0, 151703.0, 133702.0, 133703.0, 133702.0, 133703.0, 133603.0, 133702.0, 133703.0]
+  times: Array{Float64}((10000,)) [168202.0, 158002.0, 156002.0, 153302.0, 154302.0, 152502.0, 153502.0, 151901.0, 152001.0, 152002.0  …  133702.0, 133701.0, 133702.0, 133702.0, 133701.0, 133702.0, 133702.0, 133701.0, 133702.0, 133902.0]
   gctimes: Array{Float64}((10000,)) [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0  …  0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
   memory: Int64 0
   allocs: Int64 0
 </code></pre> and the often used sanity check, that actually also shows you the output of your code.</p> <pre><code class="julia hljs"><span class=hljs-meta >@btime</span> mysum($a)</code></pre>
-<p><pre><code class="plaintext hljs">  133.602 μs (0 allocations: 0 bytes)
-49905.394883616704</code></pre> </div> </div>
+<p><pre><code class="plaintext hljs">  133.601 μs (0 allocations: 0 bytes)
+49967.817924236435</code></pre> </div> </div>
 <p>We can also use the <a href="https://docs.julialang.org/en/v1/manual/profile/#Profiling"><code>Profiler</code></a> package to really dig into profiling the code but this is a bit too much of a deep dive for this class, it would look like this:</p>
 <pre><code class="julia hljs"><span class=hljs-keyword >using</span> Profile
 
@@ -104,11 +107,11 @@ println(<span class=hljs-string >&quot;\nBuilt in sum:&quot;</span>)
 <span class=hljs-meta >@btime</span> sum($a)</code></pre>
 <p><pre><code class="plaintext hljs">
 Simple sum:
-  133.602 μs (0 allocations: 0 bytes)
+  133.597 μs (0 allocations: 0 bytes)
 
 Built in sum:
-  11.600 μs (0 allocations: 0 bytes)
-49905.3948836167</code></pre> As we can see, we are slower, exactly how much slower depends on the architecture of your CPU but it is usually between 2 to 16 times. </p>
+  14.800 μs (0 allocations: 0 bytes)
+49967.81792423682</code></pre> As we can see, we are slower, exactly how much slower depends on the architecture of your CPU but it is usually between 2 to 16 times. </p>
 <p>In order to enable simd in a program &#40;if it is not done by library calls anyway&#41; you can use the <code>@simd</code> macro, this works if you loop over the indices or the elements, Julia is quite flexible there. </p>
 <pre><code class="julia hljs"><span class=hljs-keyword >function</span> mysimdsum(a)
     result = zero(eltype(a))
@@ -145,21 +148,21 @@ println(<span class=hljs-string >&quot;\nSimple mysum2 = &quot;</span>, mysum2(a
 println(<span class=hljs-string >&quot;\nSimple mysimdsum2 = &quot;</span>, mysimdsum2(a))
 <span class=hljs-meta >@btime</span> mysimdsum2($a)</code></pre>
 <p><pre><code class="plaintext hljs">
-Simple mysum(a) = 49905.394883616704
-  133.602 μs (0 allocations: 0 bytes)
+Simple mysum(a) = 49967.817924236435
+  133.601 μs (0 allocations: 0 bytes)
 
-Built in sum(a) = 49905.3948836167
-  11.600 μs (0 allocations: 0 bytes)
+Built in sum(a) = 49967.81792423682
+  14.800 μs (0 allocations: 0 bytes)
 
-Simple mysimdsum = 49905.39488361668
-  8.833 μs (0 allocations: 0 bytes)
+Simple mysimdsum = 49967.81792423682
+  12.000 μs (0 allocations: 0 bytes)
 
-Simple mysum2 = 49905.394883616704
-  133.602 μs (0 allocations: 0 bytes)
+Simple mysum2 = 49967.817924236435
+  133.600 μs (0 allocations: 0 bytes)
 
-Simple mysimdsum2 = 49905.39488361668
-  8.867 μs (0 allocations: 0 bytes)
-49905.39488361668</code></pre> We can see a massive speed up &#40;that will depend on the CPU architecture you are running your code on&#41;. What is interesting is, that the results of the three function calls are not the same. </p>
+Simple mysimdsum2 = 49967.81792423682
+  12.100 μs (0 allocations: 0 bytes)
+49967.81792423682</code></pre> We can see a massive speed up &#40;that will depend on the CPU architecture you are running your code on&#41;. What is interesting is, that the results of the three function calls are not the same. </p>
 <p>This is do to the fact that the numerics involved are are a bit tricky. In short, when adding floating point numbers you loose accuracy when adding a large number to a small number. This is exactly what is happening for our first example as we add all the numbers in one long sequence. </p>
 <p>The build in <code>sum</code> function as well as the <code>@simd</code> macro allow Julia to change the order of the operations. What it does is creating a results for the even and odd entries separately and therefore gaining a bit of accuracy.</p>
 <p>If your are not sure if something is vectorized you can check out the LLVM code:</p>
@@ -167,7 +170,7 @@ Simple mysimdsum2 = 49905.39488361668
 
 <span class=hljs-meta >@code_llvm</span> mysimdsum(a)</code></pre>
 <pre><code class="plaintext hljs">;  @ none:1 within `mysimdsum`
-define double @julia_mysimdsum_4937({}* nonnull align 16 dereferenceable(40) %0) #0 {
+define double @julia_mysimdsum_4938({}* nonnull align 16 dereferenceable(40) %0) #0 {
 top:
 ;  @ none:3 within `mysimdsum`
 ; ┌ @ simdloop.jl:69 within `macro expansion`
@@ -280,12 +283,12 @@ println(<span class=hljs-string >&quot;\nBuilt in sum(FLOAT64) = &quot;</span>, 
 println(<span class=hljs-string >&quot;\nBuild in sum(FLOAT32) = &quot;</span>, sum(a32))
 <span class=hljs-meta >@btime</span> sum($a32)</code></pre>
 <pre><code class="plaintext hljs">
-Built in sum(FLOAT64) = 49905.3948836167
-  16.800 μs (0 allocations: 0 bytes)
+Built in sum(FLOAT64) = 49967.81792423682
+  15.400 μs (0 allocations: 0 bytes)
 
-Build in sum(FLOAT32) = 99928.33
-  17.300 μs (0 allocations: 0 bytes)
-99928.33f0</code></pre>
+Build in sum(FLOAT32) = 99649.29
+  15.400 μs (0 allocations: 0 bytes)
+99649.29f0</code></pre>
 <h1 id=multiple_dispatch ><a href="#multiple_dispatch" class=header-anchor >Multiple dispatch? </a></h1>
 <pre><code class="julia hljs"><span class=hljs-keyword >using</span> InteractiveUtils
 
