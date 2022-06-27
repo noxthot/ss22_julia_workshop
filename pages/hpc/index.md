@@ -182,7 +182,7 @@ This is do to the fact that the numerics involved are are a bit tricky. In short
 
 The built-in `sum` function as well as the `@simd` macro allow Julia to change the order of the operations. What it does is computing the result for the even and odd entries separately and therefore gaining a bit of accuracy.
 
-If your are not sure if something is vectorized you can check out the LLVM code:
+If you are not sure if something is vectorized you can check out the LLVM code:
 ```julia:./code/simd_2.jl
 using InteractiveUtils
 
