@@ -136,25 +136,31 @@ In order to enable simd in a program (if it is not done by library calls anyway)
 ```julia:./code/simd_2.jl
 function mysimdsum(a)
     result = zero(eltype(a))
+
     @simd for i in eachindex(a)
         @inbounds result += a[i]
     end
+
     return result
 end
 
 function mysum2(V)
     s = zero(eltype(V))
+
     for v in V
         s += v
     end
+
     return s
 end
 
 function mysimdsum2(V)
     s = zero(eltype(V))
+
     @simd for v in V
         s += v
     end
+
     return s
 end
 
