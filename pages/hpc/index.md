@@ -62,7 +62,7 @@ We can also use the [`Profiler`](https://docs.julialang.org/en/v1/manual/profile
 using Profile
 
 Profile.clear()
-@profile for _ in 1:100_000; mysum($a); end
+@profile for _ in 1:100_000; mysum(a); end
 Profile.print(maxdepth=15)
 ```
 ```bash
@@ -194,22 +194,38 @@ printstyled("\n------Separator-------\n\n"; color = :red)
 
 The [LLVM](https://llvm.org/) Project is the compiler toolchain technology that Julia uses for its *Just in Time* (JIT) compilation. Basically, it translates the Julia code into a machine language close to Assembler (but quite readable, if you get used to it) and this is compiled when needed. We could se JIT doing its magic in the beginning of the [Benchmark](#how-to-measure-performance-in-julia) section, as the function `mysum` was compiled on its fist run. Note: in general packages get precompiled before they are used to gain performance.
 
-```julia:./code/simd_2.jl
-a32 = rand(Float32, length(a)*2)
-println("\nBuilt-in sum(FLOAT64) = ", sum(a))
-@btime sum($a32)
-println("\nBuild-in sum(FLOAT32) = ", sum(a32))
-@btime sum($a32)
-```
-\show{./code/simd_2.jl}
-# Multiple dispatch? 
-```julia:./code/simd_3.jl
-using InteractiveUtils
+# Multiple dispatch
+While on the subject of performance and the JIT compilation it is time to introduce the *multiple dispatch* capabilities of Julia. 
 
+Like most of the time this is best explained by showing an example. In our now already famous sum example we never specified what type the argument has. As long as one was able to loop over it and add the entries it was fine. That doesn't mean Julia never cared. In fact, we can take a look what Julia does for different input types.
+
+For this we use another macro from the `InteractiveUtils` package, namely `@code_typed`. Again, we get some intermediate code that Julia produces for us. This time a bit more compact but most important, all the type information of the input argument attached to it. 
+
+For an array of `Int64` we get:
+```julia:./code/simd_3.jl
 @code_typed optimize=false mysum([1, 2, 3])
 ```
 \show{./code/simd_3.jl}
+and for `FLOAT64`:
+```julia:./code/simd_3.jl
+@code_typed optimize=false mysum([1.0, 2.0, 3.0])
+```
+\show{./code/simd_3.jl}
+We can see, that in the first output everything is of type `INT64`, including the result. The second output has the same instructions but with `FLOAT64` as type. 
 
+As you might have already seen throughout this workshop you can define the same function name for different input arguments. This is very obvious for the basic math operators but it is true for every function. Lets have a look for the `+` operator:
+```julia:./code/md.jl
+methods(+)
+```
+\show{./code/md.jl}
+
+This shows us two things. First, we did not think anybody will print this workshop out or we would have gone for shorter outputs. Second, and more importantly, every time you call a function, Julia will look at the type of each argument and search for the function that fits the best. As a result you can write optimized code for different types and in general this is one key stone in the excellent performance numbers of Julia. 
+
+Before we continue to the other parallel computation concepts we introduce an example that will help as along, same as the sum did for the beginning of this section. 
+
+# Not the most efficient way of computing $\pi$
+
+As you very well know, there are a lot of ways to compute $\pi$. There is even a [blog entry](https://julialang.org/blog/2017/03/piday/) in the Julia blog for that. Nevertheless, we decided for a different method.
 
 # Concept for how to go further
 
