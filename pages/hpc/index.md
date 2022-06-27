@@ -90,7 +90,7 @@ Total snapshots: 16562
 ```
 # Single-Instruction multiple data
 
-Before we going to specifically parallelise code we talk about an inbuilt mechanism called Single-instruction, multiple data or [SIMD](https://docs.julialang.org/en/v1/base/simd-types/) for short. The main idea is that CPUs (or basically any ALU core) can perform the same operation on multiple inputs in a single clock cycle. This was already used for BLAS and LAPACK packages, with the so call unlooping.
+Before we are going to specifically parallelise code we talk about an inbuilt mechanism called Single-instruction, multiple data or [SIMD](https://docs.julialang.org/en/v1/base/simd-types/) for short. The main idea is that CPUs (or basically any ALU core) can perform the same operation on multiple inputs in a single clock cycle. This was already used for BLAS and LAPACK packages, with the so call unlooping.
 
 Let us consider the following example
 \begin{align*}
@@ -126,7 +126,7 @@ This looks otley familiar, as this is our sum example. We can modify our sum ove
 ```julia:./code/simd.jl
 println("\nSimple sum:")
 @btime mysum($a)
-println("\nBuilt in sum:")
+println("\nBuilt-in sum:")
 @btime sum($a)
 ```
 \show{./code/simd.jl}
@@ -160,7 +160,7 @@ end
 
 println("\nSimple mysum(a) = ", mysum(a))
 @btime mysum($a)
-println("\nBuilt in sum(a) = ", sum(a))
+println("\nBuilt-in sum(a) = ", sum(a))
 @btime sum($a)
 println("\nSimple mysimdsum = ", mysimdsum(a))
 @btime mysimdsum($a)
@@ -174,7 +174,7 @@ We can see a massive speed up (that will depend on the CPU architecture you are 
 
 This is do to the fact that the numerics involved are are a bit tricky. In short, when adding floating point numbers you loose accuracy when adding a large number to a small number. This is exactly what is happening for our first example as we add all the numbers in one long sequence. 
 
-The build in `sum` function as well as the `@simd` macro allow Julia to change the order of the operations. What it does is creating a results for the even and odd entries separately and therefore gaining a bit of accuracy.
+The built-in `sum` function as well as the `@simd` macro allow Julia to change the order of the operations. What it does is computing the result for the even and odd entries separately and therefore gaining a bit of accuracy.
 
 If your are not sure if something is vectorized you can check out the LLVM code:
 ```julia:./code/simd_2.jl
@@ -186,9 +186,9 @@ using InteractiveUtils
 
 ```julia:./code/simd_2.jl
 a32 = rand(Float32, length(a)*2)
-println("\nBuilt in sum(FLOAT64) = ", sum(a))
+println("\nBuilt-in sum(FLOAT64) = ", sum(a))
 @btime sum($a32)
-println("\nBuild in sum(FLOAT32) = ", sum(a32))
+println("\nBuild-in sum(FLOAT32) = ", sum(a32))
 @btime sum($a32)
 ```
 \show{./code/simd_2.jl}
