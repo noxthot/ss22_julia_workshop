@@ -1,8 +1,8 @@
 # Parallel computing with Julia
 
-Since modern laptops and computers come with multiple cores it parallel computing is not just something for High Performance Computing systems. The general idea is, do not only use a single computational thread (linear programming) but run concurring tasks at the same time that solve the task you set them. Julia by default supports different ways for active [parallel or concurring computing](https://docs.julialang.org/en/v1/manual/parallel-computing/). In this section we follow some of the examples given on [Julia Academy - JuliaTutorials](https://github.com/JuliaAcademy/JuliaTutorials).
+Since modern laptops and computers come with multiple cores parallel computing is not just something for High Performance Computing systems. The general idea is to not only use a single computational thread (linear programming) but run concurring tasks at the same time that solve the task you set them. Julia by default supports different ways for active [parallel or concurring computing](https://docs.julialang.org/en/v1/manual/parallel-computing/). In this section we follow some of the examples given on [Julia Academy - JuliaTutorials](https://github.com/JuliaAcademy/JuliaTutorials).
 
-Before we are going into details on parallelising code we need to talk about how to measure performance in Julia.
+Before we are are going into the details of parallel coding we need to talk about how to measure performance in Julia.
 
 ## How to measure performance in Julia
 
@@ -87,7 +87,7 @@ Total snapshots: 16562
 ```
 # Single-Instruction multiple data
 
-Before we going to specifically parallelise code we talk about an inbuilt mechanism called Singele-instruction, multiple data or [SIMD](https://docs.julialang.org/en/v1/base/simd-types/) for short. The main idea is that CPUs (or basically any ALU core) can perform the same operation on different input in a single clock cycle. This was already used for BLAS and LAPACK packages, with the so call unlooping. What are we talking about:
+Before we going to specifically parallelise code we talk about an inbuilt mechanism called Single-instruction, multiple data or [SIMD](https://docs.julialang.org/en/v1/base/simd-types/) for short. The main idea is that CPUs (or basically any ALU core) can perform the same operation on multiple inputs in a single clock cycle. This was already used for BLAS and LAPACK packages, with the so call unlooping.
 
 Let us consider the following example
 \begin{align*}
@@ -96,7 +96,7 @@ x_2 + y_2 \to z_2\\
 x_3 + y_3 \to z_3\\
 x_4 + y_4 \to z_4
 \end{align*}
-which should look pretty familiar from the basic vector multiplication $z = x + y$. As mentioned, modern processors have *vector units* that can deal with this kind of operation at once, basically:
+which should look pretty familiar from the basic vector addition $z = x + y$. As mentioned, modern processors have *vector units* that can deal with this kind of operation at once, basically:
 \begin{align*}
 \begin{pmatrix}
 x_1\\
@@ -119,7 +119,7 @@ z_3\\
 z_4
 \end{pmatrix}
 \end{align*}
-This looks otley familiar, as this is our sum example. We can modify our sume over a vector, and learn how Julia is including the SIMD concept and why it is most of the time better to call library functions than programming them on your own. As we know how to do benchmarking lets try to figure out if our sum function is doing a good job.
+This looks otley familiar, as this is our sum example. We can modify our sum over a vector, and learn how Julia is including the SIMD concept and why it is most of the time better to call library functions than programming them on your own. As we know how to do benchmarking lets try to figure out if our sum function is doing a good job.
 ```julia:./code/simd.jl
 println("\nSimple sum:")
 @btime mysum($a)
