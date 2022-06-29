@@ -37,7 +37,7 @@ z_3\\
 z_4
 \end{pmatrix}
 \end{align*}
-Even if you don't see it right away, we can modify our sum over a vector, and learn how Julia is including the SIMD concept and why it is most of the time better to call library functions than programming them on your own. As we know how to do benchmarking lets try to figure out if our sum function is doing a good job.
+Even if you do not see it right away, we can modify our sum over a vector, and learn how Julia is including the SIMD concept and why it is most of the time better to call library functions than programming them on your own. As we know how to do benchmarking lets try to figure out if our sum function is doing a good job.
 ```julia:./code/simd.jl
 using BenchmarkTools
 
@@ -108,7 +108,7 @@ We can see a massive speed up (that will depend on the CPU architecture you are 
 
 This is do to the fact that the numerics involved are are a bit tricky. In short, when adding floating point numbers you loose accuracy when adding a large number to a small number. This is exactly what is happening for our first example as we add all the numbers in one long sequence. 
 
-The built-in `sum` function as well as the `@simd` macro allow Julia to change the order of the operations. In this specific case, it is boils down to computing the result for the even and odd entries separately and therefore gaining a bit of accuracy.
+The built-in `sum` function as well as the `@simd` macro allow Julia to change the order of the operations. In this specific case, it boils down to computing the result for the even and odd entries separately and therefore gaining a bit of accuracy.
 
 If you are not sure if something is vectorized you can check out the LLVM code for the two versions and see the difference. Hint: look out for something called `vector.ph`.
 ```julia:./code/simd.jl
@@ -120,7 +120,7 @@ printstyled("\n------Separator-------\n\n"; color = :red)
 ```
 \show{./code/simd.jl}
 
-The [LLVM](https://llvm.org/) Project is the compiler toolchain technology that Julia uses for its *Just in Time* (JIT) compilation. Basically, it translates the Julia code into a machine language close to Assembler (but quite readable, if you get used to it) and this is compiled when needed. We could se JIT doing its magic in the beginning of the [Benchmark](#how-to-measure-performance-in-julia) section, as the function `mysum` was compiled on its fist run. Note: in general packages get precompiled before they are used to gain performance.
+The [LLVM](https://llvm.org/) Project is the compiler toolchain technology that Julia uses for its *Just in Time* (JIT) compilation. Basically, it translates the Julia code into a machine language close to Assembler (but quite readable, if you get used to it) and this is compiled when needed. We could see JIT doing its magic in the beginning of the [Benchmark](#how-to-measure-performance-in-julia) section, as the function `mysum` was compiled on its first run. Note: in general packages get precompiled before they are used to gain performance.
 
 # Multiple dispatch
 While on the subject of performance and the JIT compilation it is time to introduce the *multiple dispatch* capabilities of Julia. 
