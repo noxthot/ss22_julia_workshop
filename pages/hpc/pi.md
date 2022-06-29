@@ -12,8 +12,6 @@ $$A_{circle} = \pi r^2$$
 and the square that encases it 
 $$A_{square} = 4 r^2.$$
 
-IMAGE
-
 The ratio between the area of the circle and the area of the square is therefore
 $$
 \frac{A_{circle}}{A_{square}} = \frac{\pi r^2}{4 r^2} = \frac{\pi}{4}
@@ -24,7 +22,9 @@ $$
 $$
 The same is true if we just take the first quadrant, so $\frac14$ of the square as well as the circle. This simplification will make the code more compact and faster. 
 
-The above formula suggests that we can compute $\pi$ by a [Monte Carlo Method](https://en.wikipedia.org/wiki/Monte_Carlo_method) (the example is also included in the Wiki article).
+The above formula suggests that we can compute $\pi$ by a [Monte Carlo Method](https://en.wikipedia.org/wiki/Monte_Carlo_method). Actually this example is also included in the Wiki article and it comes with this nice gif.
+
+\figalt{Pi}{/assets/pages/hpc/Pi_30K.gif}
 
 1. For a given number $M$ of uniformly scattered points in the quadrant determine if these points are in the circle (distance less than 1) or not. We call the number of points in the circle $N$. 
 2. Estimate $\pi$ by computing 
