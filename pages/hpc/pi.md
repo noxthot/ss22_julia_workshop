@@ -7,9 +7,9 @@
 
 As you very well know, there are a lot of ways to compute $\pi$. There is even a [blog entry](https://julialang.org/blog/2017/03/piday/) in the Julia blog for that. Nevertheless, we decided for a different method (that is part of the introductory courses on [JuliaAcademy](https://juliaacademy.com/)).
 
-A circle with radius $r$ has an aria of 
+A circle with radius $r$ has an area of 
 $$A_{circle} = \pi r^2$$
-and the square the encases it 
+and the square that encases it 
 $$A_{square} = 4 r^2.$$
 
 IMAGE
@@ -22,7 +22,7 @@ and we can define $\pi$ as
 $$
 \pi = 4\frac{A_{circle}}{A_{square}}.
 $$
-The same is true if we just take the first quadrant, so $\frac14$ of the square as well as the circle. This simplification will make to code more compact and faster. 
+The same is true if we just take the first quadrant, so $\frac14$ of the square as well as the circle. This simplification will make the code more compact and faster. 
 
 The above formula suggests that we can compute $\pi$ by a [Monte Carlo Method](https://en.wikipedia.org/wiki/Monte_Carlo_method) (the example is also included in the Wiki article).
 
