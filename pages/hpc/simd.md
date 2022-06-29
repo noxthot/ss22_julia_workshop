@@ -125,7 +125,7 @@ The [LLVM](https://llvm.org/) Project is the compiler toolchain technology that 
 # Multiple dispatch
 While on the subject of performance and the JIT compilation it is time to introduce the *multiple dispatch* capabilities of Julia. 
 
-Like most of the time this is best explained by showing an example. In our now already famous sum example we never specified what type the argument has. As long as one was able to loop over it and add the entries it was fine. That doesn't mean Julia never cared. In fact, we can take a look what Julia does for different input types.
+Like most of the time this is best explained by showing an example. In our now already famous sum example we never specified what type the argument has. As long as one was able to loop over it and add the entries it was fine. That does not mean Julia never cared. In fact, we can take a look what Julia does for different input types.
 
 For this we use another macro from the `InteractiveUtils` package, namely `@code_typed`. Again, we get some intermediate code that Julia produces for us. This time a bit more compact but most important, all the type information of the input argument attached to it. 
 
@@ -134,12 +134,12 @@ For an array of `Int64` we get:
 @code_typed optimize=false mysum([1, 2, 3])
 ```
 \show{./code/simd.jl}
-and for `FLOAT64`:
+and for `Float64`:
 ```julia:./code/simd.jl
 @code_typed optimize=false mysum([1.0, 2.0, 3.0])
 ```
 \show{./code/simd.jl}
-We can see, that in the first output everything is of type `INT64`, including the result. The second output has the same instructions but with `FLOAT64` as type. 
+We can see, that in the first output everything is of type `Int64`, including the result. The second output has the same instructions but with `Float64` as type. 
 
 As you might have already seen throughout this workshop you can define the same function name for different input arguments. This is very obvious for the basic math operators but it is true for every function. Lets have a look for the `+` operator:
 ```julia:./code/md.jl
