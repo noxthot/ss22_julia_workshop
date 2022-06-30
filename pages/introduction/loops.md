@@ -7,13 +7,13 @@
 
 Just as any scientific programming language, Julia has different variants to implement loops. The perhaps most common one is the `for` loop
 ```julia
-for i = 1:N
+for i in 1:N
     # loop body
 end
 ```
-Here, Julia performs instructions inside the loop body for $i = 1,\cdots,N$. You can modify the iterates by `for i = indexStart:increment:indexEnd`. Hence, if we want to iterate from $N$ to $1$ with an increment of $2$, we have 
+Here, Julia performs instructions inside the loop body for $i = 1,\cdots,N$. You can modify the iterates by `for i in indexStart:increment:indexEnd`. Hence, if we want to iterate from $N$ to $1$ with an increment of $2$, we have 
 ```julia
-for i = N:-2:1
+for i in N:-2:1
     # loop body
 end
 ```
@@ -23,7 +23,7 @@ A further loop that can be used is the `while` loop, which performs a given inst
 ```julia
 while i <= N
     # loop body
-    i = i-2
+    i = i - 2
 end
 ```
 
@@ -41,23 +41,23 @@ using LinearAlgebra
 N = 5
 A = zeros(N,N)
 
-for i = 1:N
-    for j = 1:N
-        A[i,j] = (i-j)^2;
+for i in 1:N
+    for j in 1:N
+        A[i, j] = (i - j) ^ 2;
     end
 end
 
 # 2.
 v = rand(N);
-vNew = A*v/norm(A*v)
+vNew = A * v / norm(A * v)
 
 #3.
-while norm(v-vNew) > 1e-5
+while norm(v - vNew) > 1e-5
     v .= vNew
-    vNew .= A*v./norm(A*v)
+    vNew .= A * v ./ norm(A * v)
 end
 #4.
-println("Approximated dominant eigenvalue is ",norm(A*vNew))
+println("Approximated dominant eigenvalue is ", norm(A * vNew))
 ```
 }
 }
