@@ -1,0 +1,144 @@
+<!doctype html> <html lang=en > <script src="/ss22_julia_workshop/libs/clipboard.min.js"></script> <meta charset=UTF-8 > <meta name=viewport  content="width=device-width, initial-scale=1"> <link rel=stylesheet  href="/ss22_julia_workshop/libs/highlight/github.min.css"> <link rel=stylesheet  href="/ss22_julia_workshop/css/jtd.css"> <link rel=stylesheet  href="/ss22_julia_workshop/css/extras.css"> <link rel=icon  href="/ss22_julia_workshop/assets/favicon.ico"> <style> /* #148 wrap long header */ .franklin-content a.header-anchor, .franklin-toc li a { word-wrap: break-word; white-space: normal; } </style> <title>Dataframes</title> <div class=page-wrap > <div class=side-bar > <div class=header > <a href="/ss22_julia_workshop/" class=title > Julia </a> </div> <label for=show-menu  class=show-menu >MENU</label> <input type=checkbox  id=show-menu  role=button > <div class=menu  id=side-menu > <ul class=menu-list > <li class="menu-list-item "><a href="/ss22_julia_workshop/" class="menu-list-link ">Start</a> <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/" class="menu-list-link ">Introduction</a> <ul class="menu-list-child-list "> <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/basis_datatypes_and_operations" class=menu-list-link >Basic Datatypes and Operations</a> <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/matrix_vectors" class=menu-list-link >Matrix and Vector Operations</a> <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/loops" class=menu-list-link >Loops</a> <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/control_flow" class=menu-list-link >Control Flow</a> <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/worksheet_1" class=menu-list-link >Worksheet 1</a> <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/worksheet_2" class=menu-list-link >Worksheet 2</a> </ul> <li class="menu-list-item active"><a href="/ss22_julia_workshop/pages/datascience/" class="menu-list-link active">Data Science</a> <ul class="menu-list-child-list "> <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/datascience/dataframes" class=menu-list-link >Dataframes</a> </ul> <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/hpc/" class="menu-list-link ">Parallel computing</a> <ul class="menu-list-child-list "> <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/hpc/performance" class=menu-list-link >Measuring performance in Julia</a> <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/hpc/simd" class=menu-list-link >Single Instruction Multiple Data</a> <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/hpc/pi" class=menu-list-link >Pi example</a> </ul> </ul> </div> <div class=footer > This is <em>Just the docs</em>, adapted from the <a href="https://github.com/pmarsceill/just-the-docs" target=_blank >Jekyll theme</a>. </div> </div> <div class=main-content-wrap > <div class=main-content > <div class=main-header > SS22 Julia Workshop Obergurgl </div> <div class=franklin-content ><h1 id=dataframes ><a href="#dataframes" class=header-anchor >Dataframes</a></h1> <p>Data Science mostly requires to work with tabular data. With <a href="https://dataframes.juliadata.org/stable/"><code>DataFrames.jl</code></a> Julia provides a set of tools for working with tabular data. When you are already familiar with <code>pandas</code> &#40;Python&#41; or <code>dplyr</code> &#40;R&#41; you will be quickly able to get started with Data Wrangling using <code>DataFrames.jl</code> since design and functionality are quite similar.</p> <p>First of all you of course need to add and load the package:</p> <pre><code class="julia-repl hljs">pkg&gt; add DataFrames
+<span class="hljs-meta prompt_">julia&gt;</span><span class=language-julia > use DataFrames</span></code></pre> <p>Let us start with an empty <code>DataFrame</code>:</p> <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class=language-julia > DataFrame()
+</span>0×0 DataFrame</code></pre> <p>It is also easy to initialize a <code>DataFrame</code> with a couple of columns:</p> <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class=language-julia > DataFrame(country=[<span class=hljs-string >&quot;Austria&quot;</span>, <span class=hljs-string >&quot;Germany&quot;</span>, <span class=hljs-string >&quot;Switzerland&quot;</span>], population=[<span class=hljs-number >8_917_000</span>, <span class=hljs-number >83_240_000</span>, <span class=hljs-number >8_637_000</span>], continent=<span class=hljs-string >&quot;Europe&quot;</span>)
+</span>3×3 DataFrame
+ Row │ country      population  continent 
+     │ String       Int64       String    
+─────┼────────────────────────────────────
+   1 │ Austria         8917000  Europe
+   2 │ Germany        83240000  Europe
+   3 │ Switzerland     8637000  Europe</code></pre> <p>Note that the continent was given as scalar &quot;Europe&quot; and broadcasted to fill every row of the created <code>DataFrame</code>.</p> <p>In case you want to initialize a <code>DataFrame</code> with names that are not valid Julia identifiers &#40;e.g. containing spaces&#41; you can also use the following form: julia&gt; DataFrame&#40;&quot;country&quot; &#61;&gt; &#91;&quot;Austria&quot;, &quot;Germany&quot;, &quot;Switzerland&quot;&#93;, &quot;population 2020&quot; &#61;&gt; &#91;8<em>917</em>000, 83<em>240</em>000, 8<em>637</em>000&#93;, &quot;continent&quot; &#61;&gt; &quot;Europe&quot;&#41;</p> <pre><code class="julia-repl hljs">3×3 DataFrame
+ Row │ country      population 2020  continent 
+     │ String       Int64            String    
+─────┼─────────────────────────────────────────
+   1 │ Austria              8917000  Europe
+   2 │ Germany             83240000  Europe
+   3 │ Switzerland          8637000  Europe</code></pre> <p>And in case you already got your data in a dictionary where the keys are <code>Strings</code> or <code>Symbols</code>, simply initialize your <code>DataFrame</code> using that dictionary:</p> <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class=language-julia > mydict = <span class=hljs-built_in >Dict</span>(<span class=hljs-string >&quot;country&quot;</span> =&gt; [<span class=hljs-string >&quot;Austria&quot;</span>, <span class=hljs-string >&quot;Germany&quot;</span>, <span class=hljs-string >&quot;Switzerland&quot;</span>], <span class=hljs-string >&quot;population 2020&quot;</span> =&gt; [<span class=hljs-number >8_917_000</span>, <span class=hljs-number >83_240_000</span>, <span class=hljs-number >8_637_000</span>], <span class=hljs-string >&quot;continent&quot;</span> =&gt; <span class=hljs-string >&quot;Europe&quot;</span>)
+</span>Dict{String, Any} with 3 entries:
+  &quot;population 2020&quot; =&gt; [8917000, 83240000, 8637000]
+  &quot;continent&quot;       =&gt; &quot;Europe&quot;
+  &quot;country&quot;         =&gt; [&quot;Austria&quot;, &quot;Germany&quot;, &quot;Switzerland&quot;]
+
+<span class="hljs-meta prompt_">julia&gt;</span><span class=language-julia > DataFrame(mydict)
+</span>3×3 DataFrame
+ Row │ continent  country      population 2020 
+     │ String     String       Int64           
+─────┼─────────────────────────────────────────
+   1 │ Europe     Austria              8917000
+   2 │ Europe     Germany             83240000
+   3 │ Europe     Switzerland          8637000</code></pre> <p>Also note that the data types of the columns are printed.</p> <h2 id=working_with_real_data ><a href="#working_with_real_data" class=header-anchor >Working with real data</a></h2> <p>To get things more exciting, let us take a look at real data. &#40;Stack Overflow&#41;&#91;www.stackoverflow.com&#93; provides &#40;annual developer surveys&#41;&#91;https://insights.stackoverflow.com/survey/&#93;. We will have a look at the latest available data set from &#40;2021&#41;&#91;https://info.stackoverflowsolutions.com/rs/719-EMH-566/images/stack-overflow-developer-survey-2021.zip&#93;. Please download this file and extract it into your workspace. Note that beside that actual data there is also a file which describes the contents of the dataset.</p> <p>The file&#39;s name is <code>survey_results_public.csv</code> and the extension indicates that the file format is a &#40;comma-seperated values&#41;&#91;https://en.wikipedia.org/wiki/Comma-separated_values&#93; file. Thus we need a package that is able to handle CSV-files. Luckily there is &#40;CSV.jl&#41;&#91;https://csv.juliadata.org/stable/&#93; which makes it easy to load a file into a <code>DataFrame</code>. All we need to do is add and load <code>CSV</code> and read the data by using <code>DataFrame</code> as sink &#40;second argument&#41;. Sink? How do we even know that such a thing exists? It is always good to consult the manual first:</p> <pre><code class="julia-repl hljs">pkg&gt; add CSV
+[..]
+<span class="hljs-meta prompt_">julia&gt;</span><span class=language-julia > <span class=hljs-keyword >using</span> CSV
+</span>
+help?&gt; CSV
+search: CSV
+
+  CSV provides fast, flexible reader &amp; writer for delimited text files in various formats.
+
+  Reading:
+
+    •  CSV.File reads delimited data and returns a CSV.File object, which allows dot-access to columns and iterating rows.
+
+    •  CSV.read is similar to CSV.File but used when the input will be passed directly to a sink function such as a DataFrame.
+
+    •  CSV.Rows reads delimited data and returns a CSV.Rows object, which allows &quot;streaming&quot; the data by iterating and thereby has a lower
+       memory footprint than CSV.File.
+
+    •  CSV.Chunks allows processing extremely large files in &quot;batches&quot; or &quot;chunks&quot;.
+
+  Writing:
+
+    •  CSV.write writes a Tables.jl interface input (https://github.com/JuliaData/Tables.jl) such as a DataFrame to a csv file or an in-memory
+       IOBuffer.
+
+    •  CSV.RowWriter creates an iterator that produces csv-formatted strings for each row in the input table.
+
+  Here is an example of reading a csv file and passing the input to a DataFrame:
+
+  using CSV, DataFrames
+  ExampleInputDF = CSV.read(&quot;ExampleInputFile.csv&quot;, DataFrame)
+
+  Here is an example of writing out a DataFrame to a csv file:
+
+  using CSV, DataFrames
+  ExampleOutputDF = DataFrame(rand(10,10), :auto)
+  CSV.write(&quot;ExampleOutputFile.csv&quot;, ExampleOutputDF)
+
+help?&gt; CSV.read
+  CSV.read(source, sink::T; kwargs...) =&gt; T
+
+  Read and parses a delimited file or files, materializing directly using the sink function. Allows avoiding excessive copies of columns for certain
+  sinks like DataFrame.
+[..]</code></pre> <p>Equipped with this knowledge we are now ready to load the file:</p> <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class=language-julia > df = CSV.read(<span class=hljs-string >&quot;survey_results_public.csv&quot;</span>, DataFrame)
+</span>83439×48 DataFrame
+   Row │ ResponseId  MainBranch                         Employment                         Country                            US_State       UK_Coun ⋯
+       │ Int64       String                             String                             String                             String         String3 ⋯
+───────┼──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+     1 │          1  I am a developer by profession     Independent contractor, freelanc…  Slovakia                           NA             NA      ⋯
+     2 │          2  I am a student who is learning t…  Student, full-time                 Netherlands                        NA             NA
+     3 │          3  I am not primarily a developer, …  Student, full-time                 Russian Federation                 NA             NA
+     4 │          4  I am a developer by profession     Employed full-time                 Austria                            NA             NA
+     5 │          5  I am a developer by profession     Independent contractor, freelanc…  United Kingdom of Great Britain …  NA             England ⋯
+     6 │          6  I am a student who is learning t…  Student, part-time                 United States of America           Georgia        NA
+   ⋮   │     ⋮                       ⋮                                  ⋮                                  ⋮                        ⋮            ⋮   ⋱
+ 83435 │      83435  I am a developer by profession     Employed full-time                 United States of America           Texas          NA
+ 83436 │      83436  I am a developer by profession     Independent contractor, freelanc…  Benin                              NA             NA
+ 83437 │      83437  I am a developer by profession     Employed full-time                 United States of America           New Jersey     NA      ⋯
+ 83438 │      83438  I am a developer by profession     Employed full-time                 Canada                             NA             NA
+ 83439 │      83439  I am a developer by profession     Employed full-time                 Brazil                             NA             NA
+                                                                                                                     43 columns and 83428 rows omitted</code></pre> <p>The first thing you will notice when working with real data is that there is more data than you can fit on one screen. So let us look at a couple of methods which help to get an overview. <code>names&#40;df&#41;</code> gives a list of columns:</p> <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class=language-julia > names(df)
+</span>48-element Vector{String}:
+ :ResponseId
+ :MainBranch
+ :Employment
+ :Country
+ :US_State
+ :UK_Country
+ :EdLevel
+ :Age1stCode
+ ⋮
+ :Sexuality
+ :Ethnicity
+ :Accessibility
+ :MentalHealth
+ :SurveyLength
+ :SurveyEase
+ :ConvertedCompYearly</code></pre> <p>Unfortunately the vector has too many elements and also got summarized. The full output can be shown with</p> <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class=language-julia > show(names(df))
+</span>[&quot;ResponseId&quot;, &quot;MainBranch&quot;, &quot;Employment&quot;, &quot;Country&quot;, &quot;US_State&quot;, &quot;UK_Country&quot;, &quot;EdLevel&quot;, &quot;Age1stCode&quot;, &quot;LearnCode&quot;, &quot;YearsCode&quot;, &quot;YearsCodePro&quot;, &quot;DevType&quot;, &quot;OrgSize&quot;, &quot;Currency&quot;, &quot;CompTotal&quot;, &quot;CompFreq&quot;, &quot;LanguageHaveWorkedWith&quot;, &quot;LanguageWantToWorkWith&quot;, &quot;DatabaseHaveWorkedWith&quot;, &quot;DatabaseWantToWorkWith&quot;, &quot;PlatformHaveWorkedWith&quot;, &quot;PlatformWantToWorkWith&quot;, &quot;WebframeHaveWorkedWith&quot;, &quot;WebframeWantToWorkWith&quot;, &quot;MiscTechHaveWorkedWith&quot;, &quot;MiscTechWantToWorkWith&quot;, &quot;ToolsTechHaveWorkedWith&quot;, &quot;ToolsTechWantToWorkWith&quot;, &quot;NEWCollabToolsHaveWorkedWith&quot;, &quot;NEWCollabToolsWantToWorkWith&quot;, &quot;OpSys&quot;, &quot;NEWStuck&quot;, &quot;NEWSOSites&quot;, &quot;SOVisitFreq&quot;, &quot;SOAccount&quot;, &quot;SOPartFreq&quot;, &quot;SOComm&quot;, &quot;NEWOtherComms&quot;, &quot;Age&quot;, &quot;Gender&quot;, &quot;Trans&quot;, &quot;Sexuality&quot;, &quot;Ethnicity&quot;, &quot;Accessibility&quot;, &quot;MentalHealth&quot;, &quot;SurveyLength&quot;, &quot;SurveyEase&quot;, &quot;ConvertedCompYearly&quot;]</code></pre> <p>Let us assume that we are doing a little study on incomes of different developer roles and therefore we are only interested in the columns: <code>&#91;&quot;Age&quot;, &quot;Country&quot;, &quot;ConvertedCompYearly&quot;, &quot;Employment&quot;, &quot;Ethnicity&quot;, &quot;Gender&quot;, &quot;OrgSize&quot;, &quot;YearsCode&quot;&#93;</code>. Unfortunately <code>ConvertedCompYearly</code> is not further described within the dataset schema but it is probably fair to assume that this reflects the annual income in dollars. Selecting various columns works with <code>df&#91;&#33;, cols&#93;</code> notation:</p> <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class=language-julia > selcols = [<span class=hljs-string >&quot;Age&quot;</span>, <span class=hljs-string >&quot;Country&quot;</span>, <span class=hljs-string >&quot;ConvertedCompYearly&quot;</span>, <span class=hljs-string >&quot;Employment&quot;</span>, <span class=hljs-string >&quot;Ethnicity&quot;</span>, <span class=hljs-string >&quot;Gender&quot;</span>, <span class=hljs-string >&quot;OrgSize&quot;</span>, <span class=hljs-string >&quot;YearsCode&quot;</span>]
+</span>[...]
+
+<span class="hljs-meta prompt_">julia&gt;</span><span class=language-julia > df[!, selcols]
+</span>83439×8 DataFrame
+   Row │ Age                Country                            ConvertedCompYearly  Employment                         Ethnicity                     ⋯
+       │ String31           String                             String15             String                             String                        ⋯
+───────┼──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+     1 │ 25-34 years old    Slovakia                           62268                Independent contractor, freelanc…  White or of European descent  ⋯
+     2 │ 18-24 years old    Netherlands                        NA                   Student, full-time                 White or of European descent
+     3 │ 18-24 years old    Russian Federation                 NA                   Student, full-time                 Prefer not to say
+     4 │ 35-44 years old    Austria                            NA                   Employed full-time                 White or of European descent
+     5 │ 25-34 years old    United Kingdom of Great Britain …  NA                   Independent contractor, freelanc…  White or of European descent  ⋯
+     6 │ 18-24 years old    United States of America           NA                   Student, part-time                 Prefer not to say
+   ⋮   │         ⋮                          ⋮                           ⋮                           ⋮                                  ⋮             ⋱
+ 83435 │ 25-34 years old    United States of America           160500               Employed full-time                 White or of European descent
+ 83436 │ 18-24 years old    Benin                              3960                 Independent contractor, freelanc…  Black or of African descent
+ 83437 │ 25-34 years old    United States of America           90000                Employed full-time                 White or of European descent  ⋯
+ 83438 │ 25-34 years old    Canada                             816816               Employed full-time                 White or of European descent
+ 83439 │ 18-24 years old    Brazil                             21168                Employed full-time                 Hispanic or Latino/a/x
+                                                                                                                      4 columns and 83428 rows omitted</code></pre> <p>Do you notice that something odd happened? ConvertedCompYearly apparently is saved as a <code>String15</code> &#40;meaning a <code>String</code> with fixed length of 15 letters&#41;. This is apparently due to <code>NA</code> being used as text in the CSV file. We obviously want this column to be of type <code>Integer</code> &#40;to be more precise of type <code>Union&#123;Integer, Missing&#125;</code>&#41; and the <code>NA</code>s should be <code>missing</code>. If we would have known about this earlier, we could have corrected this right at the start when reading the dataframe. This also counts for various other problems that often occur with this file format. Non-standard seperation letter, different symbols for writing decimal numbers to just name two. Reading the manual of <code>CSV.read</code> tells how we should read the data correctly and we can even immediately tell that we only want to read specific columns:</p> <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class=language-julia > df = CSV.read(<span class=hljs-string >&quot;survey_results_public.csv&quot;</span>, DataFrame; missingstring=<span class=hljs-string >&quot;NA&quot;</span>, select=selcols)
+</span>83439×8 DataFrame
+   Row │ Employment                         Country                            YearsCode  OrgSize                            Age                Gend ⋯
+       │ String?                            String                             String31?  String?                            String31?          Stri ⋯
+───────┼──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+     1 │ Independent contractor, freelanc…  Slovakia                           missing    20 to 99 employees                 25-34 years old    Man  ⋯
+     2 │ Student, full-time                 Netherlands                        7          missing                            18-24 years old    Man
+     3 │ Student, full-time                 Russian Federation                 missing    missing                            18-24 years old    Man
+     4 │ Employed full-time                 Austria                            missing    100 to 499 employees               35-44 years old    Man
+     5 │ Independent contractor, freelanc…  United Kingdom of Great Britain …  17         Just me - I am a freelancer, sol…  25-34 years old    Man  ⋯
+     6 │ Student, part-time                 United States of America           missing    missing                            18-24 years old    Pref
+   ⋮   │                 ⋮                                  ⋮                      ⋮                      ⋮                          ⋮               ⋱
+ 83435 │ Employed full-time                 United States of America           6          20 to 99 employees                 25-34 years old    Man
+ 83436 │ Independent contractor, freelanc…  Benin                              4          Just me - I am a freelancer, sol…  18-24 years old    Man
+ 83437 │ Employed full-time                 United States of America           10         10,000 or more employees           25-34 years old    Man  ⋯
+ 83438 │ Employed full-time                 Canada                             5          20 to 99 employees                 25-34 years old    Man
+ 83439 │ Employed full-time                 Brazil                             14         I don’t know                       18-24 years old    Man
+                                                                                                                      3 columns and 83428 rows omitted</code></pre> <div class=page-foot > <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> Gregor Ehrensperger, Peter Kandolf, Jonas Kusch. Last modified: June 30, 2022. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>. </div> </div> </div> </div> </div> <!-- end of class page-wrap--> <script> (function(){ // Get the elements. // - the 'pre' element. // - the 'div' with the 'paste-content' id. var pre = document.getElementsByTagName('pre'); // Add a copy button in the 'pre' element. // which only has the className of 'language-'. for (var i = 0; i < pre.length; i++) { var isLanguage = pre[i].children[0].className.indexOf('language-'); if ( isLanguage === 0 ) { var button = document.createElement('button'); button.className = 'copy-button'; button.textContent = 'Copy'; pre[i].appendChild(button); } }; // Run Clipboard var copyCode = new Clipboard('.copy-button', { target: function(trigger) { return trigger.previousElementSibling; } }); // On success: // - Change the "Copy" text to "Copied". // - Swap it to "Copy" in 2s. // - Lead user to the "contenteditable" area with Velocity scroll. copyCode.on('success', function(event) { event.clearSelection(); event.trigger.textContent = 'Copied'; window.setTimeout(function() { event.trigger.textContent = 'Copy'; }, 2000); }); // On error (Safari): // - Change the "Press Ctrl+C to copy" // - Swap it to "Copy" in 2s. copyCode.on('error', function(event) { event.trigger.textContent = 'Press "Ctrl + C" to copy'; window.setTimeout(function() { event.trigger.textContent = 'Copy'; }, 5000); }); })(); </script> <script> var coll = document.getElementsByClassName("collapsible"); var i; for (i = 0; i < coll.length; i++) { coll[i].addEventListener("click", function() { this.classList.toggle("active"); var content = this.nextElementSibling; if (content.style.display === "block") { content.style.display = "none"; } else { content.style.display = "block"; } }); } </script> <script> var coll = document.getElementsByClassName("solution"); const queryString = window.location.search; const urlParams = new URLSearchParams(queryString); const myVar = urlParams.get('solution') console.log(myVar); if ( myVar == 'true') { for (i = 0; i < coll.length; i++) { coll[i].style.display = "block"; } } </script>
