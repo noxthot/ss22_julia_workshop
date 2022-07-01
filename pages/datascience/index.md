@@ -1,7 +1,7 @@
 @def title = "Data Science"
 @def hascode = true
 
-@def tags = ["DataScience"]
+@def tags = ["Data Science"]
 
 # Data Science
 
