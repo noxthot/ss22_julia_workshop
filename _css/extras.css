@@ -68,7 +68,7 @@
 /* Style the collapsible content. Note: hidden by default */
 .solution {
   padding: 0 18px;
-  display: none;
+  display: block;
   overflow: hidden;
   background-color: #ffffd1;
 }
