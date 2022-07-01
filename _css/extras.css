@@ -1,12 +1,12 @@
 .important {
-    background-color: lemonchiffon;
+    background-color: #f9eadf;
+    border-radius: 1em;
     padding: 0.5em;
     margin-bottom: 1em;
   }
 
   pre {
     position: relative;
-    /* padding: 30px; */
   }
   
   .copy-button {
@@ -41,12 +41,13 @@
 
   /* Style the button that is used to open and close the collapsible content */
  .collapsible {
-  background-color: #eee;
+  border-radius: 2em 2em 0.5em 0.5em;
   color: #444;
   cursor: pointer;
-  padding: 18px;
+  padding: 1em;
   width: 100%;
-  border: none;
+  margin-top: 1em;
+  margin-bottom: 2em;
   text-align: left;
   outline: none;
   font-size: inherit;
@@ -59,16 +60,28 @@
 
 /* Style the collapsible content. Note: hidden by default */
 .collapsiblecontent {
-  padding: 0 18px;
+  border-radius: 0.5em 0.5em 2em 2em;
+  padding: 1em;
+  margin-bottom: 2em;
+  margin-top: -2em;
   display: none;
   overflow: hidden;
   background-color: #f1f1f1;
 }
 
-/* Style the collapsible content. Note: hidden by default */
 .solution {
-  padding: 0 18px;
+  border-radius: 1em 1em 0 0;
+  padding: 1em;
   display: block;
   overflow: hidden;
-  background-color: #ffffd1;
+  background-color: #f2fde2;
+}
+
+/* Style the collapsible content. Note: hidden by default */
+.solutioncollapsible {
+  border-radius: 0 0 1em 1em;
+  padding: 1em;
+  display: block;
+  overflow: hidden;
+  background-color: #f2fde2;
 }

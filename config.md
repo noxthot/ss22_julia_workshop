@@ -27,13 +27,13 @@ Add here global latex commands to use throughout your pages.
 \newcommand{\scal}[1]{\langle #1 \rangle}
 \newcommand{\note}[1]{@@note @@title ⚠ Note@@ @@content #1 @@ @@}
 \newcommand{\example}[1]{
-~~~<button type="button" class="collapsible" style="background-color:#56d100">~~~ Example ~~~</button><div class="collapsiblecontent">~~~ #1 ~~~</div>~~~
+~~~<button type="button" class="collapsible" style="background-color:#caffa5">~~~ Example ~~~</button><div class="collapsiblecontent">~~~ #1 ~~~</div>~~~
 }
 \newcommand{\exercise}[1]{
-~~~<button type="button" class="collapsible" style="background-color:#0089ff">~~~ Exercise ~~~</button><div class="collapsiblecontent">~~~ #1 ~~~</div>~~~
+~~~<button type="button" class="collapsible" style="background-color:#b5ddff">~~~ Exercise ~~~</button><div class="collapsiblecontent">~~~ #1 ~~~</div>~~~
 }
 
-\newcommand{\solution}[1]{~~~<div class="solution">~~~ Solution ~~~</div><div class="solution">~~~ #1 ~~~</div>~~~}
+\newcommand{\solution}[1]{~~~<div class="solution">~~~ Solution ~~~</div><div class="solutioncollapsible">~~~ #1 ~~~</div>~~~}
 
 \newcommand{\figenv}[3]{
 ~~~
