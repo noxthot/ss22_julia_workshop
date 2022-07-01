@@ -24,12 +24,7 @@ The same is true if we just take the first quadrant, so $\frac14$ of the square 
 
 The above formula suggests that we can compute $\pi$ by a [Monte Carlo Method](https://en.wikipedia.org/wiki/Monte_Carlo_method). Actually this example is also included in the Wiki article and it comes with this nice gif.
 
-~~~
-<figure style="text-align:center;">
-<img src="/assets/pages/hpc/Pi_30K.gif" style="padding:0;" alt="Monte Carlo for &pi"/>
-<figcaption>Simulation of the Monte Carlo Method for computing &pi;. Original source: https://commons.wikimedia.org/wiki/File:Pi_30K.gif</figcaption>
-</figure>
-~~~
+\figenv{Simulation of the Monte Carlo Method for computing &pi;. <br>Original source: https://commons.wikimedia.org/wiki/File:Pi_30K.gif}{/assets/pages/hpc/Pi_30K.gif}{}
 
 The algorithm therefore becomes:
 1. For a given number $M$ of uniformly scattered points in the quadrant determine if these points are in the circle (distance less than 1) or not. We call the number of points in the circle $N$. 

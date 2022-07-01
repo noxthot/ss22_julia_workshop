@@ -34,3 +34,12 @@ Add here global latex commands to use throughout your pages.
 }
 
 \newcommand{\solution}[1]{~~~<div class="solution">~~~ Solution ~~~</div><div class="solution">~~~ #1 ~~~</div>~~~}
+
+\newcommand{\figenv}[3]{
+~~~
+<figure style="text-align:center;">
+<img src="!#2" style="padding:0;#3" alt="#1"/>
+<figcaption>#1</figcaption>
+</figure>
+~~~
+}
