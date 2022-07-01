@@ -40,6 +40,7 @@ julia> df = CSV.read("survey_results_public.csv", DataFrame; missingstring="NA",
                                                                                             6 columns and 83434 rows omitted
 ```
 
+## Data Wrangling
 In a first step, let us get a descriptive overview over the data by having a applying `describe()`. 
 Also note the additional arguments that are given to `show()`for displaying all rows and columns.
 ```julia
@@ -66,3 +67,155 @@ Since most columns are `String` types, there is not that much to see but we stil
 }
 
 After the previous exercise you should have $46844$ rows in your data set.
+
+Let us try to get an overview over the yearly compensation. Again we can use `describe` on just that column to get more detailed summary statistics:
+```julia-repl
+julia> describe(df.ConvertedCompYearly)
+Summary Stats:
+Length:         46844
+Missing Count:  0
+Mean:           118426.152890
+Minimum:        1.000000
+1st Quartile:   27025.000000
+Median:         56211.000000
+3rd Quartile:   100000.000000
+Maximum:        45241312.000000
+Type:           Int64
+```
+
+So we have $46844$ rows in this data set. We already removed the missing values, so there is no missing value left. The arithmetic mean is a lot higher than the median which indicates that the data is heavily skewed to the right. 25% of the data appears to be smaller than $27025$ and 75% of the data larger than $100000$. The maximum is given by an entry of over 45Mio and there are also participants with a yearly income of one Dollar. 
+
+Let us create some plots to gain deeper insights. We have already seen the use of `Plots.jl` before. In this section we will switch to `StatsPlots.jl`, which is a drop-in replacement for `Plots.jl` since on one hand it supports easy plotting of dataframes and on the other hand also offers additional statistical recipes.
+
+Creating a boxplot is fairly simple:
+```julia:./code/ds_exploratory_da.jl
+using StatsPlots
+@df df boxplot(:ConvertedCompYearly)
+```
+
+\figalt{Boxplot}{/assets/pages/datascience/exploratory_da_boxplot.png}
+
+Note that `@df` is the call of the macro and the second `df` is the name of our dataframe.
+
+Apparently a couple of outliers totally screw our visualization. Let us have a look at the [cumulative distribution function (CDF)](https://en.wikipedia.org/wiki/Cumulative_distribution_function) of our data column. Therefor we simply sort the values of the column and plot them on the $y$ axis while we scale the $x$-axis from $0$ to $1$.
+
+```julia
+julia> plot(sort(df.ConvertedCompYearly), (1:nrow(df)) ./ nrow(df))
+```
+
+\figalt{Boxplot}{/assets/pages/datascience/exploratory_da_cdf.png}
+
+The plot tells us (just like the quartiles already indicated) that most of the survey participates earn a lot less than 10Mio. Dollars. Removing outliers is a very controversial topic. Usually it is always a good practice to try to understand the source of outliers and to consult a domain expert to decide whether or not to remove them. In this workshop we want to show the pitfalls when working with real data, but we also want to pragmatically clean the data to practice some data wrangling. So let us assume that it is very unusual for a software developer to earn more than 1Mio per year but to be sure, let us also check all entries where `ConvertedCompYear` exceeds 1Mio. We leave this as an exercise.
+
+\exercise{
+    Filter `df` for entries where `ConvertedCompYear` exceeds 1Mio and have a look at the remaining data rows. 
+    Hints: Check the manual of `filter`. When you are running your code in the Julia REPL within VS Code you will find a dataframe viewer in your Julia extension's workspace. Otherwise it might also make sense to quickly write the dataframe to a CSV and have a look in one of the usual spreadsheet programs.
+}
+
+Apparently most of the top earners declared to be software developers. Let us filter the data set such that we only have entries $< 1$Mio from now on.
+
+\exercise{
+    Filter (and store) `df` for entries where `ConvertedCompYear` is equal or less than 1Mio.
+}
+
+Now you should have $46237$ entries. Next, we only want to look at the DACH region.
+
+\exercise{
+    Filter (and store) `df` for `Country` being `Austria`, `Germany` or `Switzerland`.
+}
+
+Now we are down to $4212$ entries. Have a look at the column `Gender`. Besides `Man` and `Woman` there are lot more categories, but unfortunately with very little sample sizes. Thus adding these to further visualizations would lead to misleading conclusions. It would require additional engineering to address these little sample sizes and therefore is out of scope of this workshop.
+So let us also add a filter in this column.
+
+\exercise{
+    Filter (and store) `df` for `Gender` being `Man` or `Woman`.
+}
+
+You should now see $4061$ entries. In a final step, let us convert the compensation from dollars into euros and store this information in a column named `EuroCompYearly`. As of 1st July, 2022 one dollar corresponds to $0.96$ Euros:
+```julia
+df[!, :EuroCompYearly] = 0.96 * df[!, :ConvertedCompYearly]
+```
+
+Here you find the solution for all manipulating tasks in this section.
+\solution{
+```julia
+using CSV, DataFrames
+
+selcols = ["Age", "Country", "ConvertedCompYearly", "DevType", "Employment", "Ethnicity", "Gender", "OrgSize", "YearsCode"]
+
+df = CSV.read("survey_results_public.csv", DataFrame; missingstring="NA", select=selcols)
+
+dropmissing!(df, :ConvertedCompYearly)
+
+filter!(x -> x.ConvertedCompYearly <= 1e6, df)
+filter!(x -> x.Country in ["Austria", "Germany", "Switzerland"], df)
+filter!(x -> !ismissing(x.Gender) && (x.Gender in ["Man", "Woman"]), df)
+
+df[!, :EuroCompYearly] = 0.96 * df[!, :ConvertedCompYearly]
+```
+}
+
+Starting from this data set, let us try to answer some questions in the upcoming exercise.
+
+\exercise{
+$~$
+1. What is the number of austrian, german and swiss survey participants? Hint: Have a look at `groupby`, `combine` and `nrow`.
+1. How does the median salary compare between full-time employments and independent contractors in Austria. Hint: `Statistics.jl` provides a `median` function.
+1. How does the median salary of data scientists compare to non data scientists in the DACH region. Hint: Have a look at `occursin` and `transform`.
+1. How many data scientists per country are left in our data set?
+$~$
+}
+
+\solution{
+1. 
+```julia-repl
+julia> combine(groupby(df, :Country), nrow => :count)
+3×2 DataFrame
+ Row │ Country      count 
+     │ String       Int64 
+─────┼────────────────────
+   1 │ Austria        437
+   2 │ Germany       3095
+   3 │ Switzerland    529
+```
+
+1. 
+```julia-repl
+julia> using Statistics
+julia> combine(groupby(filter(x -> x.Country == "Austria", df), :Employment), :EuroCompYearly  => median)
+4×2 DataFrame
+ Row │ Employment                         EuroCompYearly_median 
+     │ String?                            Float64               
+─────┼──────────────────────────────────────────────────────────
+   1 │ Independent contractor, freelanc…                74718.7
+   2 │ Employed full-time                               54481.0
+   3 │ Employed part-time                               31282.6
+   4 │ missing                                          31127.0
+```
+
+1. 
+```julia-repl
+julia> transform!(df, :DevType => ByRow(x -> !ismissing(x) && occursin(x, "Data Scientist")) => :isdatascientist)
+julia> combine(groupby(df, :isdatascientist), :EuroCompYearly => median)
+2×2 DataFrame
+ Row │ isdatascientist  EuroCompYearly_median 
+     │ Bool             Float64               
+─────┼────────────────────────────────────────
+   1 │           false                64028.2
+   2 │            true                78451.2
+```
+
+1. 
+```julia-repl
+julia> combine(groupby(df, [:Country, :isdatascientist]), nrow => :count)
+4×3 DataFrame
+ Row │ Country      isdatascientist  count 
+     │ String       Bool             Int64 
+─────┼─────────────────────────────────────
+   1 │ Austria                false    437
+   2 │ Germany                false   3088
+   3 │ Germany                 true      7
+   4 │ Switzerland            false    529
+```
+
+}
