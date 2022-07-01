@@ -1,7 +1,7 @@
 @def title = "Dataframes"
 @def hascode = true
 
-@def tags = ["DataScience", "Dataframes"]
+@def tags = ["Data Science", "Dataframes"]
 
 # Dataframes
 
@@ -200,3 +200,28 @@ julia> df = CSV.read("survey_results_public.csv", DataFrame; missingstring="NA",
                                                                                                                                       4 columns and 83435 rows omitted
 ```
 
+Since `ConvertedCompYearly` is not displayed in this last output, we will take a look at the column type by applying `eltype()`:
+```julia-repl
+julia> eltype(df.ConvertedCompYearly)
+Union{Missing, Int64}
+ ```
+
+ Let us also have a look at the types of the rest of the columns. This unfortunately is a bit technical:
+```julia-repl
+ julia> collect(zip(names(df), eltype.(eachcol(df))))
+9-element Vector{Tuple{String, Type}}:
+ ("Employment", Union{Missing, String})
+ ("Country", String)
+ ("YearsCode", Union{Missing, String31})
+ ("DevType", Union{Missing, String})
+ ("OrgSize", Union{Missing, String})
+ ("Age", Union{Missing, String31})
+ ("Gender", Union{Missing, String})
+ ("Ethnicity", Union{Missing, String})
+ ("ConvertedCompYearly", Union{Missing, Int64})
+ ```
+
+ The function `eachcol()` creates a vector-like object that allows iterating over each dataframe column, `eltype()` returns the data type of an object and by using `eltype.()` we apply `eltype()` to each column. This would return a vector of column types but unfortunately we can not see the according column names. To get the names too we use `names()`. `zip` ties together the $n$th column name with the $n$th column type, but this function also returns an iterator. Finally `collect()` returns an array of all items within that iterator which can be printed easily.
+
+\exercise{
+ When having a look at the output it might seem like `Age`, `YearsCode` and `OrgSize` probably should also be of a numeric type. Apply `unique()` to these columns to check whether those columns should be converted.}
