@@ -31,7 +31,7 @@ end
     As an exercise, we compute the dominant eigenvalue of a matrix $A$. That is, we wish to find the maximal scalar values $\lambda$ such that there exists a vector $v$ which fulfills $Av = \lambda v$.
 1. Create a matrix $A\in\mathbb{R}^{5 \times 5}$ with entries $A_{ij} = (i-j)^2$ using a `for` loop. 
 2. Apply this matrix to a random vector `v = rand(5)` and normalize the result. That is, $v_{\mathrm{new}} = Av/\Vert Av\Vert$.
-3. Repeat this process using $v_{\mathrm{new}}$ as input (i.e., $v\leftarrow v_{\mathrm{new}}$) untill $\Vert v_{\mathrm{new}}- v \Vert < 10^{-5}$ using a `while` loop.
+3. Repeat this process using $v_{\mathrm{new}}$ as input (i.e., $v\leftarrow v_{\mathrm{new}}$) until $\Vert v_{\mathrm{new}}- v \Vert < 10^{-5}$ using a `while` loop.
 4. Print out $A\cdot v_{\mathrm{new}}$ and check against the eigenvalues of $A$ using `eigvals(A)`.
 
 \solution{
