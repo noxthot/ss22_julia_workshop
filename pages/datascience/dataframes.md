@@ -167,49 +167,36 @@ julia> show(names(df))
 ["ResponseId", "MainBranch", "Employment", "Country", "US_State", "UK_Country", "EdLevel", "Age1stCode", "LearnCode", "YearsCode", "YearsCodePro", "DevType", "OrgSize", "Currency", "CompTotal", "CompFreq", "LanguageHaveWorkedWith", "LanguageWantToWorkWith", "DatabaseHaveWorkedWith", "DatabaseWantToWorkWith", "PlatformHaveWorkedWith", "PlatformWantToWorkWith", "WebframeHaveWorkedWith", "WebframeWantToWorkWith", "MiscTechHaveWorkedWith", "MiscTechWantToWorkWith", "ToolsTechHaveWorkedWith", "ToolsTechWantToWorkWith", "NEWCollabToolsHaveWorkedWith", "NEWCollabToolsWantToWorkWith", "OpSys", "NEWStuck", "NEWSOSites", "SOVisitFreq", "SOAccount", "SOPartFreq", "SOComm", "NEWOtherComms", "Age", "Gender", "Trans", "Sexuality", "Ethnicity", "Accessibility", "MentalHealth", "SurveyLength", "SurveyEase", "ConvertedCompYearly"]
 ```
 
-Let us assume that we are conducting a little study on incomes of different developer roles and therefore we are only interested in the columns: `["Age", "Country", "ConvertedCompYearly", "Employment", "Ethnicity", "Gender", "OrgSize", "YearsCode"]`. Unfortunately `ConvertedCompYearly` is not further described within the dataset schema but it is probably fair to assume that this reflects the annual income in dollars. Selecting various columns works with `df[!, cols]` notation:
+Let us assume that we are conducting a little study on incomes of different developer roles and therefore we are only interested in the columns: `["Age", "Country", "ConvertedCompYearly", "DevType", "Employment", "Ethnicity", "Gender", "OrgSize", "YearsCode"]`. Unfortunately `ConvertedCompYearly` is not further described within the dataset schema but it is probably fair to assume that this reflects the annual income in dollars. Selecting various columns works with `df[!, cols]` notation:
 ```julia-repl
-julia> selcols = ["Age", "Country", "ConvertedCompYearly", "Employment", "Ethnicity", "Gender", "OrgSize", "YearsCode"]
+julia> selcols = ["Age", "Country", "ConvertedCompYearly", "DevType", "Employment", "Ethnicity", "Gender", "OrgSize", "YearsCode"]
 [...]
 
 julia> df[!, selcols]
-83439×8 DataFrame
-   Row │ Age                Country                            ConvertedCompYearly  Employment                         Ethnicity                     ⋯
-       │ String31           String                             String15             String                             String                        ⋯
-───────┼──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-     1 │ 25-34 years old    Slovakia                           62268                Independent contractor, freelanc…  White or of European descent  ⋯
-     2 │ 18-24 years old    Netherlands                        NA                   Student, full-time                 White or of European descent
-     3 │ 18-24 years old    Russian Federation                 NA                   Student, full-time                 Prefer not to say
-     4 │ 35-44 years old    Austria                            NA                   Employed full-time                 White or of European descent
-     5 │ 25-34 years old    United Kingdom of Great Britain …  NA                   Independent contractor, freelanc…  White or of European descent  ⋯
-     6 │ 18-24 years old    United States of America           NA                   Student, part-time                 Prefer not to say
-   ⋮   │         ⋮                          ⋮                           ⋮                           ⋮                                  ⋮             ⋱
- 83435 │ 25-34 years old    United States of America           160500               Employed full-time                 White or of European descent
- 83436 │ 18-24 years old    Benin                              3960                 Independent contractor, freelanc…  Black or of African descent
- 83437 │ 25-34 years old    United States of America           90000                Employed full-time                 White or of European descent  ⋯
- 83438 │ 25-34 years old    Canada                             816816               Employed full-time                 White or of European descent
- 83439 │ 18-24 years old    Brazil                             21168                Employed full-time                 Hispanic or Latino/a/x
-                                                                                                                      4 columns and 83428 rows omitted
+83439×9 DataFrame
+   Row │ Age              Country                            ConvertedCompYearly  DevType                            Employment                       ⋯
+       │ String31         String                             String15             String                             String                           ⋯
+───────┼───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+     1 │ 25-34 years old  Slovakia                           62268                Developer, mobile                  Independent contractor, freelanc ⋯
+     2 │ 18-24 years old  Netherlands                        NA                   NA                                 Student, full-time
+   ⋮   │        ⋮                         ⋮                           ⋮                           ⋮                                  ⋮                ⋱
+ 83438 │ 25-34 years old  Canada                             816816               Developer, back-end                Employed full-time
+ 83439 │ 18-24 years old  Brazil                             21168                Developer, front-end;Developer, …  Employed full-time
+                                                                                                                       5 columns and 83435 rows omitted
 ```
 
 Do you notice that something odd happened? `ConvertedCompYearly` apparently is stored as a `String15` (meaning a `String` with fixed length of 15 letters) column. Taking a closer look at the data and/or CSV file, this is due to `NA` being used as text in the CSV file. We obviously want this column to be of type `Integer` (to be more precise of type `Union{Integer, Missing}`) and the `NA`s should be `missing`. If we would have known about this earlier, we could have corrected this right at the start when reading the dataframe. This also counts for various other problems that often occur with this file format. Non-standard seperation letter, different symbols for writing decimal numbers to just name two. Reading the manual of `CSV.read` tells how we should read the data correctly and we can even immediately tell that we only want to read specific columns:
 ```julia-repl
 julia> df = CSV.read("survey_results_public.csv", DataFrame; missingstring="NA", select=selcols)
-83439×8 DataFrame
-   Row │ Employment                         Country                            YearsCode  OrgSize                            Age                Gend ⋯
-       │ String?                            String                             String31?  String?                            String31?          Stri ⋯
-───────┼──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-     1 │ Independent contractor, freelanc…  Slovakia                           missing    20 to 99 employees                 25-34 years old    Man  ⋯
-     2 │ Student, full-time                 Netherlands                        7          missing                            18-24 years old    Man
-     3 │ Student, full-time                 Russian Federation                 missing    missing                            18-24 years old    Man
-     4 │ Employed full-time                 Austria                            missing    100 to 499 employees               35-44 years old    Man
-     5 │ Independent contractor, freelanc…  United Kingdom of Great Britain …  17         Just me - I am a freelancer, sol…  25-34 years old    Man  ⋯
-     6 │ Student, part-time                 United States of America           missing    missing                            18-24 years old    Pref
-   ⋮   │                 ⋮                                  ⋮                      ⋮                      ⋮                          ⋮               ⋱
- 83435 │ Employed full-time                 United States of America           6          20 to 99 employees                 25-34 years old    Man
- 83436 │ Independent contractor, freelanc…  Benin                              4          Just me - I am a freelancer, sol…  18-24 years old    Man
- 83437 │ Employed full-time                 United States of America           10         10,000 or more employees           25-34 years old    Man  ⋯
- 83438 │ Employed full-time                 Canada                             5          20 to 99 employees                 25-34 years old    Man
- 83439 │ Employed full-time                 Brazil                             14         I don’t know                       18-24 years old    Man
-                                                                                                                      3 columns and 83428 rows omitted
+83439×9 DataFrame
+   Row │ Employment                         Country                            YearsCode  DevType                            OrgSize                            Age  ⋯
+       │ String?                            String                             String31?  String?                            String?                            Stri ⋯
+───────┼──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+     1 │ Independent contractor, freelanc…  Slovakia                           missing    Developer, mobile                  20 to 99 employees                 25-3 ⋯
+     2 │ Student, full-time                 Netherlands                        7          missing                            missing                            18-2
+   ⋮   │                 ⋮                                  ⋮                      ⋮                      ⋮                                  ⋮                       ⋱
+ 83438 │ Employed full-time                 Canada                             5          Developer, back-end                20 to 99 employees                 25-3
+ 83439 │ Employed full-time                 Brazil                             14         Developer, front-end;Developer, …  I don’t know                       18-2
+                                                                                                                                      4 columns and 83435 rows omitted
 ```
+
