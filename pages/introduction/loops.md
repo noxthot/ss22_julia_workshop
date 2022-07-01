@@ -65,7 +65,6 @@ println("Approximated dominant eigenvalue is ", norm(A * vNew))
 In order to stop a loop or skip an evaluation of the loop body at a specific iteration index if a certain condition is fulfilled we can use the `break` and `continue` commands. The `break` command will exit the loop. A simple example is
 ```julia
 for i = 1:10
-    
     if i > 5
         break
     end
@@ -76,8 +75,7 @@ println("Loop stopped.")
 ```
 This will print out the iteration index untill a value of $i=6$ is reached at which point the loop will be exited. The `continue` statement allows us to skip an iterate.
 ```julia
-for i = 1:10
-    
+for i = 1:10    
     if i == 5
         continue
     end
