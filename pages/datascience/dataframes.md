@@ -34,8 +34,8 @@ julia> DataFrame(country=["Austria", "Germany", "Switzerland"], population=[8_91
 Note that the continent was given as scalar "Europe" and broadcasted to fill every row of the created `DataFrame`.
 
 In case you want to initialize a `DataFrame` with names that are not valid Julia identifiers (e.g. containing spaces) you can also use the following form:
-julia> DataFrame("country" => ["Austria", "Germany", "Switzerland"], "population 2020" => [8_917_000, 83_240_000, 8_637_000], "continent" => "Europe")
 ```julia-repl
+julia> DataFrame("country" => ["Austria", "Germany", "Switzerland"], "population 2020" => [8_917_000, 83_240_000, 8_637_000], "continent" => "Europe")
 3×3 DataFrame
  Row │ country      population 2020  continent 
      │ String       Int64            String    
@@ -67,9 +67,9 @@ Also note that the data types of the columns are printed.
 
 ## Working with real data
 
-To get things more exciting, let us take a look at real data. (Stack Overflow)[www.stackoverflow.com] provides (annual developer surveys)[https://insights.stackoverflow.com/survey/]. We will have a look at the latest available data set from (2021)[https://info.stackoverflowsolutions.com/rs/719-EMH-566/images/stack-overflow-developer-survey-2021.zip]. Please download this file and extract it into your workspace. Note that beside that actual data there is also a file which describes the contents of the dataset.
+To get things more exciting, let us take a look at real data. [Stack Overflow](www.stackoverflow.com) provides [annual developer surveys](https://insights.stackoverflow.com/survey/). We will have a look at the latest available data set from [2021](https://info.stackoverflowsolutions.com/rs/719-EMH-566/images/stack-overflow-developer-survey-2021.zip). Please download this file and extract it into your workspace. Note that beside that actual data there is also a file which describes the contents of the dataset.
 
-The file's name is `survey_results_public.csv` and the extension indicates that the file format is a (comma-seperated values)[https://en.wikipedia.org/wiki/Comma-separated_values] file. Thus we need a package that is able to handle CSV-files. Luckily there is (CSV.jl)[https://csv.juliadata.org/stable/] which makes it easy to load a file into a `DataFrame`. All we need to do is add and load `CSV` and read the data by using `DataFrame` as sink (second argument). Sink? How do we even know that such a thing exists? It is always good to consult the manual first:
+The file's name is `survey_results_public.csv` and the extension indicates that the file format is a [comma-seperated values](https://en.wikipedia.org/wiki/Comma-separated_values) file. Thus we need a package that is able to handle CSV-files. Luckily there is [CSV.jl](https://csv.juliadata.org/stable/) which makes it easy to load a file into a `DataFrame`. All we need to do is add and load `CSV` and read the data by using `DataFrame` as sink (second argument). Sink? How do we even know that such a thing exists? It is always good to consult the manual first:
 ```julia-repl
 pkg> add CSV
 [..]
@@ -161,13 +161,13 @@ julia> names(df)
  :ConvertedCompYearly
 ```
 
-Unfortunately the vector has too many elements and also got summarized. The full output can be shown with
+Unfortunately the vector has too many elements and also gets summarized. The full output can be shown with `show`:
 ```julia-repl
 julia> show(names(df))
 ["ResponseId", "MainBranch", "Employment", "Country", "US_State", "UK_Country", "EdLevel", "Age1stCode", "LearnCode", "YearsCode", "YearsCodePro", "DevType", "OrgSize", "Currency", "CompTotal", "CompFreq", "LanguageHaveWorkedWith", "LanguageWantToWorkWith", "DatabaseHaveWorkedWith", "DatabaseWantToWorkWith", "PlatformHaveWorkedWith", "PlatformWantToWorkWith", "WebframeHaveWorkedWith", "WebframeWantToWorkWith", "MiscTechHaveWorkedWith", "MiscTechWantToWorkWith", "ToolsTechHaveWorkedWith", "ToolsTechWantToWorkWith", "NEWCollabToolsHaveWorkedWith", "NEWCollabToolsWantToWorkWith", "OpSys", "NEWStuck", "NEWSOSites", "SOVisitFreq", "SOAccount", "SOPartFreq", "SOComm", "NEWOtherComms", "Age", "Gender", "Trans", "Sexuality", "Ethnicity", "Accessibility", "MentalHealth", "SurveyLength", "SurveyEase", "ConvertedCompYearly"]
 ```
 
-Let us assume that we are doing a little study on incomes of different developer roles and therefore we are only interested in the columns: `["Age", "Country", "ConvertedCompYearly", "Employment", "Ethnicity", "Gender", "OrgSize", "YearsCode"]`. Unfortunately `ConvertedCompYearly` is not further described within the dataset schema but it is probably fair to assume that this reflects the annual income in dollars. Selecting various columns works with `df[!, cols]` notation:
+Let us assume that we are conducting a little study on incomes of different developer roles and therefore we are only interested in the columns: `["Age", "Country", "ConvertedCompYearly", "Employment", "Ethnicity", "Gender", "OrgSize", "YearsCode"]`. Unfortunately `ConvertedCompYearly` is not further described within the dataset schema but it is probably fair to assume that this reflects the annual income in dollars. Selecting various columns works with `df[!, cols]` notation:
 ```julia-repl
 julia> selcols = ["Age", "Country", "ConvertedCompYearly", "Employment", "Ethnicity", "Gender", "OrgSize", "YearsCode"]
 [...]
