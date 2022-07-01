@@ -28,9 +28,9 @@ end
 ```
 
 \exercise{
-    As an exercise, we compute the dominant eigenvalue of a matrix $A$.
+    As an exercise, we compute the dominant eigenvalue of a matrix $A$. That is, we wish to find the maximal scalar values $\lambda$ such that there exists a vector $v$ which fulfills $Av = \lambda v$.
 1. Create a matrix $A\in\mathbb{R}^{5 \times 5}$ with entries $A_{ij} = (i-j)^2$ using a `for` loop. 
-2. Apply this matrix to a vector $v = (1,1,1,1,1)^{\top}$ and normalize the result. That is, $v_{\mathrm{new}} = Av/\Vert Av\Vert$
+2. Apply this matrix to a random vector `v = rand(5)` and normalize the result. That is, $v_{\mathrm{new}} = Av/\Vert Av\Vert$.
 3. Repeat this process using $v_{\mathrm{new}}$ as input (i.e., $v\leftarrow v_{\mathrm{new}}$) untill $\Vert v_{\mathrm{new}}- v \Vert < 10^{-5}$ using a `while` loop.
 4. Print out $A\cdot v_{\mathrm{new}}$ and check against the eigenvalues of $A$ using `eigvals(A)`.
 
@@ -61,6 +61,35 @@ println("Approximated dominant eigenvalue is ", norm(A * vNew))
 ```
 }
 }
+
+In order to stop a loop or skip an evaluation of the loop body at a specific iteration index if a certain condition is fulfilled we can use the `break` and `continue` commands. The `break` command will exit the loop. A simple example is
+```julia
+for i = 1:10
+    
+    if i > 5
+        break
+    end
+
+    println("Iteration index is ", i)
+end
+println("Loop stopped.")
+```
+This will print out the iteration index untill a value of $i=6$ is reached at which point the loop will be exited. The `continue` statement allows us to skip an iterate.
+```julia
+for i = 1:10
+    
+    if i == 5
+        continue
+    end
+
+    println("Iteration index is ", i)
+end
+```
+This prints out numbers from $1$ to $10$ but skips the number $5$.
+
+@@important
+Note that opposed to the `if` statement, loops are not leaky. That is, new variables defined inside a loop will be unknown outside the loop body.
+@@
 
 @@important
 I would like to reuse the result of this example/exercise in the parallel section
