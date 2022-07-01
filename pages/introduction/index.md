@@ -120,8 +120,8 @@ shell>
 }
 
 **You exit all of the (non) Julia modes by pressing Backspace.**
-2. Visual Studio Code - see [Main introduction](../../index.html#julia_and_vscode)
-3. A lot of other IDEs or text editors like Jupyter, Sublime Text, Nano, vim and many more can also be used in connection with Julia. Some integrate the evaluation inside the editor for others you will have to do this in the command line. You can always run Julia code from command line by typing `julia myProgram.jl`
+1. Visual Studio Code - see [Main introduction](../../index.html#julia_and_vscode)
+1. A lot of other IDEs or text editors like Jupyter, Sublime Text, Nano, vim and many more can also be used in connection with Julia. Some integrate the evaluation inside the editor for others you will have to do this in the command line. You can always run Julia code from command line by typing `julia myProgram.jl`
 
 If your are just exploring some possibilities the REPL is very useful, once you try running some program or simply want to repeat a process you will have to switch to running code from a file. In the REPL you can use the arrow keys *up* and *down* to navigate through previous calls (if your command line allows this).
 

@@ -31,8 +31,8 @@ Therefore, if you are serious about measuring  performance you should stick to t
 In order to use the BenchmarkTools you need to include it with `using BenchmarkTools`, as any other package. 
 Benchmark your `mysum` function with the following macros:
 1. `@benchmark`
-2. `@btime` 
-3. Look at the detailed output of your benchmark with `dump(t)`, where `t` is the output result of a `@benchmark` run.
+1. `@btime` 
+1. Look at the detailed output of your benchmark with `dump(t)`, where `t` is the output result of a `@benchmark` run.
 and compare the output and results.
 \solution{
 To measure the performance of the above code we do the following:

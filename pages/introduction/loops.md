@@ -30,9 +30,9 @@ end
 \exercise{
     As an exercise, we compute the dominant eigenvalue of a matrix $A$. That is, we wish to find the maximal scalar values $\lambda$ such that there exists a vector $v$ which fulfills $Av = \lambda v$.
 1. Create a matrix $A\in\mathbb{R}^{5 \times 5}$ with entries $A_{ij} = (i-j)^2$ using a `for` loop. 
-2. Apply this matrix to a random vector `v = rand(5)` and normalize the result. That is, $v_{\mathrm{new}} = Av/\Vert Av\Vert$.
-3. Repeat this process using $v_{\mathrm{new}}$ as input (i.e., $v\leftarrow v_{\mathrm{new}}$) until $\Vert v_{\mathrm{new}}- v \Vert < 10^{-5}$ using a `while` loop.
-4. Print out $A\cdot v_{\mathrm{new}}$ and check against the eigenvalues of $A$ using `eigvals(A)`.
+1. Apply this matrix to a random vector `v = rand(5)` and normalize the result. That is, $v_{\mathrm{new}} = Av/\Vert Av\Vert$.
+1. Repeat this process using $v_{\mathrm{new}}$ as input (i.e., $v\leftarrow v_{\mathrm{new}}$) until $\Vert v_{\mathrm{new}}- v \Vert < 10^{-5}$ using a `while` loop.
+1. Print out $A\cdot v_{\mathrm{new}}$ and check against the eigenvalues of $A$ using `eigvals(A)`.
 
 \solution{
 ```julia
@@ -98,10 +98,10 @@ For a vector $V\in\mathrm{R}^n$ with elements $v$ compute the sum of all the ele
     
 1. Sum over the elements per index:
     $$s_1 = \sum_{i=1}^n v_i$$
-2. Sum over the elements (hint `for each`):
+1. Sum over the elements (hint `for each`):
     $$s_2 = \sum_{v\in V} v$$
-3. Transform these loops into functions
-4. Test against `V = rand(100_000)` and `s_1 ≈ s_2` (use `\approx + TAB` for ≈)
+1. Transform these loops into functions
+1. Test against `V = rand(100_000)` and `s_1 ≈ s_2` (use `\approx + TAB` for ≈)
     
 Extra: Check the `@inbounds` macro for the first version.
 

@@ -28,7 +28,7 @@ The above formula suggests that we can compute $\pi$ by a [Monte Carlo Method](h
 
 The algorithm therefore becomes:
 1. For a given number $M$ of uniformly scattered points in the quadrant determine if these points are in the circle (distance less than 1) or not. We call the number of points in the circle $N$. 
-2. Estimate $\pi$ by computing 
+1. Estimate $\pi$ by computing 
 $$
 \pi \approx 4  \frac{N}{M}.
 $$
@@ -36,8 +36,8 @@ $$
 \exercise{
 Implement the above described algorithm to compute $\pi$.
 1. Define a function that determines $M$ for a given integer $N$.
-2. Define a function that estimates $\pi$ for a given function $f$ and integer $N$.
-3. Test your code with different values for $N$.
+1. Define a function that estimates $\pi$ for a given function $f$ and integer $N$.
+1. Test your code with different values for $N$.
 
 Help: The function `rand()` will give you a uniformly scattered point in the interval $[0,1]$.
 \solution{
