@@ -62,6 +62,12 @@
     <priority>0.5</priority>
 </url>
 <url>
+    <loc>https://noxthot.github.io/ss22_julia_workshop/pages/hpc/multithreading/index.html</loc>
+    <lastmod>2022-07-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
     <loc>https://noxthot.github.io/ss22_julia_workshop/pages/introduction/index.html</loc>
     <lastmod>2022-07-01</lastmod>
     <changefreq>monthly</changefreq>
