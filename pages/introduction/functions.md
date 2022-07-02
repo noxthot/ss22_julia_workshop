@@ -23,7 +23,7 @@ end
 ```
 If we wish to specify multiple inputs and outputs we can do so as well:
 ```julia
-function sincos(x,y)
+function sincos(x, y)
     result1 = sin(cos(x))
     result2 = sin(cos(y))
     println("sin(cos($x)) = $result1")
@@ -31,10 +31,10 @@ function sincos(x,y)
     return result1, result2
 end
 ```
-You can call a function with multiple outputs via `out = foo(input)` and access the output at index $i$ through `out[i]`. You can also write (assuming two outputs) `out1,out2 = foo(input)`.
+You can call a function with multiple outputs via `out = foo(input)` and access the output at index $i$ through `out[i]`. You can also write (assuming two outputs) `out1, out2 = foo(input)`.
 ```julia-repl
 julia> x = 1; y = 1.5;
-julia> res1,res2 = sincos(x,y)
+julia> res1, res2 = sincos(x, y)
 sin(cos(1)) = 0.5143952585235492
 sin(cos(1.5)) = 0.07067822452613834
 (0.5143952585235492, 0.07067822452613834)
@@ -42,7 +42,7 @@ sin(cos(1.5)) = 0.07067822452613834
 julia> res1
 0.5143952585235492
 
-julia> res = sincos(x,y);
+julia> res = sincos(x, y);
 
 julia> res[1]
 0.5143952585235492
@@ -59,7 +59,7 @@ end
 Calling this function leads to
 ```julia-repl
 julia> x = ones(2);
-julia> println("Function value is ",sincos!(x))
+julia> println("Function value is ", sincos!(x))
 Function value is [0.5143952585235492, 0.5143952585235492]
 
 julia> x
@@ -112,18 +112,18 @@ The reason for this behaviour is that `sincos1` changes the input as Julia funct
 2. We have
 ```julia
 function sincos1!(x)
-    println("Address input: ",pointer_from_objref(x))
+    println("Address input: ", pointer_from_objref(x))
     x .= sin.(cos.(x))
-    println("Address output: ",pointer_from_objref(x))
+    println("Address output: ", pointer_from_objref(x))
     return x
 end
 ```
 and
 ```julia
 function sincos2(x)
-    println("Address input: ",pointer_from_objref(x))
+    println("Address input: ", pointer_from_objref(x))
     x = sin.(cos.(x))
-    println("Address output: ",pointer_from_objref(x))
+    println("Address output: ", pointer_from_objref(x))
     return x
 end
 ```
@@ -137,7 +137,7 @@ Address output: Ptr{Nothing} @0x00007f3325795b90
 
 julia> x = ones(2);
 
-julia> println("Address caller: ",pointer_from_objref(x));
+julia> println("Address caller: ", pointer_from_objref(x));
 Address caller: Ptr{Nothing} @0x00007f332671cab0
 
 julia> y = sincos1!(x);
@@ -155,26 +155,26 @@ Address output: Ptr{Nothing} @0x00007f33266e2310
 ## Multiple dispatch
 You might have observed that since we did not specify any data types, we were able to call functions using vectors and scalars. However, if we call `sincos1!(1.0)` you see that this might not always be the best idea. Some functions should only be called with a certain data type. We can specify the data type of input and output in the following way:
 ```julia
-function sincos1!(x::Array{Float64,1})::Array{Float64,1}
+function sincos1!(x::Array{Float64, 1})::Array{Float64, 1}
     x .= sin.(cos.(x))
     return x
 end
 ```
 In the same way, we can define functions that have the same name but which perform different operations depending on the data type. For example, we can define the function `sincos(x)` which evaluates $\sin(\cos(x))$ when $x$ is a matrix or vector and returns a vector. In order to rearrange a matrix $M$ to a vector $m$ we can use `m = vec(M)`. Then, we get:
 ```julia
-function sincos(x::Array{Float64,1})::Array{Float64,1}
+function sincos(x::Array{Float64, 1})::Array{Float64, 1}
     println("My input is a vector.")
     return sin.(cos.(x))
 end
 
-function sincos(x::Array{Float64,2})::Array{Float64,1}
+function sincos(x::Array{Float64, 2})::Array{Float64, 1}
     println("My input is a matrix.")
     return vec(sin.(cos.(x)))
 end
 ```
 Calling these functions gives
 ```julia-repl
-julia> x = ones(2,2);
+julia> x = ones(2, 2);
 
 julia> sincos(x)
 My input is a matrix.
@@ -205,7 +205,7 @@ end
 ```
 and run
 ```julia-repl
-julia> x = ones(2,3);
+julia> x = ones(2, 3);
 
 julia> sincos.(x)
 2×3 Matrix{Float64}:
@@ -234,17 +234,21 @@ Extra: Check the `@inbounds` macro for the first version.
 ```julia
 function mysum1(V)
     s = zero(eltype(V))
+
     for i in eachindex(V)
         s += V[i]
     end
+
     return s
 end
 
 function mysum2(V)
     s = zero(eltype(V))
+
     for v in V
         s += v
     end
+
     return s
 end
 
