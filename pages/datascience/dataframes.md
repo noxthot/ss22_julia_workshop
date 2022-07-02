@@ -21,7 +21,11 @@ julia> DataFrame()
 
 It is also easy to initialize a `DataFrame` with a couple of columns:
 ```julia-repl
-julia> DataFrame(country=["Austria", "Germany", "Switzerland"], population=[8_917_000, 83_240_000, 8_637_000], continent="Europe")
+julia> DataFrame(
+           country=["Austria", "Germany", "Switzerland"], 
+           population=[8_917_000, 83_240_000, 8_637_000], 
+           continent="Europe"
+       )
 3×3 DataFrame
  Row │ country      population  continent 
      │ String       Int64       String    
@@ -35,7 +39,11 @@ Note that the continent was given as scalar "Europe" and broadcasted to fill eve
 
 In case you want to initialize a `DataFrame` with names that are not valid Julia identifiers (e.g. containing spaces) you can also use the following form:
 ```julia-repl
-julia> DataFrame("country" => ["Austria", "Germany", "Switzerland"], "population 2020" => [8_917_000, 83_240_000, 8_637_000], "continent" => "Europe")
+julia> DataFrame(
+           "country" => ["Austria", "Germany", "Switzerland"], 
+           "population 2020" => [8_917_000, 83_240_000, 8_637_000], 
+           "continent" => "Europe"
+       )
 3×3 DataFrame
  Row │ country      population 2020  continent 
      │ String       Int64            String    
@@ -47,7 +55,11 @@ julia> DataFrame("country" => ["Austria", "Germany", "Switzerland"], "population
 
 And in case you already got your data in a dictionary, where the keys are `Strings` or `Symbols`, simply initialize your `DataFrame` using that dictionary:
 ```julia-repl
-julia> mydict = Dict("country" => ["Austria", "Germany", "Switzerland"], "population 2020" => [8_917_000, 83_240_000, 8_637_000], "continent" => "Europe")
+julia> mydict = Dict(
+           "country" => ["Austria", "Germany", "Switzerland"], 
+           "population 2020" => [8_917_000, 83_240_000, 8_637_000], 
+           "continent" => "Europe"
+       )
 Dict{String, Any} with 3 entries:
   "population 2020" => [8917000, 83240000, 8637000]
   "continent"       => "Europe"
