@@ -5,10 +5,10 @@
 
 # Exploratory Data Analysis
 
-In most Data Science projects Exploratory Data Analysis (EDA) is an essential first step. The primary aim is to analyse a given data set to summarize its main characteristics. Therefore EDA often uses data visualization methods and statistical methods.
+In most data science projects *exploratory data analysis* (EDA) is an essential first step. The primary aim is to analyse a given data set to summarize its main characteristics. Therefore EDA often uses data visualization methods and statistical methods.
 
-In this section we will continue to work with the Stack Overflow Survey data set as shown in the [previous section](./pages/datascience/dataframes/). To summarize the necessary steps to start with this section, see the Code below:
-First of all you of course need to add and load the package:
+In this section we will continue to work with the Stack Overflow survey data set as shown in the [previous section](./pages/datascience/dataframes/). To summarize the necessary steps to start with this section, see the code below:
+First of all you need to add and load the package:
 ```julia-repl
 julia> using DataFrames
 
@@ -105,7 +105,7 @@ julia> plot(sort(df.ConvertedCompYearly), (1:nrow(df)) ./ nrow(df))
 
 \figalt{Boxplot}{/assets/pages/datascience/exploratory_da_cdf.png}
 
-The plot tells us (just like the quartiles already indicated) that most of the survey participates earn a lot less than 10Mio. Dollars. Removing outliers is a very controversial topic. Usually it is always a good practice to try to understand the source of outliers and to consult a domain expert to decide whether or not to remove them. In this workshop we want to show the pitfalls when working with real data, but we also want to pragmatically clean the data to practice some data wrangling. So let us assume that it is very unusual for a software developer to earn more than 1Mio per year but to be sure, let us also check all entries where `ConvertedCompYear` exceeds 1Mio. We leave this as an exercise.
+The plot tells us (just like the quartiles already indicated) that most of the survey participates earn a lot less than 10Mio. Dollars. Removing outliers is a very controversial topic. Usually it is always good practice to try to understand the source of outliers and to consult a domain expert to decide whether or not to remove them. In this workshop we want to show the pitfalls when working with real data, but we also want to pragmatically clean the data to practice some data wrangling. So let us assume that it is very unusual for a software developer to earn more than 1Mio per year but to be sure, let us also check all entries where `ConvertedCompYear` exceeds 1Mio. We leave this as an exercise.
 
 \exercise{
     Filter `df` for entries where `ConvertedCompYear` exceeds 1Mio and have a look at the remaining data rows. 
@@ -158,12 +158,10 @@ df[!, :EuroCompYearly] = 0.96 * df[!, :ConvertedCompYearly]
 Starting from this data set, let us try to answer some questions in the upcoming exercise.
 
 \exercise{
-$~$
 1. What is the number of austrian, german and swiss survey participants? Hint: Have a look at `groupby`, `combine` and `nrow`.
 1. How does the median salary compare between full-time employments and independent contractors in Austria. Hint: `Statistics.jl` provides a `median` function.
 1. How does the median salary of data scientists compare to non data scientists in the DACH region. Hint: Have a look at `occursin` and `transform`.
 1. How many data scientists per country are left in our data set?
-$~$
 }
 
 \solution{
