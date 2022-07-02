@@ -4,6 +4,8 @@
 @def tags = ["introduction"]
 
 # Functions
+
+## Syntax
 To improve the structure and ensure reusability of pieces of you program you can use the `function` command. You have already used functions when for example calling `typeof(input)`. Other examples of functions that can be found on any common calculator are `sin(x)` or `exp(x)`. The syntax to define your own functions is the following:
 ```julia
 function foo(input)
@@ -45,6 +47,8 @@ julia> res = sincos(x,y);
 julia> res[1]
 0.5143952585235492
 ```
+
+## Call by reference
 Julia functions do not copy the input but directly operate on the input data. This means that changing values of the input in the function body will also change this data for the function caller. Whenever you define a function which will modify the input, you should indicate this with a `!` behind the function name:
 ```julia
 function sincos!(x)
@@ -79,7 +83,7 @@ function sincos2!(x)
 end
 ```
 1. Evaluate both functions with the input `x = ones(2)`. How does $x$ change after calling the function? Explain this behaviour. Correct the function names accordingly.
-2. Build in the function `pointer_from_objref(x)` to see how the memory changes.
+2. Build in the function `pointer_from_objref(x)` to see how the memory changes and to validate your previous answer.
 3. Write a method which evaluates $\sin(\cos(x))$ and stores the result on $x$ such that $x$ is modified for the caller.
 \solution{
 1. The function `sincos1!(x)` will modify the input:
@@ -148,13 +152,50 @@ Address output: Ptr{Nothing} @0x00007f33266e2310
 }
 }
 
+## Multiple dispatch
 You might have observed that since we did not specify any datatypes, we were able to call functions using vectors and scalars. However, if we call `sincos1!(1.0)` you see that this might not always be the best idea. Some functions should only be called with a certain datatype. We can specify the datatype of input and output in the following way:
 ```julia
-function sincos1!(x::Array{Float64,2})::Array{Float64,2}
+function sincos1!(x::Array{Float64,1})::Array{Float64,1}
     x .= sin.(cos.(x))
     return x
 end
 ```
+In the same way, we can define functions that have the same name but which perform different operations depending on the datatype. For example, we can define the function `sincos(x)` which evaluates $sin(cos(x))$ when $x$ is a matrix or vector and returns a vector. In order to rearrange a matrix $M$ to a vector $m$ we can use `m = vec(M)`. Then, we get:
+```julia
+function sincos(x::Array{Float64,1})::Array{Float64,1}
+    println("My input is a vector.")
+    return sin.(cos.(x))
+end
+
+function sincos(x::Array{Float64,2})::Array{Float64,1}
+    println("My input is a matrix.")
+    return vec(sin.(cos.(x)))
+end
+```
+Calling these functions gives
+```julia-repl
+julia> x = ones(2,2);
+
+julia> sincos(x)
+My input is a matrix.
+4-element Vector{Float64}:
+ 0.5143952585235492
+ 0.5143952585235492
+ 0.5143952585235492
+ 0.5143952585235492
+
+julia> x = ones(4);
+
+julia> sincos(x)
+My input is a vector.
+4-element Vector{Float64}:
+ 0.5143952585235492
+ 0.5143952585235492
+ 0.5143952585235492
+ 0.5143952585235492
+```
+
+## Element-wise operations
 As always you can use the dot operation to evaluate an array of inputs element-wise. Define the scalar function
 ```julia
 function sincos(x::Float64)::Float64
