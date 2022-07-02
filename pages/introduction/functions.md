@@ -6,7 +6,7 @@
 # Functions
 
 ## Syntax
-To improve the structure and ensure reusability of pieces of you program you can use the `function` command. You have already used functions when for example calling `typeof(input)`. Other examples of functions that can be found on any common calculator are `sin(x)` or `exp(x)`. The syntax to define your own functions is the following:
+To improve the structure and ensure reusability of pieces of your program you can use the `function` command. You have already used functions when for example calling `typeof(input)`. Other examples of functions that can be found on any common calculator are `sin(x)` or `exp(x)`. The syntax to define your own functions is the following:
 ```julia
 function foo(input)
     # function body that is executed when foo is called
@@ -108,7 +108,7 @@ julia> x
  1.0
  1.0
 ```
-The reason for this behaviour is that `sincos1` changes the input as Julia functions work with call-by-reference. I.e., they do not generate a local copy of the input and instead directly work on the same memory that has been used by the caller. This memory is not reallocated due to the use of `.=`. On the other hand, `sincos2` allocates new memory, since `x = sin.(cos.(x))` will create new memory for `x` on which the values of `sin.(cos.(x))` are stored. Hence the memory of $x$ known to the caller is not modified and the original values are preserved. Not that the name `sincos2!(x)` is hence misleading and the function should be renamed to `sincos2(x)`.
+The reason for this behaviour is that `sincos1` changes the input as Julia functions work with call-by-reference. I.e., they do not generate a local copy of the input and instead directly work on the same memory that has been used by the caller. This memory is not reallocated due to the use of `.=`. On the other hand, `sincos2` allocates new memory, since `x = sin.(cos.(x))` will create new memory for `x` on which the values of `sin.(cos.(x))` are stored. Hence the memory of $x$ known to the caller is not modified and the original values are preserved. Note that the name `sincos2!(x)` is hence misleading and the function should be renamed to `sincos2(x)`.
 2. We have
 ```julia
 function sincos1!(x)
@@ -153,14 +153,14 @@ Address output: Ptr{Nothing} @0x00007f33266e2310
 }
 
 ## Multiple dispatch
-You might have observed that since we did not specify any datatypes, we were able to call functions using vectors and scalars. However, if we call `sincos1!(1.0)` you see that this might not always be the best idea. Some functions should only be called with a certain datatype. We can specify the datatype of input and output in the following way:
+You might have observed that since we did not specify any data types, we were able to call functions using vectors and scalars. However, if we call `sincos1!(1.0)` you see that this might not always be the best idea. Some functions should only be called with a certain data type. We can specify the data type of input and output in the following way:
 ```julia
 function sincos1!(x::Array{Float64,1})::Array{Float64,1}
     x .= sin.(cos.(x))
     return x
 end
 ```
-In the same way, we can define functions that have the same name but which perform different operations depending on the datatype. For example, we can define the function `sincos(x)` which evaluates $sin(cos(x))$ when $x$ is a matrix or vector and returns a vector. In order to rearrange a matrix $M$ to a vector $m$ we can use `m = vec(M)`. Then, we get:
+In the same way, we can define functions that have the same name but which perform different operations depending on the data type. For example, we can define the function `sincos(x)` which evaluates $\sin(\cos(x))$ when $x$ is a matrix or vector and returns a vector. In order to rearrange a matrix $M$ to a vector $m$ we can use `m = vec(M)`. Then, we get:
 ```julia
 function sincos(x::Array{Float64,1})::Array{Float64,1}
     println("My input is a vector.")
