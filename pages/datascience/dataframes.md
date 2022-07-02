@@ -5,9 +5,9 @@
 
 # Dataframes
 
-Data Science mostly requires to work with tabular data. With [`DataFrames.jl`](https://dataframes.juliadata.org/stable/) Julia provides a set of tools for working with tabular data. When you are already familiar with `pandas` (Python) or `dplyr` (R) you will be quickly able to get started with Data Wrangling using `DataFrames.jl` since design and functionality are quite similar.
+Data science mostly requires to work with tabular data. With [`DataFrames.jl`](https://dataframes.juliadata.org/stable/) Julia provides a set of tools for working with tabular data. When you are already familiar with `pandas` (Python) or `dplyr` (R) you will be quickly able to get started with data wrangling using `DataFrames.jl`, since design and functionality are quite similar.
 
-First of all you of course need to add and load the package:
+First of all, you need to add and load the package:
 ```julia-repl
 pkg> add DataFrames
 julia> use DataFrames
@@ -45,7 +45,7 @@ julia> DataFrame("country" => ["Austria", "Germany", "Switzerland"], "population
    3 │ Switzerland          8637000  Europe
 ```
 
-And in case you already got your data in a dictionary where the keys are `Strings` or `Symbols`, simply initialize your `DataFrame` using that dictionary:
+And in case you already got your data in a dictionary, where the keys are `Strings` or `Symbols`, simply initialize your `DataFrame` using that dictionary:
 ```julia-repl
 julia> mydict = Dict("country" => ["Austria", "Germany", "Switzerland"], "population 2020" => [8_917_000, 83_240_000, 8_637_000], "continent" => "Europe")
 Dict{String, Any} with 3 entries:
@@ -63,7 +63,7 @@ julia> DataFrame(mydict)
    3 │ Europe     Switzerland          8637000
 ```
 
-Also note that the data types of the columns are printed.
+Also note that the data types of the columns are printed below the column name.
 
 ## Working with real data
 
