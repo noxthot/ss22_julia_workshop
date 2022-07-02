@@ -1,1 +1,87 @@
-@charset "utf-8";.important{background-color:#f9eadf;border-radius:1em;padding:.5em;margin-bottom:1em}pre{position:relative}.copy-button{cursor:pointer;border:0;font-size:10px;text-transform:uppercase;font-weight:500;padding:6px 10px 10px;color:#795548;background-color:transparent;position:absolute;top:0;right:0}.copy-button:hover,.copy-button:focus,.copy-button:active{outline:0;background-color:#eee9e6}.page-foot{margin-top:2em;border-top:1px solid #eeebee;padding-top:20px;padding-bottom:15px;color:gray;font-size:90%}.collapsible{border-radius:2em 2em .5em .5em;color:#444;cursor:pointer;padding:1em;width:100%;margin-top:1em;margin-bottom:2em;text-align:left;outline:none;font-size:inherit}.active,.collapsible:hover{background-color:#ccc}.collapsiblecontent{border-radius:.5em .5em 2em 2em;padding:1em;margin-bottom:2em;margin-top:-2em;display:none;overflow:hidden;background-color:#f1f1f1}.solution{border-radius:1em 1em 0 0;padding:1em;display:block;overflow:hidden;background-color:#f2fde2}.solutioncollapsible{border-radius:0 0 1em 1em;padding:1em;display:none;overflow:hidden;background-color:#f2fde2}
+.important {
+    background-color: #f9eadf;
+    border-radius: 1em;
+    padding: 0.5em;
+    margin-bottom: 1em;
+  }
+
+  pre {
+    position: relative;
+  }
+  
+  .copy-button {
+    cursor: pointer;
+    border: 0;
+    font-size: 10px;
+    text-transform: uppercase;
+    font-weight: 500;
+    padding: 6px 10px 10px;
+    color: #795548;
+    background-color: transparent;
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+  
+  .copy-button:hover,
+  .copy-button:focus,
+  .copy-button:active {
+    outline: 0;
+    background-color: #eee9e6;
+  }
+
+  .page-foot {
+    margin-top: 2em;
+    border-top: 1px solid #eeebee;
+    padding-top:20px;
+    padding-bottom:15px;
+    color: gray;
+    font-size: 90%;
+  }
+
+  /* Style the button that is used to open and close the collapsible content */
+ .collapsible {
+  border-radius: 2em 2em 0.5em 0.5em;
+  color: #444;
+  cursor: pointer;
+  padding: 1em;
+  width: 100%;
+  margin-top: 1em;
+  margin-bottom: 2em;
+  text-align: left;
+  outline: none;
+  font-size: inherit;
+}
+
+/* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+.active, .collapsible:hover {
+  background-color: #ccc;
+}
+
+/* Style the collapsible content. Note: hidden by default */
+.collapsiblecontent {
+  border-radius: 0.5em 0.5em 2em 2em;
+  padding: 1em;
+  margin-bottom: 2em;
+  margin-top: -2em;
+  display: none;
+  overflow: hidden;
+  background-color: #f1f1f1;
+}
+
+.solution {
+  border-radius: 1em 1em 0 0;
+  padding: 1em;
+  display: block;
+  overflow: hidden;
+  background-color: #f2fde2;
+}
+
+/* Style the collapsible content. Note: hidden by default */
+.solutioncollapsible {
+  border-radius: 0 0 1em 1em;
+  padding: 1em;
+  display: none;
+  overflow: hidden;
+  background-color: #f2fde2;
+}

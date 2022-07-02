@@ -1,26 +1,121 @@
-<!doctype html> <html lang=en > <meta charset=UTF-8 > <meta name=viewport  content="width=device-width, initial-scale=1"> <link rel=stylesheet  href="/ss22_julia_workshop/libs/katex/katex.min.css"> <link rel=stylesheet  href="/ss22_julia_workshop/libs/highlight/github.min.css"> <script src="/ss22_julia_workshop/libs/clipboard.min.js"></script> <link rel=stylesheet  href="/ss22_julia_workshop/css/jtd.css"> <link rel=stylesheet  href="/ss22_julia_workshop/css/extras.css"> <link rel=icon  href="/ss22_julia_workshop/assets/favicon.ico"> <style> /* #148 wrap long header */ .franklin-content a.header-anchor, .franklin-toc li a { word-wrap: break-word; white-space: normal; } </style> <title>Parallel Computing - Multithreading</title> <div class=page-wrap > <div class=side-bar > <div class=header > <a href="/ss22_julia_workshop/" class=title > Julia </a> </div> <label for=show-menu  class=show-menu >MENU</label> <input type=checkbox  id=show-menu  role=button > <div class=menu  id=side-menu > <ul class=menu-list > <li class="menu-list-item "><a href="/ss22_julia_workshop/" class="menu-list-link ">Start</a> <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/" class="menu-list-link ">Introduction</a> <ul class="menu-list-child-list "> <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/basis_datatypes_and_operations" class=menu-list-link >Basic Datatypes and Operations</a> <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/matrix_vectors" class=menu-list-link >Matrix and Vector Operations</a> <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/conditional_evaluations" class=menu-list-link >Conditional evaluations</a> <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/loops" class=menu-list-link >Loops</a> <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/functions" class=menu-list-link >Functions</a> <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/worksheet_1" class=menu-list-link >Worksheet 1</a> <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/worksheet_2" class=menu-list-link >Worksheet 2</a> </ul> <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/datascience/" class="menu-list-link ">Data Science</a> <ul class="menu-list-child-list "> <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/datascience/dataframes" class=menu-list-link >Dataframes</a> <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/datascience/exploratory_da" class=menu-list-link >Exploratory Data Analysis</a> </ul> <li class="menu-list-item active"><a href="/ss22_julia_workshop/pages/hpc/" class="menu-list-link active">Parallel computing</a> <ul class="menu-list-child-list "> <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/hpc/performance" class=menu-list-link >Measuring performance</a> <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/hpc/simd" class=menu-list-link >Single Instruction Multiple Data</a> <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/hpc/pi" class=menu-list-link >&pi; example</a> <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/hpc/multithreading" class=menu-list-link >Multithreading</a> </ul> </ul> </div> <div class=footer > This is <em>Just the docs</em>, adapted from the <a href="https://github.com/pmarsceill/just-the-docs" target=_blank >Jekyll theme</a>. </div> </div> <div class=main-content-wrap > <div class=main-content > <div class=main-header > SS22 Julia Workshop Obergurgl </div> <div class=franklin-content ><h1 id=multithreading_in_julia ><a href="#multithreading_in_julia" class=header-anchor >Multithreading in Julia</a></h1> <p>Before we have a look how <a href="https://docs.julialang.org/en/v1/manual/multi-threading/">Julia deals with the concept of multithreading</a>, let us make clear what we are talking about.</p> <h2 id=what_is_multithreading ><a href="#what_is_multithreading" class=header-anchor >What is multithreading</a></h2> <p>In the terminology of computer science a thread is the smallest sequence of instructions that can be managed by the scheduler of the operating system. It is often also called a light weight process and is most of the time considered to exist inside the context of a process. Consequently, multithreading is the ability to mange multiple concurrently executed threads. Multiple threads share their resources, this makes this quite a powerful tool. The threads run on a single CPU or on multiple CPUs and give you the opportunity to leverage the full force of your computer &#40;or cell phone for that matter&#41;.</p> <h2 id=julia ><a href="#julia" class=header-anchor >Julia</a></h2> <p>By default, Julia will start with a single computational thread of execution:</p> <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class=language-julia > Threads.nthreads()
-</span>1</code></pre> <p>This does not mean that Julia is only using one thread. We mentioned the <a href="http://www.netlib.org/blas/">Basic Linear Algebra Subroutines - BLAS</a> before. Calls to this library &#40;e.g. matrix-matrix multiplication&#41; will be multithreaded by default and therefore, technically you have been doing multithreading all along ;&#41;. Let us illustrate this with a small example.</p> <button type=button  class=collapsible  style="background-color:#caffa5"> Example </button><div class=collapsiblecontent > Influencing the number of threads in BLAS. When we include the <a href="https://docs.julialang.org/en/v1/stdlib/LinearAlgebra/">LinearAlgebra</a> package we get the possibility to manipulate the number of threads. Here <code>BLAS</code> is a wrapper to the BLAS libraries used by Julia. </p> <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class=language-julia > <span class=hljs-keyword >using</span> BenchmarkTools
-</span><span class="hljs-meta prompt_">julia&gt;</span><span class=language-julia > <span class=hljs-keyword >using</span> LinearAlgebra
-</span><span class="hljs-meta prompt_">julia&gt;</span><span class=language-julia > A = rand(<span class=hljs-number >2000</span>, <span class=hljs-number >2000</span>);
-</span><span class="hljs-meta prompt_">julia&gt;</span><span class=language-julia > B = rand(<span class=hljs-number >2000</span>, <span class=hljs-number >2000</span>);
-</span><span class="hljs-meta prompt_">julia&gt;</span><span class=language-julia > <span class=hljs-meta >@btime</span> $A*$B;
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+   <link rel="stylesheet" href="/ss22_julia_workshop/libs/katex/katex.min.css">
+     
+   <link rel="stylesheet" href="/ss22_julia_workshop/libs/highlight/github.min.css">
+   
+    <script src="/ss22_julia_workshop/libs/clipboard.min.js"></script>
+  
+  <link rel="stylesheet" href="/ss22_julia_workshop/css/jtd.css">
+<link rel="stylesheet" href="/ss22_julia_workshop/css/extras.css">
+<link rel="icon" href="/ss22_julia_workshop/assets/favicon.ico">
+
+<style>
+  /* #148 wrap long header */
+  .franklin-content a.header-anchor,
+  .franklin-toc li a
+   {
+    word-wrap: break-word;
+    white-space: normal;
+  }
+</style>
+
+   <title>Parallel Computing - Multithreading</title>  
+</head>
+<body>                      <!-- closed in foot.html -->
+<div class="page-wrap">   <!-- closed in foot.html -->
+  <!-- SIDE BAR -->
+  <div class="side-bar">
+    <div class="header">
+      <a href="/ss22_julia_workshop/" class="title">
+        Julia
+      </a>
+    </div>
+    <label for="show-menu" class="show-menu">MENU</label>
+    <input type="checkbox" id="show-menu" role="button">
+    <div class="menu" id="side-menu">
+      <ul class="menu-list">
+        <li class="menu-list-item "><a href="/ss22_julia_workshop/" class="menu-list-link ">Start</a>
+        <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/" class="menu-list-link ">Introduction</a>
+          <ul class="menu-list-child-list ">
+            <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/basis_datatypes_and_operations" class="menu-list-link">Basic Datatypes and Operations</a>
+            <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/matrix_vectors" class="menu-list-link">Matrix and Vector Operations</a>
+            <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/conditional_evaluations" class="menu-list-link">Conditional evaluations</a>
+            <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/loops" class="menu-list-link">Loops</a>
+            <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/functions" class="menu-list-link">Functions</a>
+            <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/worksheet_1" class="menu-list-link">Worksheet 1</a>
+            <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/worksheet_2" class="menu-list-link">Worksheet 2</a>
+          </ul>
+        <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/datascience/" class="menu-list-link ">Data Science</a>
+          <ul class="menu-list-child-list ">
+            <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/datascience/dataframes" class="menu-list-link">Dataframes</a>
+              <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/datascience/exploratory_da" class="menu-list-link">Exploratory Data Analysis</a>
+          </ul>
+        <li class="menu-list-item active"><a href="/ss22_julia_workshop/pages/hpc/" class="menu-list-link active">Parallel computing</a>
+          <ul class="menu-list-child-list ">
+            <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/hpc/performance" class="menu-list-link">Measuring performance</a>
+            <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/hpc/simd" class="menu-list-link">Single Instruction Multiple Data</a>
+            <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/hpc/pi" class="menu-list-link">&pi; example</a>
+            <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/hpc/multithreading" class="menu-list-link">Multithreading</a>
+          </ul>
+      </ul>
+    </div>
+    <div class="footer">
+      This is <em>Just the docs</em>, adapted from the <a href="https://github.com/pmarsceill/just-the-docs" target="_blank">Jekyll theme</a>.
+    </div>
+  </div>
+  <!-- CONTENT -->
+  <div class="main-content-wrap"> <!-- closed in foot.html -->
+    <div class="main-content">    <!-- closed in foot.html -->
+      <div class="main-header">
+        SS22 Julia Workshop Obergurgl
+      </div>
+
+
+
+<!-- Content appended here (in class franklin-content) -->
+<div class="franklin-content"><h1 id="multithreading_in_julia"><a href="#multithreading_in_julia" class="header-anchor">Multithreading in Julia</a></h1>
+<p>Before we have a look how <a href="https://docs.julialang.org/en/v1/manual/multi-threading/">Julia deals with the concept of multithreading</a>, let us make clear what we are talking about.</p>
+<h2 id="what_is_multithreading"><a href="#what_is_multithreading" class="header-anchor">What is multithreading</a></h2>
+<p>In the terminology of computer science a thread is the smallest sequence of instructions that can be managed by the scheduler of the operating system. It is often also called a light weight process and is most of the time considered to exist inside the context of a process. Consequently, multithreading is the ability to mange multiple concurrently executed threads. Multiple threads share their resources, this makes this quite a powerful tool. The threads run on a single CPU or on multiple CPUs and give you the opportunity to leverage the full force of your computer &#40;or cell phone for that matter&#41;.</p>
+<h2 id="julia"><a href="#julia" class="header-anchor">Julia</a></h2>
+<p>By default, Julia will start with a single computational thread of execution:</p>
+<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> Threads.nthreads()
+</span>1</code></pre>
+<p>This does not mean that Julia is only using one thread. We mentioned the <a href="http://www.netlib.org/blas/">Basic Linear Algebra Subroutines - BLAS</a> before. Calls to this library &#40;e.g. matrix-matrix multiplication&#41; will be multithreaded by default and therefore, technically you have been doing multithreading all along ;&#41;. Let us illustrate this with a small example.</p>
+<button type="button" class="collapsible" style="background-color:#caffa5"> Example </button><div class="collapsiblecontent">  Influencing the number of threads in BLAS. When we include the <a href="https://docs.julialang.org/en/v1/stdlib/LinearAlgebra/">LinearAlgebra</a> package we get the possibility to manipulate the number of threads. Here <code>BLAS</code> is a wrapper to the BLAS libraries used by Julia. </p>
+<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-keyword">using</span> BenchmarkTools
+</span><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-keyword">using</span> LinearAlgebra
+</span><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> A = rand(<span class="hljs-number">2000</span>, <span class="hljs-number">2000</span>);
+</span><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> B = rand(<span class="hljs-number">2000</span>, <span class="hljs-number">2000</span>);
+</span><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@btime</span> $A*$B;
 </span>  141.984 ms (2 allocations: 30.52 MiB)
-<span class="hljs-meta prompt_">julia&gt;</span><span class=language-julia > BLAS.get_num_threads()
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> BLAS.get_num_threads()
 </span>8
-<span class="hljs-meta prompt_">julia&gt;</span><span class=language-julia > BLAS.set_num_threads(<span class=hljs-number >1</span>)
-</span><span class="hljs-meta prompt_">julia&gt;</span><span class=language-julia > <span class=hljs-meta >@btime</span> $A*$B;
-</span>  1.009 s (2 allocations: 30.52 MiB)</code></pre> <p></div> <p>In order to have multiple threads available you need to start Julia with the <code>--threads &lt;Int|auto&gt;</code> option or define the environment variable <code>JULIA_NUM_THREADS&#61;&lt;Int&gt;</code>. With the command <code>threadid&#40;&#41;</code> from the <a href="https://docs.julialang.org/en/v1/base/base/#Base.Threads"><code>Threads</code></a> module you can find out on which thread you currently are.</p> <pre><code class="julia-repl hljs">&gt; julia --threads auto
-<span class="hljs-meta prompt_">julia&gt;</span><span class=language-julia > Threads.nthreads()
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> BLAS.set_num_threads(<span class="hljs-number">1</span>)
+</span><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@btime</span> $A*$B;
+</span>  1.009 s (2 allocations: 30.52 MiB)</code></pre>
+<p></div>
+<p>In order to have multiple threads available you need to start Julia with the <code>--threads &lt;Int|auto&gt;</code> option or define the environment variable <code>JULIA_NUM_THREADS&#61;&lt;Int&gt;</code>. With the command <code>threadid&#40;&#41;</code> from the <a href="https://docs.julialang.org/en/v1/base/base/#Base.Threads"><code>Threads</code></a> module you can find out on which thread you currently are.</p>
+<pre><code class="julia-repl hljs">&gt; julia --threads auto
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> Threads.nthreads()
 </span>16
 juliy&gt; Threads.threadid()
-1</code></pre> <p>We do not have the time for a deep dive into all the dirty details on how do do proper multithreaded programming &#40;raise conditions, locks, atomic operations, thread safe programming, ...&#41;, therefore we keep it light and simple with the <code>@threads</code> macro and introduce the needed concepts when we need them along the way.</p> <p>Like all the other macro it gives us the possibility to bring something rather complex in our code by still staying very readable as the following example shows.</p> <button type=button  class=collapsible  style="background-color:#caffa5"> Example </button><div class=collapsiblecontent > Simple example for the <a href="https://docs.julialang.org/en/v1/manual/multi-threading/#The-@threads-Macro">docs</a>:</p> <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class=language-julia > <span class=hljs-keyword >using</span> Base.Threads
-</span><span class="hljs-meta prompt_">julia&gt;</span><span class=language-julia > nthreads()
+1</code></pre>
+<p>We do not have the time for a deep dive into all the dirty details on how do do proper multithreaded programming &#40;raise conditions, locks, atomic operations, thread safe programming, ...&#41;, therefore we keep it light and simple with the <code>@threads</code> macro and introduce the needed concepts when we need them along the way.</p>
+<p>Like all the other macro it gives us the possibility to bring something rather complex in our code by still staying very readable as the following example shows.</p>
+<button type="button" class="collapsible" style="background-color:#caffa5"> Example </button><div class="collapsiblecontent">  Simple example for the <a href="https://docs.julialang.org/en/v1/manual/multi-threading/#The-@threads-Macro">docs</a>:</p>
+<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-keyword">using</span> Base.Threads
+</span><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> nthreads()
 </span>4
-<span class="hljs-meta prompt_">julia&gt;</span><span class=language-julia > a = zeros(<span class=hljs-number >10</span>);
-</span><span class="hljs-meta prompt_">julia&gt;</span><span class=language-julia > <span class=hljs-meta >@threads</span> <span class=hljs-keyword >for</span> i <span class=hljs-keyword >in</span> <span class=hljs-number >1</span>:<span class=hljs-number >10</span>
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> a = zeros(<span class="hljs-number">10</span>);
+</span><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@threads</span> <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-number">1</span>:<span class="hljs-number">10</span>
                     a[i] = threadid()
-                <span class=hljs-keyword >end</span>
-</span><span class="hljs-meta prompt_">julia&gt;</span><span class=language-julia > a
+                <span class="hljs-keyword">end</span>
+</span><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> a
 </span>10-element Vector{Float64}:
  1.0
  1.0
@@ -31,103 +126,256 @@ juliy&gt; Threads.threadid()
  3.0
  3.0
  4.0
- 4.0</code></pre> <p></div> <p>Let us try to apply this example to our <span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>π</mi></mrow><annotation encoding="application/x-tex">\pi</annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">π</span></span></span></span> example.</p> <h2 id=multithreaded_pi ><a href="#multithreaded_pi" class=header-anchor >Multithreaded <span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>π</mi></mrow><annotation encoding="application/x-tex">\pi</annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">π</span></span></span></span></a></h2> <p>The obvious first impulse is to just write a <code>@threads</code> in front of the loop in our <code>in_unit_circle</code> routine, well lets follow this impulse.</p> <div class=important >We assume the functions and variables from the <a href="./pi">Not the most efficient way of computing <span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>π</mi></mrow><annotation encoding="application/x-tex">\pi</annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">π</span></span></span></span></a> section are defined and we write some new in addition.</div> <p>For reference, the results in this section are computed with 4 threads and the original code has the following performance</p> <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class=language-julia > <span class=hljs-meta >@btime</span> estimate_pi(in_unit_circle, N)
+ 4.0</code></pre>
+<p></div>
+<p>Let us try to apply this example to our <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>π</mi></mrow><annotation encoding="application/x-tex">\pi</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">π</span></span></span></span> example.</p>
+<h2 id="multithreaded_pi"><a href="#multithreaded_pi" class="header-anchor">Multithreaded <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>π</mi></mrow><annotation encoding="application/x-tex">\pi</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">π</span></span></span></span></a></h2>
+<p>The obvious first impulse is to just write a <code>@threads</code> in front of the loop in our <code>in_unit_circle</code> routine, well lets follow this impulse.</p>
+<div class="important">We assume the functions and variables from the <a href="./pi">Not the most efficient way of computing <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>π</mi></mrow><annotation encoding="application/x-tex">\pi</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">π</span></span></span></span></a> section are defined and we write some new in addition.</div>
+<p>For reference, the results in this section are computed with 4 threads and the original code has the following performance</p>
+<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@btime</span> estimate_pi(in_unit_circle, N)
 </span>  235.643 ms (0 allocations: 0 bytes)
-3.14141152</code></pre> <button type=button  class=collapsible  style="background-color:#b5ddff"> Exercise </button><div class=collapsiblecontent > Define a new function <code>in_unit_circle_threaded1</code> with the <code>@threads</code> macro and test the result as well as the timing. <div class=solution > Solution </div><div class=solutioncollapsible > </p> <pre><code class="julia hljs"><span class=hljs-keyword >using</span> BenchmarkTools
+3.14141152</code></pre>
+<button type="button" class="collapsible" style="background-color:#b5ddff"> Exercise </button><div class="collapsiblecontent">  Define a new function <code>in_unit_circle_threaded1</code> with the <code>@threads</code> macro and test the result as well as the timing. <div class="solution"> Solution </div><div class="solutioncollapsible">  </p>
+<pre><code class="julia hljs"><span class="hljs-keyword">using</span> BenchmarkTools
 
-<span class=hljs-keyword >function</span> in_unit_circle_threaded1(N::<span class=hljs-built_in >Int64</span>)
-    M = <span class=hljs-number >0</span>
+<span class="hljs-keyword">function</span> in_unit_circle_threaded1(N::<span class="hljs-built_in">Int64</span>)
+    M = <span class="hljs-number">0</span>
     
-    <span class=hljs-meta >@threads</span> <span class=hljs-keyword >for</span> i <span class=hljs-keyword >in</span> <span class=hljs-number >1</span>:N
-        <span class=hljs-keyword >if</span> (rand()^<span class=hljs-number >2</span> + rand()^<span class=hljs-number >2</span>) &lt; <span class=hljs-number >1</span>
-            M += <span class=hljs-number >1</span>
-        <span class=hljs-keyword >end</span>
-    <span class=hljs-keyword >end</span>
+    <span class="hljs-meta">@threads</span> <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-number">1</span>:N
+        <span class="hljs-keyword">if</span> (rand()^<span class="hljs-number">2</span> + rand()^<span class="hljs-number">2</span>) &lt; <span class="hljs-number">1</span>
+            M += <span class="hljs-number">1</span>
+        <span class="hljs-keyword">end</span>
+    <span class="hljs-keyword">end</span>
 
-    <span class=hljs-keyword >return</span> M
-<span class=hljs-keyword >end</span></code></pre> <p>and we test it</p> <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class=language-julia > println(
+    <span class="hljs-keyword">return</span> M
+<span class="hljs-keyword">end</span></code></pre>
+<p>and we test it</p>
+<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> println(
            abs(
-           estimate_pi(in_unit_circle_threaded1, N) - <span class=hljs-literal >pi</span>
+           estimate_pi(in_unit_circle_threaded1, N) - <span class="hljs-literal">pi</span>
            )
        )
 </span>2.238629413589793
 
-<span class="hljs-meta prompt_">julia&gt;</span><span class=language-julia > <span class=hljs-meta >@btime</span> estimate_pi(in_unit_circle_threaded1, N)
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@btime</span> estimate_pi(in_unit_circle_threaded1, N)
 </span>  1.764 s (78540628 allocations: 1.17 GiB)
-0.8047274</code></pre> <p>Well that is underwhelming. The result is wrong and it is slower. So what happened? </div> </div> <h3 id=atomic_operations ><a href="#atomic_operations" class=header-anchor >Atomic Operations</a></h3> <p>As we could see in the above example of the docs the loop is automatically split up per index for the threads available. This means each of the threads is performing the same loop and as the context and memory is shared also access the same storage. This is problematic for our variable <code>M</code>. This means each thread reads and writes in the same variable but this also means the result is not correct. It might override the results of other threads or they all read at the same time but only one result will be written in the end. In short the counter is totally wrong. We call this <a href="https://en.wikipedia.org/wiki/Race_condition">rase condition</a>.</p> <p>To solve this issue Julia supports <a href="https://docs.julialang.org/en/v1/manual/multi-threading/#Atomic-Operations">atomic</a> values. This allows us to access a variable in a thread-safe way and avoid race conditions. All primitive types can be wrapped with <code>M &#61; Atomic&#123;Int&#125;&#40;0&#41;</code> and can only be accessed in a thread safe way. In order to do the atomic add we use the function <code>atomic_add&#33;&#40;M, 1&#41;</code> and we can access the value with <code>M&#91;&#93;</code>.</p> <button type=button  class=collapsible  style="background-color:#b5ddff"> Exercise </button><div class=collapsiblecontent > Define a new function <code>in_unit_circle_threaded2</code> with the <code>@threads</code> macro, an atomic <code>M</code> and test the result as well as the timing. <div class=solution > Solution </div><div class=solutioncollapsible > </p> <pre><code class="julia hljs"><span class=hljs-keyword >function</span> in_unit_circle_threaded2(N::<span class=hljs-built_in >Int64</span>)
-    M = Atomic{<span class=hljs-built_in >Int</span>}(<span class=hljs-number >0</span>);
+0.8047274</code></pre>
+<p>Well that is underwhelming. The result is wrong and it is slower. So what happened? </div> </div>
+<h3 id="atomic_operations"><a href="#atomic_operations" class="header-anchor">Atomic Operations</a></h3>
+<p>As we could see in the above example of the docs the loop is automatically split up per index for the threads available. This means each of the threads is performing the same loop and as the context and memory is shared also access the same storage. This is problematic for our variable <code>M</code>. This means each thread reads and writes in the same variable but this also means the result is not correct. It might override the results of other threads or they all read at the same time but only one result will be written in the end. In short the counter is totally wrong. We call this <a href="https://en.wikipedia.org/wiki/Race_condition">rase condition</a>.</p>
+<p>To solve this issue Julia supports <a href="https://docs.julialang.org/en/v1/manual/multi-threading/#Atomic-Operations">atomic</a> values. This allows us to access a variable in a thread-safe way and avoid race conditions. All primitive types can be wrapped with <code>M &#61; Atomic&#123;Int&#125;&#40;0&#41;</code> and can only be accessed in a thread safe way. In order to do the atomic add we use the function <code>atomic_add&#33;&#40;M, 1&#41;</code> and we can access the value with <code>M&#91;&#93;</code>.</p>
+<button type="button" class="collapsible" style="background-color:#b5ddff"> Exercise </button><div class="collapsiblecontent">  Define a new function <code>in_unit_circle_threaded2</code> with the <code>@threads</code> macro, an atomic <code>M</code> and test the result as well as the timing. <div class="solution"> Solution </div><div class="solutioncollapsible">  </p>
+<pre><code class="julia hljs"><span class="hljs-keyword">function</span> in_unit_circle_threaded2(N::<span class="hljs-built_in">Int64</span>)
+    M = Atomic{<span class="hljs-built_in">Int</span>}(<span class="hljs-number">0</span>);
     
-    <span class=hljs-meta >@threads</span> <span class=hljs-keyword >for</span> i <span class=hljs-keyword >in</span> <span class=hljs-number >1</span>:N
-        <span class=hljs-keyword >if</span> (rand()^<span class=hljs-number >2</span> + rand()^<span class=hljs-number >2</span>) &lt; <span class=hljs-number >1</span>
-            atomic_add!(M, <span class=hljs-number >1</span>)
-        <span class=hljs-keyword >end</span>
-    <span class=hljs-keyword >end</span>
+    <span class="hljs-meta">@threads</span> <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-number">1</span>:N
+        <span class="hljs-keyword">if</span> (rand()^<span class="hljs-number">2</span> + rand()^<span class="hljs-number">2</span>) &lt; <span class="hljs-number">1</span>
+            atomic_add!(M, <span class="hljs-number">1</span>)
+        <span class="hljs-keyword">end</span>
+    <span class="hljs-keyword">end</span>
 
-    <span class=hljs-keyword >return</span> M[]
-<span class=hljs-keyword >end</span></code></pre> <p>and we test it</p> <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class=language-julia > println(
+    <span class="hljs-keyword">return</span> M[]
+<span class="hljs-keyword">end</span></code></pre>
+<p>and we test it</p>
+<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> println(
            abs(
-           estimate_pi(in_unit_circle_threaded2, N) - <span class=hljs-literal >pi</span>
+           estimate_pi(in_unit_circle_threaded2, N) - <span class="hljs-literal">pi</span>
            )
        )
 </span>1.1466410207106037e-5
 
-<span class="hljs-meta prompt_">julia&gt;</span><span class=language-julia > <span class=hljs-meta >@btime</span> estimate_pi(in_unit_circle_threaded2, N)
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@btime</span> estimate_pi(in_unit_circle_threaded2, N)
 </span>  1.026 s (78540628 allocations: 1.17 GiB)
-3.14157478</code></pre> <p>Now our result is correct, but the time is still not better but worse. </div> </div> <h3 id=actually_distribute_the_work ><a href="#actually_distribute_the_work" class=header-anchor >Actually distribute the work</a></h3> <p>We are still not fast because each <code>attomic_add&#33;</code> is checking which thread has the current result and needs to add the new value. To avoid this we need to eliminate atomic again. We can actually split up the work quite neatly if we remember the example from the docs. It is possible to access the <code>threadid&#40;&#41;</code> and the number of threads <code>nthreads&#40;&#41;</code>. So why not define <code>M</code> as an array of length <code>nthreads&#40;&#41;</code> and in each thread write to separate values in the array by using <code>threadid&#40;&#41;</code> as index.</p> <button type=button  class=collapsible  style="background-color:#b5ddff"> Exercise </button><div class=collapsiblecontent > Define a new function <code>in_unit_circle_threaded3</code> with the <code>@threads</code>, <code>M</code> as array and test the result as well as the timing. <div class=solution > Solution </div><div class=solutioncollapsible > </p> <pre><code class="julia hljs"><span class=hljs-keyword >function</span> in_unit_circle_threaded3(N::<span class=hljs-built_in >Int64</span>)
-    M = zeros(<span class=hljs-built_in >Int64</span>, nthreads());
+3.14157478</code></pre>
+<p>Now our result is correct, but the time is still not better but worse. </div> </div>
+<h3 id="actually_distribute_the_work"><a href="#actually_distribute_the_work" class="header-anchor">Actually distribute the work</a></h3>
+<p>We are still not fast because each <code>attomic_add&#33;</code> is checking which thread has the current result and needs to add the new value. To avoid this we need to eliminate atomic again. We can actually split up the work quite neatly if we remember the example from the docs. It is possible to access the <code>threadid&#40;&#41;</code> and the number of threads <code>nthreads&#40;&#41;</code>. So why not define <code>M</code> as an array of length <code>nthreads&#40;&#41;</code> and in each thread write to separate values in the array by using <code>threadid&#40;&#41;</code> as index.</p>
+<button type="button" class="collapsible" style="background-color:#b5ddff"> Exercise </button><div class="collapsiblecontent">  Define a new function <code>in_unit_circle_threaded3</code> with the <code>@threads</code>, <code>M</code> as array and test the result as well as the timing. <div class="solution"> Solution </div><div class="solutioncollapsible">  </p>
+<pre><code class="julia hljs"><span class="hljs-keyword">function</span> in_unit_circle_threaded3(N::<span class="hljs-built_in">Int64</span>)
+    M = zeros(<span class="hljs-built_in">Int64</span>, nthreads());
     
-    <span class=hljs-meta >@threads</span> <span class=hljs-keyword >for</span> i <span class=hljs-keyword >in</span> <span class=hljs-number >1</span>:N
-        <span class=hljs-keyword >if</span> (rand()^<span class=hljs-number >2</span> + rand()^<span class=hljs-number >2</span>) &lt; <span class=hljs-number >1</span>
-            <span class=hljs-meta >@inbounds</span> M[threadid()] += <span class=hljs-number >1</span>
-        <span class=hljs-keyword >end</span>
-    <span class=hljs-keyword >end</span>
+    <span class="hljs-meta">@threads</span> <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-number">1</span>:N
+        <span class="hljs-keyword">if</span> (rand()^<span class="hljs-number">2</span> + rand()^<span class="hljs-number">2</span>) &lt; <span class="hljs-number">1</span>
+            <span class="hljs-meta">@inbounds</span> M[threadid()] += <span class="hljs-number">1</span>
+        <span class="hljs-keyword">end</span>
+    <span class="hljs-keyword">end</span>
 
-    <span class=hljs-keyword >return</span> sum(M)
-<span class=hljs-keyword >end</span></code></pre> <p>and we test it</p> <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class=language-julia > println(
+    <span class="hljs-keyword">return</span> sum(M)
+<span class="hljs-keyword">end</span></code></pre>
+<p>and we test it</p>
+<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> println(
            abs(
-           estimate_pi(in_unit_circle_threaded2, N) - <span class=hljs-literal >pi</span>
+           estimate_pi(in_unit_circle_threaded2, N) - <span class="hljs-literal">pi</span>
            )
        )
 </span>0.00017913358979315674in
 
-<span class="hljs-meta prompt_">julia&gt;</span><span class=language-julia > <span class=hljs-meta >@btime</span> estimate_pi(in_unit_circle_threaded2, N)
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@btime</span> estimate_pi(in_unit_circle_threaded2, N)
 </span>  246.722 ms (22 allocations: 2.05 KiB)
-3.1415168</code></pre> <p>Now our result is correct, and the time is okay. </div> </div> <p>Now we are faster, but still not faster than the serial version. Why is it still not working?</p> <h3 id=global_states ><a href="#global_states" class=header-anchor >Global states</a></h3> <p>Without going into too much detail, <code>rand&#40;&#41;</code> is not thread safe. It does manipulate and read from some global state and that causes our slowdown. In fact, as the random numbers are not correctly distributed any more the accuracy is also decaying. </p> <p>To avoid this we need to exchange the random number generator and make the call to <code>rand</code> thread safe. This solution is inspired by the section <em>Multithreading</em> of the <a href="https://juliaacademy.com/p/parallel-computing">Parallel Computing Class on JuliaAcademy.com</a> and slightly adapted for the setup we have. </p> <p>First step is to define a separate random number generator per thread:</p> <pre><code class="julia hljs"><span class=hljs-keyword >import</span> Random
+3.1415168</code></pre>
+<p>Now our result is correct, and the time is okay. </div> </div>
+<p>Now we are faster, but still not faster than the serial version. Why is it still not working?</p>
+<h3 id="global_states"><a href="#global_states" class="header-anchor">Global states</a></h3>
+<p>Without going into too much detail, <code>rand&#40;&#41;</code> is not thread safe. It does manipulate and read from some global state and that causes our slowdown. In fact, as the random numbers are not correctly distributed any more the accuracy is also decaying. </p>
+<p>To avoid this we need to exchange the random number generator and make the call to <code>rand</code> thread safe. This solution is inspired by the section <em>Multithreading</em> of the <a href="https://juliaacademy.com/p/parallel-computing">Parallel Computing Class on JuliaAcademy.com</a> and slightly adapted for the setup we have. </p>
+<p>First step is to define a separate random number generator per thread:</p>
+<pre><code class="julia hljs"><span class="hljs-keyword">import</span> Random
 
-<span class=hljs-keyword >const</span> ThreadRNG = <span class=hljs-built_in >Vector</span>{Random.MersenneTwister}(<span class=hljs-literal >undef</span>, nthreads())
-<span class=hljs-meta >@threads</span> <span class=hljs-keyword >for</span> i <span class=hljs-keyword >in</span> <span class=hljs-number >1</span>:nthreads()
+<span class="hljs-keyword">const</span> ThreadRNG = <span class="hljs-built_in">Vector</span>{Random.MersenneTwister}(<span class="hljs-literal">undef</span>, nthreads())
+<span class="hljs-meta">@threads</span> <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-number">1</span>:nthreads()
        ThreadRNG[threadid()] = Random.MersenneTwister()
-<span class=hljs-keyword >end</span></code></pre> <p>What we do in the third line is define a <a href="https://docs.julialang.org/en/v1/base/base/#const"><code>const</code></a> variable. That is a global variable whose value will not change. In fact we define a Vector of size <code>nthreads&#40;&#41;</code> and fill it with distinct <a href="https://docs.julialang.org/en/v1/stdlib/Random/#Random.MersenneTwister"><code>Random.MersenneTwister</code></a>. This allows us to have a different random number generator for each thread by using</p> <pre><code class="julia hljs">rng = ThreadRNG[threadid()]
-rand(rng)</code></pre> <p>in each thread. </p> <p>Now for our final version of the code, the basic idea is to not have a threaded loop over the integer <code>N</code> but over the number of threads. In order for this to work we need to figure out how many iterations each threads needs and for that we use <code>len, rem &#61; divrem&#40;N, nthreads&#40;&#41;&#41;</code> to divide up <code>N</code> into the quotient and remainder from the Euclidean division. </p> <button type=button  class=collapsible  style="background-color:#b5ddff"> Exercise </button><div class=collapsiblecontent > Define a new function <code>in_unit_circle_threaded4</code> with the <code>@threads</code> macro, <code>M</code> as array, the above code snippets and test the result as well as the timing. Extra points if you check if we do not loose any iterations due to the split. <div class=solution > Solution </div><div class=solutioncollapsible > </p> <pre><code class="julia hljs"><span class=hljs-keyword >import</span> Random
+<span class="hljs-keyword">end</span></code></pre>
+<p>What we do in the third line is define a <a href="https://docs.julialang.org/en/v1/base/base/#const"><code>const</code></a> variable. That is a global variable whose value will not change. In fact we define a Vector of size <code>nthreads&#40;&#41;</code> and fill it with distinct <a href="https://docs.julialang.org/en/v1/stdlib/Random/#Random.MersenneTwister"><code>Random.MersenneTwister</code></a>. This allows us to have a different random number generator for each thread by using</p>
+<pre><code class="julia hljs">rng = ThreadRNG[threadid()]
+rand(rng)</code></pre>
+<p>in each thread. </p>
+<p>Now for our final version of the code, the basic idea is to not have a threaded loop over the integer <code>N</code> but over the number of threads. In order for this to work we need to figure out how many iterations each threads needs and for that we use <code>len, rem &#61; divrem&#40;N, nthreads&#40;&#41;&#41;</code> to divide up <code>N</code> into the quotient and remainder from the Euclidean division.  </p>
+<button type="button" class="collapsible" style="background-color:#b5ddff"> Exercise </button><div class="collapsiblecontent">  Define a new function <code>in_unit_circle_threaded4</code> with the <code>@threads</code> macro, <code>M</code> as array, the above code snippets and test the result as well as the timing. Extra points if you check if we do not loose any iterations due to the split. <div class="solution"> Solution </div><div class="solutioncollapsible">  </p>
+<pre><code class="julia hljs"><span class="hljs-keyword">import</span> Random
 
-<span class=hljs-keyword >const</span> ThreadRNG = <span class=hljs-built_in >Vector</span>{Random.MersenneTwister}(<span class=hljs-literal >undef</span>, nthreads())
-<span class=hljs-meta >@threads</span> <span class=hljs-keyword >for</span> i <span class=hljs-keyword >in</span> <span class=hljs-number >1</span>:nthreads()
+<span class="hljs-keyword">const</span> ThreadRNG = <span class="hljs-built_in">Vector</span>{Random.MersenneTwister}(<span class="hljs-literal">undef</span>, nthreads())
+<span class="hljs-meta">@threads</span> <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-number">1</span>:nthreads()
        ThreadRNG[threadid()] = Random.MersenneTwister()
-<span class=hljs-keyword >end</span>
+<span class="hljs-keyword">end</span>
 
-<span class=hljs-keyword >function</span> in_unit_circle_threaded4(N::<span class=hljs-built_in >Int64</span>)
-    M = zeros(<span class=hljs-built_in >Int64</span>, nthreads())
+<span class="hljs-keyword">function</span> in_unit_circle_threaded4(N::<span class="hljs-built_in">Int64</span>)
+    M = zeros(<span class="hljs-built_in">Int64</span>, nthreads())
     len, rem = divrem(N, nthreads())
     
-    <span class=hljs-meta >@threads</span> <span class=hljs-keyword >for</span> i <span class=hljs-keyword >in</span> <span class=hljs-number >1</span>:nthreads()
+    <span class="hljs-meta">@threads</span> <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-number">1</span>:nthreads()
         rng = ThreadRNG[threadid()]
-        m = <span class=hljs-number >0</span>
-        <span class=hljs-keyword >for</span> j <span class=hljs-keyword >in</span> <span class=hljs-number >1</span>:len
-            <span class=hljs-keyword >if</span> (rand(rng)^<span class=hljs-number >2</span> + rand(rng)^<span class=hljs-number >2</span>) &lt; <span class=hljs-number >1</span>
-                m += <span class=hljs-number >1</span>
-            <span class=hljs-keyword >end</span>
-        <span class=hljs-keyword >end</span>
+        m = <span class="hljs-number">0</span>
+        <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-number">1</span>:len
+            <span class="hljs-keyword">if</span> (rand(rng)^<span class="hljs-number">2</span> + rand(rng)^<span class="hljs-number">2</span>) &lt; <span class="hljs-number">1</span>
+                m += <span class="hljs-number">1</span>
+            <span class="hljs-keyword">end</span>
+        <span class="hljs-keyword">end</span>
         M[threadid()] = m
-    <span class=hljs-keyword >end</span>
+    <span class="hljs-keyword">end</span>
 
-    <span class=hljs-keyword >return</span> sum(M)
-<span class=hljs-keyword >end</span></code></pre> <p>and we test it</p> <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class=language-julia > println(
+    <span class="hljs-keyword">return</span> sum(M)
+<span class="hljs-keyword">end</span></code></pre>
+<p>and we test it</p>
+<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> println(
            abs(
-           estimate_pi(in_unit_circle_threaded4, N) - <span class=hljs-literal >pi</span>
+           estimate_pi(in_unit_circle_threaded4, N) - <span class="hljs-literal">pi</span>
            )
        )
 </span>3.797358979307219e-5
 
-<span class="hljs-meta prompt_">julia&gt;</span><span class=language-julia > <span class=hljs-meta >@btime</span> estimate_pi(in_unit_circle_threaded4, N)
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@btime</span> estimate_pi(in_unit_circle_threaded4, N)
 </span>  ???.??? ms (22 allocations: 2.05 KiB) -&gt; do with same laptop
-3.141406</code></pre> <p></div> </div> <h3 id=be_aware_of_oversubscription ><a href="#be_aware_of_oversubscription" class=header-anchor >Be aware of oversubscription</a></h3> <p>We should mention that you can overdo it with threading. For example if multithread something that uses a BLAS routine. Now inside each thread something is trying to run on multiple threads. As a result, they might get into the way of each other and the overall performance is reduced. </p> <div class=page-foot > <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> Gregor Ehrensperger, Peter Kandolf, Jonas Kusch. Last modified: July 02, 2022. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>. </div> </div> </div> </div> </div> <!-- end of class page-wrap--> <script> (function(){ // Get the elements. // - the 'pre' element. // - the 'div' with the 'paste-content' id. var pre = document.getElementsByTagName('pre'); // Add a copy button in the 'pre' element. // which only has the className of 'language-'. for (var i = 0; i < pre.length; i++) { var isLanguage = pre[i].children[0].className.indexOf('language-'); if ( isLanguage === 0 ) { var button = document.createElement('button'); button.className = 'copy-button'; button.textContent = 'Copy'; pre[i].appendChild(button); } }; // Run Clipboard var copyCode = new Clipboard('.copy-button', { target: function(trigger) { return trigger.previousElementSibling; } }); // On success: // - Change the "Copy" text to "Copied". // - Swap it to "Copy" in 2s. // - Lead user to the "contenteditable" area with Velocity scroll. copyCode.on('success', function(event) { event.clearSelection(); event.trigger.textContent = 'Copied'; window.setTimeout(function() { event.trigger.textContent = 'Copy'; }, 2000); }); // On error (Safari): // - Change the "Press Ctrl+C to copy" // - Swap it to "Copy" in 2s. copyCode.on('error', function(event) { event.trigger.textContent = 'Press "Ctrl + C" to copy'; window.setTimeout(function() { event.trigger.textContent = 'Copy'; }, 5000); }); })(); </script> <script> var coll = document.getElementsByClassName("collapsible"); var i; for (i = 0; i < coll.length; i++) { coll[i].addEventListener("click", function() { this.classList.toggle("active"); var content = this.nextElementSibling; if (content.style.display === "block") { content.style.display = "none"; } else { content.style.display = "block"; } }); } </script> <script> var coll = document.getElementsByClassName("solutioncollapsible"); const queryString = window.location.search; const urlParams = new URLSearchParams(queryString); const myVar = urlParams.get('solution') if ( myVar == 'true') { for (i = 0; i < coll.length; i++) { coll[i].style.display = "block"; } } </script>
+3.141406</code></pre>
+<p></div> </div>
+<h3 id="be_aware_of_oversubscription"><a href="#be_aware_of_oversubscription" class="header-anchor">Be aware of oversubscription</a></h3>
+<p>We should mention that you can overdo it with threading. For example if multithread something that uses a BLAS routine. Now inside each thread something is trying to run on multiple threads. As a result, they might get into the way of each other and the overall performance is reduced.  </p>
+<div class="page-foot">
+    <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> Gregor Ehrensperger, Peter Kandolf, Jonas Kusch. Last modified: July 02, 2022.
+    Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
+</div>
+</div><!-- CONTENT ENDS HERE -->
+    </div> <!-- end of class main-content -->
+    </div> <!-- end of class main-content-wrap -->
+    </div> <!-- end of class page-wrap-->
+    
+      
+
+
+
+    
+    
+      
+
+
+      <script>
+    (function(){
+    
+      // Get the elements.
+      // - the 'pre' element.
+      // - the 'div' with the 'paste-content' id.
+    
+      var pre = document.getElementsByTagName('pre');
+    
+      // Add a copy button in the 'pre' element.
+      // which only has the className of 'language-'.
+    
+      for (var i = 0; i < pre.length; i++) {
+        var isLanguage = pre[i].children[0].className.indexOf('language-');
+    
+        if ( isLanguage === 0 ) {
+          var button           = document.createElement('button');
+              button.className = 'copy-button';
+              button.textContent = 'Copy';
+    
+              pre[i].appendChild(button);
+        }
+      };
+    
+      // Run Clipboard
+    
+      var copyCode = new Clipboard('.copy-button', {
+        target: function(trigger) {
+          return trigger.previousElementSibling;
+        }
+      });
+    
+      // On success:
+      // - Change the "Copy" text to "Copied".
+      // - Swap it to "Copy" in 2s.
+      // - Lead user to the "contenteditable" area with Velocity scroll.
+    
+      copyCode.on('success', function(event) {
+        event.clearSelection();
+        event.trigger.textContent = 'Copied';
+        window.setTimeout(function() {
+          event.trigger.textContent = 'Copy';
+        }, 2000);
+    
+      });
+    
+      // On error (Safari):
+      // - Change the  "Press Ctrl+C to copy"
+      // - Swap it to "Copy" in 2s.
+    
+      copyCode.on('error', function(event) {
+        event.trigger.textContent = 'Press "Ctrl + C" to copy';
+        window.setTimeout(function() {
+          event.trigger.textContent = 'Copy';
+        }, 5000);
+      });
+    
+    })();
+</script>
+    
+  </body>
+</html>
+
+<script>
+  var coll = document.getElementsByClassName("collapsible");
+  var i;
+
+  for (i = 0; i < coll.length; i++) {
+    coll[i].addEventListener("click", function() {
+      this.classList.toggle("active");
+      var content = this.nextElementSibling;
+      if (content.style.display === "block") {
+        content.style.display = "none";
+      } else {
+        content.style.display = "block";
+      }
+    });
+  }
+</script>
+
+<script>
+  var coll = document.getElementsByClassName("solutioncollapsible");
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  const myVar = urlParams.get('solution')
+  if ( myVar == 'true') {
+    for (i = 0; i < coll.length; i++) {
+      coll[i].style.display = "block";
+    }
+  }
+</script>

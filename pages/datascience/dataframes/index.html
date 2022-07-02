@@ -1,9 +1,95 @@
-<!doctype html> <html lang=en > <meta charset=UTF-8 > <meta name=viewport  content="width=device-width, initial-scale=1"> <link rel=stylesheet  href="/ss22_julia_workshop/libs/katex/katex.min.css"> <link rel=stylesheet  href="/ss22_julia_workshop/libs/highlight/github.min.css"> <script src="/ss22_julia_workshop/libs/clipboard.min.js"></script> <link rel=stylesheet  href="/ss22_julia_workshop/css/jtd.css"> <link rel=stylesheet  href="/ss22_julia_workshop/css/extras.css"> <link rel=icon  href="/ss22_julia_workshop/assets/favicon.ico"> <style> /* #148 wrap long header */ .franklin-content a.header-anchor, .franklin-toc li a { word-wrap: break-word; white-space: normal; } </style> <title>Dataframes</title> <div class=page-wrap > <div class=side-bar > <div class=header > <a href="/ss22_julia_workshop/" class=title > Julia </a> </div> <label for=show-menu  class=show-menu >MENU</label> <input type=checkbox  id=show-menu  role=button > <div class=menu  id=side-menu > <ul class=menu-list > <li class="menu-list-item "><a href="/ss22_julia_workshop/" class="menu-list-link ">Start</a> <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/" class="menu-list-link ">Introduction</a> <ul class="menu-list-child-list "> <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/basis_datatypes_and_operations" class=menu-list-link >Basic Datatypes and Operations</a> <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/matrix_vectors" class=menu-list-link >Matrix and Vector Operations</a> <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/conditional_evaluations" class=menu-list-link >Conditional evaluations</a> <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/loops" class=menu-list-link >Loops</a> <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/functions" class=menu-list-link >Functions</a> <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/worksheet_1" class=menu-list-link >Worksheet 1</a> <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/worksheet_2" class=menu-list-link >Worksheet 2</a> </ul> <li class="menu-list-item active"><a href="/ss22_julia_workshop/pages/datascience/" class="menu-list-link active">Data Science</a> <ul class="menu-list-child-list "> <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/datascience/dataframes" class=menu-list-link >Dataframes</a> <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/datascience/exploratory_da" class=menu-list-link >Exploratory Data Analysis</a> </ul> <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/hpc/" class="menu-list-link ">Parallel computing</a> <ul class="menu-list-child-list "> <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/hpc/performance" class=menu-list-link >Measuring performance</a> <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/hpc/simd" class=menu-list-link >Single Instruction Multiple Data</a> <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/hpc/pi" class=menu-list-link >&pi; example</a> <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/hpc/multithreading" class=menu-list-link >Multithreading</a> </ul> </ul> </div> <div class=footer > This is <em>Just the docs</em>, adapted from the <a href="https://github.com/pmarsceill/just-the-docs" target=_blank >Jekyll theme</a>. </div> </div> <div class=main-content-wrap > <div class=main-content > <div class=main-header > SS22 Julia Workshop Obergurgl </div> <div class=franklin-content ><h1 id=dataframes ><a href="#dataframes" class=header-anchor >Dataframes</a></h1> <p>Data science mostly requires to work with tabular data. With <a href="https://dataframes.juliadata.org/stable/"><code>DataFrames.jl</code></a> Julia provides a set of tools for working with tabular data. When you are already familiar with <code>pandas</code> &#40;Python&#41; or <code>dplyr</code> &#40;R&#41; you will be quickly able to get started with data wrangling using <code>DataFrames.jl</code>, since design and functionality are quite similar.</p> <p>First of all, you need to add and load the package:</p> <pre><code class="julia-repl hljs">pkg&gt; add DataFrames
-<span class="hljs-meta prompt_">julia&gt;</span><span class=language-julia > use DataFrames</span></code></pre> <p>Let us start with an empty <code>DataFrame</code>:</p> <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class=language-julia > DataFrame()
-</span>0×0 DataFrame</code></pre> <p>It is also easy to initialize a <code>DataFrame</code> with a couple of columns:</p> <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class=language-julia > DataFrame(
-           country=[<span class=hljs-string >&quot;Austria&quot;</span>, <span class=hljs-string >&quot;Germany&quot;</span>, <span class=hljs-string >&quot;Switzerland&quot;</span>], 
-           population=[<span class=hljs-number >8_917_000</span>, <span class=hljs-number >83_240_000</span>, <span class=hljs-number >8_637_000</span>], 
-           continent=<span class=hljs-string >&quot;Europe&quot;</span>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+   <link rel="stylesheet" href="/ss22_julia_workshop/libs/katex/katex.min.css">
+     
+   <link rel="stylesheet" href="/ss22_julia_workshop/libs/highlight/github.min.css">
+   
+    <script src="/ss22_julia_workshop/libs/clipboard.min.js"></script>
+  
+  <link rel="stylesheet" href="/ss22_julia_workshop/css/jtd.css">
+<link rel="stylesheet" href="/ss22_julia_workshop/css/extras.css">
+<link rel="icon" href="/ss22_julia_workshop/assets/favicon.ico">
+
+<style>
+  /* #148 wrap long header */
+  .franklin-content a.header-anchor,
+  .franklin-toc li a
+   {
+    word-wrap: break-word;
+    white-space: normal;
+  }
+</style>
+
+   <title>Dataframes</title>  
+</head>
+<body>                      <!-- closed in foot.html -->
+<div class="page-wrap">   <!-- closed in foot.html -->
+  <!-- SIDE BAR -->
+  <div class="side-bar">
+    <div class="header">
+      <a href="/ss22_julia_workshop/" class="title">
+        Julia
+      </a>
+    </div>
+    <label for="show-menu" class="show-menu">MENU</label>
+    <input type="checkbox" id="show-menu" role="button">
+    <div class="menu" id="side-menu">
+      <ul class="menu-list">
+        <li class="menu-list-item "><a href="/ss22_julia_workshop/" class="menu-list-link ">Start</a>
+        <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/" class="menu-list-link ">Introduction</a>
+          <ul class="menu-list-child-list ">
+            <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/basis_datatypes_and_operations" class="menu-list-link">Basic Datatypes and Operations</a>
+            <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/matrix_vectors" class="menu-list-link">Matrix and Vector Operations</a>
+            <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/conditional_evaluations" class="menu-list-link">Conditional evaluations</a>
+            <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/loops" class="menu-list-link">Loops</a>
+            <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/functions" class="menu-list-link">Functions</a>
+            <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/worksheet_1" class="menu-list-link">Worksheet 1</a>
+            <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/worksheet_2" class="menu-list-link">Worksheet 2</a>
+          </ul>
+        <li class="menu-list-item active"><a href="/ss22_julia_workshop/pages/datascience/" class="menu-list-link active">Data Science</a>
+          <ul class="menu-list-child-list ">
+            <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/datascience/dataframes" class="menu-list-link">Dataframes</a>
+              <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/datascience/exploratory_da" class="menu-list-link">Exploratory Data Analysis</a>
+          </ul>
+        <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/hpc/" class="menu-list-link ">Parallel computing</a>
+          <ul class="menu-list-child-list ">
+            <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/hpc/performance" class="menu-list-link">Measuring performance</a>
+            <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/hpc/simd" class="menu-list-link">Single Instruction Multiple Data</a>
+            <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/hpc/pi" class="menu-list-link">&pi; example</a>
+            <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/hpc/multithreading" class="menu-list-link">Multithreading</a>
+          </ul>
+      </ul>
+    </div>
+    <div class="footer">
+      This is <em>Just the docs</em>, adapted from the <a href="https://github.com/pmarsceill/just-the-docs" target="_blank">Jekyll theme</a>.
+    </div>
+  </div>
+  <!-- CONTENT -->
+  <div class="main-content-wrap"> <!-- closed in foot.html -->
+    <div class="main-content">    <!-- closed in foot.html -->
+      <div class="main-header">
+        SS22 Julia Workshop Obergurgl
+      </div>
+
+
+
+<!-- Content appended here (in class franklin-content) -->
+<div class="franklin-content"><h1 id="dataframes"><a href="#dataframes" class="header-anchor">Dataframes</a></h1>
+<p>Data science mostly requires to work with tabular data. With <a href="https://dataframes.juliadata.org/stable/"><code>DataFrames.jl</code></a> Julia provides a set of tools for working with tabular data. When you are already familiar with <code>pandas</code> &#40;Python&#41; or <code>dplyr</code> &#40;R&#41; you will be quickly able to get started with data wrangling using <code>DataFrames.jl</code>, since design and functionality are quite similar.</p>
+<p>First of all, you need to add and load the package:</p>
+<pre><code class="julia-repl hljs">pkg&gt; add DataFrames
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> use DataFrames</span></code></pre>
+<p>Let us start with an empty <code>DataFrame</code>:</p>
+<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> DataFrame()
+</span>0×0 DataFrame</code></pre>
+<p>It is also easy to initialize a <code>DataFrame</code> with a couple of columns:</p>
+<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> DataFrame(
+           country=[<span class="hljs-string">&quot;Austria&quot;</span>, <span class="hljs-string">&quot;Germany&quot;</span>, <span class="hljs-string">&quot;Switzerland&quot;</span>], 
+           population=[<span class="hljs-number">8_917_000</span>, <span class="hljs-number">83_240_000</span>, <span class="hljs-number">8_637_000</span>], 
+           continent=<span class="hljs-string">&quot;Europe&quot;</span>
        )
 </span>3×3 DataFrame
  Row │ country      population  continent 
@@ -11,10 +97,13 @@
 ─────┼────────────────────────────────────
    1 │ Austria         8917000  Europe
    2 │ Germany        83240000  Europe
-   3 │ Switzerland     8637000  Europe</code></pre> <p>Note that the continent was given as scalar &quot;Europe&quot; and broadcasted to fill every row of the created <code>DataFrame</code>.</p> <p>In case you want to initialize a <code>DataFrame</code> with names that are not valid Julia identifiers &#40;e.g. containing spaces&#41; you can also use the following form:</p> <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class=language-julia > DataFrame(
-           <span class=hljs-string >&quot;country&quot;</span> =&gt; [<span class=hljs-string >&quot;Austria&quot;</span>, <span class=hljs-string >&quot;Germany&quot;</span>, <span class=hljs-string >&quot;Switzerland&quot;</span>], 
-           <span class=hljs-string >&quot;population 2020&quot;</span> =&gt; [<span class=hljs-number >8_917_000</span>, <span class=hljs-number >83_240_000</span>, <span class=hljs-number >8_637_000</span>], 
-           <span class=hljs-string >&quot;continent&quot;</span> =&gt; <span class=hljs-string >&quot;Europe&quot;</span>
+   3 │ Switzerland     8637000  Europe</code></pre>
+<p>Note that the continent was given as scalar &quot;Europe&quot; and broadcasted to fill every row of the created <code>DataFrame</code>.</p>
+<p>In case you want to initialize a <code>DataFrame</code> with names that are not valid Julia identifiers &#40;e.g. containing spaces&#41; you can also use the following form:</p>
+<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> DataFrame(
+           <span class="hljs-string">&quot;country&quot;</span> =&gt; [<span class="hljs-string">&quot;Austria&quot;</span>, <span class="hljs-string">&quot;Germany&quot;</span>, <span class="hljs-string">&quot;Switzerland&quot;</span>], 
+           <span class="hljs-string">&quot;population 2020&quot;</span> =&gt; [<span class="hljs-number">8_917_000</span>, <span class="hljs-number">83_240_000</span>, <span class="hljs-number">8_637_000</span>], 
+           <span class="hljs-string">&quot;continent&quot;</span> =&gt; <span class="hljs-string">&quot;Europe&quot;</span>
        )
 </span>3×3 DataFrame
  Row │ country      population 2020  continent 
@@ -22,26 +111,33 @@
 ─────┼─────────────────────────────────────────
    1 │ Austria              8917000  Europe
    2 │ Germany             83240000  Europe
-   3 │ Switzerland          8637000  Europe</code></pre> <p>And in case you already got your data in a dictionary, where the keys are <code>Strings</code> or <code>Symbols</code>, simply initialize your <code>DataFrame</code> using that dictionary:</p> <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class=language-julia > mydict = <span class=hljs-built_in >Dict</span>(
-           <span class=hljs-string >&quot;country&quot;</span> =&gt; [<span class=hljs-string >&quot;Austria&quot;</span>, <span class=hljs-string >&quot;Germany&quot;</span>, <span class=hljs-string >&quot;Switzerland&quot;</span>], 
-           <span class=hljs-string >&quot;population 2020&quot;</span> =&gt; [<span class=hljs-number >8_917_000</span>, <span class=hljs-number >83_240_000</span>, <span class=hljs-number >8_637_000</span>], 
-           <span class=hljs-string >&quot;continent&quot;</span> =&gt; <span class=hljs-string >&quot;Europe&quot;</span>
+   3 │ Switzerland          8637000  Europe</code></pre>
+<p>And in case you already got your data in a dictionary, where the keys are <code>Strings</code> or <code>Symbols</code>, simply initialize your <code>DataFrame</code> using that dictionary:</p>
+<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> mydict = <span class="hljs-built_in">Dict</span>(
+           <span class="hljs-string">&quot;country&quot;</span> =&gt; [<span class="hljs-string">&quot;Austria&quot;</span>, <span class="hljs-string">&quot;Germany&quot;</span>, <span class="hljs-string">&quot;Switzerland&quot;</span>], 
+           <span class="hljs-string">&quot;population 2020&quot;</span> =&gt; [<span class="hljs-number">8_917_000</span>, <span class="hljs-number">83_240_000</span>, <span class="hljs-number">8_637_000</span>], 
+           <span class="hljs-string">&quot;continent&quot;</span> =&gt; <span class="hljs-string">&quot;Europe&quot;</span>
        )
 </span>Dict{String, Any} with 3 entries:
   &quot;population 2020&quot; =&gt; [8917000, 83240000, 8637000]
   &quot;continent&quot;       =&gt; &quot;Europe&quot;
   &quot;country&quot;         =&gt; [&quot;Austria&quot;, &quot;Germany&quot;, &quot;Switzerland&quot;]
 
-<span class="hljs-meta prompt_">julia&gt;</span><span class=language-julia > DataFrame(mydict)
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> DataFrame(mydict)
 </span>3×3 DataFrame
  Row │ continent  country      population 2020 
      │ String     String       Int64           
 ─────┼─────────────────────────────────────────
    1 │ Europe     Austria              8917000
    2 │ Europe     Germany             83240000
-   3 │ Europe     Switzerland          8637000</code></pre> <p>Also note that the data types of the columns are printed below the column name.</p> <h2 id=working_with_real_data ><a href="#working_with_real_data" class=header-anchor >Working with real data</a></h2> <p>To get things more exciting, let us take a look at real data. <a href="https://www.stackoverflow.com">Stack Overflow</a> provides <a href="https://insights.stackoverflow.com/survey/">annual developer surveys</a>. We will have a look at the latest available data set from <a href="https://info.stackoverflowsolutions.com/rs/719-EMH-566/images/stack-overflow-developer-survey-2021.zip">2021</a>. Please download this file and extract it into your workspace. Note that besides the actual data there is also a file which describes the contents of the dataset.</p> <p>The filename is <code>survey_results_public.csv</code> and the extension indicates that the file format is a <a href="https://en.wikipedia.org/wiki/Comma-separated_values">comma-seperated values</a> file. Thus, we need a package that is able to handle CSV-files. Luckily there is <a href="https://csv.juliadata.org/stable/">CSV.jl</a> which makes it easy to load a file into a <code>DataFrame</code>. All we need to do is add and load <code>CSV</code> and read the data by using <code>DataFrame</code> as sink &#40;second argument&#41;. Sink? How do we even know that such a thing exists? It is always good to consult the manual first:</p> <pre><code class="julia-repl hljs">pkg&gt; add CSV
+   3 │ Europe     Switzerland          8637000</code></pre>
+<p>Also note that the data types of the columns are printed below the column name.</p>
+<h2 id="working_with_real_data"><a href="#working_with_real_data" class="header-anchor">Working with real data</a></h2>
+<p>To get things more exciting, let us take a look at real data. <a href="https://www.stackoverflow.com">Stack Overflow</a> provides <a href="https://insights.stackoverflow.com/survey/">annual developer surveys</a>. We will have a look at the latest available data set from <a href="https://info.stackoverflowsolutions.com/rs/719-EMH-566/images/stack-overflow-developer-survey-2021.zip">2021</a>. Please download this file and extract it into your workspace. Note that besides the actual data there is also a file which describes the contents of the dataset.</p>
+<p>The filename is <code>survey_results_public.csv</code> and the extension indicates that the file format is a <a href="https://en.wikipedia.org/wiki/Comma-separated_values">comma-seperated values</a> file. Thus, we need a package that is able to handle CSV-files. Luckily there is <a href="https://csv.juliadata.org/stable/">CSV.jl</a> which makes it easy to load a file into a <code>DataFrame</code>. All we need to do is add and load <code>CSV</code> and read the data by using <code>DataFrame</code> as sink &#40;second argument&#41;. Sink? How do we even know that such a thing exists? It is always good to consult the manual first:</p>
+<pre><code class="julia-repl hljs">pkg&gt; add CSV
 [..]
-<span class="hljs-meta prompt_">julia&gt;</span><span class=language-julia > <span class=hljs-keyword >using</span> CSV
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-keyword">using</span> CSV
 </span>
 help?&gt; CSV
 search: CSV
@@ -82,7 +178,9 @@ help?&gt; CSV.read
 
   Read and parses a delimited file or files, materializing directly using the sink function. Allows avoiding excessive copies of columns for certain
   sinks like DataFrame.
-[..]</code></pre> <p>Equipped with this knowledge we are now ready to load the file:</p> <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class=language-julia > df = CSV.read(<span class=hljs-string >&quot;survey_results_public.csv&quot;</span>, DataFrame)
+[..]</code></pre>
+<p>Equipped with this knowledge we are now ready to load the file:</p>
+<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> df = CSV.read(<span class="hljs-string">&quot;survey_results_public.csv&quot;</span>, DataFrame)
 </span>83439×48 DataFrame
    Row │ ResponseId  MainBranch                         Employment                         Country                            US_State       UK_Coun ⋯
        │ Int64       String                             String                             String                             String         String3 ⋯
@@ -99,7 +197,9 @@ help?&gt; CSV.read
  83437 │      83437  I am a developer by profession     Employed full-time                 United States of America           New Jersey     NA      ⋯
  83438 │      83438  I am a developer by profession     Employed full-time                 Canada                             NA             NA
  83439 │      83439  I am a developer by profession     Employed full-time                 Brazil                             NA             NA
-                                                                                                                     43 columns and 83428 rows omitted</code></pre> <p>The first thing we notice when working with real data is that there is more data than you can fit on one screen. So let us look at a couple of methods which help us to get an overview. <code>names&#40;df&#41;</code> gives us list of columns:</p> <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class=language-julia > names(df)
+                                                                                                                     43 columns and 83428 rows omitted</code></pre>
+<p>The first thing we notice when working with real data is that there is more data than you can fit on one screen. So let us look at a couple of methods which help us to get an overview. <code>names&#40;df&#41;</code> gives us list of columns:</p>
+<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> names(df)
 </span>48-element Vector{String}:
  :ResponseId
  :MainBranch
@@ -116,11 +216,15 @@ help?&gt; CSV.read
  :MentalHealth
  :SurveyLength
  :SurveyEase
- :ConvertedCompYearly</code></pre> <p>Unfortunately, the vector has too many elements and also gets summarized. The full output can be shown with <code>show</code>:</p> <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class=language-julia > show(names(df))
-</span>[&quot;ResponseId&quot;, &quot;MainBranch&quot;, &quot;Employment&quot;, &quot;Country&quot;, &quot;US_State&quot;, &quot;UK_Country&quot;, &quot;EdLevel&quot;, &quot;Age1stCode&quot;, &quot;LearnCode&quot;, &quot;YearsCode&quot;, &quot;YearsCodePro&quot;, &quot;DevType&quot;, &quot;OrgSize&quot;, &quot;Currency&quot;, &quot;CompTotal&quot;, &quot;CompFreq&quot;, &quot;LanguageHaveWorkedWith&quot;, &quot;LanguageWantToWorkWith&quot;, &quot;DatabaseHaveWorkedWith&quot;, &quot;DatabaseWantToWorkWith&quot;, &quot;PlatformHaveWorkedWith&quot;, &quot;PlatformWantToWorkWith&quot;, &quot;WebframeHaveWorkedWith&quot;, &quot;WebframeWantToWorkWith&quot;, &quot;MiscTechHaveWorkedWith&quot;, &quot;MiscTechWantToWorkWith&quot;, &quot;ToolsTechHaveWorkedWith&quot;, &quot;ToolsTechWantToWorkWith&quot;, &quot;NEWCollabToolsHaveWorkedWith&quot;, &quot;NEWCollabToolsWantToWorkWith&quot;, &quot;OpSys&quot;, &quot;NEWStuck&quot;, &quot;NEWSOSites&quot;, &quot;SOVisitFreq&quot;, &quot;SOAccount&quot;, &quot;SOPartFreq&quot;, &quot;SOComm&quot;, &quot;NEWOtherComms&quot;, &quot;Age&quot;, &quot;Gender&quot;, &quot;Trans&quot;, &quot;Sexuality&quot;, &quot;Ethnicity&quot;, &quot;Accessibility&quot;, &quot;MentalHealth&quot;, &quot;SurveyLength&quot;, &quot;SurveyEase&quot;, &quot;ConvertedCompYearly&quot;]</code></pre> <p>Let us assume that we are conducting a little study on the income of different developer roles and therefore we are only interested in the columns: <code>&#91;&quot;Age&quot;, &quot;Country&quot;, &quot;ConvertedCompYearly&quot;, &quot;DevType&quot;, &quot;Employment&quot;, &quot;Ethnicity&quot;, &quot;Gender&quot;, &quot;OrgSize&quot;, &quot;YearsCode&quot;&#93;</code>. Unfortunately, <code>ConvertedCompYearly</code> is not further described within the dataset schema but it is reasonably fair to assume that this reflects the annual income in dollars. Selecting various columns works with the <code>df&#91;&#33;, cols&#93;</code> notation:</p> <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class=language-julia > selcols = [<span class=hljs-string >&quot;Age&quot;</span>, <span class=hljs-string >&quot;Country&quot;</span>, <span class=hljs-string >&quot;ConvertedCompYearly&quot;</span>, <span class=hljs-string >&quot;DevType&quot;</span>, <span class=hljs-string >&quot;Employment&quot;</span>, <span class=hljs-string >&quot;Ethnicity&quot;</span>, <span class=hljs-string >&quot;Gender&quot;</span>, <span class=hljs-string >&quot;OrgSize&quot;</span>, <span class=hljs-string >&quot;YearsCode&quot;</span>]
+ :ConvertedCompYearly</code></pre>
+<p>Unfortunately, the vector has too many elements and also gets summarized. The full output can be shown with <code>show</code>:</p>
+<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> show(names(df))
+</span>[&quot;ResponseId&quot;, &quot;MainBranch&quot;, &quot;Employment&quot;, &quot;Country&quot;, &quot;US_State&quot;, &quot;UK_Country&quot;, &quot;EdLevel&quot;, &quot;Age1stCode&quot;, &quot;LearnCode&quot;, &quot;YearsCode&quot;, &quot;YearsCodePro&quot;, &quot;DevType&quot;, &quot;OrgSize&quot;, &quot;Currency&quot;, &quot;CompTotal&quot;, &quot;CompFreq&quot;, &quot;LanguageHaveWorkedWith&quot;, &quot;LanguageWantToWorkWith&quot;, &quot;DatabaseHaveWorkedWith&quot;, &quot;DatabaseWantToWorkWith&quot;, &quot;PlatformHaveWorkedWith&quot;, &quot;PlatformWantToWorkWith&quot;, &quot;WebframeHaveWorkedWith&quot;, &quot;WebframeWantToWorkWith&quot;, &quot;MiscTechHaveWorkedWith&quot;, &quot;MiscTechWantToWorkWith&quot;, &quot;ToolsTechHaveWorkedWith&quot;, &quot;ToolsTechWantToWorkWith&quot;, &quot;NEWCollabToolsHaveWorkedWith&quot;, &quot;NEWCollabToolsWantToWorkWith&quot;, &quot;OpSys&quot;, &quot;NEWStuck&quot;, &quot;NEWSOSites&quot;, &quot;SOVisitFreq&quot;, &quot;SOAccount&quot;, &quot;SOPartFreq&quot;, &quot;SOComm&quot;, &quot;NEWOtherComms&quot;, &quot;Age&quot;, &quot;Gender&quot;, &quot;Trans&quot;, &quot;Sexuality&quot;, &quot;Ethnicity&quot;, &quot;Accessibility&quot;, &quot;MentalHealth&quot;, &quot;SurveyLength&quot;, &quot;SurveyEase&quot;, &quot;ConvertedCompYearly&quot;]</code></pre>
+<p>Let us assume that we are conducting a little study on the income of different developer roles and therefore we are only interested in the columns: <code>&#91;&quot;Age&quot;, &quot;Country&quot;, &quot;ConvertedCompYearly&quot;, &quot;DevType&quot;, &quot;Employment&quot;, &quot;Ethnicity&quot;, &quot;Gender&quot;, &quot;OrgSize&quot;, &quot;YearsCode&quot;&#93;</code>. Unfortunately, <code>ConvertedCompYearly</code> is not further described within the dataset schema but it is reasonably fair to assume that this reflects the annual income in dollars. Selecting various columns works with the <code>df&#91;&#33;, cols&#93;</code> notation:</p>
+<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> selcols = [<span class="hljs-string">&quot;Age&quot;</span>, <span class="hljs-string">&quot;Country&quot;</span>, <span class="hljs-string">&quot;ConvertedCompYearly&quot;</span>, <span class="hljs-string">&quot;DevType&quot;</span>, <span class="hljs-string">&quot;Employment&quot;</span>, <span class="hljs-string">&quot;Ethnicity&quot;</span>, <span class="hljs-string">&quot;Gender&quot;</span>, <span class="hljs-string">&quot;OrgSize&quot;</span>, <span class="hljs-string">&quot;YearsCode&quot;</span>]
 </span>[...]
 
-<span class="hljs-meta prompt_">julia&gt;</span><span class=language-julia > df[!, selcols]
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> df[!, selcols]
 </span>83439×9 DataFrame
    Row │ Age              Country                            ConvertedCompYearly  DevType                            Employment                       ⋯
        │ String31         String                             String15             String                             String                           ⋯
@@ -130,7 +234,9 @@ help?&gt; CSV.read
    ⋮   │        ⋮                         ⋮                           ⋮                           ⋮                                  ⋮                ⋱
  83438 │ 25-34 years old  Canada                             816816               Developer, back-end                Employed full-time
  83439 │ 18-24 years old  Brazil                             21168                Developer, front-end;Developer, …  Employed full-time
-                                                                                                                       5 columns and 83435 rows omitted</code></pre> <p>Do we notice that something odd happened? <code>ConvertedCompYearly</code> apparently is stored as a <code>String15</code> &#40;meaning a <code>String</code> with fixed length of 15 letters&#41; column. Taking a closer look at the data and/or CSV file, this is due to <code>NA</code> being used as text in the CSV file. We obviously want this column to be of type <code>Integer</code> &#40;to be more precise of type <code>Union&#123;Integer, Missing&#125;</code>&#41; and the <code>NA</code>s should be <code>missing</code>. If we would have known about this earlier, we could have corrected this right at the start when reading the dataframe. This also counts for various other problems that often occur with this file format. Non-standard seperation letter, different symbols for writing decimal numbers to just name two. Reading the manual of <code>CSV.read</code> tells us how we should read the data correctly and we can tell the function that we only want to read specific columns:</p> <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class=language-julia > df = CSV.read(<span class=hljs-string >&quot;survey_results_public.csv&quot;</span>, DataFrame; missingstring=<span class=hljs-string >&quot;NA&quot;</span>, select=selcols)
+                                                                                                                       5 columns and 83435 rows omitted</code></pre>
+<p>Do we notice that something odd happened? <code>ConvertedCompYearly</code> apparently is stored as a <code>String15</code> &#40;meaning a <code>String</code> with fixed length of 15 letters&#41; column. Taking a closer look at the data and/or CSV file, this is due to <code>NA</code> being used as text in the CSV file. We obviously want this column to be of type <code>Integer</code> &#40;to be more precise of type <code>Union&#123;Integer, Missing&#125;</code>&#41; and the <code>NA</code>s should be <code>missing</code>. If we would have known about this earlier, we could have corrected this right at the start when reading the dataframe. This also counts for various other problems that often occur with this file format. Non-standard seperation letter, different symbols for writing decimal numbers to just name two. Reading the manual of <code>CSV.read</code> tells us how we should read the data correctly and we can tell the function that we only want to read specific columns:</p>
+<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> df = CSV.read(<span class="hljs-string">&quot;survey_results_public.csv&quot;</span>, DataFrame; missingstring=<span class="hljs-string">&quot;NA&quot;</span>, select=selcols)
 </span>83439×9 DataFrame
    Row │ Employment                         Country                            YearsCode  DevType                            OrgSize                            Age  ⋯
        │ String?                            String                             String31?  String?                            String?                            Stri ⋯
@@ -140,8 +246,12 @@ help?&gt; CSV.read
    ⋮   │                 ⋮                                  ⋮                      ⋮                      ⋮                                  ⋮                       ⋱
  83438 │ Employed full-time                 Canada                             5          Developer, back-end                20 to 99 employees                 25-3
  83439 │ Employed full-time                 Brazil                             14         Developer, front-end;Developer, …  I don’t know                       18-2
-                                                                                                                                      4 columns and 83435 rows omitted</code></pre> <p>Since <code>ConvertedCompYearly</code> is not displayed in this last output, we will take a look at the column type by applying <code>eltype&#40;&#41;</code>:</p> <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class=language-julia > eltype(df.ConvertedCompYearly)
-</span>Union{Missing, Int64}</code></pre> <p>Let us also have a look at the types of the rest of the columns. This unfortunately is a bit technical:</p> <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class=language-julia > collect(zip(names(df), eltype.(eachcol(df))))
+                                                                                                                                      4 columns and 83435 rows omitted</code></pre>
+<p>Since <code>ConvertedCompYearly</code> is not displayed in this last output, we will take a look at the column type by applying <code>eltype&#40;&#41;</code>:</p>
+<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> eltype(df.ConvertedCompYearly)
+</span>Union{Missing, Int64}</code></pre>
+<p>Let us also have a look at the types of the rest of the columns. This unfortunately is a bit technical:</p>
+<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> collect(zip(names(df), eltype.(eachcol(df))))
 </span>9-element Vector{Tuple{String, Type}}:
  (&quot;Employment&quot;, Union{Missing, String})
  (&quot;Country&quot;, String)
@@ -151,4 +261,131 @@ help?&gt; CSV.read
  (&quot;Age&quot;, Union{Missing, String31})
  (&quot;Gender&quot;, Union{Missing, String})
  (&quot;Ethnicity&quot;, Union{Missing, String})
- (&quot;ConvertedCompYearly&quot;, Union{Missing, Int64})</code></pre> <p>Let us split up the call <code>collect&#40;zip&#40;names&#40;df&#41;, eltype.&#40;eachcol&#40;df&#41;&#41;&#41;&#41;</code> and explain each part:</p> <ul> <li><p>the function <code>eachcol&#40;&#41;</code> creates a vector-like object that allows iterating over each dataframe column</p> <li><p><code>eltype&#40;&#41;</code> returns the data type of an object</p> <li><p>by using <code>eltype.&#40;&#41;</code> we apply <code>eltype&#40;&#41;</code> to each column. </p> <li><p>this returns a vector of column types but unfortunately we can not see the according column names</p> <li><p>to also get the names we use <code>names&#40;&#41;</code></p> <li><p><code>zip</code> ties together the <span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:0.4306em;"></span><span class="mord mathnormal">n</span></span></span></span>th column name with the <span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:0.4306em;"></span><span class="mord mathnormal">n</span></span></span></span>th column type, but this function also returns an iterator which can not be printed immediately</p> <li><p>finally <code>collect&#40;&#41;</code> returns an array of all items within that iterator</p> </ul> <button type=button  class=collapsible  style="background-color:#b5ddff"> Exercise </button><div class=collapsiblecontent > When having a look at the output it might seem like <code>Age</code>, <code>YearsCode</code> and <code>OrgSize</code> probably should also be of a numeric type. Apply <code>unique&#40;&#41;</code> to these columns to check whether those columns should be converted. </div> <div class=page-foot > <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> Gregor Ehrensperger, Peter Kandolf, Jonas Kusch. Last modified: July 02, 2022. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>. </div> </div> </div> </div> </div> <!-- end of class page-wrap--> <script> (function(){ // Get the elements. // - the 'pre' element. // - the 'div' with the 'paste-content' id. var pre = document.getElementsByTagName('pre'); // Add a copy button in the 'pre' element. // which only has the className of 'language-'. for (var i = 0; i < pre.length; i++) { var isLanguage = pre[i].children[0].className.indexOf('language-'); if ( isLanguage === 0 ) { var button = document.createElement('button'); button.className = 'copy-button'; button.textContent = 'Copy'; pre[i].appendChild(button); } }; // Run Clipboard var copyCode = new Clipboard('.copy-button', { target: function(trigger) { return trigger.previousElementSibling; } }); // On success: // - Change the "Copy" text to "Copied". // - Swap it to "Copy" in 2s. // - Lead user to the "contenteditable" area with Velocity scroll. copyCode.on('success', function(event) { event.clearSelection(); event.trigger.textContent = 'Copied'; window.setTimeout(function() { event.trigger.textContent = 'Copy'; }, 2000); }); // On error (Safari): // - Change the "Press Ctrl+C to copy" // - Swap it to "Copy" in 2s. copyCode.on('error', function(event) { event.trigger.textContent = 'Press "Ctrl + C" to copy'; window.setTimeout(function() { event.trigger.textContent = 'Copy'; }, 5000); }); })(); </script> <script> var coll = document.getElementsByClassName("collapsible"); var i; for (i = 0; i < coll.length; i++) { coll[i].addEventListener("click", function() { this.classList.toggle("active"); var content = this.nextElementSibling; if (content.style.display === "block") { content.style.display = "none"; } else { content.style.display = "block"; } }); } </script> <script> var coll = document.getElementsByClassName("solutioncollapsible"); const queryString = window.location.search; const urlParams = new URLSearchParams(queryString); const myVar = urlParams.get('solution') if ( myVar == 'true') { for (i = 0; i < coll.length; i++) { coll[i].style.display = "block"; } } </script>
+ (&quot;ConvertedCompYearly&quot;, Union{Missing, Int64})</code></pre>
+<p>Let us split up the call <code>collect&#40;zip&#40;names&#40;df&#41;, eltype.&#40;eachcol&#40;df&#41;&#41;&#41;&#41;</code> and explain each part:</p>
+<ul>
+<li><p>the function <code>eachcol&#40;&#41;</code> creates a vector-like object that allows iterating over each dataframe column</p>
+</li>
+<li><p><code>eltype&#40;&#41;</code> returns the data type of an object</p>
+</li>
+<li><p>by using <code>eltype.&#40;&#41;</code> we apply <code>eltype&#40;&#41;</code> to each column. </p>
+</li>
+<li><p>this returns a vector of column types but unfortunately we can not see the according column names</p>
+</li>
+<li><p>to also get the names we use <code>names&#40;&#41;</code></p>
+</li>
+<li><p><code>zip</code> ties together the <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">n</span></span></span></span>th column name with the <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">n</span></span></span></span>th column type, but this function also returns an iterator which can not be printed immediately</p>
+</li>
+<li><p>finally <code>collect&#40;&#41;</code> returns an array of all items within that iterator</p>
+</li>
+</ul>
+<button type="button" class="collapsible" style="background-color:#b5ddff"> Exercise </button><div class="collapsiblecontent">  When having a look at the output it might seem like <code>Age</code>, <code>YearsCode</code> and <code>OrgSize</code> probably should also be of a numeric type. Apply <code>unique&#40;&#41;</code> to these columns to check whether those columns should be converted. </div>
+<div class="page-foot">
+    <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> Gregor Ehrensperger, Peter Kandolf, Jonas Kusch. Last modified: July 02, 2022.
+    Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
+</div>
+</div><!-- CONTENT ENDS HERE -->
+    </div> <!-- end of class main-content -->
+    </div> <!-- end of class main-content-wrap -->
+    </div> <!-- end of class page-wrap-->
+    
+      
+
+
+
+    
+    
+      
+
+
+      <script>
+    (function(){
+    
+      // Get the elements.
+      // - the 'pre' element.
+      // - the 'div' with the 'paste-content' id.
+    
+      var pre = document.getElementsByTagName('pre');
+    
+      // Add a copy button in the 'pre' element.
+      // which only has the className of 'language-'.
+    
+      for (var i = 0; i < pre.length; i++) {
+        var isLanguage = pre[i].children[0].className.indexOf('language-');
+    
+        if ( isLanguage === 0 ) {
+          var button           = document.createElement('button');
+              button.className = 'copy-button';
+              button.textContent = 'Copy';
+    
+              pre[i].appendChild(button);
+        }
+      };
+    
+      // Run Clipboard
+    
+      var copyCode = new Clipboard('.copy-button', {
+        target: function(trigger) {
+          return trigger.previousElementSibling;
+        }
+      });
+    
+      // On success:
+      // - Change the "Copy" text to "Copied".
+      // - Swap it to "Copy" in 2s.
+      // - Lead user to the "contenteditable" area with Velocity scroll.
+    
+      copyCode.on('success', function(event) {
+        event.clearSelection();
+        event.trigger.textContent = 'Copied';
+        window.setTimeout(function() {
+          event.trigger.textContent = 'Copy';
+        }, 2000);
+    
+      });
+    
+      // On error (Safari):
+      // - Change the  "Press Ctrl+C to copy"
+      // - Swap it to "Copy" in 2s.
+    
+      copyCode.on('error', function(event) {
+        event.trigger.textContent = 'Press "Ctrl + C" to copy';
+        window.setTimeout(function() {
+          event.trigger.textContent = 'Copy';
+        }, 5000);
+      });
+    
+    })();
+</script>
+    
+  </body>
+</html>
+
+<script>
+  var coll = document.getElementsByClassName("collapsible");
+  var i;
+
+  for (i = 0; i < coll.length; i++) {
+    coll[i].addEventListener("click", function() {
+      this.classList.toggle("active");
+      var content = this.nextElementSibling;
+      if (content.style.display === "block") {
+        content.style.display = "none";
+      } else {
+        content.style.display = "block";
+      }
+    });
+  }
+</script>
+
+<script>
+  var coll = document.getElementsByClassName("solutioncollapsible");
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  const myVar = urlParams.get('solution')
+  if ( myVar == 'true') {
+    for (i = 0; i < coll.length; i++) {
+      coll[i].style.display = "block";
+    }
+  }
+</script>
