@@ -151,7 +151,7 @@ julia> df = CSV.read("survey_results_public.csv", DataFrame)
                                                                                                                      43 columns and 83428 rows omitted
 ```
 
-The first thing you will notice when working with real data is that there is more data than you can fit on one screen. So let us look at a couple of methods which help to get an overview. `names(df)` gives a list of columns:
+The first thing we notice when working with real data is that there is more data than you can fit on one screen. So let us look at a couple of methods which help us to get an overview. `names(df)` gives us list of columns:
 ```julia-repl
 julia> names(df)
 48-element Vector{String}:
@@ -173,13 +173,13 @@ julia> names(df)
  :ConvertedCompYearly
 ```
 
-Unfortunately the vector has too many elements and also gets summarized. The full output can be shown with `show`:
+Unfortunately, the vector has too many elements and also gets summarized. The full output can be shown with `show`:
 ```julia-repl
 julia> show(names(df))
 ["ResponseId", "MainBranch", "Employment", "Country", "US_State", "UK_Country", "EdLevel", "Age1stCode", "LearnCode", "YearsCode", "YearsCodePro", "DevType", "OrgSize", "Currency", "CompTotal", "CompFreq", "LanguageHaveWorkedWith", "LanguageWantToWorkWith", "DatabaseHaveWorkedWith", "DatabaseWantToWorkWith", "PlatformHaveWorkedWith", "PlatformWantToWorkWith", "WebframeHaveWorkedWith", "WebframeWantToWorkWith", "MiscTechHaveWorkedWith", "MiscTechWantToWorkWith", "ToolsTechHaveWorkedWith", "ToolsTechWantToWorkWith", "NEWCollabToolsHaveWorkedWith", "NEWCollabToolsWantToWorkWith", "OpSys", "NEWStuck", "NEWSOSites", "SOVisitFreq", "SOAccount", "SOPartFreq", "SOComm", "NEWOtherComms", "Age", "Gender", "Trans", "Sexuality", "Ethnicity", "Accessibility", "MentalHealth", "SurveyLength", "SurveyEase", "ConvertedCompYearly"]
 ```
 
-Let us assume that we are conducting a little study on incomes of different developer roles and therefore we are only interested in the columns: `["Age", "Country", "ConvertedCompYearly", "DevType", "Employment", "Ethnicity", "Gender", "OrgSize", "YearsCode"]`. Unfortunately `ConvertedCompYearly` is not further described within the dataset schema but it is probably fair to assume that this reflects the annual income in dollars. Selecting various columns works with `df[!, cols]` notation:
+Let us assume that we are conducting a little study on the income of different developer roles and therefore we are only interested in the columns: `["Age", "Country", "ConvertedCompYearly", "DevType", "Employment", "Ethnicity", "Gender", "OrgSize", "YearsCode"]`. Unfortunately, `ConvertedCompYearly` is not further described within the dataset schema but it is reasonably fair to assume that this reflects the annual income in dollars. Selecting various columns works with the `df[!, cols]` notation:
 ```julia-repl
 julia> selcols = ["Age", "Country", "ConvertedCompYearly", "DevType", "Employment", "Ethnicity", "Gender", "OrgSize", "YearsCode"]
 [...]
@@ -197,7 +197,7 @@ julia> df[!, selcols]
                                                                                                                        5 columns and 83435 rows omitted
 ```
 
-Do you notice that something odd happened? `ConvertedCompYearly` apparently is stored as a `String15` (meaning a `String` with fixed length of 15 letters) column. Taking a closer look at the data and/or CSV file, this is due to `NA` being used as text in the CSV file. We obviously want this column to be of type `Integer` (to be more precise of type `Union{Integer, Missing}`) and the `NA`s should be `missing`. If we would have known about this earlier, we could have corrected this right at the start when reading the dataframe. This also counts for various other problems that often occur with this file format. Non-standard seperation letter, different symbols for writing decimal numbers to just name two. Reading the manual of `CSV.read` tells how we should read the data correctly and we can even immediately tell that we only want to read specific columns:
+Do we notice that something odd happened? `ConvertedCompYearly` apparently is stored as a `String15` (meaning a `String` with fixed length of 15 letters) column. Taking a closer look at the data and/or CSV file, this is due to `NA` being used as text in the CSV file. We obviously want this column to be of type `Integer` (to be more precise of type `Union{Integer, Missing}`) and the `NA`s should be `missing`. If we would have known about this earlier, we could have corrected this right at the start when reading the dataframe. This also counts for various other problems that often occur with this file format. Non-standard seperation letter, different symbols for writing decimal numbers to just name two. Reading the manual of `CSV.read` tells us how we should read the data correctly and we can tell the function that we only want to read specific columns:
 ```julia-repl
 julia> df = CSV.read("survey_results_public.csv", DataFrame; missingstring="NA", select=selcols)
 83439×9 DataFrame
