@@ -13,7 +13,7 @@ function foo(input)
     return output
 end
 ```
-So if you want to define a function which prints out and returns $sin(cos(x))$ we can write
+So if you want to define a function which prints out and returns $\sin(\cos(x))$ we can write
 ```julia
 function sincos(x)
     result = sin(cos(x))
