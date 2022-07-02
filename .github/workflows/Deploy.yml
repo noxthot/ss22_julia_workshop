@@ -38,7 +38,7 @@ jobs:
             using Pkg; Pkg.activate("."); Pkg.instantiate();
             using NodeJS; run(`$(npm_cmd()) install highlight.js`);
             using Franklin;
-            optimize()'
+            optimize(minify=false)'
       env:
         # Allows the use of unicode characters in Plots.jl
         GKS_ENCODING: "utf8"
