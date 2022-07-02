@@ -81,7 +81,7 @@
 .solutioncollapsible {
   border-radius: 0 0 1em 1em;
   padding: 1em;
-  display: block;
+  display: none;
   overflow: hidden;
   background-color: #f2fde2;
 }
