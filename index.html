@@ -158,9 +158,9 @@
       // which only has the className of 'language-'.
     
       for (var i = 0; i < pre.length; i++) {
-        var isLanguage = pre[i].children[0].className.indexOf('language-');
+        var isLanguage = pre[i].children[0].tagName == 'CODE';
     
-        if ( isLanguage === 0 ) {
+        if ( isLanguage ) {
           var button           = document.createElement('button');
               button.className = 'copy-button';
               button.textContent = 'Copy';

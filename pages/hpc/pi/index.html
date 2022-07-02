@@ -141,7 +141,7 @@ println(
     estimate_pi(in_unit_circle, N) - <span class="hljs-literal">pi</span>
     )
 )</code></pre>
-<p><pre><code class="plaintext hljs">1.5666410206893744e-5
+<p><pre><code class="plaintext hljs">9.321358979308414e-5
 </code></pre> </div> </div>
 <div class="page-foot">
     <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> Gregor Ehrensperger, Peter Kandolf, Jonas Kusch. Last modified: July 02, 2022.
@@ -174,9 +174,9 @@ println(
       // which only has the className of 'language-'.
     
       for (var i = 0; i < pre.length; i++) {
-        var isLanguage = pre[i].children[0].className.indexOf('language-');
+        var isLanguage = pre[i].children[0].tagName == 'CODE';
     
-        if ( isLanguage === 0 ) {
+        if ( isLanguage ) {
           var button           = document.createElement('button');
               button.className = 'copy-button';
               button.textContent = 'Copy';
