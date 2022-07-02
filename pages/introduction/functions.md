@@ -17,7 +17,7 @@ So if you want to define a function which prints out and returns $\sin(\cos(x))$
 ```julia
 function sincos(x)
     result = sin(cos(x))
-    println("sin(cos(",x,")) = ",result)
+    println("sin(cos($x)) = $result")
     return result
 end
 ```
@@ -26,8 +26,8 @@ If we wish to specify multiple inputs and outputs we can do so as well:
 function sincos(x,y)
     result1 = sin(cos(x))
     result2 = sin(cos(y))
-    println("sin(cos(",x,")) = ",result1)
-    println("sin(cos(",y,")) = ",result2)
+    println("sin(cos($x)) = $result1")
+    println("sin(cos($y)) = $result2")
     return result1, result2
 end
 ```
