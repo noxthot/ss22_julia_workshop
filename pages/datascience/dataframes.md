@@ -233,7 +233,14 @@ Union{Missing, Int64}
  ("ConvertedCompYearly", Union{Missing, Int64})
  ```
 
- The function `eachcol()` creates a vector-like object that allows iterating over each dataframe column, `eltype()` returns the data type of an object and by using `eltype.()` we apply `eltype()` to each column. This would return a vector of column types but unfortunately we can not see the according column names. To get the names too we use `names()`. `zip` ties together the $n$th column name with the $n$th column type, but this function also returns an iterator. Finally `collect()` returns an array of all items within that iterator which can be printed easily.
+Let us split up the call `collect(zip(names(df), eltype.(eachcol(df))))` and explain each part:
+- the function `eachcol()` creates a vector-like object that allows iterating over each dataframe column
+- `eltype()` returns the data type of an object
+- by using `eltype.()` we apply `eltype()` to each column. 
+- this returns a vector of column types but unfortunately we can not see the according column names
+- to also get the names we use `names()`
+- `zip` ties together the $n$th column name with the $n$th column type, but this function also returns an iterator which can not be printed immediately
+- finally `collect()` returns an array of all items within that iterator
 
 \exercise{
  When having a look at the output it might seem like `Age`, `YearsCode` and `OrgSize` probably should also be of a numeric type. Apply `unique()` to these columns to check whether those columns should be converted.}
