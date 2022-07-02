@@ -13,7 +13,7 @@ In the terminology of computer science a thread is the smallest sequence of inst
 
 ## Julia
 
-By default, Julia will start with a single computational thread of execution:
+By default Julia will start with a single computational thread of execution:
 ```julia-repl
 julia> Threads.nthreads()
 1
@@ -23,14 +23,16 @@ This does not mean that Julia is only using one thread. We mentioned the [Basic 
 \example{
 Influencing the number of threads in BLAS. When we include the [LinearAlgebra](https://docs.julialang.org/en/v1/stdlib/LinearAlgebra/) package we get the possibility to manipulate the number of threads. Here `BLAS` is a wrapper to the BLAS libraries used by Julia. 
 ```julia-repl
-julia> using BenchmarkTools
-julia> using LinearAlgebra
+julia> using BenchmarkTools, LinearAlgebra
+
 julia> A = rand(2000, 2000);
 julia> B = rand(2000, 2000);
-julia> @btime $A*$B;
-  141.984 ms (2 allocations: 30.52 MiB)
+
 julia> BLAS.get_num_threads()
 8
+julia> @btime $A*$B;
+  141.984 ms (2 allocations: 30.52 MiB)
+
 julia> BLAS.set_num_threads(1)
 julia> @btime $A*$B;
   1.009 s (2 allocations: 30.52 MiB)
@@ -45,22 +47,24 @@ julia> Threads.nthreads()
 julia> Threads.threadid()
 1
 ```
-
+By default, the Julia REPL, or the main Julia process for that matter, will always run on the thread with id 1.
 We do not have the time for a deep dive into all the dirty details on how do do proper multithreaded programming (raise conditions, locks, atomic operations, thread safe programming, ...), therefore we keep it light and simple with the `@threads` macro and introduce the needed concepts when we need them along the way.
 
-Like all the other macro it gives us the possibility to bring something rather complex in our code by still staying very readable as the following example shows.
+Like all the other macros it gives us the possibility to bring something rather complex in our code by still staying very readable as the following example shows.
 
 \example{
 Simple example for the [docs](https://docs.julialang.org/en/v1/manual/multi-threading/#The-@threads-Macro):
 
 ```julia-repl
 julia> using Base.Threads
+
 julia> nthreads()
 4
 julia> a = zeros(10);
 julia> @threads for i in 1:10
                     a[i] = threadid()
                 end
+
 julia> a
 10-element Vector{Float64}:
  1.0
@@ -247,11 +251,13 @@ function in_unit_circle_threaded4(N::Int64)
     @threads for i in 1:nthreads()
         rng = ThreadRNG[threadid()]
         m = 0
+
         for j in 1:len
             if (rand(rng)^2 + rand(rng)^2) < 1
                 m += 1
             end
         end
+        
         M[threadid()] = m
     end
 
