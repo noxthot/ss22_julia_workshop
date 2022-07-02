@@ -79,9 +79,9 @@ Also note that the data types of the columns are printed below the column name.
 
 ## Working with real data
 
-To get things more exciting, let us take a look at real data. [Stack Overflow](www.stackoverflow.com) provides [annual developer surveys](https://insights.stackoverflow.com/survey/). We will have a look at the latest available data set from [2021](https://info.stackoverflowsolutions.com/rs/719-EMH-566/images/stack-overflow-developer-survey-2021.zip). Please download this file and extract it into your workspace. Note that beside that actual data there is also a file which describes the contents of the dataset.
+To get things more exciting, let us take a look at real data. [Stack Overflow](https://www.stackoverflow.com) provides [annual developer surveys](https://insights.stackoverflow.com/survey/). We will have a look at the latest available data set from [2021](https://info.stackoverflowsolutions.com/rs/719-EMH-566/images/stack-overflow-developer-survey-2021.zip). Please download this file and extract it into your workspace. Note that besides the actual data there is also a file which describes the contents of the dataset.
 
-The file's name is `survey_results_public.csv` and the extension indicates that the file format is a [comma-seperated values](https://en.wikipedia.org/wiki/Comma-separated_values) file. Thus we need a package that is able to handle CSV-files. Luckily there is [CSV.jl](https://csv.juliadata.org/stable/) which makes it easy to load a file into a `DataFrame`. All we need to do is add and load `CSV` and read the data by using `DataFrame` as sink (second argument). Sink? How do we even know that such a thing exists? It is always good to consult the manual first:
+The filename is `survey_results_public.csv` and the extension indicates that the file format is a [comma-seperated values](https://en.wikipedia.org/wiki/Comma-separated_values) file. Thus, we need a package that is able to handle CSV-files. Luckily there is [CSV.jl](https://csv.juliadata.org/stable/) which makes it easy to load a file into a `DataFrame`. All we need to do is add and load `CSV` and read the data by using `DataFrame` as sink (second argument). Sink? How do we even know that such a thing exists? It is always good to consult the manual first:
 ```julia-repl
 pkg> add CSV
 [..]
