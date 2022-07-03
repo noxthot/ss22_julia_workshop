@@ -90,7 +90,7 @@ So we have $46844$ rows in this data set. We already removed the missing values,
 Let us create some plots to gain deeper insights. We have already seen the use of `Plots.jl` before. In this section we will switch to `StatsPlots.jl`, which is a drop-in replacement for `Plots.jl` since on one hand it supports easy plotting of dataframes and on the other hand also offers additional statistical recipes.
 
 Creating a boxplot is fairly simple:
-```julia:./code/ds_exploratory_da.jl
+```julia
 using StatsPlots
 @df df boxplot(:ConvertedCompYearly)
 ```
