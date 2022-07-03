@@ -8,6 +8,35 @@
    
     <script src="/ss22_julia_workshop/libs/clipboard.min.js"></script>
   
+  
+  <script src="/ss22_julia_workshop/libs/plotly-1_58_5.min.js"></script> 
+  <script>
+    // This function is used when calling `\fig{...}` See # Using \fig{...} below
+    const PlotlyJS_json = async (div, url) => {
+      response = await fetch(url); // get file
+      fig = await response.json(); // convert it to json
+      // Make the plot fit the screen responsively. See the documentation of plotly.js. https://plotly.com/javascript/responsive-fluid-layout/
+      if (typeof fig.config === 'undefined') { fig["config"]={} }
+      delete fig.layout.width
+      delete fig.layout.height
+      fig["layout"]["autosize"] = true
+      fig["config"]["autosizable"] = true
+      fig["config"]["responsive"] = true
+
+      // make it easier to scroll throught the website rather than being blocked by a figure.
+      fig.config["scrollZoom"] = false
+
+      // PlotlyJS.savefig by default add the some more attribute to make a static plot.
+      // Disable them to make the website fancier.
+      delete fig.config.staticPlot
+      delete fig.config.displayModeBar
+      delete fig.config.doubleClick
+      delete fig.config.showTips
+
+      Plotly.newPlot(div, fig);
+    };
+  </script>
+  
   <link rel="stylesheet" href="/ss22_julia_workshop/css/jtd.css">
 <link rel="stylesheet" href="/ss22_julia_workshop/css/extras.css">
 <link rel="icon" href="/ss22_julia_workshop/assets/favicon.ico">
@@ -91,9 +120,9 @@
 a = rand(<span class="hljs-number">100_000</span>)
 <span class="hljs-meta">@time</span> mysum(a)
 <span class="hljs-meta">@time</span> mysum(a)</code></pre>
-<pre><code class="plaintext hljs">  0.007324 seconds (4.16 k allocations: 222.597 KiB, 97.58% compilation time)
-  0.000163 seconds (1 allocation: 16 bytes)
-50089.44916157728</code></pre>
+<pre><code class="plaintext hljs">  0.006673 seconds (4.16 k allocations: 222.597 KiB, 97.83% compilation time)
+  0.000134 seconds (1 allocation: 16 bytes)
+49897.3287462172</code></pre>
 <p>The downside with the <code>@time</code> macro is, that it really just measures the execution time of what is given to it. This means if the function is not already compiled this might include compiling or if the CPU is busy with something else it is often not accurate. </p>
 <p>Therefore, if you are serious about measuring  performance you should stick to the <a href="https://juliaci.github.io/BenchmarkTools.jl/stable/"><code>BenchmarkTools</code></a>. It comes with a couple of macros that you should test out:</p>
 <button type="button" class="collapsible" style="background-color:#b5ddff"> Exercise </button><div class="collapsiblecontent">  In order to use the BenchmarkTools you need to include it with <code>using BenchmarkTools</code>, as any other package.  Benchmark your <code>mysum</code> function with the following macros:</p>
@@ -110,13 +139,13 @@ a = rand(<span class="hljs-number">100_000</span>)
 
 <span class="hljs-meta">@benchmark</span> mysum($a)</code></pre>
 <p><pre><code class="plaintext hljs">BenchmarkTools.Trial: 10000 samples with 1 evaluation.
- Range (min … max):  133.601 μs … 185.402 μs  ┊ GC (min … max): 0.00% … 0.00%
- Time  (median):     133.702 μs               ┊ GC (median):    0.00%
- Time  (mean ± σ):   133.957 μs ±   1.459 μs  ┊ GC (mean ± σ):  0.00% ± 0.00%
+ Range (min … max):  108.301 μs … 169.703 μs  ┊ GC (min … max): 0.00% … 0.00%
+ Time  (median):     117.902 μs               ┊ GC (median):    0.00%
+ Time  (mean ± σ):   117.282 μs ±   5.449 μs  ┊ GC (mean ± σ):  0.00% ± 0.00%
 
-  ██▂                                                     ▁     ▂
-  ███▆▆▇▇▆▄▅▄▁▄▅▃▄▅▅▅▆█▇▇▆▅▄▃▄▃▁▃▁▁▁▁▁▁▃▁▃▁▁▁▁▁▁▁▁▁▁▃▅▄▇▇███▇▆▇ █
-  134 μs        Histogram: log(frequency) by time        140 μs &lt;
+  ▅             ▇       █▁  ▁       ▁         ▁                 ▂
+  █▅▁▅▆▁▁▁▁▁▅▇▅▃██▃▄▇▇▃▁██▅▆███▆▅▆▆▇██▇▆▇▇████████▇▆▆▆▇████████ █
+  108 μs        Histogram: log(frequency) by time        134 μs &lt;
 
  Memory estimate: 0 bytes, allocs estimate: 0.</code></pre> the full details with </p>
 <pre><code class="julia hljs">t = <span class="hljs-meta">@benchmark</span> mysum($a)
@@ -131,14 +160,14 @@ dump(t)</code></pre>
     gcsample: Bool false
     time_tolerance: Float64 0.05
     memory_tolerance: Float64 0.01
-  times: Array{Float64}((10000,)) [172902.0, 136902.0, 133801.0, 133702.0, 133701.0, 133702.0, 133701.0, 133602.0, 133701.0, 133702.0  …  133702.0, 133701.0, 133702.0, 133701.0, 133702.0, 133701.0, 133701.0, 133702.0, 133701.0, 133702.0]
+  times: Array{Float64}((10000,)) [130202.0, 120102.0, 118001.0, 118002.0, 118002.0, 117901.0, 117902.0, 117901.0, 117902.0, 118001.0  …  108401.0, 108402.0, 108401.0, 108402.0, 108401.0, 126902.0, 114602.0, 114601.0, 114602.0, 132401.0]
   gctimes: Array{Float64}((10000,)) [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0  …  0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
   memory: Int64 0
   allocs: Int64 0
 </code></pre> and the often used sanity check, that actually also shows you the output of your code.</p>
 <pre><code class="julia hljs"><span class="hljs-meta">@btime</span> mysum($a)</code></pre>
-<p><pre><code class="plaintext hljs">  133.601 μs (0 allocations: 0 bytes)
-50089.44916157728</code></pre> </div> </div>
+<p><pre><code class="plaintext hljs">  108.301 μs (0 allocations: 0 bytes)
+49897.3287462172</code></pre> </div> </div>
 <p>We can also use the <a href="https://docs.julialang.org/en/v1/manual/profile/#Profiling"><code>Profiler</code></a> package to really dig into profiling the code but this is a bit too much of a deep dive for this class, it would look like this:</p>
 <pre><code class="julia hljs"><span class="hljs-keyword">using</span> Profile
 

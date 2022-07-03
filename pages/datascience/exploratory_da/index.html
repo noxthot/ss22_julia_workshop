@@ -9,6 +9,35 @@
    
     <script src="/ss22_julia_workshop/libs/clipboard.min.js"></script>
   
+  
+  <script src="/ss22_julia_workshop/libs/plotly-1_58_5.min.js"></script> 
+  <script>
+    // This function is used when calling `\fig{...}` See # Using \fig{...} below
+    const PlotlyJS_json = async (div, url) => {
+      response = await fetch(url); // get file
+      fig = await response.json(); // convert it to json
+      // Make the plot fit the screen responsively. See the documentation of plotly.js. https://plotly.com/javascript/responsive-fluid-layout/
+      if (typeof fig.config === 'undefined') { fig["config"]={} }
+      delete fig.layout.width
+      delete fig.layout.height
+      fig["layout"]["autosize"] = true
+      fig["config"]["autosizable"] = true
+      fig["config"]["responsive"] = true
+
+      // make it easier to scroll throught the website rather than being blocked by a figure.
+      fig.config["scrollZoom"] = false
+
+      // PlotlyJS.savefig by default add the some more attribute to make a static plot.
+      // Disable them to make the website fancier.
+      delete fig.config.staticPlot
+      delete fig.config.displayModeBar
+      delete fig.config.doubleClick
+      delete fig.config.showTips
+
+      Plotly.newPlot(div, fig);
+    };
+  </script>
+  
   <link rel="stylesheet" href="/ss22_julia_workshop/css/jtd.css">
 <link rel="stylesheet" href="/ss22_julia_workshop/css/extras.css">
 <link rel="icon" href="/ss22_julia_workshop/assets/favicon.ico">
@@ -78,7 +107,7 @@
 
 <!-- Content appended here (in class franklin-content) -->
 <div class="franklin-content"><h1 id="exploratory_data_analysis"><a href="#exploratory_data_analysis" class="header-anchor">Exploratory Data Analysis</a></h1>
-<div class="franklin-toc"><ol><li><a href="#introduction">Introduction</a></li><li><a href="#data_wrangling">Data Wrangling</a></li><li><a href="#case_studies">Case Studies</a></li><li><a href="#data_visualisation">Data Visualisation</a></li></ol></div>
+<div class="franklin-toc"><ol><li><a href="#introduction">Introduction</a></li><li><a href="#data_wrangling">Data Wrangling</a></li><li><a href="#case_studies">Case Studies</a></li><li><a href="#data_visualisation">Data Visualisation</a><ol><li><a href="#show_survey_participants_by_country">Show survey participants by country</a></li><li><a href="#salary_in_comparison_to_employment_status">Salary in comparison to employment status</a></li></ol></li></ol></div>
 <h2 id="introduction"><a href="#introduction" class="header-anchor">Introduction</a></h2>
 <p>In most data science projects <em>exploratory data analysis</em> &#40;EDA&#41; is an essential first step. The primary aim is to analyse a given data set to summarize its main characteristics. Therefore EDA often uses data visualization methods and statistical methods.</p>
 <p>In this section we will continue to work with the Stack Overflow survey data set as shown in the <a href="./pages/datascience/dataframes/">previous section</a>. To summarize the necessary steps to start with this section, see the code below: First of all you need to add and load the package:</p>
@@ -180,8 +209,12 @@ df[!, :EuroCompYearly] = <span class="hljs-number">0.96</span> * df[!, :Converte
 <p></div></p>
 <h2 id="case_studies"><a href="#case_studies" class="header-anchor">Case Studies</a></h2>
 <p>Starting from this data set, let us conduct some case studies in the upcoming exercise.</p>
-<p><button type="button" class="collapsible" style="background-color:#b5ddff"> Exercise </button><div class="collapsiblecontent">  1. What is the number of austrian, german and swiss survey participants? Hint: Have a look at <code>groupby</code>, <code>combine</code> and <code>nrow</code>.</p>
+<p><button type="button" class="collapsible" style="background-color:#b5ddff"> Exercise </button><div class="collapsiblecontent">  1. What is the number of austrian, german and swiss survey participants. </p>
 <ol>
+<li><p>Use <code>groupby</code>, <code>combine</code> and <code>nrow</code>.</p>
+</li>
+<li><p>Use <a href="https://juliastats.org/StatsBase.jl/stable/counts/#StatsBase.countmap"><code>countmap</code></a> of the <a href="https://juliastats.org/StatsBase.jl/stable/"><code>StatsBase.jl</code></a> package.</p>
+</li>
 <li><p>How does the median salary compare between full-time employments and independent contractors in Austria. Hint: <code>Statistics.jl</code> provides a <code>median</code> function.</p>
 </li>
 <li><p>How does the median salary of data scientists compare to non data scientists in the DACH region. Hint: Have a look at <code>occursin</code> and <code>transform</code>.</p>
@@ -237,7 +270,27 @@ df[!, :EuroCompYearly] = <span class="hljs-number">0.96</span> * df[!, :Converte
    4 │ Switzerland            false    529</code></pre>
 <p></div>
 <h2 id="data_visualisation"><a href="#data_visualisation" class="header-anchor">Data Visualisation</a></h2>
-<p>In this workshop we have already used <code>Plots.jl</code> and <code>StatsPlots.jl</code> a couple of times to visualize functions and data. It may come to a surprise that <code>Plots.jl</code> and <code>StatsPlots.jl</code> are actually no plotting packages. They are rather plotting metapackages which provide an interface over many different plotting libraries. The specific plotting library that is actually being used to create the plots is referred to as the <a href="https://docs.juliaplots.org/stable/tutorial/#plotting-backends"><em>backend</em></a> and it is easy to switch and use different plotting libraries. So far we always used the default backend <code>GR</code> which is fast, but lacks interactivity. Depending on the requirements you might like to try <code>PlotlyJS</code> for interactivity or PyPlot because you like the functionality of Matplotlib &#40;known from Python&#41;. To a get a good overview, have a look at the <a href="https://docs.juliaplots.org/stable/backends/#backends">Plots.jl documentation</a>.</p>
+<p>In this workshop we have already used <code>Plots.jl</code> and <code>StatsPlots.jl</code> a couple of times to visualize functions and data. It may come to a surprise that <code>Plots.jl</code> and <code>StatsPlots.jl</code> are actually no plotting packages. They are rather plotting metapackages which provide an interface over many different plotting libraries. The specific plotting library that is actually being used to create the plots is referred to as the <a href="https://docs.juliaplots.org/stable/tutorial/#plotting-backends"><em>backend</em></a> and it is easy to switch and use different plotting libraries. So far we always used the default backend <code>GR</code> which is fast, but lacks interactivity. Depending on the requirements you might like to try <code>PlotlyJS</code> for interactivity or <code>PyPlot</code> because you like the functionality of Matplotlib &#40;known from Python&#41;. To a get a good overview, have a look at the <a href="https://docs.juliaplots.org/stable/backends/#backends">Plots.jl documentation</a>.</p>
+<p>In the last section we used methods from <code>DataFrames.jl</code> and <code>Statistics.jl</code> to do some case studies. Now we will supplement the studies with visualisations.</p>
+<h3 id="show_survey_participants_by_country"><a href="#show_survey_participants_by_country" class="header-anchor">Show survey participants by country</a></h3>
+<p>In a previous exercise we already used <code>countmap</code> to get a dictionary which summarizes the number of participants per country. Fortunately <code>StatsPlots</code> is able to visualize this dictionary immediately. We will also switch the backend to <code>plotlyjs</code>, so we are able to interact with the graph and get more detailed information about the height of the bars by moving our mouse cursor over the top of the bars and looking at the hover label.</p>
+<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-keyword">using</span> StatsPlots; plotlyjs()
+</span>Plots.PlotlyJSBackend()
+
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> countmap(df.Country)
+</span>Dict{String, Int64} with 3 entries:
+  &quot;Switzerland&quot; =&gt; 529
+  &quot;Germany&quot;     =&gt; 3095
+  &quot;Austria&quot;     =&gt; 437
+
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@df</span> df bar(countmap(:Country), legend=<span class="hljs-literal">false</span>)</span></code></pre>
+<div id="fdpsnk" style=""></div>
+<script>
+graphDiv = document.getElementById("fdpsnk");
+plotlyPromise = PlotlyJS_json(graphDiv, '/assets/pages/datascience/plot_explorative_da_country.json');
+</script>
+
+<h3 id="salary_in_comparison_to_employment_status"><a href="#salary_in_comparison_to_employment_status" class="header-anchor">Salary in comparison to employment status</a></h3>
 <div class="page-foot">
     <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> Gregor Ehrensperger, Peter Kandolf, Jonas Kusch. Last modified: July 03, 2022.
     Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
