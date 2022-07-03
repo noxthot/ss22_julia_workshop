@@ -3,7 +3,7 @@
 
 @def tags = ["Data Science", "Dataframes"]
 
-# Dataframes
+# Loading data into dataframes
 
 Data science mostly requires to work with tabular data. With [`DataFrames.jl`](https://dataframes.juliadata.org/stable/) Julia provides a set of tools for working with tabular data. When you are already familiar with `pandas` (Python) or `dplyr` (R) you will be quickly able to get started with data wrangling using `DataFrames.jl`, since design and functionality are quite similar.
 
