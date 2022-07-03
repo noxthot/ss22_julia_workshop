@@ -10,7 +10,7 @@ Data science mostly requires to work with tabular data. With [`DataFrames.jl`](h
 First of all, you need to add and load the package:
 ```julia-repl
 pkg> add DataFrames
-julia> use DataFrames
+julia> using DataFrames
 ```
 
 Let us start with an empty `DataFrame`:
@@ -239,7 +239,7 @@ Let us split up the call `collect(zip(names(df), eltype.(eachcol(df))))` and exp
 - by using `eltype.()` we apply `eltype()` to each column. 
 - this returns a vector of column types but unfortunately we can not see the according column names
 - to also get the names we use `names()`
-- `zip` ties together the $n$th column name with the $n$th column type, but this function also returns an iterator which can not be printed immediately
+- `zip` ties together the $n$-th column name with the $n$-th column type, but this function also returns an iterator which can not be printed immediately
 - finally `collect()` returns an array of all items within that iterator
 
 \exercise{
