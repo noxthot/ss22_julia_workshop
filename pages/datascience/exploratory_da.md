@@ -233,5 +233,26 @@ julia> combine(groupby(df, [:Country, :isdatascientist]), nrow => :count)
 
 ## Data Visualisation
 
-In this workshop we have already used `Plots.jl` and `StatsPlots.jl` a couple of times to visualize functions and data. It may come to a surprise that `Plots.jl` and `StatsPlots.jl` are actually no plotting packages. They are rather plotting metapackages which provide an interface over many different plotting libraries. The specific plotting library that is actually being used to create the plots is referred to as the [*backend*](https://docs.juliaplots.org/stable/tutorial/#plotting-backends) and it is easy to switch and use different plotting libraries. So far we always used the default backend `GR` which is fast, but lacks interactivity. Depending on the requirements you might like to try `PlotlyJS` for interactivity or PyPlot because you like the functionality of Matplotlib (known from Python). To a get a good overview, have a look at the [Plots.jl documentation](https://docs.juliaplots.org/stable/backends/#backends).
+In this workshop we have already used `Plots.jl` and `StatsPlots.jl` a couple of times to visualize functions and data. It may come to a surprise that `Plots.jl` and `StatsPlots.jl` are actually no plotting packages. They are rather plotting metapackages which provide an interface over many different plotting libraries. The specific plotting library that is actually being used to create the plots is referred to as the [*backend*](https://docs.juliaplots.org/stable/tutorial/#plotting-backends) and it is easy to switch and use different plotting libraries. So far we always used the default backend `GR` which is fast, but lacks interactivity. Depending on the requirements you might like to try `PlotlyJS` for interactivity or `PyPlot` because you like the functionality of Matplotlib (known from Python). To a get a good overview, have a look at the [Plots.jl documentation](https://docs.juliaplots.org/stable/backends/#backends).
+
+In the last section we used methods from `DataFrames.jl` and `Statistics.jl` to do some case studies. Now we will supplement the studies with visualisations.
+
+### Show survey participants by country
+In a previous exercise we already used `countmap` to get a dictionary which summarizes the number of participants per country. Fortunately `StatsPlots` is able to visualize this dictionary immediately. We will also switch the backend to `plotlyjs`, so we are able to interact with the graph and get more detailed information about the height of the bars by moving our mouse cursor over the top of the bars and looking at the hover label.
+```julia-repl
+julia> using StatsPlots; plotlyjs()
+Plots.PlotlyJSBackend()
+
+julia> countmap(df.Country)
+Dict{String, Int64} with 3 entries:
+  "Switzerland" => 529
+  "Germany"     => 3095
+  "Austria"     => 437
+
+julia> @df df bar(countmap(:Country), legend=false)
+```
+
+\figalt{Barplot showing participants per country}{/assets/pages/datascience/plot_explorative_da_country.json}
+
+### Salary in comparison to employment status
 
