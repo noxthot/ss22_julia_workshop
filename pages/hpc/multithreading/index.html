@@ -51,7 +51,7 @@
           </ul>
         <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/datascience/" class="menu-list-link ">Data Science</a>
           <ul class="menu-list-child-list ">
-            <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/datascience/dataframes" class="menu-list-link">Dataframes</a>
+            <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/datascience/dataframes" class="menu-list-link">Loading data</a>
               <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/datascience/exploratory_da" class="menu-list-link">Exploratory Data Analysis</a>
           </ul>
         <li class="menu-list-item active"><a href="/ss22_julia_workshop/pages/hpc/" class="menu-list-link active">Parallel computing</a>
@@ -271,7 +271,7 @@ rand(rng)</code></pre>
 <h3 id="be_aware_of_oversubscription"><a href="#be_aware_of_oversubscription" class="header-anchor">Be aware of oversubscription</a></h3>
 <p>We should mention that you can overdo it with threading. For example if multithread something that uses a BLAS routine. Now inside each thread something is trying to run on multiple threads. As a result, they might get into the way of each other and the overall performance is reduced.  </p>
 <div class="page-foot">
-    <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> Gregor Ehrensperger, Peter Kandolf, Jonas Kusch. Last modified: July 02, 2022.
+    <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> Gregor Ehrensperger, Peter Kandolf, Jonas Kusch. Last modified: July 03, 2022.
     Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
 </div>
 </div><!-- CONTENT ENDS HERE -->

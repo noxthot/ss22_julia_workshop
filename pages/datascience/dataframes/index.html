@@ -51,7 +51,7 @@
           </ul>
         <li class="menu-list-item active"><a href="/ss22_julia_workshop/pages/datascience/" class="menu-list-link active">Data Science</a>
           <ul class="menu-list-child-list ">
-            <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/datascience/dataframes" class="menu-list-link">Dataframes</a>
+            <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/datascience/dataframes" class="menu-list-link">Loading data</a>
               <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/datascience/exploratory_da" class="menu-list-link">Exploratory Data Analysis</a>
           </ul>
         <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/hpc/" class="menu-list-link ">Parallel computing</a>
@@ -77,11 +77,11 @@
 
 
 <!-- Content appended here (in class franklin-content) -->
-<div class="franklin-content"><h1 id="dataframes"><a href="#dataframes" class="header-anchor">Dataframes</a></h1>
+<div class="franklin-content"><h1 id="loading_data_into_dataframes"><a href="#loading_data_into_dataframes" class="header-anchor">Loading data into dataframes</a></h1>
 <p>Data science mostly requires to work with tabular data. With <a href="https://dataframes.juliadata.org/stable/"><code>DataFrames.jl</code></a> Julia provides a set of tools for working with tabular data. When you are already familiar with <code>pandas</code> &#40;Python&#41; or <code>dplyr</code> &#40;R&#41; you will be quickly able to get started with data wrangling using <code>DataFrames.jl</code>, since design and functionality are quite similar.</p>
 <p>First of all, you need to add and load the package:</p>
 <pre><code class="julia-repl hljs">pkg&gt; add DataFrames
-<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> use DataFrames</span></code></pre>
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-keyword">using</span> DataFrames</span></code></pre>
 <p>Let us start with an empty <code>DataFrame</code>:</p>
 <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> DataFrame()
 </span>0×0 DataFrame</code></pre>
@@ -274,14 +274,14 @@ help?&gt; CSV.read
 </li>
 <li><p>to also get the names we use <code>names&#40;&#41;</code></p>
 </li>
-<li><p><code>zip</code> ties together the <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">n</span></span></span></span>th column name with the <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">n</span></span></span></span>th column type, but this function also returns an iterator which can not be printed immediately</p>
+<li><p><code>zip</code> ties together the <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">n</span></span></span></span>-th column name with the <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">n</span></span></span></span>-th column type, but this function also returns an iterator which can not be printed immediately</p>
 </li>
 <li><p>finally <code>collect&#40;&#41;</code> returns an array of all items within that iterator</p>
 </li>
 </ul>
 <button type="button" class="collapsible" style="background-color:#b5ddff"> Exercise </button><div class="collapsiblecontent">  When having a look at the output it might seem like <code>Age</code>, <code>YearsCode</code> and <code>OrgSize</code> probably should also be of a numeric type. Apply <code>unique&#40;&#41;</code> to these columns to check whether those columns should be converted. </div>
 <div class="page-foot">
-    <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> Gregor Ehrensperger, Peter Kandolf, Jonas Kusch. Last modified: July 02, 2022.
+    <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> Gregor Ehrensperger, Peter Kandolf, Jonas Kusch. Last modified: July 03, 2022.
     Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
 </div>
 </div><!-- CONTENT ENDS HERE -->
