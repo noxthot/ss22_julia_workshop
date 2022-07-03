@@ -5,14 +5,16 @@
 
 # Exploratory Data Analysis
 
+\toc
+
+## Introduction
+
 In most data science projects *exploratory data analysis* (EDA) is an essential first step. The primary aim is to analyse a given data set to summarize its main characteristics. Therefore EDA often uses data visualization methods and statistical methods.
 
 In this section we will continue to work with the Stack Overflow survey data set as shown in the [previous section](./pages/datascience/dataframes/). To summarize the necessary steps to start with this section, see the code below:
 First of all you need to add and load the package:
 ```julia-repl
-julia> using DataFrames
-
-julia> using CSV
+julia> using CSV, DataFrames
 
 julia> selcols = ["Age", "Country", "ConvertedCompYearly", "DevType", "Employment", "Ethnicity", "Gender", "OrgSize", "YearsCode"]
 9-element Vector{String}:
@@ -155,7 +157,8 @@ df[!, :EuroCompYearly] = 0.96 * df[!, :ConvertedCompYearly]
 ```
 }
 
-Starting from this data set, let us try to answer some questions in the upcoming exercise.
+## Case Studies
+Starting from this data set, let us conduct some case studies in the upcoming exercise.
 
 \exercise{
 1. What is the number of austrian, german and swiss survey participants? Hint: Have a look at `groupby`, `combine` and `nrow`.
