@@ -99,15 +99,24 @@ using StatsPlots
 
 Note that `@df` is the call of the macro and the second `df` is the name of our dataframe.
 
-Apparently a couple of outliers totally screw our visualization. Let us have a look at the [cumulative distribution function (CDF)](https://en.wikipedia.org/wiki/Cumulative_distribution_function) of our data column. Therefor we simply sort the values of the column and plot them on the $y$ axis while we scale the $x$-axis from $0$ to $1$.
+Apparently a couple of outliers totally screw our visualization. Fortunately there is an [undocumented function argument](https://github.com/JuliaPlots/StatsPlots.jl/blob/db1a9e2f58ff9fb4beb3a0f7d133fcc8fd72b812/src/boxplot.jl#L14) that allows to get rid of the outliers within the visualization:
+```julia-repl
+@df df boxplot(:ConvertedCompYearly, outliers=false)
+```
+
+So apparently around 50% of the developers within the DACH region earn $27000$ to $100000$ euros per year, the median being at about $56000$.
+
+\figalt{Boxplot}{/assets/pages/datascience/exploratory_da_boxplot_no_outliers.png}
+
+Let us also have a look at the [cumulative distribution function (CDF)](https://en.wikipedia.org/wiki/Cumulative_distribution_function) of our data column. Therefor we simply sort the values of the column and plot them on the $y$ axis while we scale the $x$-axis from $0$ to $1$.
 
 ```julia
 julia> plot(sort(df.ConvertedCompYearly), (1:nrow(df)) ./ nrow(df))
 ```
 
-\figalt{Boxplot}{/assets/pages/datascience/exploratory_da_cdf.png}
+\figalt{Cumulative distribution function plot}{/assets/pages/datascience/exploratory_da_cdf.png}
 
-The plot tells us (just like the quartiles already indicated) that most of the survey participates earn a lot less than 10Mio. Dollars. Removing outliers is a very controversial topic. Usually it is always good practice to try to understand the source of outliers and to consult a domain expert to decide whether or not to remove them. In this workshop we want to show the pitfalls when working with real data, but we also want to pragmatically clean the data to practice some data wrangling. So let us assume that it is very unusual for a software developer to earn more than 1Mio per year but to be sure, let us also check all entries where `ConvertedCompYear` exceeds 1Mio. We leave this as an exercise.
+The plot tells us (just like the quartiles already indicated) that most of the survey participates earn a lot less than 10Mio. Dollars. Removing outliers is a very controversial topic. Usually it is always good practice to try to understand the source of outliers and to consult a domain expert to decide whether or not to remove them. In this workshop we want to show the pitfalls when working with real data, but we also want to pragmatically clean the data to practice some data wrangling. So let us assume that it is very unusual for a software developer to earn more than 1Mio per year but to be sure, let us also check the entries where `ConvertedCompYear` exceeds 1Mio. We leave this as an exercise.
 
 \exercise{
     Filter `df` for entries where `ConvertedCompYear` exceeds 1Mio and have a look at the remaining data rows. 
