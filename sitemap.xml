@@ -38,6 +38,12 @@
     <priority>0.5</priority>
 </url>
 <url>
+    <loc>https://noxthot.github.io/ss22_julia_workshop/pages/introduction/package_manager/index.html</loc>
+    <lastmod>2022-07-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
     <loc>https://noxthot.github.io/ss22_julia_workshop/pages/datascience/exploratory_da/index.html</loc>
     <lastmod>2022-07-03</lastmod>
     <changefreq>monthly</changefreq>
