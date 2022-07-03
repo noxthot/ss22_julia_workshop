@@ -227,5 +227,9 @@ julia> combine(groupby(df, [:Country, :isdatascientist]), nrow => :count)
    3 │ Germany                 true      7
    4 │ Switzerland            false    529
 ```
-
 }
+
+## Data Visualisation
+
+In this workshop we have already used `Plots.jl` and `StatsPlots.jl` a couple of times to visualize functions and data. It may come to a surprise that `Plots.jl` and `StatsPlots.jl` are actually no plotting packages. They are rather plotting metapackages which provide an interface over many different plotting libraries. The specific plotting library that is actually being used to create the plots is referred to as the [*backend*](https://docs.juliaplots.org/stable/tutorial/#plotting-backends) and it is easy to switch and use different plotting libraries. So far we always used the default backend `GR` which is fast, but lacks interactivity. Depending on the requirements you might like to try `PlotlyJS` for interactivity or PyPlot because you like the functionality of Matplotlib (known from Python). To a get a good overview, have a look at the [Plots.jl documentation](https://docs.juliaplots.org/stable/backends/#backends).
+
