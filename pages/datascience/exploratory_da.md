@@ -252,7 +252,7 @@ Dict{String, Int64} with 3 entries:
 julia> @df df bar(countmap(:Country), legend=false)
 ```
 
-\figalt{Barplot showing participants per country}{/assets/pages/datascience/plot_explorative_da_country.json}
+\figalt{Barplot showing participants per country}{plot_explorative_da_country.json}
 
 ### Salary in comparison to employment status
 
