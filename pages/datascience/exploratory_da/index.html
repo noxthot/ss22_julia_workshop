@@ -78,7 +78,7 @@
 
 <!-- Content appended here (in class franklin-content) -->
 <div class="franklin-content"><h1 id="exploratory_data_analysis"><a href="#exploratory_data_analysis" class="header-anchor">Exploratory Data Analysis</a></h1>
-<div class="franklin-toc"><ol><li><a href="#introduction">Introduction</a></li><li><a href="#data_wrangling">Data Wrangling</a></li><li><a href="#case_studies">Case Studies</a></li></ol></div>
+<div class="franklin-toc"><ol><li><a href="#introduction">Introduction</a></li><li><a href="#data_wrangling">Data Wrangling</a></li><li><a href="#case_studies">Case Studies</a></li><li><a href="#data_visualisation">Data Visualisation</a></li></ol></div>
 <h2 id="introduction"><a href="#introduction" class="header-anchor">Introduction</a></h2>
 <p>In most data science projects <em>exploratory data analysis</em> &#40;EDA&#41; is an essential first step. The primary aim is to analyse a given data set to summarize its main characteristics. Therefore EDA often uses data visualization methods and statistical methods.</p>
 <p>In this section we will continue to work with the Stack Overflow survey data set as shown in the <a href="./pages/datascience/dataframes/">previous section</a>. To summarize the necessary steps to start with this section, see the code below: First of all you need to add and load the package:</p>
@@ -236,6 +236,8 @@ df[!, :EuroCompYearly] = <span class="hljs-number">0.96</span> * df[!, :Converte
    3 │ Germany                 true      7
    4 │ Switzerland            false    529</code></pre>
 <p></div>
+<h2 id="data_visualisation"><a href="#data_visualisation" class="header-anchor">Data Visualisation</a></h2>
+<p>In this workshop we have already used <code>Plots.jl</code> and <code>StatsPlots.jl</code> a couple of times to visualize functions and data. It may come to a surprise that <code>Plots.jl</code> and <code>StatsPlots.jl</code> are actually no plotting packages. They are rather plotting metapackages which provide an interface over many different plotting libraries. The specific plotting library that is actually being used to create the plots is referred to as the <a href="https://docs.juliaplots.org/stable/tutorial/#plotting-backends"><em>backend</em></a> and it is easy to switch and use different plotting libraries. So far we always used the default backend <code>GR</code> which is fast, but lacks interactivity. Depending on the requirements you might like to try <code>PlotlyJS</code> for interactivity or PyPlot because you like the functionality of Matplotlib &#40;known from Python&#41;. To a get a good overview, have a look at the <a href="https://docs.juliaplots.org/stable/backends/#backends">Plots.jl documentation</a>.</p>
 <div class="page-foot">
     <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> Gregor Ehrensperger, Peter Kandolf, Jonas Kusch. Last modified: July 03, 2022.
     Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
