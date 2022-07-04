@@ -47,7 +47,7 @@ If you check this new environment with the `status` command you will see that yo
 using LinearAlgebra
 # 1.
 N = 5
-A = zeros(N,N)
+A = zeros(N, N)
 
 for i in 1:N
     for j in 1:N
