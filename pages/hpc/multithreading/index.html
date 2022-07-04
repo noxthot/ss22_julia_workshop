@@ -132,8 +132,8 @@
 <pre><code class="julia-repl hljs">&gt; julia --threads auto
 <span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> Threads.nthreads()
 </span>16
-juliy&gt; Threads.threadid()
-1</code></pre>
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> Threads.threadid()
+</span>1</code></pre>
 <p>We do not have the time for a deep dive into all the dirty details on how do do proper multithreaded programming &#40;raise conditions, locks, atomic operations, thread safe programming, ...&#41;, therefore we keep it light and simple with the <code>@threads</code> macro and introduce the needed concepts when we need them along the way.</p>
 <p>Like all the other macro it gives us the possibility to bring something rather complex in our code by still staying very readable as the following example shows.</p>
 <button type="button" class="collapsible" style="background-color:#caffa5"> Example </button><div class="collapsiblecontent">  Simple example for the <a href="https://docs.julialang.org/en/v1/manual/multi-threading/#The-@threads-Macro">docs</a>:</p>
@@ -294,13 +294,35 @@ rand(rng)</code></pre>
 </span>3.797358979307219e-5
 
 <span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@btime</span> estimate_pi(in_unit_circle_threaded4, N)
-</span>  ???.??? ms (22 allocations: 2.05 KiB) -&gt; do with same laptop
+</span>  46.866 ms (22 allocations: 2.06 KiB)
 3.141406</code></pre>
 <p></div> </div>
-<h3 id="be_aware_of_oversubscription"><a href="#be_aware_of_oversubscription" class="header-anchor">Be aware of oversubscription</a></h3>
-<p>We should mention that you can overdo it with threading. For example if multithread something that uses a BLAS routine. Now inside each thread something is trying to run on multiple threads. As a result, they might get into the way of each other and the overall performance is reduced.  </p>
+<h3 id="final_results"><a href="#final_results" class="header-anchor">Final results</a></h3>
+<p>For comparison, here are our final results for 4 computational threads:</p>
+<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@btime</span> estimate_pi(in_unit_circle, N);
+</span>  235.669 ms (0 allocations: 0 bytes)
+
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@btime</span> estimate_pi(in_unit_circle_threaded1, N);
+</span>  1.936 s (78536523 allocations: 1.17 GiB)
+
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@btime</span> estimate_pi(in_unit_circle_threaded2, N);
+</span>  897.725 ms (22 allocations: 1.97 KiB)
+
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@btime</span> estimate_pi(in_unit_circle_threaded3, N);
+</span>  264.300 ms (22 allocations: 2.05 KiB)
+
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@btime</span> estimate_pi(in_unit_circle_threaded4, N);
+</span>  46.866 ms (22 allocations: 2.06 KiB)</code></pre>
+<h3 id="other_pitfalls"><a href="#other_pitfalls" class="header-anchor">Other pitfalls</a></h3>
+<p>There are several other pitfalls that might occur for multithreading, here is an incomplete list:</p>
+<ul>
+<li><p><strong>Oversubscription</strong>: we can overdo it with threading. For example if we multithread something that uses a BLAS routine. This can results in the scenario, that inside each thread something is trying to run on multiple threads. As a result, they might get in the way of each other and the overall performance is reduced, depending on the capacities of we are working on.</p>
+</li>
+<li><p><a href="https://en.wikipedia.org/wiki/False_sharing"><strong>False sharing</strong></a>: The latency of the different layers of memory inside a CPU vary and also the way a core on a CPU can access it. Usually, L3 is shared by all cores but not L2 and L1. This can result in <em>false</em> sharing and reduce the performance if one CPU access the data from a cache of another CPU. </p>
+</li>
+</ul>
 <div class="page-foot">
-    <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> Gregor Ehrensperger, Peter Kandolf, Jonas Kusch. Last modified: July 03, 2022.
+    <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> Gregor Ehrensperger, Peter Kandolf, Jonas Kusch. Last modified: July 04, 2022.
     Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
 </div>
 </div><!-- CONTENT ENDS HERE -->
