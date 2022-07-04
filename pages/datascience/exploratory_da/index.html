@@ -110,33 +110,11 @@
 <div class="franklin-toc"><ol><li><a href="#introduction">Introduction</a></li><li><a href="#data_wrangling">Data Wrangling</a></li><li><a href="#case_studies">Case Studies</a></li><li><a href="#data_visualisation">Data Visualisation</a><ol><li><a href="#show_survey_participants_by_country">Show survey participants by country</a></li><li><a href="#salary_in_comparison_to_employment_status">Salary in comparison to employment status</a></li></ol></li></ol></div>
 <h2 id="introduction"><a href="#introduction" class="header-anchor">Introduction</a></h2>
 <p>In most data science projects <em>exploratory data analysis</em> &#40;EDA&#41; is an essential first step. The primary aim is to analyse a given data set to summarize its main characteristics. Therefore EDA often uses data visualization methods and statistical methods.</p>
-<p>In this section we will continue to work with the Stack Overflow survey data set as shown in the <a href="./pages/datascience/dataframes/">previous section</a>. To summarize the necessary steps to start with this section, see the code below: First of all you need to add and load the package:</p>
-<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-keyword">using</span> CSV, DataFrames
-</span>
-<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> selcols = [<span class="hljs-string">&quot;Age&quot;</span>, <span class="hljs-string">&quot;Country&quot;</span>, <span class="hljs-string">&quot;ConvertedCompYearly&quot;</span>, <span class="hljs-string">&quot;DevType&quot;</span>, <span class="hljs-string">&quot;Employment&quot;</span>, <span class="hljs-string">&quot;Ethnicity&quot;</span>, <span class="hljs-string">&quot;Gender&quot;</span>, <span class="hljs-string">&quot;OrgSize&quot;</span>, <span class="hljs-string">&quot;YearsCode&quot;</span>]
-</span>9-element Vector{String}:
- &quot;Age&quot;
- &quot;Country&quot;
- &quot;ConvertedCompYearly&quot;
- &quot;DevType&quot;
- &quot;Employment&quot;
- &quot;Ethnicity&quot;
- &quot;Gender&quot;
- &quot;OrgSize&quot;
- &quot;YearsCode&quot;
+<p>In this section we will continue to work with the Stack Overflow survey data set as shown in the <a href="./pages/datascience/dataframes/">previous section</a>. To summarize the necessary steps to start with this section, see the code below:</p>
+<pre><code class="julia hljs"><span class="hljs-keyword">using</span> CSV, DataFrames
 
-<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> df = CSV.read(<span class="hljs-string">&quot;survey_results_public.csv&quot;</span>, DataFrame; missingstring=<span class="hljs-string">&quot;NA&quot;</span>, select=selcols)
-</span>83439×9 DataFrame
-   Row │ Employment                         Country                            YearsCode  DevType                          ⋯
-       │ String?                            String                             String31?  String?                          ⋯
-───────┼────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-     1 │ Independent contractor, freelanc…  Slovakia                           missing    Developer, mobile                ⋯
-     2 │ Student, full-time                 Netherlands                        7          missing
-     3 │ Student, full-time                 Russian Federation                 missing    missing
-   ⋮   │                 ⋮                                  ⋮                      ⋮                      ⋮                ⋱
- 83438 │ Employed full-time                 Canada                             5          Developer, back-end
- 83439 │ Employed full-time                 Brazil                             14         Developer, front-end;Developer,  ⋯
-                                                                                            6 columns and 83434 rows omitted</code></pre>
+selcols = [<span class="hljs-string">&quot;Age&quot;</span>, <span class="hljs-string">&quot;Country&quot;</span>, <span class="hljs-string">&quot;ConvertedCompYearly&quot;</span>, <span class="hljs-string">&quot;DevType&quot;</span>, <span class="hljs-string">&quot;Employment&quot;</span>, <span class="hljs-string">&quot;Ethnicity&quot;</span>, <span class="hljs-string">&quot;Gender&quot;</span>, <span class="hljs-string">&quot;OrgSize&quot;</span>, <span class="hljs-string">&quot;YearsCode&quot;</span>]
+df = CSV.read(<span class="hljs-string">&quot;survey_results_public.csv&quot;</span>, DataFrame; missingstring=<span class="hljs-string">&quot;NA&quot;</span>, select=selcols)</code></pre>
 <h2 id="data_wrangling"><a href="#data_wrangling" class="header-anchor">Data Wrangling</a></h2>
 <p>In a first step, let us get a descriptive overview over the data by having a applying <code>describe&#40;&#41;</code>.  Also note the additional arguments that are given to <code>show&#40;&#41;</code>for displaying all rows and columns.</p>
 <pre><code class="julia hljs">julia&gt; show(describe(df), allrows=<span class="hljs-literal">true</span>, allcols=<span class="hljs-literal">true</span>)
@@ -274,7 +252,9 @@ df[!, :EuroCompYearly] = <span class="hljs-number">0.96</span> * df[!, :Converte
 <p>In the last section we used methods from <code>DataFrames.jl</code> and <code>Statistics.jl</code> to do some case studies. Now we will supplement the studies with visualisations.</p>
 <h3 id="show_survey_participants_by_country"><a href="#show_survey_participants_by_country" class="header-anchor">Show survey participants by country</a></h3>
 <p>In a previous exercise we already used <code>countmap</code> to get a dictionary which summarizes the number of participants per country. Fortunately <code>StatsPlots</code> is able to visualize this dictionary immediately. We will also switch the backend to <code>plotlyjs</code>, so we are able to interact with the graph and get more detailed information about the height of the bars by moving our mouse cursor over the top of the bars and looking at the hover label.</p>
-<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-keyword">using</span> StatsPlots; plotlyjs()
+<pre><code class="julia-repl hljs">julia &gt; using StatsBase
+
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-keyword">using</span> StatsPlots; plotlyjs()
 </span>Plots.PlotlyJSBackend()
 
 <span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> countmap(df.Country)
@@ -284,10 +264,10 @@ df[!, :EuroCompYearly] = <span class="hljs-number">0.96</span> * df[!, :Converte
   &quot;Austria&quot;     =&gt; 437
 
 <span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@df</span> df bar(countmap(:Country), legend=<span class="hljs-literal">false</span>)</span></code></pre>
-<div id="fdpcgm" style=""></div>
+<div id="fdplji" style=""></div>
 <script>
-graphDiv = document.getElementById("fdpcgm");
-plotlyPromise = PlotlyJS_json(graphDiv, '/assets/pages/datascience/exploratory_da/code/plot_explorative_da_country.json');
+graphDiv = document.getElementById("fdplji");
+plotlyPromise = PlotlyJS_json(graphDiv, '/assets/pages/datascience/plot_explorative_da_country.json');
 </script>
 
 <h3 id="salary_in_comparison_to_employment_status"><a href="#salary_in_comparison_to_employment_status" class="header-anchor">Salary in comparison to employment status</a></h3>
