@@ -3,8 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-   <link rel="stylesheet" href="/ss22_julia_workshop/libs/katex/katex.min.css">
-     
+  
    <link rel="stylesheet" href="/ss22_julia_workshop/libs/highlight/github.min.css">
    
     <script src="/ss22_julia_workshop/libs/clipboard.min.js"></script>
@@ -52,7 +51,7 @@
   }
 </style>
 
-   <title>Parallel Computing</title>  
+   <title>Saving Dataframes</title>  
 </head>
 <body>                      <!-- closed in foot.html -->
 <div class="page-wrap">   <!-- closed in foot.html -->
@@ -78,13 +77,13 @@
             <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/worksheet_1" class="menu-list-link">Worksheet 1</a>
             <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/worksheet_2" class="menu-list-link">Worksheet 2</a>
           </ul>
-        <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/datascience/" class="menu-list-link ">Data Science</a>
+        <li class="menu-list-item active"><a href="/ss22_julia_workshop/pages/datascience/" class="menu-list-link active">Data Science</a>
           <ul class="menu-list-child-list ">
             <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/datascience/loading_data" class="menu-list-link">Loading data</a>
             <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/datascience/saving_data" class="menu-list-link">Saving data</a>
             <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/datascience/exploratory_da" class="menu-list-link">Exploratory Data Analysis</a>
           </ul>
-        <li class="menu-list-item active"><a href="/ss22_julia_workshop/pages/hpc/" class="menu-list-link active">Parallel computing</a>
+        <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/hpc/" class="menu-list-link ">Parallel computing</a>
           <ul class="menu-list-child-list ">
             <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/hpc/performance" class="menu-list-link">Measuring performance</a>
             <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/hpc/simd" class="menu-list-link">Single Instruction Multiple Data</a>
@@ -107,24 +106,13 @@
 
 
 <!-- Content appended here (in class franklin-content) -->
-<div class="franklin-content"><h1 id="parallel_computing_with_julia"><a href="#parallel_computing_with_julia" class="header-anchor">Parallel computing with Julia</a></h1>
-<p>Since modern laptops and computers come with multiple cores parallel computing is not just something for High Performance Computing systems. The general idea is to not only use a single computational thread &#40;linear programming&#41; but run concurring threads at the same time that solve the given task at hand in parallel. Julia by default supports different ways for active <a href="https://docs.julialang.org/en/v1/manual/parallel-computing/">parallel or concurring computing</a>. In this section we follow some of the examples given on <a href="https://github.com/JuliaAcademy/JuliaTutorials">Julia Academy - JuliaTutorials</a>.</p>
-<p>Before we are are going into the details of parallel coding we need to talk about how to measure performance in Julia.</p>
-<h1 id="concept_for_how_to_go_further"><a href="#concept_for_how_to_go_further" class="header-anchor">Concept for how to go further</a></h1>
-<ul>
-<li><p>introduce multithreading and adapt the <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>π</mi></mrow><annotation encoding="application/x-tex">\pi</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">π</span></span></span></span> example</p>
-</li>
-<li><p>introduce multiple processes and adapt the <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>π</mi></mrow><annotation encoding="application/x-tex">\pi</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">π</span></span></span></span> example</p>
-</li>
-<li><p>introduce &quot;cluster&quot; and adapt <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>π</mi></mrow><annotation encoding="application/x-tex">\pi</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">π</span></span></span></span> example</p>
-</li>
-<li><p>bring it to the GPU - show and tell, if the have gpus let them test</p>
-</li>
-<li><p>Repeat what we learned today</p>
-</li>
-<li><p>If on last day Q/A section</p>
-</li>
-</ul>
+<div class="franklin-content"><h1 id="saving_dataframes"><a href="#saving_dataframes" class="header-anchor">Saving dataframes</a></h1>
+<p>Now that we prepared our data source and noticed how much work it was to restore the original data types it would make sense to save the current state of our dataframe. Our data source was provided in the CSV format which has the major disadvantage that Julia needs to elobarately guess the data type of each column, the used decimal symbol and so on. But it is also possible to store this so-called meta data along with the dataframe. <a href="https://juliaio.github.io/HDF5.jl/stable/"><code>Arrow.jl</code></a> provides sufficient metadata to know how each item has to be interpreted &#40;at least for simple types&#41;. Additionally this format is compatible across different computer architectures and can be read with various programming languages &#40;like e.g. Julia, Python and R&#41;.</p>
+<p>To write a dataframe into an arrow-file simply call:</p>
+<pre><code class="julia-repl hljs">using Arrow
+Arrow.write(&quot;survey.arrow&quot;, df)</code></pre>
+<p>Loading the file again is slightly more complicated since we need to transform the loaded Arrow Table back into a DataFrame:</p>
+<pre><code class="julia-repl hljs">df = DataFrame(Arrow.Table(&quot;survey.arrow&quot;))</code></pre>
 <div class="page-foot">
     <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> Gregor Ehrensperger, Peter Kandolf, Jonas Kusch. Last modified: July 04, 2022.
     Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
@@ -133,11 +121,6 @@
     </div> <!-- end of class main-content -->
     </div> <!-- end of class main-content-wrap -->
     </div> <!-- end of class page-wrap-->
-    
-      
-
-
-
     
     
       

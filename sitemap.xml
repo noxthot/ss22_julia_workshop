@@ -14,6 +14,12 @@
     <priority>0.5</priority>
 </url>
 <url>
+    <loc>https://noxthot.github.io/ss22_julia_workshop/pages/datascience/loading_data/index.html</loc>
+    <lastmod>2022-07-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
     <loc>https://noxthot.github.io/ss22_julia_workshop/pages/introduction/worksheet_1/index.html</loc>
     <lastmod>2022-07-04</lastmod>
     <changefreq>monthly</changefreq>
@@ -51,6 +57,12 @@
 </url>
 <url>
     <loc>https://noxthot.github.io/ss22_julia_workshop/index.html</loc>
+    <lastmod>2022-07-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
+    <loc>https://noxthot.github.io/ss22_julia_workshop/pages/datascience/saving_data/index.html</loc>
     <lastmod>2022-07-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
@@ -105,12 +117,6 @@
 </url>
 <url>
     <loc>https://noxthot.github.io/ss22_julia_workshop/pages/hpc/simd/index.html</loc>
-    <lastmod>2022-07-04</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-</url>
-<url>
-    <loc>https://noxthot.github.io/ss22_julia_workshop/pages/datascience/dataframes/index.html</loc>
     <lastmod>2022-07-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
