@@ -296,7 +296,7 @@ julia> @btime estimate_pi(in_unit_circle_threaded4, N);
 
 ### Other pitfalls
 
-There are several other pitfalls that might occur for multithreading, here is an incomplete list:
-- **Oversubscription**: we can overdo it with threading. For example if we multithread something that uses a BLAS routine. This can results in the scenario, that inside each thread something is trying to run on multiple threads. As a result, they might get in the way of each other and the overall performance is reduced, depending on the capacities of we are working on.
-- [**False sharing**](https://en.wikipedia.org/wiki/False_sharing): The latency of the different layers of memory inside a CPU vary and also the way a core on a CPU can access it. Usually, L3 is shared by all cores but not L2 and L1. This can result in *false* sharing and reduce the performance if one CPU access the data from a cache of another CPU. 
+There are several other pitfalls that might occur with multithreading, here is an incomplete list:
+- **Oversubscription**: we can overdo it with threading. For example if we multithread an algorithm that uses a BLAS routine, it can result in the scenario, that inside each thread a subroutine is trying to run on multiple threads. Thus, they might partially block each other and the overall performance is reduced, depending on the capacities we are working on.
+- [**False sharing**](https://en.wikipedia.org/wiki/False_sharing): The latency of the different layers of memory inside a CPU vary and also the way a core on a CPU can access it. Usually, L3 is shared by all cores but not L2 and L1. This can result in *false* sharing and reduce the performance if one CPU accesses the data from a cache of another CPU. 
 
