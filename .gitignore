@@ -2,3 +2,4 @@ __site/
 .DS_Store
 node_modules/
 package-lock.json
+survey_results_public.csv
