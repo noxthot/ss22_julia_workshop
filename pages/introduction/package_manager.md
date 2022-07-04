@@ -13,7 +13,7 @@ Now, everytime you open Julia, you can type
 ```julia-repl
 julia> using LinearAlgebra
 ```
-which let's you use all linear algebra functionalities of Julia. We will discuss details of this specific package later. In the case you wish to remove this package you can open the package manager and type
+which adds various linear algebra related functionalities to your session. We will discuss details of this specific package later. In the case you wish to remove this package you can open the package manager and type
 ```julia-repl
 (@v1.7) pkg> rm LinearAlgebra
 ```
