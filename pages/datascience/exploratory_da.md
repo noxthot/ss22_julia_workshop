@@ -12,34 +12,11 @@
 In most data science projects *exploratory data analysis* (EDA) is an essential first step. The primary aim is to analyse a given data set to summarize its main characteristics. Therefore EDA often uses data visualization methods and statistical methods.
 
 In this section we will continue to work with the Stack Overflow survey data set as shown in the [previous section](./pages/datascience/dataframes/). To summarize the necessary steps to start with this section, see the code below:
-First of all you need to add and load the package:
-```julia-repl
-julia> using CSV, DataFrames
+```julia
+using CSV, DataFrames
 
-julia> selcols = ["Age", "Country", "ConvertedCompYearly", "DevType", "Employment", "Ethnicity", "Gender", "OrgSize", "YearsCode"]
-9-element Vector{String}:
- "Age"
- "Country"
- "ConvertedCompYearly"
- "DevType"
- "Employment"
- "Ethnicity"
- "Gender"
- "OrgSize"
- "YearsCode"
-
-julia> df = CSV.read("survey_results_public.csv", DataFrame; missingstring="NA", select=selcols)
-83439×9 DataFrame
-   Row │ Employment                         Country                            YearsCode  DevType                          ⋯
-       │ String?                            String                             String31?  String?                          ⋯
-───────┼────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-     1 │ Independent contractor, freelanc…  Slovakia                           missing    Developer, mobile                ⋯
-     2 │ Student, full-time                 Netherlands                        7          missing
-     3 │ Student, full-time                 Russian Federation                 missing    missing
-   ⋮   │                 ⋮                                  ⋮                      ⋮                      ⋮                ⋱
- 83438 │ Employed full-time                 Canada                             5          Developer, back-end
- 83439 │ Employed full-time                 Brazil                             14         Developer, front-end;Developer,  ⋯
-                                                                                            6 columns and 83434 rows omitted
+selcols = ["Age", "Country", "ConvertedCompYearly", "DevType", "Employment", "Ethnicity", "Gender", "OrgSize", "YearsCode"]
+df = CSV.read("survey_results_public.csv", DataFrame; missingstring="NA", select=selcols)
 ```
 
 ## Data Wrangling
