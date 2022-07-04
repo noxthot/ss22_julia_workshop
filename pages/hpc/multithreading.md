@@ -268,13 +268,35 @@ julia> println(
 3.797358979307219e-5
 
 julia> @btime estimate_pi(in_unit_circle_threaded4, N)
-  ???.??? ms (22 allocations: 2.05 KiB) -> do with same laptop
+  46.866 ms (22 allocations: 2.06 KiB)
 3.141406
 ```
 }
 }
 
-### Be aware of oversubscription
+### Final results
 
-We should mention that you can overdo it with threading. For example if multithread something that uses a BLAS routine. Now inside each thread something is trying to run on multiple threads. As a result, they might get into the way of each other and the overall performance is reduced.  
+For comparison, here are our final results for 4 computational threads:
+```julia-repl
+julia> @btime estimate_pi(in_unit_circle, N);
+  235.669 ms (0 allocations: 0 bytes)
+
+julia> @btime estimate_pi(in_unit_circle_threaded1, N);
+  1.936 s (78536523 allocations: 1.17 GiB)
+
+julia> @btime estimate_pi(in_unit_circle_threaded2, N);
+  897.725 ms (22 allocations: 1.97 KiB)
+
+julia> @btime estimate_pi(in_unit_circle_threaded3, N);
+  264.300 ms (22 allocations: 2.05 KiB)
+
+julia> @btime estimate_pi(in_unit_circle_threaded4, N);
+  46.866 ms (22 allocations: 2.06 KiB)
+```
+
+### Other pitfalls
+
+There are several other pitfalls that might occur for multithreading, here is an incomplete list:
+- **Oversubscription**: we can overdo it with threading. For example if we multithread something that uses a BLAS routine. This can results in the scenario, that inside each thread something is trying to run on multiple threads. As a result, they might get in the way of each other and the overall performance is reduced, depending on the capacities of we are working on.
+- [**False sharing**](https://en.wikipedia.org/wiki/False_sharing): The latency of the different layers of memory inside a CPU vary and also the way a core on a CPU can access it. Usually, L3 is shared by all cores but not L2 and L1. This can result in *false* sharing and reduce the performance if one CPU access the data from a cache of another CPU. 
 
