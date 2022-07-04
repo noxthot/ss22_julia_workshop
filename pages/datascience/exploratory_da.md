@@ -217,6 +217,8 @@ In the last section we used methods from `DataFrames.jl` and `Statistics.jl` to 
 ### Show survey participants by country
 In a previous exercise we already used `countmap` to get a dictionary which summarizes the number of participants per country. Fortunately `StatsPlots` is able to visualize this dictionary immediately. We will also switch the backend to `plotlyjs`, so we are able to interact with the graph and get more detailed information about the height of the bars by moving our mouse cursor over the top of the bars and looking at the hover label.
 ```julia-repl
+julia > using StatsBase
+
 julia> using StatsPlots; plotlyjs()
 Plots.PlotlyJSBackend()
 
