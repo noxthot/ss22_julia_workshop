@@ -116,6 +116,10 @@
 
 selcols = [<span class="hljs-string">&quot;Age&quot;</span>, <span class="hljs-string">&quot;Country&quot;</span>, <span class="hljs-string">&quot;ConvertedCompYearly&quot;</span>, <span class="hljs-string">&quot;DevType&quot;</span>, <span class="hljs-string">&quot;Employment&quot;</span>, <span class="hljs-string">&quot;Ethnicity&quot;</span>, <span class="hljs-string">&quot;Gender&quot;</span>, <span class="hljs-string">&quot;OrgSize&quot;</span>, <span class="hljs-string">&quot;YearsCode&quot;</span>]
 df = CSV.read(<span class="hljs-string">&quot;survey_results_public.csv&quot;</span>, DataFrame; missingstring=<span class="hljs-string">&quot;NA&quot;</span>, select=selcols)</code></pre>
+<p>Alternatively you can also load the arrow-file which we created in the previous section:</p>
+<pre><code class="julia hljs"><span class="hljs-keyword">using</span> Arrow, DataFrames
+
+df = DataFrame(Arrow.Table(<span class="hljs-string">&quot;survey.arrow&quot;</span>))</code></pre>
 <h2 id="data_wrangling"><a href="#data_wrangling" class="header-anchor">Data Wrangling</a></h2>
 <p>In a first step, let us get a descriptive overview over the data by having a applying <code>describe&#40;&#41;</code>.  Also note the additional arguments that are given to <code>show&#40;&#41;</code>for displaying all rows and columns.</p>
 <pre><code class="julia hljs">julia&gt; show(describe(df), allrows=<span class="hljs-literal">true</span>, allcols=<span class="hljs-literal">true</span>)
@@ -265,9 +269,9 @@ df[!, :EuroCompYearly] = <span class="hljs-number">0.96</span> * df[!, :Converte
   &quot;Austria&quot;     =&gt; 437
 
 <span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@df</span> df bar(countmap(:Country), legend=<span class="hljs-literal">false</span>)</span></code></pre>
-<div id="fdpgee" style=""></div>
+<div id="fdpmrw" style=""></div>
 <script>
-graphDiv = document.getElementById("fdpgee");
+graphDiv = document.getElementById("fdpmrw");
 plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_explorative_da_country.json');
 </script>
 
@@ -286,9 +290,9 @@ plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datas
 </ul>
 <p>The filled area of the boxes correspond to the 25&#37; to 75&#37; quantiles of the data, so 50&#37; of the data samples live within the filled area. The whiskers capture 1.5 times the interquartile range &#40;<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1.5</mn><mo>⋅</mo><mo stretchy="false">(</mo><msub><mrow><mi mathvariant="normal">IQR</mi><mo>⁡</mo></mrow><mn>75</mn></msub><mo>−</mo><msub><mrow><mi mathvariant="normal">IQR</mi><mo>⁡</mo></mrow><mn>25</mn></msub></mrow><annotation encoding="application/x-tex">1.5 \cdot (\operatorname{IQR}_{75} - \operatorname{IQR}_{25}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1.5</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mop"><span class="mop"><span class="mord mathrm">IQR</span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.207em;"><span style="top:-2.4559em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">75</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2441em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">−</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mop"><span class="mop"><span class="mord mathrm">IQR</span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.207em;"><span style="top:-2.4559em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">25</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2441em;"><span></span></span></span></span></span></span></span></span></span>&#41; and every data point that lies outside the whiskers is considered to be an outlier. The horizontal line inside the filled area corresponds to the median of the subset.</p>
 <p>Please note that we create the figure using plotly, so the plot is interactive and you are able to zoom in and get additional information by pointing at certain details.</p>
-<div id="fdperl" style=""></div>
+<div id="fdphtk" style=""></div>
 <script>
-graphDiv = document.getElementById("fdperl");
+graphDiv = document.getElementById("fdphtk");
 plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_explorative_da_salary_1.json');
 </script>
 
@@ -296,9 +300,9 @@ plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datas
 <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@df</span> df boxplot(:Employment, :EuroCompYearly, xrotation=<span class="hljs-number">30</span>, size=(<span class="hljs-number">500</span>, <span class="hljs-number">900</span>), legend=<span class="hljs-literal">false</span>)
 </span>
 <span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@df</span> df dotplot!(:Employment, :EuroCompYearly, legend=<span class="hljs-literal">false</span>)</span></code></pre>
-<div id="fdpufc" style=""></div>
+<div id="fdpqol" style=""></div>
 <script>
-graphDiv = document.getElementById("fdpufc");
+graphDiv = document.getElementById("fdpqol");
 plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_explorative_da_salary_2.json');
 </script>
 
