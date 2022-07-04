@@ -19,6 +19,13 @@ selcols = ["Age", "Country", "ConvertedCompYearly", "DevType", "Employment", "Et
 df = CSV.read("survey_results_public.csv", DataFrame; missingstring="NA", select=selcols)
 ```
 
+Alternatively you can also load the arrow-file which we created in the previous section:
+```julia
+using Arrow, DataFrames
+
+df = DataFrame(Arrow.Table("survey.arrow"))
+```
+
 ## Data Wrangling
 In a first step, let us get a descriptive overview over the data by having a applying `describe()`. 
 Also note the additional arguments that are given to `show()`for displaying all rows and columns.
