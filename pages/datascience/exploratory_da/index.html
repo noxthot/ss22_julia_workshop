@@ -107,7 +107,7 @@
 
 <!-- Content appended here (in class franklin-content) -->
 <div class="franklin-content"><h1 id="exploratory_data_analysis"><a href="#exploratory_data_analysis" class="header-anchor">Exploratory Data Analysis</a></h1>
-<div class="franklin-toc"><ol><li><a href="#introduction">Introduction</a></li><li><a href="#data_wrangling">Data Wrangling</a></li><li><a href="#case_studies">Case Studies</a></li><li><a href="#data_visualisation">Data Visualisation</a><ol><li><a href="#show_survey_participants_by_country">Show survey participants by country</a></li><li><a href="#salary_in_comparison_to_employment_status">Salary in comparison to employment status</a></li></ol></li></ol></div>
+<div class="franklin-toc"><ol><li><a href="#introduction">Introduction</a></li><li><a href="#data_wrangling">Data Wrangling</a></li><li><a href="#case_studies">Case Studies</a></li><li><a href="#data_visualisation">Data Visualisation</a><ol><li><a href="#barplot_show_survey_participants_by_country">Barplot: Show survey participants by country</a></li><li><a href="#boxplot_salary_in_comparison_to_employment_status">Boxplot: Salary in comparison to employment status</a></li></ol></li></ol></div>
 <h2 id="introduction"><a href="#introduction" class="header-anchor">Introduction</a></h2>
 <p>In most data science projects <em>exploratory data analysis</em> &#40;EDA&#41; is an essential first step. The primary aim is to analyse a given data set to summarize its main characteristics. Therefore EDA often uses data visualization methods and statistical methods.</p>
 <p>In this section we will continue to work with the Stack Overflow survey data set as shown in the <a href="./pages/datascience/dataframes/">previous section</a>. To summarize the necessary steps to start with this section, see the code below:</p>
@@ -250,7 +250,7 @@ df[!, :EuroCompYearly] = <span class="hljs-number">0.96</span> * df[!, :Converte
 <h2 id="data_visualisation"><a href="#data_visualisation" class="header-anchor">Data Visualisation</a></h2>
 <p>In this workshop we have already used <code>Plots.jl</code> and <code>StatsPlots.jl</code> a couple of times to visualize functions and data. It may come to a surprise that <code>Plots.jl</code> and <code>StatsPlots.jl</code> are actually no plotting packages. They are rather plotting metapackages which provide an interface over many different plotting libraries. The specific plotting library that is actually being used to create the plots is referred to as the <a href="https://docs.juliaplots.org/stable/tutorial/#plotting-backends"><em>backend</em></a> and it is easy to switch and use different plotting libraries. So far we always used the default backend <code>GR</code> which is fast, but lacks interactivity. Depending on the requirements you might like to try <code>PlotlyJS</code> for interactivity or <code>PyPlot</code> because you like the functionality of Matplotlib &#40;known from Python&#41;. To a get a good overview, have a look at the <a href="https://docs.juliaplots.org/stable/backends/#backends">Plots.jl documentation</a>.</p>
 <p>In the last section we used methods from <code>DataFrames.jl</code> and <code>Statistics.jl</code> to do some case studies. Now we will supplement the studies with visualisations.</p>
-<h3 id="show_survey_participants_by_country"><a href="#show_survey_participants_by_country" class="header-anchor">Show survey participants by country</a></h3>
+<h3 id="barplot_show_survey_participants_by_country"><a href="#barplot_show_survey_participants_by_country" class="header-anchor">Barplot: Show survey participants by country</a></h3>
 <p>In a previous exercise we already used <code>countmap</code> to get a dictionary which summarizes the number of participants per country. Fortunately <code>StatsPlots</code> is able to visualize this dictionary immediately. We will also switch the backend to <code>plotlyjs</code>, so we are able to interact with the graph and get more detailed information about the height of the bars by moving our mouse cursor over the top of the bars and looking at the hover label.</p>
 <pre><code class="julia-repl hljs">julia &gt; using StatsBase
 
@@ -264,13 +264,51 @@ df[!, :EuroCompYearly] = <span class="hljs-number">0.96</span> * df[!, :Converte
   &quot;Austria&quot;     =&gt; 437
 
 <span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@df</span> df bar(countmap(:Country), legend=<span class="hljs-literal">false</span>)</span></code></pre>
-<div id="fdpsit" style=""></div>
+<div id="fdplfw" style=""></div>
 <script>
-graphDiv = document.getElementById("fdpsit");
+graphDiv = document.getElementById("fdplfw");
 plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_explorative_da_country.json');
 </script>
 
-<h3 id="salary_in_comparison_to_employment_status"><a href="#salary_in_comparison_to_employment_status" class="header-anchor">Salary in comparison to employment status</a></h3>
+<h3 id="boxplot_salary_in_comparison_to_employment_status"><a href="#boxplot_salary_in_comparison_to_employment_status" class="header-anchor">Boxplot: Salary in comparison to employment status</a></h3>
+<p>Boxplots are a nice tool to visualize some distributional characteristics &#40;locality, spread, skewness&#41; of a given data sample. Dividing the data set into different groups allows an easy comparison.</p>
+<p>In the following plot we compare the salary of different employment states:</p>
+<pre><code class="julia-repl hljs">julia @df df boxplot(:Employment, :EuroCompYearly, xrotation=30, size=(500, 900), legend=false)</code></pre>
+<p>We also used some optional arguments:</p>
+<ul>
+<li><p><code>xrotation&#61;30</code> such that <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">x</span></span></span></span>-axis labels do not overlap</p>
+</li>
+<li><p><code>size&#61;&#40;500, 900&#41;</code> such that the rotated labels are not cut off</p>
+</li>
+<li><p><code>legend&#61;false</code> to disable the legend</p>
+</li>
+</ul>
+<p>The filled area of the boxes correspond to the 25&#37; to 75&#37; quantiles of the data, so 50&#37; of the data samples live within the filled area. The whiskers capture 1.5 times the interquartile range &#40;<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1.5</mn><mo>⋅</mo><mo stretchy="false">(</mo><msub><mrow><mi mathvariant="normal">IQR</mi><mo>⁡</mo></mrow><mn>75</mn></msub><mo>−</mo><msub><mrow><mi mathvariant="normal">IQR</mi><mo>⁡</mo></mrow><mn>25</mn></msub></mrow><annotation encoding="application/x-tex">1.5 \cdot (\operatorname{IQR}_{75} - \operatorname{IQR}_{25}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1.5</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mop"><span class="mop"><span class="mord mathrm">IQR</span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.207em;"><span style="top:-2.4559em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">75</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2441em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">−</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mop"><span class="mop"><span class="mord mathrm">IQR</span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.207em;"><span style="top:-2.4559em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">25</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2441em;"><span></span></span></span></span></span></span></span></span></span>&#41; and every data point that lies outside the whiskers is considered to be an outlier. The horizontal line inside the filled area corresponds to the median of the subset.</p>
+<p>Please note that we create the figure using plotly, so the plot is interactive and you are able to zoom in and get additional information by pointing at certain details.</p>
+<div id="fdpgga" style=""></div>
+<script>
+graphDiv = document.getElementById("fdpgga");
+plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_explorative_da_salary_1.json');
+</script>
+
+<p>Since visualizations usually condense information up to some extend it is always a good idea to look at the data from different perspectives. Adding e.g. a dots plot where every sample is visualized by a dot shows that two of the groups have only very little sample sizes.</p>
+<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@df</span> df boxplot(:Employment, :EuroCompYearly, xrotation=<span class="hljs-number">30</span>, size=(<span class="hljs-number">500</span>, <span class="hljs-number">900</span>), legend=<span class="hljs-literal">false</span>)
+</span>
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@df</span> df dotplot!(:Employment, :EuroCompYearly, legend=<span class="hljs-literal">false</span>)</span></code></pre>
+<div id="fdpyte" style=""></div>
+<script>
+graphDiv = document.getElementById("fdpyte");
+plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_explorative_da_salary_2.json');
+</script>
+
+<p>Combining the information of the two plots we obviously have too little data to judge about the empty and ~I prefer not to say~ category. Also it appears that the average salaries of freelancers are a lot higher than the salaries of employees. Also the 25&#37; quantile of freelancers is comparable to the median salary of full-time employees.</p>
+<button type="button" class="collapsible" style="background-color:#b5ddff"> Exercise </button><div class="collapsiblecontent">  The dataframe has a couple of interesting columns &#40;see <code>names&#40;df&#41;</code>&#41;. Have a look at the <a href="https://github.com/JuliaPlots/StatsPlots.jl">StatsPlots.jl documentation</a>, get creative and generate some nice visualisations. </div>
+<p>Of course there are many different plot types you can choose from. Have a look at <a href="https://docs.juliaplots.org/stable/gallery/plotlyjs/">Plots.jl gallery</a> to get an overview. With <a href="https://github.com/queryverse/DataVoyager.jl">DataVoyager.jl</a> there is also a nice package that allows to interactively explore your data by loading a given data frame into the Voyager data exploration tool:</p>
+<pre><code class="julia-repl hljs">using DataVoyager
+
+v = Voyager(df)</code></pre>
+<p>Here is a screenshot that shows this tool in action: <img src="/ss22_julia_workshop/assets/pages/datascience/datavoyager.png" alt="Data Voyager"></p>
+<button type="button" class="collapsible" style="background-color:#b5ddff"> Exercise </button><div class="collapsiblecontent">  Explore our dataframe with <code>DataVoyager.jl</code>. </div>
 <div class="page-foot">
     <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> Gregor Ehrensperger, Peter Kandolf, Jonas Kusch. Last modified: July 04, 2022.
     Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
