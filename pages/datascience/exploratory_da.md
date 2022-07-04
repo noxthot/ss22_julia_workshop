@@ -276,9 +276,9 @@ Combining the information of the two plots we obviously have too little data to 
 
 Of course there are many different plot types you can choose from. Have a look at [Plots.jl gallery](https://docs.juliaplots.org/stable/gallery/plotlyjs/) to get an overview. With [DataVoyager.jl](https://github.com/queryverse/DataVoyager.jl) there is also a nice package that allows to interactively explore your data by loading a given data frame into the Voyager data exploration tool:
 ```julia-repl
-using DataVoyager
+julia> using DataVoyager
 
-v = Voyager(df)
+julia> v = Voyager(df)
 ```
 
 Here is a screenshot that shows this tool in action:
