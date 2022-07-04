@@ -214,7 +214,7 @@ In this workshop we have already used `Plots.jl` and `StatsPlots.jl` a couple of
 
 In the last section we used methods from `DataFrames.jl` and `Statistics.jl` to do some case studies. Now we will supplement the studies with visualisations.
 
-### Show survey participants by country
+### Barplot: Show survey participants by country
 In a previous exercise we already used `countmap` to get a dictionary which summarizes the number of participants per country. Fortunately `StatsPlots` is able to visualize this dictionary immediately. We will also switch the backend to `plotlyjs`, so we are able to interact with the graph and get more detailed information about the height of the bars by moving our mouse cursor over the top of the bars and looking at the hover label.
 ```julia-repl
 julia > using StatsBase
@@ -233,5 +233,48 @@ julia> @df df bar(countmap(:Country), legend=false)
 
 \figalt{Barplot showing participants per country}{/ss22_julia_workshop/assets/pages/datascience/plot_explorative_da_country.json}
 
-### Salary in comparison to employment status
+### Boxplot: Salary in comparison to employment status
 
+Boxplots are a nice tool to visualize some distributional characteristics (locality, spread, skewness) of a given data sample. Dividing the data set into different groups allows an easy comparison.
+
+In the following plot we compare the salary of different employment states:
+```julia-repl
+julia @df df boxplot(:Employment, :EuroCompYearly, xrotation=30, size=(500, 900), legend=false)
+```
+
+We also used some optional arguments:
+- `xrotation=30` such that $x$-axis labels do not overlap
+- `size=(500, 900)` such that the rotated labels are not cut off
+- `legend=false` to disable the legend
+
+The filled area of the boxes correspond to the 25% to 75% quantiles of the data, so 50% of the data samples live within the filled area. The whiskers capture 1.5 times the interquartile range ($1.5 \cdot (\operatorname{IQR}_{75} - \operatorname{IQR}_{25}$) and every data point that lies outside the whiskers is considered to be an outlier. The horizontal line inside the filled area corresponds to the median of the subset.
+
+Please note that we create the figure using plotly, so the plot is interactive and you are able to zoom in and get additional information by pointing at certain details.
+
+\figalt{Boxplot visualizing salaries between different employment states}{/ss22_julia_workshop/assets/pages/datascience/plot_explorative_da_salary_1.json}
+
+Since visualizations usually condense information up to some extend it is always a good idea to look at the data from different perspectives. Adding e.g. a dots plot where every sample is visualized by a dot shows that two of the groups have only very little sample sizes.
+
+```julia-repl
+julia> @df df boxplot(:Employment, :EuroCompYearly, xrotation=30, size=(500, 900), legend=false)
+
+julia> @df df dotplot!(:Employment, :EuroCompYearly, legend=false)
+```
+
+\figalt{Boxplot plus Dotsplot}{/ss22_julia_workshop/assets/pages/datascience/plot_explorative_da_salary_2.json}
+
+Combining the information of the two plots we obviously have too little data to judge about the empty and ~I prefer not to say~ category. Also it appears that the average salaries of freelancers are a lot higher than the salaries of employees. Also the 25% quantile of freelancers is comparable to the median salary of full-time employees.
+
+\exercise{The dataframe has a couple of interesting columns (see `names(df)`). Have a look at the [StatsPlots.jl documentation](https://github.com/JuliaPlots/StatsPlots.jl), get creative and generate some nice visualisations.}
+
+Of course there are many different plot types you can choose from. Have a look at [Plots.jl gallery](https://docs.juliaplots.org/stable/gallery/plotlyjs/) to get an overview. With [DataVoyager.jl](https://github.com/queryverse/DataVoyager.jl) there is also a nice package that allows to interactively explore your data by loading a given data frame into the Voyager data exploration tool:
+```julia-repl
+using DataVoyager
+
+v = Voyager(df)
+```
+
+Here is a screenshot that shows this tool in action:
+\figalt{Data Voyager}{/assets/pages/datascience/datavoyager.png}
+
+\exercise{Explore our dataframe with `DataVoyager.jl`.}
