@@ -111,7 +111,7 @@
 <pre><code class="julia-repl hljs"><span class=hljs-metap>(@v1.7) pkg&gt;</span> add LinearAlgebra</code></pre>
 <p>Now, everytime you open Julia, you can type</p>
 <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-keyword">using</span> LinearAlgebra</span></code></pre>
-<p>which let&#39;s you use all linear algebra functionalities of Julia. We will discuss details of this specific package later. In the case you wish to remove this package you can open the package manager and type</p>
+<p>which adds various linear algebra related functionalities to your session. We will discuss details of this specific package later. In the case you wish to remove this package you can open the package manager and type</p>
 <pre><code class="julia-repl hljs"><span class=hljs-metap>(@v1.7) pkg&gt;</span> rm LinearAlgebra</code></pre>
 <p>Moreover, you can update all packages that you have added by typing</p>
 <pre><code class="julia-repl hljs"><span class=hljs-metap>(@v1.7) pkg&gt;</span> update</code></pre>
@@ -137,7 +137,7 @@
 <pre><code class="julia hljs"><span class="hljs-keyword">using</span> LinearAlgebra
 <span class="hljs-comment"># 1.</span>
 N = <span class="hljs-number">5</span>
-A = zeros(N,N)
+A = zeros(N, N)
 
 <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-number">1</span>:N
     <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-number">1</span>:N
