@@ -42,7 +42,7 @@ In order to have multiple threads available you need to start Julia with the `--
 > julia --threads auto
 julia> Threads.nthreads()
 16
-juliy> Threads.threadid()
+julia> Threads.threadid()
 1
 ```
 
