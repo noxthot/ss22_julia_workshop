@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  
+   <link rel="stylesheet" href="/ss22_julia_workshop/libs/katex/katex.min.css">
+     
    <link rel="stylesheet" href="/ss22_julia_workshop/libs/highlight/github.min.css">
    
     <script src="/ss22_julia_workshop/libs/clipboard.min.js"></script>
@@ -119,6 +120,28 @@
 </ul>
 <p>In this section we will quickly glimpse into clustering with an algorithm called <em>Kmeans</em> and into dimensionality reduction by applying the <em>Principal Component Analysis</em>.</p>
 <h2 id="clustering_k_means"><a href="#clustering_k_means" class="header-anchor">Clustering &#40;K Means&#41;</a></h2>
+<p>The K means algorithm is one of the most popular clustering methods. For a given set of \(n\) observations \((\textbf{x}_1 \dots \textbf{x}_n)\) the algorithm strives to partion the observations into \(k\) sets \((S_1, \ldots, S_k)\) such that the inner cluster variance is minimized. Formally the goal is to find </p>
+\[
+\operatorname{argmin}_S \sum_{i=1}^k \sum_{\textbf{x} \in S_i} \|\textbf{x} - \mu_i\|^2,
+\]
+<p>where \(\textbf{\mu}_i\) denotes the mean of the set \(S_i\).</p>
+<p>The naive algorithm works iteratively for a given \(k\):</p>
+<ol>
+<li><p>Randomly initalize \(k\) points \(\mu_1, \dots, \mu_k\). We also call those points <em>cluster centers</em>.</p>
+</li>
+<li><p>Assign every point to the nearest cluster center \(\mu_i\). These points define the sets \(S_i\).</p>
+</li>
+<li><p>Calculate the mean within each set \(S_i\) and replace the previous cluster centers.</p>
+</li>
+<li><p>Repeat until the cluster centers are stable &#40;with some tolerance&#41;.</p>
+</li>
+</ol>
+<p>The following animation illustrates this process: 
+<figure style="text-align:center;">
+<img src="/ss22_julia_workshop/assets/pages/datascience/K-means_convergence.gif" style="padding:0; " alt=" K means convergence. <br>Original source: https://commons.wikimedia.org/wiki/File:K-means_convergence.gif"/>
+<figcaption> K means convergence. <br>Original source: https://commons.wikimedia.org/wiki/File:K-means_convergence.gif</figcaption>
+</figure>
+</p>
 <h2 id="dimensionality_reduction_principal_component_analysis"><a href="#dimensionality_reduction_principal_component_analysis" class="header-anchor">Dimensionality Reduction &#40;Principal Component Analysis&#41;</a></h2>
 <div class="page-foot">
     <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> Gregor Ehrensperger, Peter Kandolf, Jonas Kusch. Last modified: July 05, 2022.
@@ -129,9 +152,14 @@
     </div> <!-- end of class main-content-wrap -->
     </div> <!-- end of class page-wrap-->
     
-    
-      
+      <script src="/ss22_julia_workshop/libs/katex/katex.min.js"></script>
+<script src="/ss22_julia_workshop/libs/katex/auto-render.min.js"></script>
+<script>renderMathInElement(document.body)</script>
 
+    
+    
+      <script src="/ss22_julia_workshop/libs/highlight/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();hljs.configure({tabReplace: '    '});</script>
 
       <script>
     (function(){
