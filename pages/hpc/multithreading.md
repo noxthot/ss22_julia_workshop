@@ -192,7 +192,7 @@ julia> println(
            estimate_pi(in_unit_circle_threaded2, N) - pi
            )
        )
-0.00017913358979315674in
+0.00017913358979315674
 
 julia> @btime estimate_pi(in_unit_circle_threaded2, N)
   246.722 ms (22 allocations: 2.05 KiB)
