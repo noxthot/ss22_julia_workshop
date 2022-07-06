@@ -1,0 +1,451 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+   <link rel="stylesheet" href="/ss22_julia_workshop/libs/katex/katex.min.css">
+     
+   <link rel="stylesheet" href="/ss22_julia_workshop/libs/highlight/github.min.css">
+   
+    <script src="/ss22_julia_workshop/libs/clipboard.min.js"></script>
+  
+  
+  <script src="/ss22_julia_workshop/libs/plotly-1_58_5.min.js"></script> 
+  <script>
+    // This function is used when calling `\fig{...}` See # Using \fig{...} below
+    const PlotlyJS_json = async (div, url) => {
+      response = await fetch(url); // get file
+      fig = await response.json(); // convert it to json
+      // Make the plot fit the screen responsively. See the documentation of plotly.js. https://plotly.com/javascript/responsive-fluid-layout/
+      if (typeof fig.config === 'undefined') { fig["config"]={} }
+      delete fig.layout.width
+      delete fig.layout.height
+      fig["layout"]["autosize"] = true
+      fig["config"]["autosizable"] = true
+      fig["config"]["responsive"] = true
+
+      // make it easier to scroll throught the website rather than being blocked by a figure.
+      fig.config["scrollZoom"] = false
+
+      // PlotlyJS.savefig by default add the some more attribute to make a static plot.
+      // Disable them to make the website fancier.
+      delete fig.config.staticPlot
+      delete fig.config.displayModeBar
+      delete fig.config.doubleClick
+      delete fig.config.showTips
+
+      Plotly.newPlot(div, fig);
+    };
+  </script>
+  
+  <link rel="stylesheet" href="/ss22_julia_workshop/css/jtd.css">
+<link rel="stylesheet" href="/ss22_julia_workshop/css/extras.css">
+<link rel="icon" href="/ss22_julia_workshop/assets/favicon.ico">
+
+<style>
+  /* #148 wrap long header */
+  .franklin-content a.header-anchor,
+  .franklin-toc li a
+   {
+    word-wrap: break-word;
+    white-space: normal;
+  }
+</style>
+
+   <title>Parallel Computing - Distributed Computing</title>  
+</head>
+<body>                      <!-- closed in foot.html -->
+<div class="page-wrap">   <!-- closed in foot.html -->
+  <!-- SIDE BAR -->
+  <div class="side-bar">
+    <div class="header">
+      <a href="/ss22_julia_workshop/" class="title">
+        Julia
+      </a>
+    </div>
+    <label for="show-menu" class="show-menu">MENU</label>
+    <input type="checkbox" id="show-menu" role="button">
+    <div class="menu" id="side-menu">
+      <ul class="menu-list">
+        <li class="menu-list-item "><a href="/ss22_julia_workshop/" class="menu-list-link ">Start</a>
+        <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/" class="menu-list-link ">Introduction</a>
+          <ul class="menu-list-child-list ">
+            <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/basis_datatypes_and_operations" class="menu-list-link">Basic Datatypes and Operations</a>
+            <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/matrix_vectors" class="menu-list-link">Matrix and Vector Operations</a>
+            <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/conditional_evaluations" class="menu-list-link">Conditional evaluations</a>
+            <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/loops" class="menu-list-link">Loops</a>
+            <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/functions" class="menu-list-link">Functions</a>
+            <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/worksheet_1" class="menu-list-link">Worksheet 1</a>
+            <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/worksheet_2" class="menu-list-link">Worksheet 2</a>
+          </ul>
+        <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/datascience/" class="menu-list-link ">Data Science</a>
+          <ul class="menu-list-child-list ">
+            <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/datascience/loading_data" class="menu-list-link">Loading data</a>
+            <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/datascience/saving_data" class="menu-list-link">Saving data</a>
+            <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/datascience/exploratory_da" class="menu-list-link">Exploratory Data Analysis</a>
+            <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/datascience/unsupervised_learning" class="menu-list-link">Unsupervised Learning</a>
+          </ul>
+        <li class="menu-list-item active"><a href="/ss22_julia_workshop/pages/hpc/" class="menu-list-link active">Parallel computing</a>
+          <ul class="menu-list-child-list ">
+            <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/hpc/performance" class="menu-list-link">Measuring performance</a>
+            <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/hpc/simd" class="menu-list-link">Single Instruction Multiple Data</a>
+            <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/hpc/pi" class="menu-list-link">&pi; example</a>
+            <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/hpc/multithreading" class="menu-list-link">Multithreading</a>
+            <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/hpc/distributed" class="menu-list-link">Distributed computing</a>
+          </ul>
+      </ul>
+    </div>
+    <div class="footer">
+      This is <em>Just the docs</em>, adapted from the <a href="https://github.com/pmarsceill/just-the-docs" target="_blank">Jekyll theme</a>.
+    </div>
+  </div>
+  <!-- CONTENT -->
+  <div class="main-content-wrap"> <!-- closed in foot.html -->
+    <div class="main-content">    <!-- closed in foot.html -->
+      <div class="main-header">
+        SS22 Julia Workshop Obergurgl
+      </div>
+
+
+
+<!-- Content appended here (in class franklin-content) -->
+<div class="franklin-content"><h1 id="distributed_computing_in_julia"><a href="#distributed_computing_in_julia" class="header-anchor">Distributed computing in Julia</a></h1>
+<p>In Julia we talk about distributed computing when we run Julia processes with separate memory spaces, Julia does not distinguish between processes on the same or on multiple computers. The main idea is to have remote execution. </p>
+<p>Before we start with distributed computing we introduce tasks.</p>
+<h2 id="tasks"><a href="#tasks" class="header-anchor">Tasks</a></h2>
+<p>Tasks are part of the <a href="https://docs.julialang.org/en/v1/manual/asynchronous-programming/">asynchronous programming</a> concepts implemented in Julia. We can think of a task as a unit of work with a create-start-run-finish lifecycle. This means, a task can be created and scheduled independently. Tasks are the basic building block for performing distributed computing in Julia. This concept of tasks is actually rather similar to how High Performance Computing &#40;HPC&#41; systems.</p>
+<p>To create a task we can use the <code>@task</code> macro, that will return us a <em>runnable</em> but will not execute it. We use the <code>schedule</code> command to actually execute it. </p>
+<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> t = <span class="hljs-meta">@task</span> <span class="hljs-keyword">begin</span>; sleep(<span class="hljs-number">5</span>); println(<span class="hljs-string">&quot;done&quot;</span>); <span class="hljs-keyword">end</span>
+</span>Task (runnable) @0x00007fb859f336b0
+
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> schedule(t)
+</span>Task (runnable) @0x00007fb859f336b0
+
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> done
+</span><span class="hljs-meta prompt_">julia&gt;</span></code></pre>
+<p>The main idea is, that a task can be interrupted and the order of tasks is not set. This means if you have multiple tasks the order of execution is not guarantied. This also means, that the main Julia process is not blocked by a task but works independently. If you want to wait for the task to finish before the calling task continues, you can do this with <code>wait&#40;t&#41;</code>.</p>
+<p>Most of the time you create a task and schedule it right away. This can be done by the <code>@async</code> macro. It is basically equivalent to <code>schedule&#40;@task x&#41;</code>. You can also catch the task &#40;and therefore the state&#41; with <code>t &#61; @async x</code>. If you want to wait for several tasks you can use the <code>@sync</code> macro. It will wait until all enclosed tasks spanned by <code>@async</code>, <code>@spawn</code>, <code>@spawnat</code>, and <code>@distributed</code> are completed. </p>
+<p>A task can also return a value, you can get the value with <code>fetch&#40;t&#41;</code> or with <code>take&#33;&#40;t&#41;</code>,  which will remove the value as well. </p>
+<button type="button" class="collapsible" style="background-color:#caffa5"> Example </button><div class="collapsiblecontent">  The following examples are taken from <a href="https://juliaacademy.com/p/parallel-computing">Parallel Computing Class on JuliaAcademy.com</a>, section <em>Tasks</em>:</p>
+<ol>
+<li><p>How long will this take?</p>
+</li>
+</ol>
+<pre><code class="julia hljs"><span class="hljs-meta">@time</span> <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-number">1</span>:<span class="hljs-number">10</span>
+          sleep(<span class="hljs-number">1</span>)
+      <span class="hljs-keyword">end</span></code></pre>
+<ol start="2">
+<li><p>How long will this take?</p>
+</li>
+</ol>
+<pre><code class="julia hljs"><span class="hljs-meta">@time</span> <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-number">1</span>:<span class="hljs-number">10</span>
+          <span class="hljs-meta">@async</span> sleep(<span class="hljs-number">1</span>)
+      <span class="hljs-keyword">end</span></code></pre>
+<ol start="3">
+<li><p>How long will this take?</p>
+</li>
+</ol>
+<pre><code class="julia hljs"><span class="hljs-meta">@time</span> <span class="hljs-meta">@sync</span> <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-number">1</span>:<span class="hljs-number">10</span>
+                sleep(<span class="hljs-number">1</span>)
+            <span class="hljs-keyword">end</span></code></pre>
+<p></div>
+<h3 id="the_pi_example_with_tasks"><a href="#the_pi_example_with_tasks" class="header-anchor">The <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>π</mi></mrow><annotation encoding="application/x-tex">\pi</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">π</span></span></span></span> example with tasks</a></h3>
+<p>Now we apply the task knowledge to our example for computing <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>π</mi></mrow><annotation encoding="application/x-tex">\pi</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">π</span></span></span></span>.</p>
+<button type="button" class="collapsible" style="background-color:#b5ddff"> Exercise </button><div class="collapsiblecontent">  Define a new function <code>in_unit_circle_task</code> with the <code>@async</code> and <code>@sync</code> macros. Split up <code>N</code> into 4 parts, same as for threads, and schedule the tasks in a loop. Define a vector of tasks to catch the results inside the loop. <div class="solution"> Solution </div><div class="solutioncollapsible">  </p>
+<pre><code class="julia hljs"><span class="hljs-keyword">function</span> in_unit_circle_task(N::<span class="hljs-built_in">Int64</span>)
+    n = <span class="hljs-number">4</span>
+    len, rem = divrem(N, n)
+    t = <span class="hljs-built_in">Vector</span>{<span class="hljs-built_in">Task</span>}(<span class="hljs-literal">undef</span>, n)
+    
+    <span class="hljs-meta">@sync</span> <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-number">1</span>:<span class="hljs-number">4</span>
+        t[i] = <span class="hljs-meta">@async</span> in_unit_circle(len)
+    <span class="hljs-keyword">end</span>
+    
+    M = sum(map((x) -&gt; fetch(t[x]), <span class="hljs-number">1</span>:<span class="hljs-number">4</span>))
+    
+    <span class="hljs-keyword">return</span> M
+<span class="hljs-keyword">end</span></code></pre>
+<p>and we test it</p>
+<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> println(
+           abs(
+           estimate_pi(in_unit_circle_task, N) - <span class="hljs-literal">pi</span>
+           )
+       )
+</span>5.813589793124407e-6
+
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@btime</span> estimate_pi(in_unit_circle_task, N)
+</span>  235.873 ms (46 allocations: 2.72 KiB)
+3.14161696</code></pre>
+<p></div> </div>
+<h2 id="back_to_distributed_computing"><a href="#back_to_distributed_computing" class="header-anchor">Back to distributed computing</a></h2>
+<p>Now that we know what a task is and how to create one we have no difficulty to define what distributed computing is.  It is simply the way to distribute tasks on multiple CPUs or computers.  This multiprocessing environment is based on message passing to allow tasks to run on multiple processes in separate memory domains all at once.  The communication in Julia is not like the one used by <a href="https://www.mpi-forum.org/docs/">MPI</a>.  It is <em>one-sided</em>, that is we only need to manage one process in a two-process operation. These management instructions are also not <em>sent</em>/<em>receive</em> messages but calls to functions or something similar.  For this Julia provides tow primitives, <em>remote reference</em> and <em>remote calls</em>, the <a href="https://docs.julialang.org/en/v1/manual/distributed-computing/">documentation</a> tells us: </p>
+<blockquote>
+<p>A remote reference is an object that can be used from any process to refer to an object stored on a particular process. A remote call is a request by one process to call a certain function on certain arguments on another &#40;possibly the same&#41; process.</p>
+</blockquote>
+<p>All of this is managed from the <a href="https://docs.julialang.org/en/v1/stdlib/Distributed/#man-distributed"><code>Distributed</code></a> package.  It is easy to imagine, that the field of distributed computing can quickly become quite extensive, so let us look at some concepts that are useful for our <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>π</mi></mrow><annotation encoding="application/x-tex">\pi</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">π</span></span></span></span> example and give you an idea on how this works.</p>
+<h3 id="the_pi_example_for_distributed_computing"><a href="#the_pi_example_for_distributed_computing" class="header-anchor">The <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>π</mi></mrow><annotation encoding="application/x-tex">\pi</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">π</span></span></span></span> example for distributed computing</a></h3>
+<p>In order to start with distributed computing we need to add some distributed processes or <em>workers</em>.  Similar as with threads each process has an associated identifier. The process providing the Julia REPL or the main call has id <code>1</code>.  As long as there are more than two processes, each process that does not have id <code>1</code> is considered a worker process. </p>
+<p>We can add workers at startup:</p>
+<pre><code class="bash hljs">$ julia -p 2</code></pre>
+<p>where we defined 2 workers on the local machine.  We can also add workers from within Julia by calling </p>
+<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-keyword">using</span> Distributed
+</span><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> addprocs(<span class="hljs-number">4</span>)
+</span>5</code></pre>
+<p>This added for workers and in total we have now 5 processes, hence the return value. Consequently, we can remove workers again by calling</p>
+<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> rmprocs(<span class="hljs-number">2</span>:<span class="hljs-number">5</span>)
+</span>Task (done) @0x00007fb859fc1430</code></pre>
+<p>and with <code>myid&#40;&#41;</code> we get the id of the process we are on.  </p>
+<h3 id="the_distributed_macro"><a href="#the_distributed_macro" class="header-anchor">The <code>@distributed</code> macro</a></h3>
+<p>There is an obvious problem right away.  If we define a function or a variable on a process how does another process know about this? </p>
+<p>The easiest concept is to run a parallel for loop.  As before we can do this with a macro, namely the <a href="https://docs.julialang.org/en/v1/stdlib/Distributed/#Distributed.@distributed"><code>@distributed</code></a> macro.  The general construct is</p>
+<pre><code class="julia hljs"><span class="hljs-meta">@distributed</span> [reducer] <span class="hljs-keyword">for</span> var = range
+    body
+<span class="hljs-keyword">end</span></code></pre>
+<blockquote>
+<p>The specified range is partitioned and locally executed across all workers. In case an optional reducer function is specified, @distributed performs local reductions on each worker with a final reduction on the calling process.</p>
+</blockquote>
+<blockquote>
+<p>Note that without a reducer function, @distributed executes asynchronously, i.e. it spawns independent tasks on all available workers and returns immediately without waiting for completion. To wait for completion, prefix the call with @sync, like :</p>
+</blockquote>
+<pre><code class="julia hljs"><span class="hljs-meta">@sync</span> <span class="hljs-meta">@distributed</span> <span class="hljs-keyword">for</span> var = range
+    body
+<span class="hljs-keyword">end</span></code></pre>
+<button type="button" class="collapsible" style="background-color:#caffa5"> Example </button><div class="collapsiblecontent">  What is the result for the following code snippet?</p>
+<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> workers()
+</span>4-element Vector{Int64}:
+ 2
+ 3
+ 4 
+ 5
+
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> a = zeros(<span class="hljs-number">5</span>);
+</span>
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@sync</span> <span class="hljs-meta">@distributed</span> <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-number">1</span>:<span class="hljs-number">5</span>
+                              a[i] = i
+                          <span class="hljs-keyword">end</span></span></code></pre>
+<p></div>
+<p>Luckily, our <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>π</mi></mrow><annotation encoding="application/x-tex">\pi</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">π</span></span></span></span> example does not need much data movement. </p>
+<button type="button" class="collapsible" style="background-color:#b5ddff"> Exercise </button><div class="collapsiblecontent">  Define a new function <code>in_unit_circle_distributed1</code> with the <code>@distributed</code> macro and an appropriate <em>reducer</em> function &#40;the syntax is <code>x &#61; @distributed &#40;operator&#41; for ...</code>&#41;. Note that you might need to always return a value inside to loop. For comparison start 4 workers and test the accuracy and measure the performance. <div class="solution"> Solution </div><div class="solutioncollapsible">  </p>
+<pre><code class="julia hljs"><span class="hljs-keyword">function</span> in_unit_circle_distributed1(N::<span class="hljs-built_in">Int64</span>)
+    M = <span class="hljs-meta">@distributed</span> (+) <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-number">1</span>:N
+        <span class="hljs-keyword">if</span> (rand()^<span class="hljs-number">2</span> + rand()^<span class="hljs-number">2</span>) &lt; <span class="hljs-number">1</span>
+            <span class="hljs-number">1</span>
+        <span class="hljs-keyword">else</span>
+            <span class="hljs-number">0</span>
+        <span class="hljs-keyword">end</span>
+    <span class="hljs-keyword">end</span>
+
+    <span class="hljs-keyword">return</span> M
+<span class="hljs-keyword">end</span>
+
+<span class="hljs-comment"># more compact for with the ternary operator</span>
+<span class="hljs-keyword">function</span> in_unit_circle_distributed1_1(N::<span class="hljs-built_in">Int64</span>)
+    M = <span class="hljs-meta">@distributed</span> (+) <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-number">1</span>:N
+        (rand()^<span class="hljs-number">2</span> + rand()^<span class="hljs-number">2</span>) &lt; <span class="hljs-number">1</span> ? <span class="hljs-number">1</span> : <span class="hljs-number">0</span>
+    <span class="hljs-keyword">end</span>
+
+    <span class="hljs-keyword">return</span> M
+<span class="hljs-keyword">end</span></code></pre>
+<p>and we test it</p>
+<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> nprocs()
+</span>1
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> addprocs(<span class="hljs-number">4</span>)
+</span>5
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> println(
+           abs(
+           estimate_pi(in_unit_circle_, N)distributed1 - <span class="hljs-literal">pi</span>
+           )
+       )
+</span>8.741358979325042e-5
+
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@btime</span> estimate_pi(in_unit_circle_distributed1, N)
+</span>  69.229 ms (286 allocations: 12.17 KiB)
+3.14156188</code></pre>
+<p></div> </div>
+<p>We can see that this is a very easy way to parallelize and this time the <code>rand&#40;&#41;</code> function is not causing problems. We are already faster than the basic implementation and close to the optimised four threads implementation.</p>
+<p>The <em>distributed for loop</em> with <code>@distributed</code> is designed to work well for situations where each iteration is tiny.  Of course there is also the other possibility, that we have a function with a massive workload and work with the results of these calls.</p>
+<h3 id="the_pmap_and_the_everywhere_macro"><a href="#the_pmap_and_the_everywhere_macro" class="header-anchor">The <code>pmap</code> and the <code>@everywhere</code> macro</a></h3>
+<p>As mentioned before, we need to get functions to all the workers, in order to execute them.  For distributing a functions or for loading modules we can use the <code>@everywhere</code> macro.  As the name suggests, it will make sure that the function is available in the scope of each worker and the main process.  We simply prepend a function with <code>@everywhere</code> and nothing more is required.  There are some things to note for this case:</p>
+<ul>
+<li><p>the function will be compiled on each worker on the first call.</p>
+</li>
+<li><p>no local variables are captured but they can be broadcasted &#40;arguments are broadcasted&#41;</p>
+</li>
+</ul>
+<pre><code class="julia hljs">foo = <span class="hljs-number">2</span>
+<span class="hljs-meta">@everywhre</span> bar = $foo</code></pre>
+<ul>
+<li><p>the function will only be available on workers that where present during the call, every worker that is added later will not have it defined.</p>
+</li>
+<li><p>a module can be loaded on every worker with <code>@everywhere using &lt;modulename&gt;</code>.</p>
+</li>
+</ul>
+<p>The function <a href="https://docs.julialang.org/en/v1/stdlib/Distributed/#Distributed.pmap"><code>pmap</code></a> is the parallel version of the <a href="https://docs.julialang.org/en/v1/base/collections/#Base.map"><code>map</code></a> function.  Let us start with <code>map</code> before we go on to <code>pmap</code>. The basic idea is to map a collection to a function by applying the function to each element. The result is again a collection.   The syntax is as follows:</p>
+<pre><code class="julia hljs">map(f, c...) -&gt; collection</code></pre>
+<p>You can even include multiple collections and it will apply the function until one collection is exhausted. </p>
+<button type="button" class="collapsible" style="background-color:#caffa5"> Example </button><div class="collapsiblecontent">  This examples is copied from the <a href="https://docs.julialang.org/en/v1/base/collections/#Base.map">docs</a></p>
+<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> map(+, [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>], [<span class="hljs-number">10</span>, <span class="hljs-number">20</span>, <span class="hljs-number">30</span>, <span class="hljs-number">400</span>, <span class="hljs-number">5000</span>])
+</span>3-element Vector{Int64}:
+ 11
+ 22
+ 33
+
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> map(x -&gt; x * <span class="hljs-number">2</span>, [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>])
+</span>3-element Vector{Int64}:
+ 2
+ 4
+ 6</code></pre>
+<p>The second example also includes an <a href="https://docs.julialang.org/en/v1/manual/functions/#man-anonymous-functions">anonymous function</a>.  The idea is simply to have a function that is not needed outside of the scope of a function call. </div>
+<p>Now, <code>pmap</code> just distributes the map function on workers.  It has a lot of optional arguments to influence how this is done but we will not need this. </p>
+<button type="button" class="collapsible" style="background-color:#b5ddff"> Exercise </button><div class="collapsiblecontent">  Define a new function <code>in_unit_circle_distributed2</code> with the <code>@everywhere</code> macro and the <code>pmap</code> function. Hint: define a inner function that is distributed to all workers via <code>@everywhere</code> and collect the results with <code>pmap</code>. Split up the works similar as for the last example in tasks. </p>
+<p><div class="solution"> Solution </div><div class="solutioncollapsible">  </p>
+<pre><code class="julia hljs"><span class="hljs-meta">@everywhere</span> <span class="hljs-keyword">function</span> in_unit_circle_distributed2_inner(N::<span class="hljs-built_in">Int64</span>)
+    M = <span class="hljs-number">0</span>
+    
+    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-number">1</span>:N
+        <span class="hljs-keyword">if</span> (rand()^<span class="hljs-number">2</span> + rand()^<span class="hljs-number">2</span>) &lt; <span class="hljs-number">1</span>
+            M += <span class="hljs-number">1</span>
+        <span class="hljs-keyword">end</span>
+    <span class="hljs-keyword">end</span>
+
+    <span class="hljs-keyword">return</span> M    
+<span class="hljs-keyword">end</span>
+
+<span class="hljs-keyword">function</span> in_unit_circle_distributed2(N::<span class="hljs-built_in">Int64</span>)
+    len, rem = divrem(N, nprocs() - <span class="hljs-number">1</span>)
+    M = sum(
+            pmap(
+            (x) -&gt; in_unit_circle_distributed2_inner(len), <span class="hljs-number">2</span>:nprocs()
+            )
+        )
+
+    <span class="hljs-keyword">return</span> M
+<span class="hljs-keyword">end</span></code></pre>
+<p>and we test it</p>
+<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> nprocs()
+</span>1
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> addprocs(<span class="hljs-number">4</span>)
+</span>5
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> println(
+           abs(
+           estimate_pi(in_unit_circle_task, N) - <span class="hljs-literal">pi</span>
+           )
+       )
+</span>5.886641020680372e-5
+
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@btime</span> estimate_pi(in_unit_circle_distributed2, N)
+</span>  63.124 ms (301 allocations: 13.02 KiB)
+3.1415646</code></pre>
+<p></div> </div>
+<h1 id="additional_information_on_distributed_computing"><a href="#additional_information_on_distributed_computing" class="header-anchor">Additional information on distributed computing</a></h1>
+<p>There is a lot more to say about distributed computing.  Have a read in the <a href="https://docs.julialang.org/en/v1/manual/distributed-computing/">docs</a> but here are some things we want to mention.   For example Julia is able to define <a href="https://docs.julialang.org/en/v1/manual/distributed-computing/#man-shared-arrays">shared arrays</a> that allow to have literally share an array on multiple workers and have consistent content. </p>
+<p>Furthermore, it is possible to have a cluster, e.g. a managed pool of workers. This cluster can be distributed on several machines.  You can define various ways of accessing these machines so you can become really flexible about this and maybe start a worker on the laptop of a colleague.  For this we have the <a href="https://docs.julialang.org/en/v1/manual/distributed-computing/#ClusterManagers"><code>ClusterManager</code></a> package.</p>
+<div class="page-foot">
+    <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> Gregor Ehrensperger, Peter Kandolf, Jonas Kusch. Last modified: July 06, 2022.
+    Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
+</div>
+</div><!-- CONTENT ENDS HERE -->
+    </div> <!-- end of class main-content -->
+    </div> <!-- end of class main-content-wrap -->
+    </div> <!-- end of class page-wrap-->
+    
+      
+
+
+
+    
+    
+      
+
+
+      <script>
+    (function(){
+    
+      // Get the elements.
+      // - the 'pre' element.
+      // - the 'div' with the 'paste-content' id.
+    
+      var pre = document.getElementsByTagName('pre');
+    
+      // Add a copy button in the 'pre' element.
+      // which only has the className of 'language-'.
+    
+      for (var i = 0; i < pre.length; i++) {
+        var isLanguage = pre[i].children[0].tagName == 'CODE';
+    
+        if ( isLanguage ) {
+          var button           = document.createElement('button');
+              button.className = 'copy-button';
+              button.textContent = 'Copy';
+    
+              pre[i].appendChild(button);
+        }
+      };
+    
+      // Run Clipboard
+    
+      var copyCode = new Clipboard('.copy-button', {
+        target: function(trigger) {
+          return trigger.previousElementSibling;
+        }
+      });
+    
+      // On success:
+      // - Change the "Copy" text to "Copied".
+      // - Swap it to "Copy" in 2s.
+      // - Lead user to the "contenteditable" area with Velocity scroll.
+    
+      copyCode.on('success', function(event) {
+        event.clearSelection();
+        event.trigger.textContent = 'Copied';
+        window.setTimeout(function() {
+          event.trigger.textContent = 'Copy';
+        }, 2000);
+    
+      });
+    
+      // On error (Safari):
+      // - Change the  "Press Ctrl+C to copy"
+      // - Swap it to "Copy" in 2s.
+    
+      copyCode.on('error', function(event) {
+        event.trigger.textContent = 'Press "Ctrl + C" to copy';
+        window.setTimeout(function() {
+          event.trigger.textContent = 'Copy';
+        }, 5000);
+      });
+    
+    })();
+</script>
+    
+  </body>
+</html>
+
+<script>
+  var coll = document.getElementsByClassName("collapsible");
+  var i;
+
+  for (i = 0; i < coll.length; i++) {
+    coll[i].addEventListener("click", function() {
+      this.classList.toggle("active");
+      var content = this.nextElementSibling;
+      if (content.style.display === "block") {
+        content.style.display = "none";
+      } else {
+        content.style.display = "block";
+      }
+    });
+  }
+</script>
+
+<script>
+  var coll = document.getElementsByClassName("solutioncollapsible");
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  const myVar = urlParams.get('solution')
+  if ( myVar == 'true') {
+    for (i = 0; i < coll.length; i++) {
+      coll[i].style.display = "block";
+    }
+  }
+</script>

@@ -91,6 +91,7 @@
             <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/hpc/simd" class="menu-list-link">Single Instruction Multiple Data</a>
             <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/hpc/pi" class="menu-list-link">&pi; example</a>
             <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/hpc/multithreading" class="menu-list-link">Multithreading</a>
+            <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/hpc/distributed" class="menu-list-link">Distributed computing</a>
           </ul>
       </ul>
     </div>
@@ -240,7 +241,7 @@
            estimate_pi(in_unit_circle_threaded2, N) - <span class="hljs-literal">pi</span>
            )
        )
-</span>0.00017913358979315674in
+</span>0.00017913358979315674
 
 <span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@btime</span> estimate_pi(in_unit_circle_threaded2, N)
 </span>  246.722 ms (22 allocations: 2.05 KiB)
@@ -318,13 +319,13 @@ rand(rng)</code></pre>
 <h3 id="other_pitfalls"><a href="#other_pitfalls" class="header-anchor">Other pitfalls</a></h3>
 <p>There are several other pitfalls that might occur with multithreading, here is an incomplete list:</p>
 <ul>
-<li><p><strong>Oversubscription</strong>: we can overdo it with threading. For example if we multithread an algorithm that uses a BLAS routine, it can result in the scenario, that inside each thread a subroutine is trying to run on multiple threads. Thus, they might partially block each other and the overall performance is reduced, depending on the capacities we are working on.</p>
+<li><p><strong>Oversubscription</strong>: We can overdo it with threading. For example if we multithread an algorithm that uses a BLAS routine, it can result in the scenario, that inside each thread a subroutine is trying to run on multiple threads. Thus, they might partially block each other and the overall performance is reduced, depending on the capacities we are working on.</p>
 </li>
 <li><p><a href="https://en.wikipedia.org/wiki/False_sharing"><strong>False sharing</strong></a>: The latency of the different layers of memory inside a CPU vary and also the way a core on a CPU can access it. Usually, L3 is shared by all cores but not L2 and L1. This can result in <em>false</em> sharing and reduce the performance if one CPU accesses the data from a cache of another CPU. </p>
 </li>
 </ul>
 <div class="page-foot">
-    <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> Gregor Ehrensperger, Peter Kandolf, Jonas Kusch. Last modified: July 05, 2022.
+    <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> Gregor Ehrensperger, Peter Kandolf, Jonas Kusch. Last modified: July 06, 2022.
     Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
 </div>
 </div><!-- CONTENT ENDS HERE -->
