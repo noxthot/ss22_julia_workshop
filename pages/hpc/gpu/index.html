@@ -51,7 +51,7 @@
   }
 </style>
 
-   <title>Parallel Computing - Performance</title>  
+   <title>Parallel Computing - GPU computing</title>  
 </head>
 <body>                      <!-- closed in foot.html -->
 <div class="page-wrap">   <!-- closed in foot.html -->
@@ -109,96 +109,7 @@
 
 
 <!-- Content appended here (in class franklin-content) -->
-<div class="franklin-content"><h1 id="how_to_measure_performance_in_julia"><a href="#how_to_measure_performance_in_julia" class="header-anchor">How to measure performance in Julia</a></h1>
-<p>For that, we recall the loops example from the introduction to <a href="../../introduction/loops.html">loops</a> and include the simple <code>@time</code> macro.</p>
-<pre><code class="julia hljs"><span class="hljs-keyword">function</span> mysum(a)
-    result = zero(eltype(a))
-
-    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> eachindex(a)
-        <span class="hljs-meta">@inbounds</span> result += a[i]
-    <span class="hljs-keyword">end</span>
-
-    <span class="hljs-keyword">return</span> result
-<span class="hljs-keyword">end</span>
-
-a = rand(<span class="hljs-number">100_000</span>)
-<span class="hljs-meta">@time</span> mysum(a)
-<span class="hljs-meta">@time</span> mysum(a)</code></pre>
-<pre><code class="plaintext hljs">  0.008758 seconds (4.16 k allocations: 222.597 KiB, 97.89% compilation time)
-  0.000161 seconds (1 allocation: 16 bytes)
-50061.34768706896</code></pre>
-<p>The downside with the <code>@time</code> macro is, that it really just measures the execution time of what is given to it. This means if the function is not already compiled this might include compiling or if the CPU is busy with something else it is often not accurate. </p>
-<p>Therefore, if you are serious about measuring  performance you should stick to the <a href="https://juliaci.github.io/BenchmarkTools.jl/stable/"><code>BenchmarkTools</code></a>. It comes with a couple of macros that you should test out:</p>
-<button type="button" class="collapsible" style="background-color:#b5ddff"> Exercise </button><div class="collapsiblecontent">  In order to use the BenchmarkTools you need to include it with <code>using BenchmarkTools</code>, as any other package.  Benchmark your <code>mysum</code> function with the following macros:</p>
-<ol>
-<li><p><code>@benchmark</code></p>
-</li>
-<li><p><code>@btime</code> </p>
-</li>
-<li><p>Look at the detailed output of your benchmark with <code>dump&#40;t&#41;</code>, where <code>t</code> is the output result of a <code>@benchmark</code> run.</p>
-</li>
-</ol>
-<p>and compare the output and results. <div class="solution"> Solution </div><div class="solutioncollapsible">  To measure the performance of the above code we do the following:</p>
-<pre><code class="julia hljs"><span class="hljs-keyword">using</span> BenchmarkTools
-
-<span class="hljs-meta">@benchmark</span> mysum($a)</code></pre>
-<p><pre><code class="plaintext hljs">BenchmarkTools.Trial: 10000 samples with 1 evaluation.
- Range (min … max):  111.309 μs … 223.020 μs  ┊ GC (min … max): 0.00% … 0.00%
- Time  (median):     148.514 μs               ┊ GC (median):    0.00%
- Time  (mean ± σ):   145.180 μs ±  17.107 μs  ┊ GC (mean ± σ):  0.00% ± 0.00%
-
-  ▆               ▇ ▁  ▁        ▁   █▂▁▁▁▂▁▁▁ ▇▄▂▂▁▁▁▂▁▁▁▁      ▂
-  █▆▁▁▆▆▃▄▁▁▁▆▆▆▇▇███▇████▇███▇███████████████████████████████▇ █
-  111 μs        Histogram: log(frequency) by time        178 μs &lt;
-
- Memory estimate: 0 bytes, allocs estimate: 0.</code></pre> the full details with </p>
-<pre><code class="julia hljs">t = <span class="hljs-meta">@benchmark</span> mysum($a)
-dump(t)</code></pre>
-<p><pre><code class="plaintext hljs">BenchmarkTools.Trial
-  params: BenchmarkTools.Parameters
-    seconds: Float64 5.0
-    samples: Int64 10000
-    evals: Int64 1
-    overhead: Float64 0.0
-    gctrial: Bool true
-    gcsample: Bool false
-    time_tolerance: Float64 0.05
-    memory_tolerance: Float64 0.01
-  times: Array{Float64}((10000,)) [170615.0, 161514.0, 160714.0, 160915.0, 160914.0, 160415.0, 160514.0, 160515.0, 160814.0, 160714.0  …  148613.0, 148513.0, 148613.0, 129312.0, 129412.0, 160414.0, 148514.0, 148513.0, 148513.0, 148513.0]
-  gctimes: Array{Float64}((10000,)) [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0  …  0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  memory: Int64 0
-  allocs: Int64 0
-</code></pre> and the often used sanity check, that actually also shows you the output of your code.</p>
-<pre><code class="julia hljs"><span class="hljs-meta">@btime</span> mysum($a)</code></pre>
-<p><pre><code class="plaintext hljs">  111.310 μs (0 allocations: 0 bytes)
-50061.34768706896</code></pre> </div> </div>
-<p>We can also use the <a href="https://docs.julialang.org/en/v1/manual/profile/#Profiling"><code>Profiler</code></a> package to really dig into profiling the code but this is a bit too much of a deep dive for this class, it would look like this:</p>
-<pre><code class="julia hljs"><span class="hljs-keyword">using</span> Profile
-
-Profile.clear()
-<span class="hljs-meta">@profile</span> <span class="hljs-keyword">for</span> _ <span class="hljs-keyword">in</span> <span class="hljs-number">1</span>:<span class="hljs-number">100_000</span>; mysum(a); <span class="hljs-keyword">end</span>
-Profile.print(maxdepth=<span class="hljs-number">15</span>)</code></pre>
-<pre><code class="bash hljs">Overhead ╎ [+additional indent] Count File:Line; Function
-=========================================================
-    ╎8281  @Base/client.jl:495; _start()
-    ╎ 8281  @Base/client.jl:309; exec_options(opts::Base.JLOptions)
-    ╎  8281  @Base/client.jl:379; run_main_repl(interactive::Bool, quiet::Bool, banner::Bool, history_file::Bool, color_set::Bool)
-    ╎   8281  @Base/essentials.jl:714; invokelatest
-    ╎    8281  @Base/essentials.jl:716; <span class="hljs-comment">#invokelatest#2</span>
-    ╎     8281  @Base/client.jl:394; (::Base.var<span class="hljs-string">&quot;#936#938&quot;</span>{Bool, Bool, Bool})(REPL::Module)
-    ╎    ╎ 8281  ...r/worker/package_linux64/build/usr/share/julia/stdlib/v1.7/REPL/src/REPL.jl:351; run_repl(repl::REPL.AbstractREPL, consumer::Any)
-    ╎    ╎  8281  ...r/worker/package_linux64/build/usr/share/julia/stdlib/v1.7/REPL/src/REPL.jl:364; run_repl(repl::REPL.AbstractREPL, consumer::Any; backend_on_current_task::Bool)
-    ╎    ╎   8281  .../worker/package_linux64/build/usr/share/julia/stdlib/v1.7/REPL/src/REPL.jl:231; start_repl_backend(backend::REPL.REPLBackend, consumer::Any)
-    ╎    ╎    8281  .../worker/package_linux64/build/usr/share/julia/stdlib/v1.7/REPL/src/REPL.jl:246; repl_backend_loop(backend::REPL.REPLBackend)
-    ╎    ╎     8281  ...worker/package_linux64/build/usr/share/julia/stdlib/v1.7/REPL/src/REPL.jl:150; eval_user_input(ast::Any, backend::REPL.REPLBackend)
-    ╎    ╎    ╎ 8281  @Base/boot.jl:373; <span class="hljs-built_in">eval</span>
-    ╎    ╎    ╎  8281  .../package_linux64/build/usr/share/julia/stdlib/v1.7/Profile/src/Profile.jl:28; top-level scope
-   1╎    ╎    ╎   8281  REPL[18]:1; macro expansion
-    ╎    ╎    ╎    1     REPL[7]:3; mysum(a::Vector{Float64})
-    ╎    ╎    ╎     1     @Base/abstractarray.jl:279; eachindex
-    ╎    ╎    ╎    8279  REPL[7]:4; mysum(a::Vector{Float64})
-    ╎    ╎    ╎     8279  @Base/range.jl:837; iterate
-Total snapshots: 16562</code></pre>
+<div class="franklin-content"><h1 id="gpu_computing_in_julia"><a href="#gpu_computing_in_julia" class="header-anchor">GPU computing in Julia</a></h1>
 <div class="page-foot">
     <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> Gregor Ehrensperger, Peter Kandolf, Jonas Kusch. Last modified: July 06, 2022.
     Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
