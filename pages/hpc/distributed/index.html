@@ -179,7 +179,7 @@
 3.14161696</code></pre>
 <p></div> </div>
 <h2 id="back_to_distributed_computing"><a href="#back_to_distributed_computing" class="header-anchor">Back to distributed computing</a></h2>
-<p>Now that we know what a task is and how to create one we have no difficulty to define what distributed computing is.  It is simply the way to distribute tasks on multiple CPUs or computers.  This multiprocessing environment is based on message passing to allow tasks to run on multiple processes in separate memory domains all at once.  The communication in Julia is not like the one used by <a href="https://www.mpi-forum.org/docs/">MPI</a>.  It is <em>one-sided</em>, that is we only need to manage one process in a two-process operation. These management instructions are also not <em>sent</em>/<em>receive</em> messages but calls to functions or something similar.  For this Julia provides tow primitives, <em>remote reference</em> and <em>remote calls</em>, the <a href="https://docs.julialang.org/en/v1/manual/distributed-computing/">documentation</a> tells us: </p>
+<p>Now that we know what a task is and how to create one we have no difficulty to define what distributed computing is.  It is simply the way to distribute tasks on multiple CPUs or computers.  This multiprocessing environment is based on message passing to allow tasks to run on multiple processes in separate memory domains all at once.  The communication in Julia is not like the one used by <a href="https://www.mpi-forum.org/docs/">MPI</a>.  It is <em>one-sided</em>, that is we only need to manage one process in a two-process operation. These management instructions are also not <em>sent</em>/<em>receive</em> messages but calls to functions or something similar.  For this Julia provides two primitives, <em>remote reference</em> and <em>remote calls</em>, the <a href="https://docs.julialang.org/en/v1/manual/distributed-computing/">documentation</a> tells us: </p>
 <blockquote>
 <p>A remote reference is an object that can be used from any process to refer to an object stored on a particular process. A remote call is a request by one process to call a certain function on certain arguments on another &#40;possibly the same&#41; process.</p>
 </blockquote>
@@ -226,7 +226,7 @@
                           <span class="hljs-keyword">end</span></span></code></pre>
 <p></div>
 <p>Luckily, our <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>π</mi></mrow><annotation encoding="application/x-tex">\pi</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">π</span></span></span></span> example does not need much data movement. </p>
-<button type="button" class="collapsible" style="background-color:#b5ddff"> Exercise </button><div class="collapsiblecontent">  Define a new function <code>in_unit_circle_distributed1</code> with the <code>@distributed</code> macro and an appropriate <em>reducer</em> function &#40;the syntax is <code>x &#61; @distributed &#40;operator&#41; for ...</code>&#41;. Note that you might need to always return a value inside to loop. For comparison start 4 workers and test the accuracy and measure the performance. <div class="solution"> Solution </div><div class="solutioncollapsible">  </p>
+<button type="button" class="collapsible" style="background-color:#b5ddff"> Exercise </button><div class="collapsiblecontent">  Define a new function <code>in_unit_circle_distributed1</code> with the <code>@distributed</code> macro and an appropriate <em>reducer</em> function &#40;the syntax is <code>x &#61; @distributed &#40;operator&#41; for ...</code>&#41;. Note that you might need to always return a value inside the loop. For comparison start 4 workers and test the accuracy and measure the performance. <div class="solution"> Solution </div><div class="solutioncollapsible">  </p>
 <pre><code class="julia hljs"><span class="hljs-keyword">function</span> in_unit_circle_distributed1(N::<span class="hljs-built_in">Int64</span>)
     M = <span class="hljs-meta">@distributed</span> (+) <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-number">1</span>:N
         <span class="hljs-keyword">if</span> (rand()^<span class="hljs-number">2</span> + rand()^<span class="hljs-number">2</span>) &lt; <span class="hljs-number">1</span>
@@ -274,9 +274,9 @@
 </li>
 </ul>
 <pre><code class="julia hljs">foo = <span class="hljs-number">2</span>
-<span class="hljs-meta">@everywhre</span> bar = $foo</code></pre>
+<span class="hljs-meta">@everywhere</span> bar = $foo</code></pre>
 <ul>
-<li><p>the function will only be available on workers that where present during the call, every worker that is added later will not have it defined.</p>
+<li><p>the function will only be available on workers that were present during the call, every worker that is added later will not have it defined.</p>
 </li>
 <li><p>a module can be loaded on every worker with <code>@everywhere using &lt;modulename&gt;</code>.</p>
 </li>
@@ -342,7 +342,7 @@
 <p>There is a lot more to say about distributed computing.  Have a read in the <a href="https://docs.julialang.org/en/v1/manual/distributed-computing/">docs</a> but here are some things we want to mention.   For example Julia is able to define <a href="https://docs.julialang.org/en/v1/manual/distributed-computing/#man-shared-arrays">shared arrays</a> that allow to have literally share an array on multiple workers and have consistent content. </p>
 <p>Furthermore, it is possible to have a cluster, e.g. a managed pool of workers. This cluster can be distributed on several machines.  You can define various ways of accessing these machines so you can become really flexible about this and maybe start a worker on the laptop of a colleague.  For this we have the <a href="https://docs.julialang.org/en/v1/manual/distributed-computing/#ClusterManagers"><code>ClusterManager</code></a> package.</p>
 <div class="page-foot">
-    <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> Gregor Ehrensperger, Peter Kandolf, Jonas Kusch. Last modified: July 06, 2022.
+    <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> Gregor Ehrensperger, Peter Kandolf, Jonas Kusch. Last modified: July 07, 2022.
     Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
 </div>
 </div><!-- CONTENT ENDS HERE -->
