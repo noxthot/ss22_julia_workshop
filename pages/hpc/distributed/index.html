@@ -114,8 +114,8 @@
 <p>In Julia we talk about distributed computing when we run Julia processes with separate memory spaces, Julia does not distinguish between processes on the same or on multiple computers. The main idea is to have remote execution. </p>
 <p>Before we start with distributed computing we introduce tasks.</p>
 <h2 id="tasks"><a href="#tasks" class="header-anchor">Tasks</a></h2>
-<p>Tasks are part of the <a href="https://docs.julialang.org/en/v1/manual/asynchronous-programming/">asynchronous programming</a> concepts implemented in Julia. We can think of a task as a unit of work with a create-start-run-finish lifecycle. This means, a task can be created and scheduled independently. Tasks are the basic building block for performing distributed computing in Julia. This concept of tasks is actually rather similar to how High Performance Computing &#40;HPC&#41; systems.</p>
-<p>To create a task we can use the <code>@task</code> macro, that will return us a <em>runnable</em> but will not execute it. We use the <code>schedule</code> command to actually execute it. </p>
+<p>Tasks are part of the <a href="https://docs.julialang.org/en/v1/manual/asynchronous-programming/">asynchronous programming</a> concepts implemented in Julia.  We can think of a task as a work package with a create-start-run-finish lifecycle. This means, a task can be created and scheduled independently.  Tasks are the basic building block for performing distributed computing in Julia.  This concept of tasks is actually rather similar to how High Performance Computing &#40;HPC&#41; systems work with their job scheduler.</p>
+<p>To create a task we can use the <code>@task</code> macro, that will return a <em>runnable</em> but will not execute it. We use the <code>schedule</code> command to actually execute it. </p>
 <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> t = <span class="hljs-meta">@task</span> <span class="hljs-keyword">begin</span>; sleep(<span class="hljs-number">5</span>); println(<span class="hljs-string">&quot;done&quot;</span>); <span class="hljs-keyword">end</span>
 </span>Task (runnable) @0x00007fb859f336b0
 
@@ -147,9 +147,24 @@
 </li>
 </ol>
 <pre><code class="julia hljs"><span class="hljs-meta">@time</span> <span class="hljs-meta">@sync</span> <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-number">1</span>:<span class="hljs-number">10</span>
-                sleep(<span class="hljs-number">1</span>)
+                <span class="hljs-meta">@async</span> sleep(<span class="hljs-number">1</span>)
             <span class="hljs-keyword">end</span></code></pre>
-<p></div>
+<p><div class="solution"> Solution </div><div class="solutioncollapsible">  </p>
+<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@time</span> <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-number">1</span>:<span class="hljs-number">10</span>
+                 sleep(<span class="hljs-number">1</span>)
+             <span class="hljs-keyword">end</span>
+</span> 10.020172 seconds (51 allocations: 1.703 KiB)
+
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@time</span> <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-number">1</span>:<span class="hljs-number">10</span>
+                 <span class="hljs-meta">@async</span> sleep(<span class="hljs-number">1</span>)
+             <span class="hljs-keyword">end</span>
+</span>  0.017384 seconds (6.40 k allocations: 399.856 KiB, 96.91% compilation time)
+
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@time</span> <span class="hljs-meta">@sync</span> <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-number">1</span>:<span class="hljs-number">10</span>
+                       <span class="hljs-meta">@async</span> sleep(<span class="hljs-number">1</span>)
+                   <span class="hljs-keyword">end</span>
+</span>  1.047838 seconds (847 allocations: 53.656 KiB, 4.34% compilation time)</code></pre>
+<p></div> </div>
 <h3 id="the_pi_example_with_tasks"><a href="#the_pi_example_with_tasks" class="header-anchor">The <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>π</mi></mrow><annotation encoding="application/x-tex">\pi</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">π</span></span></span></span> example with tasks</a></h3>
 <p>Now we apply the task knowledge to our example for computing <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>π</mi></mrow><annotation encoding="application/x-tex">\pi</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">π</span></span></span></span>.</p>
 <button type="button" class="collapsible" style="background-color:#b5ddff"> Exercise </button><div class="collapsiblecontent">  Define a new function <code>in_unit_circle_task</code> with the <code>@async</code> and <code>@sync</code> macros. Split up <code>N</code> into 4 parts, same as for threads, and schedule the tasks in a loop. Define a vector of tasks to catch the results inside the loop. <div class="solution"> Solution </div><div class="solutioncollapsible">  </p>
@@ -179,7 +194,7 @@
 3.14161696</code></pre>
 <p></div> </div>
 <h2 id="back_to_distributed_computing"><a href="#back_to_distributed_computing" class="header-anchor">Back to distributed computing</a></h2>
-<p>Now that we know what a task is and how to create one we have no difficulty to define what distributed computing is.  It is simply the way to distribute tasks on multiple CPUs or computers.  This multiprocessing environment is based on message passing to allow tasks to run on multiple processes in separate memory domains all at once.  The communication in Julia is not like the one used by <a href="https://www.mpi-forum.org/docs/">MPI</a>.  It is <em>one-sided</em>, that is we only need to manage one process in a two-process operation. These management instructions are also not <em>sent</em>/<em>receive</em> messages but calls to functions or something similar.  For this Julia provides two primitives, <em>remote reference</em> and <em>remote calls</em>, the <a href="https://docs.julialang.org/en/v1/manual/distributed-computing/">documentation</a> tells us: </p>
+<p>Now that we know what a task is and how to create one we have no difficulty to define what distributed computing is.  It is simply the way to distribute tasks on multiple CPUs or computers.  This multiprocessing environment is based on message passing to allow tasks to run on multiple processes in separate memory domains all at once.  The communication in Julia is not like the one used by <a href="https://www.mpi-forum.org/docs/">MPI</a>.  It is <em>one-sided</em>, that is we only need to manage one process in a two-process operation. These management instructions are also not sent/receive messages but calls to functions or something similar.  For this Julia provides two primitives, <em>remote reference</em> and <em>remote calls</em>, the <a href="https://docs.julialang.org/en/v1/manual/distributed-computing/">documentation</a> tells us: </p>
 <blockquote>
 <p>A remote reference is an object that can be used from any process to refer to an object stored on a particular process. A remote call is a request by one process to call a certain function on certain arguments on another &#40;possibly the same&#41; process.</p>
 </blockquote>
@@ -339,7 +354,7 @@
 3.1415646</code></pre>
 <p></div> </div>
 <h1 id="additional_information_on_distributed_computing"><a href="#additional_information_on_distributed_computing" class="header-anchor">Additional information on distributed computing</a></h1>
-<p>There is a lot more to say about distributed computing.  Have a read in the <a href="https://docs.julialang.org/en/v1/manual/distributed-computing/">docs</a> but here are some things we want to mention.   For example Julia is able to define <a href="https://docs.julialang.org/en/v1/manual/distributed-computing/#man-shared-arrays">shared arrays</a> that allow to have literally share an array on multiple workers and have consistent content. </p>
+<p>There is a lot more to say about distributed computing.  Have a read in the <a href="https://docs.julialang.org/en/v1/manual/distributed-computing/">docs</a> but here are some things we want to mention.   For example Julia is able to define <a href="https://docs.julialang.org/en/v1/manual/distributed-computing/#man-shared-arrays">shared arrays</a>.  A shared array means the content can be accessed by each worker and it is consistent over all workers.</p>
 <p>Furthermore, it is possible to have a cluster, e.g. a managed pool of workers. This cluster can be distributed on several machines.  You can define various ways of accessing these machines so you can become really flexible about this and maybe start a worker on the laptop of a colleague.  For this we have the <a href="https://docs.julialang.org/en/v1/manual/distributed-computing/#ClusterManagers"><code>ClusterManager</code></a> package.</p>
 <div class="page-foot">
     <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> Gregor Ehrensperger, Peter Kandolf, Jonas Kusch. Last modified: July 07, 2022.
