@@ -11,9 +11,12 @@ Before we start with distributed computing we introduce tasks.
 
 ## Tasks
 
-Tasks are part of the [asynchronous programming](https://docs.julialang.org/en/v1/manual/asynchronous-programming/) concepts implemented in Julia. We can think of a task as a unit of work with a create-start-run-finish lifecycle. This means, a task can be created and scheduled independently. Tasks are the basic building block for performing distributed computing in Julia. This concept of tasks is actually rather similar to how High Performance Computing (HPC) systems.
+Tasks are part of the [asynchronous programming](https://docs.julialang.org/en/v1/manual/asynchronous-programming/) concepts implemented in Julia. 
+We can think of a task as a work package with a create-start-run-finish lifecycle. This means, a task can be created and scheduled independently. 
+Tasks are the basic building block for performing distributed computing in Julia. 
+This concept of tasks is actually rather similar to how High Performance Computing (HPC) systems work with their job scheduler.
 
-To create a task we can use the `@task` macro, that will return us a *runnable* but will not execute it. We use the `schedule` command to actually execute it. 
+To create a task we can use the `@task` macro, that will return a *runnable* but will not execute it. We use the `schedule` command to actually execute it. 
 
 ```julia-repl
 julia> t = @task begin; sleep(5); println("done"); end
@@ -51,9 +54,28 @@ The following examples are taken from [Parallel Computing Class on JuliaAcademy.
 3. How long will this take?
 ```julia
 @time @sync for i in 1:10
-                sleep(1)
+                @async sleep(1)
             end
 ```
+\solution{
+```julia-repl
+julia> @time for i in 1:10
+                 sleep(1)
+             end
+ 10.020172 seconds (51 allocations: 1.703 KiB)
+
+julia> @time for i in 1:10
+                 @async sleep(1)
+             end
+  0.017384 seconds (6.40 k allocations: 399.856 KiB, 96.91% compilation time)
+
+julia> @time @sync for i in 1:10
+                       @async sleep(1)
+                   end
+  1.047838 seconds (847 allocations: 53.656 KiB, 4.34% compilation time)
+
+```
+}
 }
 
 ### The $\pi$ example with tasks
@@ -101,7 +123,7 @@ It is simply the way to distribute tasks on multiple CPUs or computers.
 This multiprocessing environment is based on message passing to allow tasks to run on multiple processes in separate memory domains all at once. 
 The communication in Julia is not like the one used by [MPI](https://www.mpi-forum.org/docs/). 
 It is *one-sided*, that is we only need to manage one process in a two-process operation.
-These management instructions are also not *sent*/*receive* messages but calls to functions or something similar. 
+These management instructions are also not sent/receive messages but calls to functions or something similar. 
 For this Julia provides two primitives, *remote reference* and *remote calls*, the [documentation](https://docs.julialang.org/en/v1/manual/distributed-computing/) tells us: 
 > A remote reference is an object that can be used from any process to refer to an object stored on a particular process. A remote call is a request by one process to call a certain function on certain arguments on another (possibly the same) process.
 
@@ -326,7 +348,8 @@ julia> @btime estimate_pi(in_unit_circle_distributed2, N)
 
 There is a lot more to say about distributed computing. 
 Have a read in the [docs](https://docs.julialang.org/en/v1/manual/distributed-computing/) but here are some things we want to mention.  
-For example Julia is able to define [shared arrays](https://docs.julialang.org/en/v1/manual/distributed-computing/#man-shared-arrays) that allow to have literally share an array on multiple workers and have consistent content. 
+For example Julia is able to define [shared arrays](https://docs.julialang.org/en/v1/manual/distributed-computing/#man-shared-arrays). 
+A shared array means the content can be accessed by each worker and it is consistent over all workers.
 
 Furthermore, it is possible to have a cluster, e.g. a managed pool of workers.
 This cluster can be distributed on several machines. 
