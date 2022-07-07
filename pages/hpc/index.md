@@ -1,7 +1,7 @@
 @def title = "Parallel Computing"
 @def hascode = true
 
-@def tags = ["ParallelComputing"]
+@def tags = ["Parallel Computing"]
 
 # Parallel computing with Julia
 

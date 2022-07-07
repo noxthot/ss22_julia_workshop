@@ -1,7 +1,7 @@
 @def title = "Parallel Computing - SIMD"
 @def hascode = true
 
-@def tags = ["ParallelComputingSimd"]
+@def tags = ["Parallel Computing", "SIMD"]
 
 # Single-Instruction multiple data
 

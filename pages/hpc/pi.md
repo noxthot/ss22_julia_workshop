@@ -1,7 +1,7 @@
 @def title = "Parallel Computing - &pi;"
 @def hascode = true
 
-@def tags = ["ParallelComputingPi"]
+@def tags = ["Parallel Computing", "Pi example"]
 
 # Not the most efficient way of computing $\pi$
 

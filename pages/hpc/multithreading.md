@@ -1,7 +1,7 @@
 @def title = "Parallel Computing - Multithreading"
 @def hascode = true
 
-@def tags = ["ParallelComputingMultithreading"]
+@def tags = ["Parallel Computing", "Multithreading"]
 
 # Multithreading in Julia
 

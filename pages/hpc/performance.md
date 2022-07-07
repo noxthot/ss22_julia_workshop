@@ -1,7 +1,7 @@
 @def title = "Parallel Computing - Performance"
 @def hascode = true
 
-@def tags = ["ParallelComputingPerformance"]
+@def tags = ["Parallel Computing", "Performance"]
 
 # How to measure performance in Julia
 
