@@ -102,7 +102,7 @@ This multiprocessing environment is based on message passing to allow tasks to r
 The communication in Julia is not like the one used by [MPI](https://www.mpi-forum.org/docs/). 
 It is *one-sided*, that is we only need to manage one process in a two-process operation.
 These management instructions are also not *sent*/*receive* messages but calls to functions or something similar. 
-For this Julia provides tow primitives, *remote reference* and *remote calls*, the [documentation](https://docs.julialang.org/en/v1/manual/distributed-computing/) tells us: 
+For this Julia provides two primitives, *remote reference* and *remote calls*, the [documentation](https://docs.julialang.org/en/v1/manual/distributed-computing/) tells us: 
 > A remote reference is an object that can be used from any process to refer to an object stored on a particular process. A remote call is a request by one process to call a certain function on certain arguments on another (possibly the same) process.
 
 All of this is managed from the [`Distributed`](https://docs.julialang.org/en/v1/stdlib/Distributed/#man-distributed) package. 
@@ -176,7 +176,7 @@ julia> @sync @distributed for i in 1:5
 Luckily, our $\pi$ example does not need much data movement. 
 
 \exercise{
-Define a new function `in_unit_circle_distributed1` with the `@distributed` macro and an appropriate *reducer* function (the syntax is `x = @distributed (operator) for ...`). Note that you might need to always return a value inside to loop. For comparison start 4 workers and test the accuracy and measure the performance.
+Define a new function `in_unit_circle_distributed1` with the `@distributed` macro and an appropriate *reducer* function (the syntax is `x = @distributed (operator) for ...`). Note that you might need to always return a value inside the loop. For comparison start 4 workers and test the accuracy and measure the performance.
 \solution{
 ```julia
 function in_unit_circle_distributed1(N::Int64)
@@ -237,9 +237,9 @@ There are some things to note for this case:
 - no local variables are captured but they can be broadcasted (arguments are broadcasted)
 ```julia
 foo = 2
-@everywhre bar = $foo
+@everywhere bar = $foo
 ```
-- the function will only be available on workers that where present during the call, every worker that is added later will not have it defined.
+- the function will only be available on workers that were present during the call, every worker that is added later will not have it defined.
 - a module can be loaded on every worker with `@everywhere using <modulename>`.
 
 The function [`pmap`](https://docs.julialang.org/en/v1/stdlib/Distributed/#Distributed.pmap) is the parallel version of the [`map`](https://docs.julialang.org/en/v1/base/collections/#Base.map) function. 
