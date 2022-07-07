@@ -30,11 +30,11 @@ julia> B = rand(2000, 2000);
 
 julia> BLAS.get_num_threads()
 8
-julia> @btime $A*$B;
+julia> @btime $A * $B;
   141.984 ms (2 allocations: 30.52 MiB)
 
 julia> BLAS.set_num_threads(1)
-julia> @btime $A*$B;
+julia> @btime $A * $B;
   1.009 s (2 allocations: 30.52 MiB)
 ```
 }
