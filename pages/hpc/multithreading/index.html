@@ -115,19 +115,21 @@
 <h2 id="what_is_multithreading"><a href="#what_is_multithreading" class="header-anchor">What is multithreading</a></h2>
 <p>In the terminology of computer science a thread is the smallest sequence of instructions that can be managed by the scheduler of the operating system. It is often also called a light weight process and is most of the time considered to exist inside the context of a process. Consequently, multithreading is the ability to mange multiple concurrently executed threads. Multiple threads share their resources, this makes this quite a powerful tool. The threads run on a single CPU or on multiple CPUs and give you the opportunity to leverage the full force of your computer &#40;or cell phone for that matter&#41;.</p>
 <h2 id="julia"><a href="#julia" class="header-anchor">Julia</a></h2>
-<p>By default, Julia will start with a single computational thread of execution:</p>
+<p>By default Julia will start with a single computational thread of execution:</p>
 <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> Threads.nthreads()
 </span>1</code></pre>
 <p>This does not mean that Julia is only using one thread. We mentioned the <a href="http://www.netlib.org/blas/">Basic Linear Algebra Subroutines - BLAS</a> before. Calls to this library &#40;e.g. matrix-matrix multiplication&#41; will be multithreaded by default and therefore, technically you have been doing multithreading all along ;&#41;. Let us illustrate this with a small example.</p>
 <button type="button" class="collapsible" style="background-color:#caffa5"> Example </button><div class="collapsiblecontent">  Influencing the number of threads in BLAS. When we include the <a href="https://docs.julialang.org/en/v1/stdlib/LinearAlgebra/">LinearAlgebra</a> package we get the possibility to manipulate the number of threads. Here <code>BLAS</code> is a wrapper to the BLAS libraries used by Julia. </p>
-<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-keyword">using</span> BenchmarkTools
-</span><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-keyword">using</span> LinearAlgebra
-</span><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> A = rand(<span class="hljs-number">2000</span>, <span class="hljs-number">2000</span>);
+<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-keyword">using</span> BenchmarkTools, LinearAlgebra
+</span>
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> A = rand(<span class="hljs-number">2000</span>, <span class="hljs-number">2000</span>);
 </span><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> B = rand(<span class="hljs-number">2000</span>, <span class="hljs-number">2000</span>);
-</span><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@btime</span> $A*$B;
-</span>  141.984 ms (2 allocations: 30.52 MiB)
+</span>
 <span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> BLAS.get_num_threads()
 </span>8
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@btime</span> $A*$B;
+</span>  141.984 ms (2 allocations: 30.52 MiB)
+
 <span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> BLAS.set_num_threads(<span class="hljs-number">1</span>)
 </span><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@btime</span> $A*$B;
 </span>  1.009 s (2 allocations: 30.52 MiB)</code></pre>
@@ -138,17 +140,19 @@
 </span>16
 <span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> Threads.threadid()
 </span>1</code></pre>
-<p>We do not have the time for a deep dive into all the dirty details on how do do proper multithreaded programming &#40;raise conditions, locks, atomic operations, thread safe programming, ...&#41;, therefore we keep it light and simple with the <code>@threads</code> macro and introduce the needed concepts when we need them along the way.</p>
-<p>Like all the other macro it gives us the possibility to bring something rather complex in our code by still staying very readable as the following example shows.</p>
+<p>By default, the Julia REPL, or the main Julia process for that matter, will always run on the thread with id 1. We do not have the time for a deep dive into all the dirty details on how do do proper multithreaded programming &#40;raise conditions, locks, atomic operations, thread safe programming, ...&#41;, therefore we keep it light and simple with the <code>@threads</code> macro and introduce the needed concepts when we need them along the way.</p>
+<p>Like all the other macros it gives us the possibility to bring something rather complex in our code by still staying very readable as the following example shows.</p>
 <button type="button" class="collapsible" style="background-color:#caffa5"> Example </button><div class="collapsiblecontent">  Simple example for the <a href="https://docs.julialang.org/en/v1/manual/multi-threading/#The-@threads-Macro">docs</a>:</p>
 <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-keyword">using</span> Base.Threads
-</span><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> nthreads()
+</span>
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> nthreads()
 </span>4
 <span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> a = zeros(<span class="hljs-number">10</span>);
 </span><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@threads</span> <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-number">1</span>:<span class="hljs-number">10</span>
                     a[i] = threadid()
                 <span class="hljs-keyword">end</span>
-</span><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> a
+</span>
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> a
 </span>10-element Vector{Float64}:
  1.0
  1.0
@@ -279,11 +283,13 @@ rand(rng)</code></pre>
     <span class="hljs-meta">@threads</span> <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-number">1</span>:nthreads()
         rng = ThreadRNG[threadid()]
         m = <span class="hljs-number">0</span>
+
         <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-number">1</span>:len
             <span class="hljs-keyword">if</span> (rand(rng)^<span class="hljs-number">2</span> + rand(rng)^<span class="hljs-number">2</span>) &lt; <span class="hljs-number">1</span>
                 m += <span class="hljs-number">1</span>
             <span class="hljs-keyword">end</span>
         <span class="hljs-keyword">end</span>
+        
         M[threadid()] = m
     <span class="hljs-keyword">end</span>
 
