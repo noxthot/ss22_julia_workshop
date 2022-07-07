@@ -127,11 +127,11 @@
 </span>
 <span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> BLAS.get_num_threads()
 </span>8
-<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@btime</span> $A*$B;
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@btime</span> $A * $B;
 </span>  141.984 ms (2 allocations: 30.52 MiB)
 
 <span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> BLAS.set_num_threads(<span class="hljs-number">1</span>)
-</span><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@btime</span> $A*$B;
+</span><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@btime</span> $A * $B;
 </span>  1.009 s (2 allocations: 30.52 MiB)</code></pre>
 <p></div>
 <p>In order to have multiple threads available you need to start Julia with the <code>--threads &lt;Int|auto&gt;</code> option or define the environment variable <code>JULIA_NUM_THREADS&#61;&lt;Int&gt;</code>. With the command <code>threadid&#40;&#41;</code> from the <a href="https://docs.julialang.org/en/v1/base/base/#Base.Threads"><code>Threads</code></a> module you can find out on which thread you currently are.</p>
