@@ -17,10 +17,23 @@ So let us give a little bit of background: The radiation transport equation desc
 
 ## Adding packages
 
-Let us first generate the velocity grid, which are commonly chosen to be the so-called Gauss-Legendre points. Luckily, these points are already implemented in Julia. All we need to do is to install the Julia Package `FastGaussQuadrature`. Therefore open the package manager by pressing `]`. Then, type
+Let us first generate the velocity grid, which are commonly chosen to be the so-called Gauss-Legendre points. Luckily, these points are already implemented in Julia. All we need to do is to install the Julia Package `FastGaussQuadrature`. The $\operatorname{nv} = 10$ points can be accessed and stored in a vector $v$ by calling `v, w = gausslegendre(nv)`. Note that $v$ contains the Gauss-Legendre points and $w$ contains the so-called quadrature weights used to compute integrals. Recall that it can be advantageous to create a new environment for this project. 
+\example{
+First, we need to open a new project and install the `FastGaussQuadrature` package:
 
-```julia
-add FastGaussQuadrature
+```julia-repl
+shell> cd ..
+/home/jonas/Projects
+
+shell> mkdir LinearTransportSolver
+
+shell> cd LinearTransportSolver
+/home/jonas/Projects/LinearTransportSolver
+
+(SummerSchool) pkg> activate .
+  Activating new project at `~/Projects/LinearTransportSolver`
+
+(LinearTransportSolver) pkg> add FastGaussQuadrature
 ```
 
 Now you can use all functionalities of the `FastGaussQuadrature` package whenever you start Julia. For this, generate a script `main.jl` and write
@@ -30,8 +43,8 @@ using FastGaussQuadrature
 nv = 10
 v, w = gausslegendre(nv)
 ```
-
 You can print out your velocity grid by typing `v` in the Julia environment or by adding `println(v)`. 
+}
 
 ## Array generation and access
 
@@ -42,7 +55,10 @@ nx = 101
 x = collect(range(0, 1; length=nx))
 ```
 
-The `range` command will generate $\operatorname{nx}$ values from 0 to 1. We use the `collect` command to store these values into a vector. Now we know how to use Julia packages and Julia built-in functions to generate our velocity and spatial grid. The next step is to set up our solution matrix $\bm{\psi}$. For this we can use the `zeros(n, m)` command, which generates a matrix with dimension $n\times m$ that has entries of zero everywhere. Hence, to create a matrix with dimension $\operatorname{nx} \times \operatorname{nv}$ type
+The `range` command will generate $\operatorname{nx}$ values from 0 to 1. We use the `collect` command to store these values into a vector. The next step is to set up our solution matrix $\bm{\psi}$. The matrix should have dimension $\operatorname{nx}\times\operatorname{nv}$. Initially, the solution is zero except for $\psi_{50,k}=1$ for all $k$. Compute the described matrix.
+
+\example{
+To generate a zero matrix of dimension $n\times m$ we can use the `zeros(n, m)` command. Hence, to create a matrix with dimension $\operatorname{nx} \times \operatorname{nv}$ type
 
 ```julia:./code/worksheet_1.jl
 psi = zeros(nx, nv)
@@ -53,13 +69,40 @@ Now to access this matrix at spatial index $j$ and velocity index $i$, we can ty
 ```julia:./code/worksheet_1.jl
 psi[50, :] = ones(nv)
 ```
+}
 
+## Linear algebra operations
 A next step would be to evolve these particles in time. This is done by solving an ordinary differential equation of the form
 $$  \bm{\dot \psi} = -\mathbf{D}^+\bm{\psi}\mathbf{V}^+ - \mathbf{D}^-\bm{\psi}\mathbf{V}^- + \bm{\psi}\mathbf{G}  \label{eq:ODE1} $$
 
-## Linear algebra operations
+Here $\mathbf{D}^{\pm}$ are tridiagonal matrices of the form
+$$
+\mathbf{D}^- = \frac{1}{\Delta x}\begin{pmatrix}
+    -1 & 1 &    &      &   \\
+      & -1       & 1   &      &    \\
+      &         & -1         & \ddots    &     \\
+      &         &           &     -1      & 1   \\
+      &         &           &           & -1
+  \end{pmatrix}\;,
+$$
+and 
+$$
+\mathbf{D}^+ = \frac{1}{\Delta x}\begin{pmatrix}
+    1 &  &    &      &   \\
+    -1  & 1       &    &      &    \\
+      &  -1       & 1         &     &     \\
+      &         &    \ddots       &     1      &    \\
+      &         &           &      -1     & 1
+  \end{pmatrix}\;.
+$$
+Set up these two matrices in your code.
+\example{
+To setup tridiagonal matrices you need to load the `LinearAlgebra` package:
+```julia-repl
+(LinearTransportSolver) pkg> add LinearAlgebra
+```
 
-Here $\mathbf{D}^{\pm}$ are tridiagonal matrices. To setup tridiagonal matrices you need to load the `LinearAlgebra` package. You already know how to install this package and use it in your code. Then the tridiagonal matrices are defined as
+Then, the tridiagonal matrices can be implemented as
 
 ```julia:./code/worksheet_1.jl
 using LinearAlgebra
@@ -67,8 +110,11 @@ dx = 1 / (nx - 1)
 DPlus = (1 / dx) * Tridiagonal(-ones(nx - 1), ones(nx), zeros(nx - 1))
 DMinus = (1 / dx) * Tridiagonal(zeros(nx - 1), -ones(nx), ones(nx - 1))
 ```
+}
+The matrices $\mathbf{V}^{\pm}\in\mathbb{R}^{n_v\times n_v}$ are diagonal matrices, where $\mathbf{V}^-$ collects all negative velocities on the diagonal, i.e., $\mathbf{V}^- = \text{diag}(v_1,\cdots,v_{5},0,\cdots,0)$ and $\mathbf{V}^+$ collects all positive velocities, i.e., $\mathbf{V}^+ = \text{diag}(0,\cdots,0,v_{6},\cdots,v_{10})$. Implement these two matrices. To write your code for general $\operatorname{nv}$, use the `ceil` and `floor` commands.
 
-The matrices $\mathbf{V}^{\pm}\in\mathbb{R}^{n_v\times n_v}$ are diagonal matrices, where $\mathbf{V}^-$ collects all negative velocities on the diagonal, i.e., $\mathbf{V}^- = \text{diag}(v_1,\cdots,v_{5},0,\cdots,0)$ and $\mathbf{V}^+$ collects all positive velocities, i.e., $\mathbf{V}^+ = \text{diag}(0,\cdots,0,v_{6},\cdots,v_{10})$. The command to create a diagonal matrix with diagonal $y$ is `Diagonal(y)`. You can append two vectors $a$ and $b$ by `[a; b]`. Set up $\mathbf{V}^{\pm}$. If you want to later change the number of velocity points you can work with the `ceil` and `floor` commands to determine the midpoint of your velocity vector by e.g. `Int(ceil(nv))`. This determines $\operatorname{ceil}{n_v}$ and then transforms the resuling floating point number to an integer.
+\example{
+The command to create a diagonal matrix with diagonal $y$ is `Diagonal(y)`. You can append two vectors $a$ and $b$ by `[a; b]`. Set up $\mathbf{V}^{\pm}$. If you want to later change the number of velocity points you can work with the `ceil` and `floor` commands to determine the midpoint of your velocity vector by e.g. `Int(ceil(nv))`. This determines $\operatorname{ceil}{n_v}$ and then transforms the resuling floating point number to an integer. 
 
 ```julia:./code/worksheet_1.jl
 midMinus = Int(ceil(nv / 2))
@@ -76,7 +122,7 @@ midPlus = Int(floor(nv / 2))
 VMinus = Diagonal([v[1:midMinus]; zeros(midPlus)])
 VPlus = Diagonal([zeros(midMinus); v[(midPlus + 1):end]])
 ```
-
+}
 Lastly, the so called scattering matrix $\mathbf{G}$ is given as 
 
 ```julia:./code/worksheet_1.jl
