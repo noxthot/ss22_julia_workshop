@@ -61,13 +61,13 @@ The `range` command will generate $\operatorname{nx}$ values from 0 to 1. We use
 To generate a zero matrix of dimension $n\times m$ we can use the `zeros(n, m)` command. Hence, to create a matrix with dimension $\operatorname{nx} \times \operatorname{nv}$ type
 
 ```julia:./code/worksheet_1.jl
-psi = zeros(nx, nv)
+ψ = zeros(nx, nv)
 ```
 
-Now to access this matrix at spatial index $j$ and velocity index $i$, we can type `psi[j, i]`. Moreover, if we do not want to access a single index, but let's say indices $5$ to $10$ in the spatial domain at all indices in velocity, we can write `psi[5:10, :]`. Note that Julia uses indices starting at index $1$, not $0$. Now, put particles in the center of the domain having all possible velocities. That is,
+Now to access this matrix at spatial index $j$ and velocity index $i$, we can type `ψ[j, i]`. Moreover, if we do not want to access a single index, but let's say indices $5$ to $10$ in the spatial domain at all indices in velocity, we can write `ψ[5:10, :]`. Note that Julia uses indices starting at index $1$, not $0$. Now, put particles in the center of the domain having all possible velocities. That is,
 
 ```julia:./code/worksheet_1.jl
-psi[50, :] = ones(nv)
+ψ[50, :] = ones(nv)
 ```
 }
 
@@ -106,9 +106,9 @@ Then, the tridiagonal matrices can be implemented as
 
 ```julia:./code/worksheet_1.jl
 using LinearAlgebra
-dx = 1 / (nx - 1)
-DPlus = (1 / dx) * Tridiagonal(-ones(nx - 1), ones(nx), zeros(nx - 1))
-DMinus = (1 / dx) * Tridiagonal(zeros(nx - 1), -ones(nx), ones(nx - 1))
+Δx = 1 / (nx - 1)
+DPlus = (1 / Δx) * Tridiagonal(-ones(nx - 1), ones(nx), zeros(nx - 1))
+DMinus = (1 / Δx) * Tridiagonal(zeros(nx - 1), -ones(nx), ones(nx - 1))
 ```
 }
 The matrices $\mathbf{V}^{\pm}\in\mathbb{R}^{n_v\times n_v}$ are diagonal matrices, where $\mathbf{V}^-$ collects all negative velocities on the diagonal, i.e., $\mathbf{V}^- = \text{diag}(v_1,\cdots,v_{5},0,\cdots,0)$ and $\mathbf{V}^+$ collects all positive velocities, i.e., $\mathbf{V}^+ = \text{diag}(0,\cdots,0,v_{6},\cdots,v_{10})$. Implement these two matrices. To write your code for general $\operatorname{nv}$, use the `ceil` and `floor` commands.
@@ -132,8 +132,8 @@ G = ones(nv, nv) .* w-I
 Now, to update your solution $\bm\psi$ from $t=0$ to $t = \Delta t$, we approximate the time derivative by $\bm{\dot \psi} \approx (\bm\psi_{\mathrm{new}}-\bm\psi)/\Delta t$. Hence, we then get
 
 ```julia:./code/worksheet_1.jl
-dt = 0.01;
-psiOneStep = psi + dt * (-DPlus * psi * VPlus - DMinus * psi * VMinus + psi * G)
+Δt = 0.01;
+psiOneStep = ψ + Δt * (-DPlus * ψ * VPlus - DMinus * ψ * VMinus + ψ * G)
 ```
 
 You can already check how the solution has changed by inspecting `psiOneStep` in the center. You already know how this works. If you want you can interpret the physical process that you observe. 
@@ -146,18 +146,18 @@ Now, we do not want to know the solution at $\Delta t$, but at $t_{\mathrm{end}}
 nT = 40
 
 for n in 1:nT
-    psiNew = psi + dt * (-DPlus * psi * VPlus - DMinus * psi * VMinus + psi * G)
-    psi .= psiNew
+    ψ_new = ψ + Δt * (-DPlus * ψ * VPlus - DMinus * ψ * VMinus + ψ * G)
+    ψ .= ψ_new
 end
 ```
 
-Note that we are using `.=` insead of `=` to copy values from `psiNew` to `psi`. This is a pointwise operation and we will discuss later how this works. Now, we are interested in plotting $\phi(t_{\mathrm{end}},x) := \int_{-1}^1 \psi(t_{\mathrm{end}},x,v)\, \mathrm{d}v$. On a numerical level, we can compute this via
+Note that we are using `.=` insead of `=` to copy values from `ψ_new` to `ψ`. This is a pointwise operation and we will discuss later how this works. Now, we are interested in plotting $\phi(t_{\mathrm{end}},x) := \int_{-1}^1 \psi(t_{\mathrm{end}},x,v)\, \mathrm{d}v$. On a numerical level, we can compute this via
 
 ```julia:./code/worksheet_1.jl
 phi = zeros(nx)
 
 for j in 1:nx
-    phi[j] = sum(psi[j, :] .* w)
+    phi[j] = sum(ψ[j, :] .* w)
 end
 ```
 
@@ -224,8 +224,8 @@ nx = 101
 x = collect(range(0, 1; length=nx))
 
 # setup initial condition
-psi = zeros(nx, nv)
-psi[50, :] = ones(nv)
+ψ = zeros(nx, nv)
+ψ[50, :] = ones(nv)
 
 # create stencil matrices
 dx = 1 / (nx - 1)
@@ -242,19 +242,19 @@ VPlus = Diagonal([zeros(midMinus); v[(midPlus + 1):end]])
 G = ones(nv, nv) .* w - I
 
 # advance in time
-dt = 0.01
+Δt = 0.01
 nT = 40
 
 for n in 1:nT
-    psiNew = psi + dt * (-DPlus * psi * VPlus - DMinus * psi * VMinus + psi * G)
-    psi .= psiNew
+    ψ_new = ψ + Δt * (-DPlus * ψ * VPlus - DMinus * ψ * VMinus + ψ * G)
+    ψ .= ψ_new
 end
 
 # store phi for plotting
 phi = zeros(nx)
 
 for j in 1:nx
-    phi[j] = sum(psi[j, :] .* w)
+    phi[j] = sum(ψ[j, :] .* w)
 end
 
 # plot phi
