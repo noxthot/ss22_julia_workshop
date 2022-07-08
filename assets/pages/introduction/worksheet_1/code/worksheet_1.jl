@@ -11,8 +11,8 @@ nx = 101
 x = collect(range(0, 1; length=nx))
 
 # setup initial condition
-psi = zeros(nx, nv)
-psi[50, :] = ones(nv)
+ψ = zeros(nx, nv)
+ψ[50, :] = ones(nv)
 
 # create stencil matrices
 dx = 1 / (nx - 1)
@@ -29,19 +29,19 @@ VPlus = Diagonal([zeros(midMinus); v[(midPlus + 1):end]])
 G = ones(nv, nv) .* w - I
 
 # advance in time
-dt = 0.01
+Δt = 0.01
 nT = 40
 
 for n in 1:nT
-    psiNew = psi + dt * (-DPlus * psi * VPlus - DMinus * psi * VMinus + psi * G)
-    psi .= psiNew
+    ψ_new = ψ + Δt * (-DPlus * ψ * VPlus - DMinus * ψ * VMinus + ψ * G)
+    ψ .= ψ_new
 end
 
 # store phi for plotting
 phi = zeros(nx)
 
 for j in 1:nx
-    phi[j] = sum(psi[j, :] .* w)
+    phi[j] = sum(ψ[j, :] .* w)
 end
 
 # plot phi
