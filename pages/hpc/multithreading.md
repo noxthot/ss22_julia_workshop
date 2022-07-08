@@ -116,16 +116,11 @@ end
 ```
 and we test it
 ```julia-repl
-julia> println(
-           abs(
-           estimate_pi(in_unit_circle_threaded1, N) - pi
-           )
-       )
-2.238629413589793
+julia> get_accuracy(in_unit_circle_threaded1, N)
+  2.2828585264557084
 
-julia> @btime estimate_pi(in_unit_circle_threaded1, N)
-  1.764 s (78540628 allocations: 1.17 GiB)
-0.8047274
+julia> @btime estimate_pi(in_unit_circle_threaded1, N);
+  21.899 s (843326330 allocations: 12.57 GiB)
 ```
 Well that is underwhelming. The result is wrong and it is slower. So what happened?
 }
@@ -155,16 +150,11 @@ end
 ```
 and we test it
 ```julia-repl
-julia> println(
-           abs(
-           estimate_pi(in_unit_circle_threaded2, N) - pi
-           )
-       )
-1.1466410207106037e-5
+julia> get_accuracy(in_unit_circle_threaded2, N)
+  2.729346091356888e-5
 
-julia> @btime estimate_pi(in_unit_circle_threaded2, N)
-  1.026 s (78540628 allocations: 1.17 GiB)
-3.14157478
+julia> @btime estimate_pi(in_unit_circle_threaded2, N);
+  10.487 s (24 allocations: 2.03 KiB)
 ```
 Now our result is correct, but the time is still not better but worse.
 }
@@ -191,16 +181,11 @@ end
 ```
 and we test it
 ```julia-repl
-julia> println(
-           abs(
-           estimate_pi(in_unit_circle_threaded2, N) - pi
-           )
-       )
-0.00017913358979315674
+julia> get_accuracy(in_unit_circle_threaded3, N)
+  1.7652409621149445e-5
 
-julia> @btime estimate_pi(in_unit_circle_threaded2, N)
-  246.722 ms (22 allocations: 2.05 KiB)
-3.1415168
+julia> @btime estimate_pi(in_unit_circle_threaded3, N);
+  2.857 s (23 allocations: 2.08 KiB)
 ```
 Now our result is correct, and the time is okay.
 }
@@ -266,16 +251,11 @@ end
 ```
 and we test it
 ```julia-repl
-julia> println(
-           abs(
-           estimate_pi(in_unit_circle_threaded4, N) - pi
-           )
-       )
-3.797358979307219e-5
+julia> get_accuracy(in_unit_circle_threaded4, N)
+  3.955314820203171e-5
 
-julia> @btime estimate_pi(in_unit_circle_threaded4, N)
-  46.866 ms (22 allocations: 2.06 KiB)
-3.141406
+julia> @btime estimate_pi(in_unit_circle_threaded4, N);
+  504.697 ms (22 allocations: 2.06 KiB)
 ```
 }
 }
@@ -283,21 +263,26 @@ julia> @btime estimate_pi(in_unit_circle_threaded4, N)
 ### Final results
 
 For comparison, here are our final results for 4 computational threads:
-```julia-repl
-julia> @btime estimate_pi(in_unit_circle, N);
-  235.669 ms (0 allocations: 0 bytes)
+```julia
+Accuracy of in_unit_circle: 9.43186408797203e-5
+Performance:
+  2.531 s (0 allocations: 0 bytes)
 
-julia> @btime estimate_pi(in_unit_circle_threaded1, N);
-  1.936 s (78536523 allocations: 1.17 GiB)
+Accuracy of in_unit_circle_threaded1: 2.2828585264557084
+Performance:
+  21.899 s (843326330 allocations: 12.57 GiB)
 
-julia> @btime estimate_pi(in_unit_circle_threaded2, N);
-  897.725 ms (22 allocations: 1.97 KiB)
+Accuracy of in_unit_circle_threaded2: 2.729346091356888e-5
+Performance:
+  10.487 s (24 allocations: 2.03 KiB)
 
-julia> @btime estimate_pi(in_unit_circle_threaded3, N);
-  264.300 ms (22 allocations: 2.05 KiB)
+Accuracy of in_unit_circle_threaded3: 1.7652409621149445e-5
+Performance:
+  2.857 s (23 allocations: 2.08 KiB)
 
-julia> @btime estimate_pi(in_unit_circle_threaded4, N);
-  46.866 ms (22 allocations: 2.06 KiB)
+Accuracy of in_unit_circle_threaded4: 3.955314820203171e-5
+Performance:
+  504.697 ms (22 allocations: 2.06 KiB)
 ```
 
 ### Other pitfalls

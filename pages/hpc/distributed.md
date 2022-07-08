@@ -102,16 +102,11 @@ end
 ```
 and we test it
 ```julia-repl
-julia> println(
-           abs(
-           estimate_pi(in_unit_circle_task, N) - pi
-           )
-       )
-5.813589793124407e-6
+julia> get_accuracy(in_unit_circle_task, N)
+  3.002385561856613e-5
 
-julia> @btime estimate_pi(in_unit_circle_task, N)
-  235.873 ms (46 allocations: 2.72 KiB)
-3.14161696
+julia> @btime estimate_pi(in_unit_circle_task, N);
+  2.549 s (46 allocations: 2.72 KiB)
 ```
 }
 }
@@ -228,16 +223,11 @@ julia> nprocs()
 1
 julia> addprocs(4)
 5
-julia> println(
-           abs(
-           estimate_pi(in_unit_circle_, N)distributed1 - pi
-           )
-       )
-8.741358979325042e-5
+julia> get_accuracy(in_unit_circle_distributed1, N)
+  4.179204767140732e-5
 
-julia> @btime estimate_pi(in_unit_circle_distributed1, N)
-  69.229 ms (286 allocations: 12.17 KiB)
-3.14156188
+julia> @btime estimate_pi(in_unit_circle_distributed1, N);
+  649.564 ms (289 allocations: 12.27 KiB)
 ```
 }
 }
@@ -329,17 +319,11 @@ julia> nprocs()
 1
 julia> addprocs(4)
 5
-julia> println(
-           abs(
-           estimate_pi(in_unit_circle_task, N) - pi
-           )
-       )
-5.886641020680372e-5
+julia> get_accuracy(in_unit_circle_distributed2, N)
+  3.955314820203171e-5
 
-julia> @btime estimate_pi(in_unit_circle_distributed2, N)
-  63.124 ms (301 allocations: 13.02 KiB)
-3.1415646
-
+julia> @btime estimate_pi(in_unit_circle_distributed2, N);
+  648.168 ms (304 allocations: 13.11 KiB)
 ```
 }
 }
