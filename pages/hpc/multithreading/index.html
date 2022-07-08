@@ -140,7 +140,7 @@
 </span>16
 <span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> Threads.threadid()
 </span>1</code></pre>
-<p>By default, the Julia REPL, or the main Julia process for that matter, will always run on the thread with id 1. We do not have the time for a deep dive into all the dirty details on how do do proper multithreaded programming &#40;raise conditions, locks, atomic operations, thread safe programming, ...&#41;, therefore we keep it light and simple with the <code>@threads</code> macro and introduce the needed concepts when we need them along the way.</p>
+<p>By default, the Julia REPL, or the main Julia process for that matter, will always run on the thread with id &#39;1&#39;. We do not have the time for a deep dive into all the dirty details on how do do proper multithreaded programming &#40;raise conditions, locks, atomic operations, thread safe programming, ...&#41;, therefore we keep it light and simple with the <code>@threads</code> macro and introduce the needed concepts when we need them along the way.</p>
 <p>Like all the other macros it gives us the possibility to bring something rather complex in our code by still staying very readable as the following example shows.</p>
 <button type="button" class="collapsible" style="background-color:#caffa5"> Example </button><div class="collapsiblecontent">  Simple example for the <a href="https://docs.julialang.org/en/v1/manual/multi-threading/#The-@threads-Macro">docs</a>:</p>
 <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-keyword">using</span> Base.Threads
@@ -332,7 +332,7 @@ rand(rng)</code></pre>
 </li>
 </ul>
 <div class="page-foot">
-    <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> Gregor Ehrensperger, Peter Kandolf, Jonas Kusch. Last modified: July 07, 2022.
+    <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> Gregor Ehrensperger, Peter Kandolf, Jonas Kusch. Last modified: July 08, 2022.
     Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
 </div>
 </div><!-- CONTENT ENDS HERE -->
