@@ -111,19 +111,25 @@
 
 
 <!-- Content appended here (in class franklin-content) -->
-<div class="franklin-content"><h1 id="gpu_computing_in_julia_-_touching_the_subject"><a href="#gpu_computing_in_julia_-_touching_the_subject" class="header-anchor">GPU computing in Julia - touching the subject</a></h1>
-<p>A Graphic Processing Unit, or GPU for short, was originally designed to manipulate images an a frame buffer. Their inherent parallelism makes them more efficient for some tasks than CPUs.  Basically everything that is related to SIMD operations but not limited to them.   Using GPUs for general purpose computing &#40;GPGPU&#41; became a thing in the 21st century.  NVidia became the first big vendor that started to support this kind of application for their GPUs and invested in dedicated frameworks to aid general purpose computing and later also started to have dedicated hardware for this purpose only.  Nowadays GPUs are usd for AI, deep learning and a lot of HPC workloads.</p>
-<p>In Julia GPUs are supported by the  <a href="https://juliagpu.org/">JuliaGPU</a> project.  They support the there big vendor frameworks: </p>
+<div class="franklin-content"><h1 id="gpu_computing_in_julia"><a href="#gpu_computing_in_julia" class="header-anchor">GPU computing in Julia</a></h1>
+<p>A Graphic Processing Unit, or GPU for short, was originally designed to manipulate images an a frame buffer. Their inherent parallelism makes them more efficient for some tasks than CPUs.  Basically everything that is related to SIMD operations but not limited to them.   Using GPUs for general purpose computing &#40;GPGPU&#41; became a thing in the 21st century.  NVidia became the first big vendor that started to support this kind of application for their GPUs and invested heavily in dedicated frameworks to aid general purpose computing and later also started to produce dedicated hardware for this purpose only.  Nowadays, GPUs are usd for AI, deep learning and a lot of HPC workloads.</p>
+<p>In Julia GPUs are supported by the  <a href="https://juliagpu.org/">JuliaGPU</a> project.  They support the t three big vendor frameworks: </p>
 <ul>
-<li><p>NVidia with CUDA and <a href="https://cuda.juliagpu.org/stable/"><code>CUDA.jl</code></a></p>
+<li><p>NVidia with <a href="https://docs.nvidia.com/cuda/">CUDA</a> and <a href="https://cuda.juliagpu.org/stable/"><code>CUDA.jl</code></a></p>
 </li>
-<li><p>AMD with ROCm and <a href="https://github.com/JuliaGPU/AMDGPU.jl"><code>AMDGPU.jl</code></a></p>
+<li><p>AMD with <a href="https://rocmdocs.amd.com/en/latest/">ROCm</a> and <a href="https://github.com/JuliaGPU/AMDGPU.jl"><code>AMDGPU.jl</code></a></p>
 </li>
-<li><p>Intel with opnAPI and <a href="https://github.com/JuliaGPU/oneAPI.jl"><code>oneAPI</code></a></p>
+<li><p>Intel with <a href="https://www.intel.com/content/www/us/en/develop/documentation/oneapi-gpu-optimization-guide/top.html">oneAPI</a> and <a href="https://github.com/JuliaGPU/oneAPI.jl"><code>oneAPI</code></a></p>
 </li>
 </ul>
-<p>where <code>CUDA.jl</code> comes with the most features.  Nevertheless, in good Julia practice, they also included an abstraction layer, such that a lot of common functionality can be implemented without the need to specify a vendor. </p>
-<p>As the <code>rand&#40;&#41;</code> function needed for our <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>π</mi></mrow><annotation encoding="application/x-tex">\pi</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">π</span></span></span></span> example is not supported on all platforms we stick to CUDA here. </p>
+<p>where <code>CUDA.jl</code> comes with the most features.  Nevertheless, in good Julia practice, the team behind JuliaGPU also included an abstraction layer, such that a lot of common functionality can be implemented without the need to specify a vendor.</p>
+
+<figure style="text-align:center;">
+<img src="/ss22_julia_workshop/assets/pages/hpc/GPUBackend.png" style="padding:0; " alt=" Compile strategy for JuliaGPU <br>Original source: https://www.youtube.com/watch?v=Hz9IMJuW5hU"/>
+<figcaption> Compile strategy for JuliaGPU <br>Original source: https://www.youtube.com/watch?v=Hz9IMJuW5hU</figcaption>
+</figure>
+
+<p>We will focus on <code>CUDA.jl</code> as the card at hand is CUDA compatible. </p>
 <p>We install tha package with the usual command and execute the test right away, to see if the GPU is working:</p>
 <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-keyword">using</span> CUDA
 </span>
@@ -277,7 +283,8 @@ Test Summary: |  Pass  Broken  Total
     SUCCESS
      Testing CUDA tests passed</code></pre>
 <p></div>
-<p>Right away we are able to use the high level functionality by the implicit parallelism programming model and SIMD instructions. </p>
+<p>This already provides us with a lot of information about the card and the supported CUDA library versions. Note that <code>CUDA.jl</code> will look up the driver &#40;the only requirement&#41; and download the best CUDA version on its own. Therefore, it is not necessary the same as you have installed. </p>
+<p>Right away we are able to use the high level functionality of the <code>CUDA.jl</code> package with the <em>implicit parallelism programming model</em>.</p>
 <p>Let us look at some examples:</p>
 <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> a = CuArray([<span class="hljs-number">1.0</span>,<span class="hljs-number">2.0</span>,<span class="hljs-number">3.0</span>,<span class="hljs-number">4.0</span>])
 </span>4-element CuArray{Float64, 1, CUDA.Mem.DeviceBuffer}:
@@ -377,7 +384,7 @@ Stacktrace:
  10.0
  18.0
  28.0</code></pre>
-<p>Already with this functionality we can code a lot of problems on the GPU without knowing anything else than how to include <code>CUDA.jl</code>. </p>
+<p>Already with this functionality we can code up a lot of problems in scientific computing and port it to the GPU without knowing anything else than how to include <code>CUDA.jl</code>.  It is worth noting, that this is also highly efficient, as the people behind <code>CUDA.jl</code> optimize the calls with the same features as Julia itself and they work extraordinary well. </p>
 <p>Of course we can not express everything in these terms.  Sometimes it is necessary to write a specific CUDA kernel function &#40;kernel is the technical name given to a function that is executed on the GPU&#41;. So here is a possible implementation of our <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>π</mi></mrow><annotation encoding="application/x-tex">\pi</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">π</span></span></span></span> example.</p>
 <p>The main idea is to use the most of the GPU by performing as many operations in parallel as possible, this also means we need to represent <code>M</code> as a vector again.  The GPU at hand supports a maximum of <code>1024</code> threads, so let us use all of them. </p>
 <p>There is also one additional thing to keep in mind, that is, a kernel can not return a value.  That means we need to give <code>M</code> as an input variable rather than an output variable and in order to stick to the convention in Julia we define the kernel as:</p>
