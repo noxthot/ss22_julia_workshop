@@ -3,25 +3,27 @@
 
 @def tags = ["Parallel Computing", "GPU computing"]
 
-# GPU computing in Julia - touching the subject
+# GPU computing in Julia
 
 A Graphic Processing Unit, or GPU for short, was originally designed to manipulate images an a frame buffer.
 Their inherent parallelism makes them more efficient for some tasks than CPUs. 
 Basically everything that is related to SIMD operations but not limited to them.  
 Using GPUs for general purpose computing (GPGPU) became a thing in the 21st century. 
-NVidia became the first big vendor that started to support this kind of application for their GPUs and invested in dedicated frameworks to aid general purpose computing and later also started to have dedicated hardware for this purpose only. 
-Nowadays GPUs are usd for AI, deep learning and a lot of HPC workloads.
+NVidia became the first big vendor that started to support this kind of application for their GPUs and invested heavily in dedicated frameworks to aid general purpose computing and later also started to produce dedicated hardware for this purpose only. 
+Nowadays, GPUs are usd for AI, deep learning and a lot of HPC workloads.
 
 In Julia GPUs are supported by the 
 [JuliaGPU](https://juliagpu.org/) project. 
-They support the there big vendor frameworks: 
-- NVidia with CUDA and [`CUDA.jl`](https://cuda.juliagpu.org/stable/)
-- AMD with ROCm and [`AMDGPU.jl`](https://github.com/JuliaGPU/AMDGPU.jl)
-- Intel with opnAPI and [`oneAPI`](https://github.com/JuliaGPU/oneAPI.jl)
+They support the t three big vendor frameworks: 
+- NVidia with [CUDA](https://docs.nvidia.com/cuda/) and [`CUDA.jl`](https://cuda.juliagpu.org/stable/)
+- AMD with [ROCm](https://rocmdocs.amd.com/en/latest/) and [`AMDGPU.jl`](https://github.com/JuliaGPU/AMDGPU.jl)
+- Intel with [oneAPI](https://www.intel.com/content/www/us/en/develop/documentation/oneapi-gpu-optimization-guide/top.html) and [`oneAPI`](https://github.com/JuliaGPU/oneAPI.jl)
 where `CUDA.jl` comes with the most features. 
-Nevertheless, in good Julia practice, they also included an abstraction layer, such that a lot of common functionality can be implemented without the need to specify a vendor. 
+Nevertheless, in good Julia practice, the team behind JuliaGPU also included an abstraction layer, such that a lot of common functionality can be implemented without the need to specify a vendor.
 
-As the `rand()` function needed for our $\pi$ example is not supported on all platforms we stick to CUDA here. 
+\figenv{Compile strategy for JuliaGPU <br>Original source: https://www.youtube.com/watch?v=Hz9IMJuW5hU}{/assets/pages/hpc/GPUBackend.png}{}
+
+We will focus on `CUDA.jl` as the card at hand is CUDA compatible. 
 
 We install tha package with the usual command and execute the test right away, to see if the GPU is working:
 ```julia-repl
@@ -182,7 +184,10 @@ Test Summary: |  Pass  Broken  Total
 ```
 }
 
-Right away we are able to use the high level functionality by the implicit parallelism programming model and SIMD instructions. 
+This already provides us with a lot of information about the card and the supported CUDA library versions. Note that `CUDA.jl`
+will look up the driver (the only requirement) and download the best CUDA version on its own. Therefore, it is not necessary the same as you have installed. 
+
+Right away we are able to use the high level functionality of the `CUDA.jl` package with the *implicit parallelism programming model*.
 
 Let us look at some examples:
 ```julia-repl
@@ -286,7 +291,8 @@ julia> accumulate(+, a)
  28.0
 
 ```
-Already with this functionality we can code a lot of problems on the GPU without knowing anything else than how to include `CUDA.jl`. 
+Already with this functionality we can code up a lot of problems in scientific computing and port it to the GPU without knowing anything else than how to include `CUDA.jl`. 
+It is worth noting, that this is also highly efficient, as the people behind `CUDA.jl` optimize the calls with the same features as Julia itself and they work extraordinary well. 
 
 Of course we can not express everything in these terms. 
 Sometimes it is necessary to write a specific CUDA kernel function (kernel is the technical name given to a function that is executed on the GPU).
