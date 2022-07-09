@@ -189,16 +189,11 @@
     <span class="hljs-keyword">return</span> M
 <span class="hljs-keyword">end</span></code></pre>
 <p>and we test it</p>
-<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> println(
-           abs(
-           estimate_pi(in_unit_circle_threaded1, N) - <span class="hljs-literal">pi</span>
-           )
-       )
-</span>2.238629413589793
+<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> get_accuracy(in_unit_circle_threaded1, N)
+</span>  2.2828585264557084
 
-<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@btime</span> estimate_pi(in_unit_circle_threaded1, N)
-</span>  1.764 s (78540628 allocations: 1.17 GiB)
-0.8047274</code></pre>
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@btime</span> estimate_pi(in_unit_circle_threaded1, N);
+</span>  21.899 s (843326330 allocations: 12.57 GiB)</code></pre>
 <p>Well that is underwhelming. The result is wrong and it is slower. So what happened? </div> </div>
 <h3 id="atomic_operations"><a href="#atomic_operations" class="header-anchor">Atomic Operations</a></h3>
 <p>As we could see in the above example of the docs the loop is automatically split up per index for the threads available. This means each of the threads is performing the same loop and as the context and memory is shared also access the same storage. This is problematic for our variable <code>M</code>. This means each thread reads and writes in the same variable but this also means the result is not correct. It might override the results of other threads or they all read at the same time but only one result will be written in the end. In short the counter is totally wrong. We call this <a href="https://en.wikipedia.org/wiki/Race_condition">rase condition</a>.</p>
@@ -216,16 +211,11 @@
     <span class="hljs-keyword">return</span> M[]
 <span class="hljs-keyword">end</span></code></pre>
 <p>and we test it</p>
-<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> println(
-           abs(
-           estimate_pi(in_unit_circle_threaded2, N) - <span class="hljs-literal">pi</span>
-           )
-       )
-</span>1.1466410207106037e-5
+<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> get_accuracy(in_unit_circle_threaded2, N)
+</span>  2.729346091356888e-5
 
-<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@btime</span> estimate_pi(in_unit_circle_threaded2, N)
-</span>  1.026 s (78540628 allocations: 1.17 GiB)
-3.14157478</code></pre>
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@btime</span> estimate_pi(in_unit_circle_threaded2, N);
+</span>  10.487 s (24 allocations: 2.03 KiB)</code></pre>
 <p>Now our result is correct, but the time is still not better but worse. </div> </div>
 <h3 id="actually_distribute_the_work"><a href="#actually_distribute_the_work" class="header-anchor">Actually distribute the work</a></h3>
 <p>We are still not fast because each <code>attomic_add&#33;</code> is checking which thread has the current result and needs to add the new value. To avoid this we need to eliminate atomic again. We can actually split up the work quite neatly if we remember the example from the docs. It is possible to access the <code>threadid&#40;&#41;</code> and the number of threads <code>nthreads&#40;&#41;</code>. So why not define <code>M</code> as an array of length <code>nthreads&#40;&#41;</code> and in each thread write to separate values in the array by using <code>threadid&#40;&#41;</code> as index.</p>
@@ -242,16 +232,11 @@
     <span class="hljs-keyword">return</span> sum(M)
 <span class="hljs-keyword">end</span></code></pre>
 <p>and we test it</p>
-<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> println(
-           abs(
-           estimate_pi(in_unit_circle_threaded2, N) - <span class="hljs-literal">pi</span>
-           )
-       )
-</span>0.00017913358979315674
+<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> get_accuracy(in_unit_circle_threaded3, N)
+</span>  1.7652409621149445e-5
 
-<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@btime</span> estimate_pi(in_unit_circle_threaded2, N)
-</span>  246.722 ms (22 allocations: 2.05 KiB)
-3.1415168</code></pre>
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@btime</span> estimate_pi(in_unit_circle_threaded3, N);
+</span>  2.857 s (23 allocations: 2.08 KiB)</code></pre>
 <p>Now our result is correct, and the time is okay. </div> </div>
 <p>Now we are faster, but still not faster than the serial version. Why is it still not working?</p>
 <h3 id="global_states"><a href="#global_states" class="header-anchor">Global states</a></h3>
@@ -297,33 +282,33 @@ rand(rng)</code></pre>
     <span class="hljs-keyword">return</span> sum(M)
 <span class="hljs-keyword">end</span></code></pre>
 <p>and we test it</p>
-<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> println(
-           abs(
-           estimate_pi(in_unit_circle_threaded4, N) - <span class="hljs-literal">pi</span>
-           )
-       )
-</span>3.797358979307219e-5
+<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> get_accuracy(in_unit_circle_threaded4, N)
+</span>  3.955314820203171e-5
 
-<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@btime</span> estimate_pi(in_unit_circle_threaded4, N)
-</span>  46.866 ms (22 allocations: 2.06 KiB)
-3.141406</code></pre>
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@btime</span> estimate_pi(in_unit_circle_threaded4, N);
+</span>  504.697 ms (22 allocations: 2.06 KiB)</code></pre>
 <p></div> </div>
 <h3 id="final_results"><a href="#final_results" class="header-anchor">Final results</a></h3>
 <p>For comparison, here are our final results for 4 computational threads:</p>
-<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@btime</span> estimate_pi(in_unit_circle, N);
-</span>  235.669 ms (0 allocations: 0 bytes)
+<pre><code class="julia hljs">Accuracy of in_unit_circle: <span class="hljs-number">9.43186408797203e-5</span>
+Performance:
+  <span class="hljs-number">2.531</span> s (<span class="hljs-number">0</span> allocations: <span class="hljs-number">0</span> bytes)
 
-<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@btime</span> estimate_pi(in_unit_circle_threaded1, N);
-</span>  1.936 s (78536523 allocations: 1.17 GiB)
+Accuracy of in_unit_circle_threaded1: <span class="hljs-number">2.2828585264557084</span>
+Performance:
+  <span class="hljs-number">21.899</span> s (<span class="hljs-number">843326330</span> allocations: <span class="hljs-number">12.57</span> GiB)
 
-<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@btime</span> estimate_pi(in_unit_circle_threaded2, N);
-</span>  897.725 ms (22 allocations: 1.97 KiB)
+Accuracy of in_unit_circle_threaded2: <span class="hljs-number">2.729346091356888e-5</span>
+Performance:
+  <span class="hljs-number">10.487</span> s (<span class="hljs-number">24</span> allocations: <span class="hljs-number">2.03</span> KiB)
 
-<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@btime</span> estimate_pi(in_unit_circle_threaded3, N);
-</span>  264.300 ms (22 allocations: 2.05 KiB)
+Accuracy of in_unit_circle_threaded3: <span class="hljs-number">1.7652409621149445e-5</span>
+Performance:
+  <span class="hljs-number">2.857</span> s (<span class="hljs-number">23</span> allocations: <span class="hljs-number">2.08</span> KiB)
 
-<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@btime</span> estimate_pi(in_unit_circle_threaded4, N);
-</span>  46.866 ms (22 allocations: 2.06 KiB)</code></pre>
+Accuracy of in_unit_circle_threaded4: <span class="hljs-number">3.955314820203171e-5</span>
+Performance:
+  <span class="hljs-number">504.697</span> ms (<span class="hljs-number">22</span> allocations: <span class="hljs-number">2.06</span> KiB)</code></pre>
 <h3 id="other_pitfalls"><a href="#other_pitfalls" class="header-anchor">Other pitfalls</a></h3>
 <p>There are several other pitfalls that might occur with multithreading, here is an incomplete list:</p>
 <ul>
@@ -333,7 +318,7 @@ rand(rng)</code></pre>
 </li>
 </ul>
 <div class="page-foot">
-    <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> Gregor Ehrensperger, Peter Kandolf, Jonas Kusch. Last modified: July 08, 2022.
+    <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> Gregor Ehrensperger, Peter Kandolf, Jonas Kusch. Last modified: July 09, 2022.
     Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
 </div>
 </div><!-- CONTENT ENDS HERE -->

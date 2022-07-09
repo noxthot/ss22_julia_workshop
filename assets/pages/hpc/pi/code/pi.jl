@@ -15,9 +15,11 @@ function estimate_pi(f::Function, N::Int64)
     return 4 * f(N) / N
 end
 
-N = 100_000_000
-println(
-    abs(
-    estimate_pi(in_unit_circle, N) - pi
-    )
-)
+function get_accuracy(f::Function, N::Int64)
+    return abs(
+        estimate_pi(f, N) - pi
+        )
+end
+
+N = 2^30
+get_accuracy(in_unit_circle, N)

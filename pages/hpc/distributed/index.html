@@ -183,16 +183,11 @@
     <span class="hljs-keyword">return</span> M
 <span class="hljs-keyword">end</span></code></pre>
 <p>and we test it</p>
-<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> println(
-           abs(
-           estimate_pi(in_unit_circle_task, N) - <span class="hljs-literal">pi</span>
-           )
-       )
-</span>5.813589793124407e-6
+<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> get_accuracy(in_unit_circle_task, N)
+</span>  3.002385561856613e-5
 
-<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@btime</span> estimate_pi(in_unit_circle_task, N)
-</span>  235.873 ms (46 allocations: 2.72 KiB)
-3.14161696</code></pre>
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@btime</span> estimate_pi(in_unit_circle_task, N);
+</span>  2.549 s (46 allocations: 2.72 KiB)</code></pre>
 <p></div> </div>
 <h2 id="back_to_distributed_computing"><a href="#back_to_distributed_computing" class="header-anchor">Back to distributed computing</a></h2>
 <p>Now that we know what a task is and how to create one we have no difficulty to define what distributed computing is.  It is simply the way to distribute tasks on multiple CPUs or computers.  This multiprocessing environment is based on message passing to allow tasks to run on multiple processes in separate memory domains all at once.  The communication in Julia is not like the one used by <a href="https://www.mpi-forum.org/docs/">MPI</a>.  It is <em>one-sided</em>, that is we only need to manage one process in a two-process operation. These management instructions are also not sent/receive messages but calls to functions or something similar.  For this Julia provides two primitives, <em>remote reference</em> and <em>remote calls</em>, the <a href="https://docs.julialang.org/en/v1/manual/distributed-computing/">documentation</a> tells us: </p>
@@ -268,16 +263,11 @@
 </span>1
 <span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> addprocs(<span class="hljs-number">4</span>)
 </span>5
-<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> println(
-           abs(
-           estimate_pi(in_unit_circle_, N)distributed1 - <span class="hljs-literal">pi</span>
-           )
-       )
-</span>8.741358979325042e-5
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> get_accuracy(in_unit_circle_distributed1, N)
+</span>  4.179204767140732e-5
 
-<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@btime</span> estimate_pi(in_unit_circle_distributed1, N)
-</span>  69.229 ms (286 allocations: 12.17 KiB)
-3.14156188</code></pre>
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@btime</span> estimate_pi(in_unit_circle_distributed1, N);
+</span>  649.564 ms (289 allocations: 12.27 KiB)</code></pre>
 <p></div> </div>
 <p>We can see that this is a very easy way to parallelize and this time the <code>rand&#40;&#41;</code> function is not causing problems. We are already faster than the basic implementation and close to the optimised four threads implementation.</p>
 <p>The <em>distributed for loop</em> with <code>@distributed</code> is designed to work well for situations where each iteration is tiny.  Of course there is also the other possibility, that we have a function with a massive workload and work with the results of these calls.</p>
@@ -343,22 +333,17 @@
 </span>1
 <span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> addprocs(<span class="hljs-number">4</span>)
 </span>5
-<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> println(
-           abs(
-           estimate_pi(in_unit_circle_task, N) - <span class="hljs-literal">pi</span>
-           )
-       )
-</span>5.886641020680372e-5
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> get_accuracy(in_unit_circle_distributed2, N)
+</span>  3.955314820203171e-5
 
-<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@btime</span> estimate_pi(in_unit_circle_distributed2, N)
-</span>  63.124 ms (301 allocations: 13.02 KiB)
-3.1415646</code></pre>
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@btime</span> estimate_pi(in_unit_circle_distributed2, N);
+</span>  648.168 ms (304 allocations: 13.11 KiB)</code></pre>
 <p></div> </div>
 <h1 id="additional_information_on_distributed_computing"><a href="#additional_information_on_distributed_computing" class="header-anchor">Additional information on distributed computing</a></h1>
 <p>There is a lot more to say about distributed computing.  Have a read in the <a href="https://docs.julialang.org/en/v1/manual/distributed-computing/">docs</a> but here are some things we want to mention.   For example Julia is able to define <a href="https://docs.julialang.org/en/v1/manual/distributed-computing/#man-shared-arrays">shared arrays</a>.  A shared array means the content can be accessed by each worker and it is consistent over all workers.</p>
 <p>Furthermore, it is possible to have a cluster, e.g. a managed pool of workers. This cluster can be distributed on several machines.  You can define various ways of accessing these machines so you can become really flexible about this and maybe start a worker on the laptop of a colleague.  For this we have the <a href="https://docs.julialang.org/en/v1/manual/distributed-computing/#ClusterManagers"><code>ClusterManager</code></a> package.</p>
 <div class="page-foot">
-    <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> Gregor Ehrensperger, Peter Kandolf, Jonas Kusch. Last modified: July 08, 2022.
+    <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> Gregor Ehrensperger, Peter Kandolf, Jonas Kusch. Last modified: July 09, 2022.
     Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
 </div>
 </div><!-- CONTENT ENDS HERE -->

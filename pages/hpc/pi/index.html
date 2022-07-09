@@ -169,16 +169,17 @@
     <span class="hljs-keyword">return</span> <span class="hljs-number">4</span> * f(N) / N
 <span class="hljs-keyword">end</span>
 
-N = <span class="hljs-number">100_000_000</span>
-println(
-    abs(
-    estimate_pi(in_unit_circle, N) - <span class="hljs-literal">pi</span>
-    )
-)</code></pre>
-<p><pre><code class="plaintext hljs">5.98664102069435e-5
-</code></pre> </div> </div>
+<span class="hljs-keyword">function</span> get_accuracy(f::<span class="hljs-built_in">Function</span>, N::<span class="hljs-built_in">Int64</span>)
+    <span class="hljs-keyword">return</span> abs(
+        estimate_pi(f, N) - <span class="hljs-literal">pi</span>
+        )
+<span class="hljs-keyword">end</span>
+
+N = <span class="hljs-number">2</span>^<span class="hljs-number">30</span>
+get_accuracy(in_unit_circle, N)</code></pre>
+<p><pre><code class="plaintext hljs">9.862584523290252e-6</code></pre> </div> </div>
 <div class="page-foot">
-    <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> Gregor Ehrensperger, Peter Kandolf, Jonas Kusch. Last modified: July 08, 2022.
+    <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> Gregor Ehrensperger, Peter Kandolf, Jonas Kusch. Last modified: July 09, 2022.
     Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
 </div>
 </div><!-- CONTENT ENDS HERE -->
