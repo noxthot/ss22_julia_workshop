@@ -176,6 +176,7 @@ $$
 $$ 
 we can use `T = Tridiagonal(a,b,c)`.
 The rest you need to know about vectors and matrices we will introduce along the way.
+
 \exercise{
 1. Create a sparse matrix $\mathbf{T}\in\mathbb{R}^{10 \times 10}$ of the form
 $$
@@ -189,6 +190,7 @@ $$
 $$
 2. Compute a vector $\mathbf{x}$ such that $\mathbf{T}\mathbf{x} = \mathbf{1}$ where $\mathbf{1} = (1,\cdots,1)^{\top}$
 
+$\,$
 }
 
 test
