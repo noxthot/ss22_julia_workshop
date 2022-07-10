@@ -164,4 +164,31 @@ julia> sA \ v
  1.1102230246251565e-16
  0.09999999999999995
 ```
+A further functionality of the LinearAlgebra package is given by efficient storage routines for sparse matrices, i.e., matrices that are zero except for a small number of entries. A very common sparse matrix is a diagonal matrix. To create a diagonal matrix $D$ which has entries $d = (d_1,\cdots,d_{10})$ on the diagonal, we can use `D = Diagonal(d)`. If the matrix is a tridiagonal matrix, that is, it has the form
+$$
+\mathbf{T} = \begin{pmatrix}
+    b_1 & c_1 &  &      &   \\
+    a_1  & b_2       & c_2   &     &    \\
+      &         & \ddots         & \ddots    &     \\
+      &         &    \ddots       &     b_{N-1}      & c_{N-1}   \\
+      &         &           &     a_{N-1}      & b_N
+  \end{pmatrix}\;,
+$$ 
+we can use `T = Tridiagonal(a,b,c)`.
 The rest you need to know about vectors and matrices we will introduce along the way.
+\exercise{
+1. Create a sparse matrix $\mathbf{T}\in\mathbb{R}^{10 \times 10}$ of the form
+$$
+\mathbf{T} = \begin{pmatrix}
+    -1 & 1 & -1   &      &   \\
+      & -1       & 1   &      &    \\
+      &         & -1         & \ddots    &     \\
+      &         &           &     -1      & 1   \\
+      &         &           &           & -1
+\end{pmatrix}\;.
+$$
+2. Compute a vector $\mathbf{x}$ such that $\mathbf{T}\mathbf{x} = \mathbf{1}$ where $\mathbf{1} = (1,\cdots,1)^{\top}$
+
+}
+
+test

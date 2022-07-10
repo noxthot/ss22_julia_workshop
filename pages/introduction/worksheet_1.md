@@ -46,6 +46,7 @@ v, w = gausslegendre(nv)
 You can print out your velocity grid by typing `v` in the Julia environment or by adding `println(v)`. 
 }
 
+
 ## Array generation and access
 
 Now, to generate the spatial positions on which we want to evaluate the solution we can use the built-in `range` command
@@ -111,6 +112,7 @@ DPlus = (1 / Δx) * Tridiagonal(-ones(nx - 1), ones(nx), zeros(nx - 1))
 DMinus = (1 / Δx) * Tridiagonal(zeros(nx - 1), -ones(nx), ones(nx - 1))
 ```
 }
+
 The matrices $\mathbf{V}^{\pm}\in\mathbb{R}^{n_v\times n_v}$ are diagonal matrices, where $\mathbf{V}^-$ collects all negative velocities on the diagonal, i.e., $\mathbf{V}^- = \text{diag}(v_1,\cdots,v_{5},0,\cdots,0)$ and $\mathbf{V}^+$ collects all positive velocities, i.e., $\mathbf{V}^+ = \text{diag}(0,\cdots,0,v_{6},\cdots,v_{10})$. Implement these two matrices. To write your code for general $\operatorname{nv}$, use the `ceil` and `floor` commands.
 
 \example{
@@ -123,6 +125,7 @@ VMinus = Diagonal([v[1:midMinus]; zeros(midPlus)])
 VPlus = Diagonal([zeros(midMinus); v[(midPlus + 1):end]])
 ```
 }
+
 Lastly, the so called scattering matrix $\mathbf{G}$ is given as 
 
 ```julia:./code/worksheet_1.jl
