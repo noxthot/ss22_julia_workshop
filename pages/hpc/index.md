@@ -12,4 +12,11 @@ Since modern laptops and computers come with multiple cores parallel computing i
 Julia has a excellent section dedicated to general [performance tips](https://docs.julialang.org/en/v1/manual/performance-tips/) that are a good read every couple of months.
 @@
 
-Before we are are going into the details of parallel coding we need to talk about how to measure performance in Julia.
+This part covers the following sections:
+
+1. [Measuring performance](performance)
+1. [Singe Instruction Multiple Data](simd)
+1. [$\pi$ example](pi)
+1. [Multithreading](multithreading)
+1. [Distributed computing](distributed)
+1. [GPU computing](gpu)

@@ -4,6 +4,7 @@
 @def tags = ["Parallel Computing", "Distributed Computing"]
 
 # Distributed computing in Julia
+\toc
 
 In Julia we talk about distributed computing when we run Julia processes with separate memory spaces, Julia does not distinguish between processes on the same or on multiple computers. The main idea is to have remote execution. 
 

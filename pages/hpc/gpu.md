@@ -5,6 +5,8 @@
 
 # GPU computing in Julia
 
+\toc 
+
 Graphic Processing Units, or GPUs for short, where originally designed to manipulate images in a frame buffer.
 Their inherent parallelism makes them more efficient for some tasks than CPUs. 
 Basically everything that is related to SIMD operations but not limited to them.  
@@ -12,6 +14,7 @@ Using GPUs for general purpose computing (GPGPU) became a thing in the 21st cent
 NVIDIA was the first big vendor that started to support this kind of application for their GPUs and invested heavily in dedicated frameworks to aid general purpose computing and later also started to produce dedicated hardware for this purpose only. 
 Nowadays, GPUs are usd for AI, deep learning and a lot of HPC workloads - some still use them for gaming too.
 
+## Introduction 
 In Julia GPUs are supported by the 
 [JuliaGPU](https://juliagpu.org/) project. 
 They support the three big vendor frameworks: 
@@ -188,6 +191,8 @@ The output of the test already provides us with a lot of information about the c
 Note that `CUDA.jl` will look up the NVIDIA driver (the only requirement) and download the best CUDA version on its own. Therefore, it is not necessarily the same version as installed on the system. 
 
 Right away, we are able to use the high level functionality of the `CUDA.jl` package with the *implicit parallelism programming* model.
+
+## Implicit parallelism programming
 
 Let us look at some examples:
 ```julia-repl
@@ -376,6 +381,9 @@ The used GPU is actually quite powerfull and  if we have a look at the [NVIDIA S
 It only provides a snapshot but we still see that the `Volatile GPU-Util` is low to insignificant. 
 What we did in the above example was to use the maximal number of threads (`1024`) support by the used GPU and performed our operations with them.
 This way we only occupied one *streaming multiprocessor* (SM) but the GPU has several SMs - this is similar to how a CPU has multiple cores.
+
+### Multiple Streamin Multiprocessors
+
 To get the full performance we need to run our kernel not just with multiple threads, but also with multiple blocks. 
 
 In this technical blog from NVIDIA [CUDA Refresher: The CUDA Programming Model](https://developer.nvidia.com/blog/cuda-refresher-cuda-programming-model/) we can read more about it. 
@@ -424,6 +432,8 @@ julia> @btime estimate_pi(in_unit_circle_gpu2, N);
 Now each thread on the GPU is doing exactly one computation (and therefore the loop inside the kernel is not needed and for performance reason removed).
 This is still not the most efficient way to use the GPU and in addition it is rather wastefull on memory. 
 
+### Multiple operations per thread
+
 So let us optimize it a bit further.
 Each of the threads should do `n` iterations. This means we need to define the number of blocks as 
 $$
@@ -467,6 +477,8 @@ julia> @btime estimate_pi(in_unit_circle_gpu2, N);
 ```
 One thing you have to keep in mind, we definde `M` of type `Int8` to safe space and boost performance. 
 If `n` become larger than $2^7$ it might happen that the result is too large and can no longer be stored in an 8-Bit integer (as a result an overrun would occure). 
+
+### Additional notes
 
 Like with the rest of the topics in this section we skimmed the surface and did not make a deep dive (like memory access, profiling to boot performance, multi GPU programming, multithreaded/distributed computing with GPUs and so forth). 
 Have a look at the excelent introduciton on [JuliaGPU](https://juliagpu.org/learn/) to see more about the topic and have a look at the YouTube Videos of Tim Besard for a start. 
