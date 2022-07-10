@@ -23,9 +23,9 @@ Nevertheless, in good Julia practice, the team behind JuliaGPU also included an 
 
 \figenv{Compile strategy for JuliaGPU <br>Original source: https://www.youtube.com/watch?v=Hz9IMJuW5hU}{/assets/pages/hpc/GPUBackend.png}{}
 
-We will focus on `CUDA.jl` as the card at hand is CUDA compatible. 
+For the rest of the section we will focus on `CUDA.jl` as the card at hand is CUDA compatible. 
 
-We install tha package with the usual command and execute the test right away, to see if the GPU is working:
+We install tha package with `Pkg,add("CUDA"); using CUDA` and execute the test right away, to see if the GPU is working:
 ```julia-repl
 julia> using CUDA
 
@@ -184,10 +184,10 @@ Test Summary: |  Pass  Broken  Total
 ```
 }
 
-This already provides us with a lot of information about the card and the supported CUDA library versions. Note that `CUDA.jl`
-will look up the driver (the only requirement) and download the best CUDA version on its own. Therefore, it is not necessary the same as you have installed. 
+This already provides us with a lot of information about the card and the supported CUDA library versions. 
+Note that `CUDA.jl` will look up the driver (the only requirement) and download the best CUDA version on its own. Therefore, it is not necessarily the same version as installed on the system. 
 
-Right away we are able to use the high level functionality of the `CUDA.jl` package with the *implicit parallelism programming model*.
+Right away, we are able to use the high level functionality of the `CUDA.jl` package with the *implicit parallelism programming model*.
 
 Let us look at some examples:
 ```julia-repl
@@ -295,8 +295,9 @@ Already with this functionality we can code up a lot of problems in scientific c
 It is worth noting, that this is also highly efficient, as the people behind `CUDA.jl` optimize the calls with the same features as Julia itself and they work extraordinary well. 
 
 Of course we can not express everything in these terms. 
-Sometimes it is necessary to write a specific CUDA kernel function (kernel is the technical name given to a function that is executed on the GPU).
-So here is a possible implementation of our $\pi$ example.
+Sometimes it is necessary to write a specific CUDA kernel function. Note, that kernel is the technical name given to a function that is executed on the GPU.
+
+## $\pi$ example on the GPU
 
 The main idea is to use the most of the GPU by performing as many operations in parallel as possible, this also means we need to represent `M` as a vector again. 
 The GPU at hand supports a maximum of `1024` threads, so let us use all of them. 
@@ -304,10 +305,10 @@ The GPU at hand supports a maximum of `1024` threads, so let us use all of them.
 There is also one additional thing to keep in mind, that is, a kernel can not return a value. 
 That means we need to give `M` as an input variable rather than an output variable and in order to stick to the convention in Julia we define the kernel as:
 ```julia
-function in_unit_circle_kernel!(N::Int64, M)
+function in_unit_circle_kernel!(n::Int64, M)
     j =  threadIdx().x 
     
-    for i in 1:N
+    for i in 1:n
         if (rand()^2 + rand()^2) < 1
             @inbounds M[j] += 1
         end
@@ -318,16 +319,23 @@ end
 ```
 This looks very similar to our function [`in_unit_circle_threaded3`](./multithreading#actually_distribute_the_work). 
 Instead of `treadid()` as we had it in multithreading, this time the id is queried by `threadIdx().x`. 
-The `.x` is due to the fact that we could also have two dimensional arrays (remember GPUs where designed to work with images).
+The `.x` is due to the fact that we could also have two or three dimensional arrays (remember GPUs where designed to work with images).
 
 The kernel is is now called with the `@cuda` macro and the number of threads given as an argument. 
-Note, that we also define `M` to have dimension `1024` and `Int8` as type.
+Note, that we also define `M` to have dimension `2^10 = 1024` and `Int8` as type.
+
+We use `Int8` as on GPUs the data type has quite a high impact on the performance. 
+With integers this is not that important but if we are not working on a highl level server grades GPU the *double* (`Float64`) performance will be significantly slower than *single* (`Float32`). 
+Secondly, there is usually less storage on the GPU.
+
+The resulting *host* side function looks as follows:
 ```julia
 function in_unit_circle_gpu(N::Int64)
-    len, _ = divrem(N, 2^10)
-    M = CUDA.zeros(Int8, 2^10)
+    nthreads = 2^10
+    len, _ = divrem(N, nthreads)
+    M = CUDA.zeros(Int8, nthreads)
 
-    @cuda threads = 1024 in_unit_circle_kernel!(len, M)
+    @cuda threads = nthreads in_unit_circle_kernel!(len, M)
 
     return sum(M)
 end
@@ -342,13 +350,46 @@ julia> @btime estimate_pi(in_unit_circle_gpu, N);
 ```
 
 We are already faster than the standard Julia implementation but this is not what we where hoping for. 
+The used GPU is actually quite powerfull and  if we have a look `nvidia-smi` on the terminal we see that GPU is not utilized fully.
+```bash
++-----------------------------------------------------------------------------+
+| NVIDIA-SMI 510.73.05    Driver Version: 510.73.05    CUDA Version: 11.6     |
+|-------------------------------+----------------------+----------------------+
+| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+|                               |                      |               MIG M. |
+|===============================+======================+======================|
+|   0  NVIDIA GeForce ...  Off  | 00000000:01:00.0 Off |                  N/A |
+| N/A   38C    P5    15W /  N/A |    173MiB /  8192MiB |      0%      Default |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+                                                                               
++-----------------------------------------------------------------------------+
+| Processes:                                                                  |
+|  GPU   GI   CI        PID   Type   Process name                  GPU Memory |
+|        ID   ID                                                   Usage      |
+|=============================================================================|
+|    0   N/A  N/A      2232      G   /usr/lib/xorg/Xorg                  4MiB |
+|    0   N/A  N/A     46980      C   julia                             165MiB |
++-----------------------------------------------------------------------------+
+```
 
-What we did in the above example was to use the maximal number of threads (`1024`) support by the used GPU and performed out operations with them.
-This way we only occupied one *streaming multiprocessor* (SM) but the GPU has several SMs. 
+What we did in the above example was to use the maximal number of threads (`1024`) support by the used GPU and performed our operations with them.
+This way we only occupied one *streaming multiprocessor* (SM) but the GPU has several SMs - this is similar to how a CPU has multiple cores.
 To get the full performance we need to run our kernel not just with multiple threads, but also with multiple blocks. 
 
-In this technical blog [CUDA Refresher: The CUDA Programming Model](https://developer.nvidia.com/blog/cuda-refresher-cuda-programming-model/) we can read more about it. The following figure illustrates it quite nicelly. 
+In this technical blog from NVidia [CUDA Refresher: The CUDA Programming Model](https://developer.nvidia.com/blog/cuda-refresher-cuda-programming-model/) we can read more about it. 
+The following figure illustrates it quite nicelly: 
 \figenv{Kernel execution on GPU. <br>Original source: https://developer.nvidia.com/blog/cuda-refresher-cuda-programming-model/}{/assets/pages/hpc/kernel-execution-on-gpu-1.png}{}
+
+If you use blocks the computation of you index in `M` becomes a bit more tricky and you also need to have more storage for `M`.
+
+Similar as with the `threadIdx().x` we have a `blockIdx().x` and a `blockDim().x` to performe this computation. 
+
+@@important
+Julia starst with indexing by 1. On the GPU this can become a bit confusing as CUDA in general does not. 
+In this case we need to correct the `blockIdx()` by `1`.
+@@
 
 So we end up with the following code:
 ```julia
@@ -380,15 +421,15 @@ julia> get_accuracy(in_unit_circle_gpu2, N)
 julia> @btime estimate_pi(in_unit_circle_gpu2, N);
   81.436 ms (156 allocations: 8.16 KiB)
 ```
-Now each thread on the GPU is doing one computation.
-This is actually not the most efficient way to use the GPU and in additio it is rather wastefull on memory. 
+Now each thread on the GPU is doing one computation, the loop inside there kernel is not needed and for performance removed.
+This is still not the most efficient way to use the GPU and in addition it is rather wastefull on memory. 
 
 So let us optimize it a bit further.
 Each of the threads should do `n` iterations. This means we need to define the number of blocks as 
 $$
- nblocks = \frac{N}{nthreads n}.
+ nblocks = \frac{N}{nthreads \, n}.
 $$
-The kernel is more or less the same but the loop returns.
+The kernel is a combination of the two previous kernels:
 ```julia
 function in_unit_circle_kernel3!(n::Int64, M)
     j = (blockIdx().x - 1) * blockDim().x + threadIdx().x
@@ -402,7 +443,7 @@ function in_unit_circle_kernel3!(n::Int64, M)
     return
 end
 ```
-The calling function needs to compute the values as defined above. 
+The calling function needs to compute the values as defined above: 
 ```julia
 function in_unit_circle_gpu3(N::Int64)
     nthreads = 2^10
@@ -425,7 +466,7 @@ julia> @btime estimate_pi(in_unit_circle_gpu2, N);
   45.194 ms (155 allocations: 8.14 KiB)
 ```
 One thing you have to keep in mind, we definde `M` of type `Int8` to safe space and boost performance. 
-If `n` become larger than $2^7$ it might happen that the result is to large and can not longer be stored in an 8-Bit integer. 
+If `n` become larger than $2^7$ it might happen that the result is to large and can no longer be stored in an 8-Bit integer. 
 
 Like with the rest of the topics in this section we skimmed the surface and did not make a deep dive (like memory access, multi GPU programming, multithreaded/distributed computing with GPUs and so forth). 
 It should give you a sound idea on what is happening and how great and easy you can accieve all of it with Julia.
