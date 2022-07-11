@@ -327,10 +327,10 @@ Instead of `treadid()` as we had it in multithreading, this time the *id* is que
 The `.x` is due to the fact that we could also have two or three dimensional arrays (remember GPUs were designed to work with images).
 
 The kernel is now called with the `@cuda` macro and the number of threads given as an argument. 
-Note, that we also define `M` to have dimension `2 ^ 10 = 1024` and of type `Int8`.
+Note, that we also define `M` to have dimension $2^{10} = 1024$ and of type `Int8`.
 
 We use `Int8` as on GPUs the data type has quite a high impact on the performance. 
-With integers this is not that important but if we are not working on a highl level server grades GPU the *double* (`Float64`) performance will be significantly slower than *single* (`Float32`). 
+With integers this is not that important but if we are not working on a high level server grades GPU the *double* (`Float64`) performance will be significantly slower than *single* (`Float32`). 
 Secondly, there is usually less storage on the GPU.
 
 The resulting *host* side function looks as follows:
@@ -445,7 +445,7 @@ function in_unit_circle_kernel3!(n::Int64, M)
     j = (blockIdx().x - 1) * blockDim().x + threadIdx().x
 
     for _ in 1:n
-        if (rand()^2 + rand()^2) < 1
+        if (rand() ^ 2 + rand() ^ 2) < 1
             @inbounds M[j] += 1
         end
     end
@@ -456,8 +456,8 @@ end
 The calling function needs to compute the values as defined above: 
 ```julia
 function in_unit_circle_gpu3(N::Int64)
-    nthreads = 2^10
-    n = 2^6
+    nthreads = 2 ^ 10
+    n = 2 ^ 6
     
     nblocks, _ = divrem(N, n * nthreads)
     M = CUDA.zeros(Int8, nblocks * nthreads)
