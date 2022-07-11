@@ -11,7 +11,7 @@ for i in 1:N
     # loop body
 end
 ```
-Here, Julia performs instructions inside the loop body for $i = 1,\cdots,N$. You can modify the iterates by `for i in indexStart:increment:indexEnd`. Hence, if we want to iterate from $N$ to $1$ with an increment of $2$, we have 
+Here, Julia performs instructions inside the loop body for $i = 1, \ldots, N$. You can modify the iterates by `for i in indexStart:increment:indexEnd`. Hence, if we want to iterate from $N$ to $1$ with an increment of $2$, we have 
 ```julia
 for i in N:-2:1
     # loop body
@@ -62,9 +62,9 @@ println("Approximated dominant eigenvalue is ", norm(A * vNew))
 }
 }
 
-In order to stop a loop or skip an evaluation of the loop body at a specific iteration index if a certain condition is fulfilled we can use the `break` and `continue` commands. The `break` command will exit the loop. A simple example is
-```julia
-for i = 1:10
+In order to stop a loop or skip an evaluation of the loop body at a specific iteration index, if a certain condition is fulfilled, we can use the `break` and `continue` commands. The `break` command will exit the loop. A simple example is
+```julia:./code/loop.jl
+for i in 1:10
     if i > 5
         break
     end
@@ -73,9 +73,10 @@ for i = 1:10
 end
 println("Loop stopped.")
 ```
-This will print out the iteration index untill a value of $i=6$ is reached at which point the loop will be exited. The `continue` statement allows us to skip an iterate.
-```julia
-for i = 1:10    
+\show{./code/loop.jl}
+This will print out the iteration index until a value of $i=6$ is reached, at which point the loop will be exited. The `continue` statement allows us to skip an iterate.
+```julia:./code/loop.jl
+for i in 1:10    
     if i == 5
         continue
     end
@@ -83,6 +84,7 @@ for i = 1:10
     println("Iteration index is ", i)
 end
 ```
+\show{./code/loop.jl}
 This prints out numbers from $1$ to $10$ but skips the number $5$.
 
 @@important
