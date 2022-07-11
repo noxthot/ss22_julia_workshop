@@ -196,7 +196,7 @@ Right away, we are able to use the high level functionality of the `CUDA.jl` pac
 
 Let us look at some examples:
 ```julia-repl
-julia> a = CuArray([1.0,2.0,3.0,4.0])
+julia> a = CuArray([1.0, 2.0, 3.0, 4.0])
 4-element CuArray{Float64, 1, CUDA.Mem.DeviceBuffer}:
  1.0
  2.0
@@ -314,7 +314,7 @@ function in_unit_circle_kernel!(n::Int64, M)
     j =  threadIdx().x 
     
     for i in 1:n
-        if (rand()^2 + rand()^2) < 1
+        if (rand() ^ 2 + rand() ^ 2) < 1
             @inbounds M[j] += 1
         end
     end
@@ -327,7 +327,7 @@ Instead of `treadid()` as we had it in multithreading, this time the *id* is que
 The `.x` is due to the fact that we could also have two or three dimensional arrays (remember GPUs where designed to work with images).
 
 The kernel is now called with the `@cuda` macro and the number of threads given as an argument. 
-Note, that we also define `M` to have dimension `2^10 = 1024` and of type `Int8`.
+Note, that we also define `M` to have dimension `2 ^ 10 = 1024` and of type `Int8`.
 
 We use `Int8` as on GPUs the data type has quite a high impact on the performance. 
 With integers this is not that important but if we are not working on a highl level server grades GPU the *double* (`Float64`) performance will be significantly slower than *single* (`Float32`). 
@@ -336,7 +336,7 @@ Secondly, there is usually less storage on the GPU.
 The resulting *host* side function looks as follows:
 ```julia
 function in_unit_circle_gpu(N::Int64)
-    nthreads = 2^10
+    nthreads = 2 ^ 10
     len, _ = divrem(N, nthreads)
     M = CUDA.zeros(Int8, nthreads)
 
@@ -404,7 +404,7 @@ So we end up with the following code:
 function in_unit_circle_kernel2!(M)
     j = (blockIdx().x - 1) * blockDim().x + threadIdx().x
 
-    if (rand()^2 + rand()^2) < 1
+    if (rand() ^ 2 + rand() ^ 2) < 1
         @inbounds M[j] += 1
     end
 
@@ -412,7 +412,7 @@ function in_unit_circle_kernel2!(M)
 end
 
 function in_unit_circle_gpu2(N::Int64)
-    nthreads = 2^10
+    nthreads = 2 ^ 10
     nblocks, _ = divrem(N, nthreads)
     M = CUDA.zeros(Int8, N)
 
