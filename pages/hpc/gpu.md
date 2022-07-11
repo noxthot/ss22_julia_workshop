@@ -7,7 +7,7 @@
 
 \toc 
 
-Graphic Processing Units, or GPUs for short, where originally designed to manipulate images in a frame buffer.
+Graphic Processing Units, or GPUs for short, were originally designed to manipulate images in a frame buffer.
 Their inherent parallelism makes them more efficient for some tasks than CPUs. 
 Basically everything that is related to SIMD operations but not limited to them.  
 Using GPUs for general purpose computing (GPGPU) became a thing in the 21st century. 
@@ -324,7 +324,7 @@ end
 ```
 This looks very similar to our function [`in_unit_circle_threaded3`](./multithreading#actually_distribute_the_work). 
 Instead of `treadid()` as we had it in multithreading, this time the *id* is queried by `threadIdx().x`. 
-The `.x` is due to the fact that we could also have two or three dimensional arrays (remember GPUs where designed to work with images).
+The `.x` is due to the fact that we could also have two or three dimensional arrays (remember GPUs were designed to work with images).
 
 The kernel is now called with the `@cuda` macro and the number of threads given as an argument. 
 Note, that we also define `M` to have dimension `2 ^ 10 = 1024` and of type `Int8`.
@@ -354,7 +354,7 @@ julia> @btime estimate_pi(in_unit_circle_gpu, N);
   1.740 s (157 allocations: 8.25 KiB)
 ```
 
-We are already faster than the standard Julia implementation but this is not what we where hoping for. 
+We are already faster than the standard Julia implementation but this is not what we were hoping for. 
 The used GPU is actually quite powerfull and  if we have a look at the [NVIDIA System Management Interface](https://developer.nvidia.com/nvidia-system-management-interface#:~:text=The%20NVIDIA%20System%20Management%20Interface,monitoring%20of%20NVIDIA%20GPU%20devices.) (`nvidia-smi`) on the terminal we see that GPU is not utilized fully.
 ```bash
 +-----------------------------------------------------------------------------+
