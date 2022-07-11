@@ -5,29 +5,29 @@
 
 # Package manager
 
-We have already worked a little bit with the Julia [package manager](https://docs.julialang.org/en/v1/stdlib/Pkg/). In the following, we will discuss this feature in more detail. You already know how to open the package manager: simply press `]`. Now, in order to, for example, add the [LinearAlgebra](https://docs.julialang.org/en/v1/stdlib/LinearAlgebra/) package type 
+We have already worked a little bit with the Julia [package manager](https://docs.julialang.org/en/v1/stdlib/Pkg/). In the following, we will discuss this feature in more detail. You already know how to open the package manager: simply press `]`. Now, in order to, for example, add the [FastGaussQuadrature](https://juliaapproximation.github.io/FastGaussQuadrature.jl/stable/) package type 
 ```julia-repl
-(@v1.7) pkg> add LinearAlgebra
+(@v1.7) pkg> add FastGaussQuadrature
 ```
 Now, every time you open Julia, you can type
 ```julia-repl
-julia> using LinearAlgebra
+julia> using FastGaussQuadrature
 ```
-which adds various linear algebra related functionalities to your session. We will discuss details of this specific package later. In case you wish to remove this package you can open the package manager and type
+which in this case adds functionalities to numerically compute integrals to your session. Note that the specific details of this package are not important at this point and we will revisit this package in our work sheets. In case you wish to remove this package you can open the package manager and type
 ```julia-repl
-(@v1.7) pkg> rm LinearAlgebra
+(@v1.7) pkg> rm FastGaussQuadrature
 ```
-If you now want to install a specific version of a package you can add `@<versionnumber>` behind the package name. As an example, to install `LinearAlgebra` at version $1.7.2$ type
+If you now want to install a specific version of a package you can add `@<versionnumber>` behind the package name. As an example, to install `FastGaussQuadrature` at version $0.4.8$ type
 ```julia-repl
-(@v1.7) pkg> add LinearAlgebra@1.7.2
+(@v1.7) pkg> add FastGaussQuadrature@0.4.8
 ```
 Moreover, you can update all packages that you have added by typing
 ```julia-repl
 (@v1.7) pkg> update
 ```
-or just a specific package (for example LinearAlgebra) by typing
+or just a specific package (for example FastGaussQuadrature) by typing
 ```julia-repl
-(@v1.7) pkg> update LinearAlgebra
+(@v1.7) pkg> update FastGaussQuadrature
 ```
 To get a list of all installed packages you can type
 ```julia-repl
