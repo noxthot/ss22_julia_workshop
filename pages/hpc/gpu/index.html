@@ -404,8 +404,8 @@ Stacktrace:
     <span class="hljs-keyword">return</span>
 <span class="hljs-keyword">end</span></code></pre>
 <p>This looks very similar to our function <a href="./multithreading#actually_distribute_the_work"><code>in_unit_circle_threaded3</code></a>.  Instead of <code>treadid&#40;&#41;</code> as we had it in multithreading, this time the <em>id</em> is queried by <code>threadIdx&#40;&#41;.x</code>.  The <code>.x</code> is due to the fact that we could also have two or three dimensional arrays &#40;remember GPUs were designed to work with images&#41;.</p>
-<p>The kernel is now called with the <code>@cuda</code> macro and the number of threads given as an argument.  Note, that we also define <code>M</code> to have dimension <code>2 ^ 10 &#61; 1024</code> and of type <code>Int8</code>.</p>
-<p>We use <code>Int8</code> as on GPUs the data type has quite a high impact on the performance.  With integers this is not that important but if we are not working on a highl level server grades GPU the <em>double</em> &#40;<code>Float64</code>&#41; performance will be significantly slower than <em>single</em> &#40;<code>Float32</code>&#41;.  Secondly, there is usually less storage on the GPU.</p>
+<p>The kernel is now called with the <code>@cuda</code> macro and the number of threads given as an argument.  Note, that we also define <code>M</code> to have dimension <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>2</mn><mn>10</mn></msup><mo>=</mo><mn>1024</mn></mrow><annotation encoding="application/x-tex">2^{10} = 1024</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">10</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1024</span></span></span></span> and of type <code>Int8</code>.</p>
+<p>We use <code>Int8</code> as on GPUs the data type has quite a high impact on the performance.  With integers this is not that important but if we are not working on a high level server grades GPU the <em>double</em> &#40;<code>Float64</code>&#41; performance will be significantly slower than <em>single</em> &#40;<code>Float32</code>&#41;.  Secondly, there is usually less storage on the GPU.</p>
 <p>The resulting <em>host</em> side function looks as follows:</p>
 <pre><code class="julia hljs"><span class="hljs-keyword">function</span> in_unit_circle_gpu(N::<span class="hljs-built_in">Int64</span>)
     nthreads = <span class="hljs-number">2</span> ^ <span class="hljs-number">10</span>
@@ -481,7 +481,7 @@ Stacktrace:
 
 <span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@btime</span> estimate_pi(in_unit_circle_gpu2, N);
 </span>  81.436 ms (156 allocations: 8.16 KiB)</code></pre>
-<p>Now each thread on the GPU is doing exactly one computation &#40;and therefore the loop inside the kernel is not needed and for performance reason removed&#41;. This is still not the most efficient way to use the GPU and in addition it is rather wastefull on memory. </p>
+<p>Now each thread on the GPU is doing exactly one computation &#40;and therefore the loop inside the kernel is not needed and for performance reasons removed&#41;. This is still not the most efficient way to use the GPU and in addition it is rather wastefull on memory. </p>
 <h3 id="multiple_operations_per_thread"><a href="#multiple_operations_per_thread" class="header-anchor">Multiple operations per thread</a></h3>
 <p>So let us optimize it a bit further. Each of the threads should do <code>n</code> iterations. This means we need to define the number of blocks as </p>
 <span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi mathvariant="normal">nblocks</mi><mo>⁡</mo><mo>=</mo><mfrac><mi>N</mi><mrow><mi mathvariant="normal">nthreads</mi><mo>⁡</mo><mo>⋅</mo><mi>n</mi></mrow></mfrac><mi mathvariant="normal">.</mi></mrow><annotation encoding="application/x-tex">
@@ -492,7 +492,7 @@ Stacktrace:
     j = (blockIdx().x - <span class="hljs-number">1</span>) * blockDim().x + threadIdx().x
 
     <span class="hljs-keyword">for</span> _ <span class="hljs-keyword">in</span> <span class="hljs-number">1</span>:n
-        <span class="hljs-keyword">if</span> (rand()^<span class="hljs-number">2</span> + rand()^<span class="hljs-number">2</span>) &lt; <span class="hljs-number">1</span>
+        <span class="hljs-keyword">if</span> (rand() ^ <span class="hljs-number">2</span> + rand() ^ <span class="hljs-number">2</span>) &lt; <span class="hljs-number">1</span>
             <span class="hljs-meta">@inbounds</span> M[j] += <span class="hljs-number">1</span>
         <span class="hljs-keyword">end</span>
     <span class="hljs-keyword">end</span>
@@ -501,8 +501,8 @@ Stacktrace:
 <span class="hljs-keyword">end</span></code></pre>
 <p>The calling function needs to compute the values as defined above: </p>
 <pre><code class="julia hljs"><span class="hljs-keyword">function</span> in_unit_circle_gpu3(N::<span class="hljs-built_in">Int64</span>)
-    nthreads = <span class="hljs-number">2</span>^<span class="hljs-number">10</span>
-    n = <span class="hljs-number">2</span>^<span class="hljs-number">6</span>
+    nthreads = <span class="hljs-number">2</span> ^ <span class="hljs-number">10</span>
+    n = <span class="hljs-number">2</span> ^ <span class="hljs-number">6</span>
     
     nblocks, _ = divrem(N, n * nthreads)
     M = CUDA.zeros(<span class="hljs-built_in">Int8</span>, nblocks * nthreads)
@@ -517,7 +517,7 @@ Stacktrace:
 
 <span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@btime</span> estimate_pi(in_unit_circle_gpu2, N);
 </span>  45.194 ms (155 allocations: 8.14 KiB)</code></pre>
-<p>One thing you have to keep in mind, is that we have defined <code>M</code> of type <code>Int8</code> to save space and boost performance.  If <code>n</code> become larger than <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>2</mn><mn>7</mn></msup></mrow><annotation encoding="application/x-tex">2^7</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">7</span></span></span></span></span></span></span></span></span></span></span> it might happen that the result is too large and can no longer be stored in an 8-Bit integer &#40;as a result an overrun would occure&#41;. </p>
+<p>One thing you have to keep in mind, is that we have defined <code>M</code> of type <code>Int8</code> to save space and boost performance.  If <code>n</code> become larger than <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>2</mn><mn>7</mn></msup></mrow><annotation encoding="application/x-tex">2^7</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">7</span></span></span></span></span></span></span></span></span></span></span> it might happen that the result is too large and can no longer be stored in an 8-Bit integer &#40;as a result an overflow would occure&#41;. </p>
 <h3 id="additional_notes"><a href="#additional_notes" class="header-anchor">Additional notes</a></h3>
 <p>Like with the rest of the topics in this section we skimmed the surface and did not make a deep dive &#40;like memory access, profiling to find slow parts in the code, multi GPU programming, multithreaded/distributed computing with GPUs and so forth&#41;.  Have a look at the excellent introduction on <a href="https://juliagpu.org/learn/">JuliaGPU</a> to see more about the topic and have a look at the YouTube Videos of Tim Besard for a start.  Here it was only possible to give you a sound idea on what is happening and how great and easy you can achieve all of it with Julia.</p>
 <div class="page-foot">
