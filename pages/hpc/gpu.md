@@ -429,7 +429,7 @@ julia> get_accuracy(in_unit_circle_gpu2, N)
 julia> @btime estimate_pi(in_unit_circle_gpu2, N);
   81.436 ms (156 allocations: 8.16 KiB)
 ```
-Now each thread on the GPU is doing exactly one computation (and therefore the loop inside the kernel is not needed and for performance reason removed).
+Now each thread on the GPU is doing exactly one computation (and therefore the loop inside the kernel is not needed and for performance reasons removed).
 This is still not the most efficient way to use the GPU and in addition it is rather wastefull on memory. 
 
 ### Multiple operations per thread
@@ -476,7 +476,7 @@ julia> @btime estimate_pi(in_unit_circle_gpu2, N);
   45.194 ms (155 allocations: 8.14 KiB)
 ```
 One thing you have to keep in mind, is that we have defined `M` of type `Int8` to save space and boost performance. 
-If `n` become larger than $2^7$ it might happen that the result is too large and can no longer be stored in an 8-Bit integer (as a result an overrun would occure). 
+If `n` become larger than $2^7$ it might happen that the result is too large and can no longer be stored in an 8-Bit integer (as a result an overflow would occure). 
 
 ### Additional notes
 
