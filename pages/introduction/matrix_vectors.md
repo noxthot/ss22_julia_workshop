@@ -188,9 +188,8 @@ $$
       &         &           &           & -1
 \end{pmatrix}\;.
 $$
-2. Compute a vector $\mathbf{x}$ such that $\mathbf{T}\mathbf{x} = \mathbf{1}$ where $\mathbf{1} = (1,\cdots,1)^{\top}$
+2. Compute a vector $\mathbf{x}$ such that $\mathbf{T}\mathbf{x} = \mathbf{1}$ where $\mathbf{1} = (1,\cdots,1)^{\top}$.
 
 $\,$
 }
 
-test

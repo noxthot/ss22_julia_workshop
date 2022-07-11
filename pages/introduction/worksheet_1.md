@@ -18,6 +18,7 @@ So let us give a little bit of background: The radiation transport equation desc
 ## Adding packages
 
 Let us first generate the velocity grid, which are commonly chosen to be the so-called Gauss-Legendre points. Luckily, these points are already implemented in Julia. All we need to do is to install the Julia Package `FastGaussQuadrature`. The $\operatorname{nv} = 10$ points can be accessed and stored in a vector $v$ by calling `v, w = gausslegendre(nv)`. Note that $v$ contains the Gauss-Legendre points and $w$ contains the so-called quadrature weights used to compute integrals. Recall that it can be advantageous to create a new environment for this project. 
+
 \example{
 First, we need to open a new project and install the `FastGaussQuadrature` package:
 
@@ -44,6 +45,9 @@ nv = 10
 v, w = gausslegendre(nv)
 ```
 You can print out your velocity grid by typing `v` in the Julia environment or by adding `println(v)`. 
+
+$\,$
+
 }
 
 
@@ -70,6 +74,9 @@ Now to access this matrix at spatial index $j$ and velocity index $i$, we can ty
 ```julia:./code/worksheet_1.jl
 ψ[50, :] = ones(nv)
 ```
+
+$\,$
+
 }
 
 ## Linear algebra operations
@@ -97,6 +104,7 @@ $$
   \end{pmatrix}\;.
 $$
 Set up these two matrices in your code.
+
 \example{
 To setup tridiagonal matrices you need to load the `LinearAlgebra` package:
 ```julia-repl
@@ -111,6 +119,9 @@ using LinearAlgebra
 DPlus = (1 / Δx) * Tridiagonal(-ones(nx - 1), ones(nx), zeros(nx - 1))
 DMinus = (1 / Δx) * Tridiagonal(zeros(nx - 1), -ones(nx), ones(nx - 1))
 ```
+
+$\,$
+
 }
 
 The matrices $\mathbf{V}^{\pm}\in\mathbb{R}^{n_v\times n_v}$ are diagonal matrices, where $\mathbf{V}^-$ collects all negative velocities on the diagonal, i.e., $\mathbf{V}^- = \text{diag}(v_1,\cdots,v_{5},0,\cdots,0)$ and $\mathbf{V}^+$ collects all positive velocities, i.e., $\mathbf{V}^+ = \text{diag}(0,\cdots,0,v_{6},\cdots,v_{10})$. Implement these two matrices. To write your code for general $\operatorname{nv}$, use the `ceil` and `floor` commands.
@@ -128,33 +139,75 @@ VPlus = Diagonal([zeros(midMinus); v[(midPlus + 1):end]])
 
 Lastly, the so called scattering matrix $\mathbf{G}$ is given as 
 
+$$
+\mathbf{G} = \begin{pmatrix}
+    w_1 & w_2 &  \cdots  & w_{\operatorname{nv}}  \\
+    w_1  & w_2 & \cdots   & w_{\operatorname{nv}}   \\
+    \vdots  &   \vdots      &           &  \vdots  \\
+    w_1  &   w_2      &   \cdots & w_{\operatorname{nv}}
+  \end{pmatrix} - 
+  \begin{pmatrix}
+    1 &  &  &      &   \\
+      & 1       &    &     &    \\
+      &         & \ddots         &     &     \\
+      &         &           &       1    &    \\
+      &         &           &           & 1
+  \end{pmatrix}
+  \;.
+$$
+Implement this matrix. You can try to not use `for` loops to test your element-wise operation skills.
+
+\example{
+
 ```julia:./code/worksheet_1.jl
 G = ones(nv, nv) .* w-I
 ```
 
+}
+
+
 Now, to update your solution $\bm\psi$ from $t=0$ to $t = \Delta t$, we approximate the time derivative by $\bm{\dot \psi} \approx (\bm\psi_{\mathrm{new}}-\bm\psi)/\Delta t$. Hence, we then get
 
+$$  \bm{\psi}_{new} = \bm{\psi} -\Delta t\mathbf{D}^+\bm{\psi}\mathbf{V}^+ - \Delta t\mathbf{D}^-\bm{\psi}\mathbf{V}^- + \Delta t\bm{\psi}\mathbf{G}  \label{eq:ODE2} $$
+
+Implement the above formular using a time step size $\Delta t = 0.01$. Try to use dot operations whenever possible. You can already check how the solution has changed by inspecting `ψ_new` in the center. You already know how this works. If you want you can interpret the physical process that you observe. 
+
+\example{
+
+We can use dot operations for additions and scalar multiplications. A possible implementation reads
 ```julia:./code/worksheet_1.jl
 Δt = 0.01;
-psiOneStep = ψ + Δt * (-DPlus * ψ * VPlus - DMinus * ψ * VMinus + ψ * G)
+ψ_new = ψ .+ Δt .* (-DPlus * ψ * VPlus .- DMinus * ψ * VMinus .+ ψ * G)
+```
+To check the change of $\psi$ after a single time step around the center of the spatial domain you can for example type
+ ```julia-repl
+julia> midIndex = Int(floor(nx/2));
+
+julia> ψ_new[midIndex-1:midIndex+1,:]
 ```
 
-You can already check how the solution has changed by inspecting `psiOneStep` in the center. You already know how this works. If you want you can interpret the physical process that you observe. 
+}
 
 ## Loops
 
-Now, we do not want to know the solution at $\Delta t$, but at $t_{\mathrm{end}}=1.0$. If we just choose $\Delta t=0.4$ our approximation of the time derivative is inaccurate. Therefore, we wish to repeat the update with $\Delta t = 0.01$ fourty times. For this we can use a for loop:
+Now, we do not want to know the solution at $\Delta t$, but at $t_{\mathrm{end}}=1.0$. If we just choose $\Delta t=0.4$ our approximation of the time derivative is inaccurate. Therefore, we wish to repeat the update with $\Delta t = 0.01$ fourty times. Use a loop to implement the repeated updates
+
+\example{
 
 ```julia:./code/worksheet_1.jl
 nT = 40
+ψ_new = zeros(size(ψ));
 
 for n in 1:nT
-    ψ_new = ψ + Δt * (-DPlus * ψ * VPlus - DMinus * ψ * VMinus + ψ * G)
+    ψ_new .= ψ + Δt * (-DPlus * ψ * VPlus - DMinus * ψ * VMinus + ψ * G)
     ψ .= ψ_new
 end
 ```
+Note that we are using `.=` insead of `=` to copy values from `ψ_new` to `ψ` and to write new values on `ψ_new`. This ensures that no additional memory is allocated in very iteration step.
 
-Note that we are using `.=` insead of `=` to copy values from `ψ_new` to `ψ`. This is a pointwise operation and we will discuss later how this works. Now, we are interested in plotting $\phi(t_{\mathrm{end}},x) := \int_{-1}^1 \psi(t_{\mathrm{end}},x,v)\, \mathrm{d}v$. On a numerical level, we can compute this via
+}
+
+ Now, we are interested in plotting $\phi(t_{\mathrm{end}},x) := \int_{-1}^1 \psi(t_{\mathrm{end}},x,v)\, \mathrm{d}v$. On a numerical level, we can compute this via
 
 ```julia:./code/worksheet_1.jl
 phi = zeros(nx)
@@ -163,7 +216,6 @@ for j in 1:nx
     phi[j] = sum(ψ[j, :] .* w)
 end
 ```
-
 
 ## Plotting
 
