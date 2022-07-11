@@ -12,7 +12,7 @@ Their inherent parallelism makes them more efficient for some tasks than CPUs.
 Basically everything that is related to SIMD operations but not limited to them.  
 Using GPUs for general purpose computing (GPGPU) became a thing in the 21st century. 
 NVIDIA was the first big vendor that started to support this kind of application for their GPUs and invested heavily in dedicated frameworks to aid general purpose computing and later also started to produce dedicated hardware for this purpose only. 
-Nowadays, GPUs are usd for AI, deep learning and a lot of HPC workloads - some still use them for gaming too.
+Nowadays, GPUs are used for artificial intelligence, deep learning and a lot of HPC workloads - some still use them for gaming too.
 
 ## Introduction 
 In Julia GPUs are supported by the 
@@ -387,15 +387,15 @@ This way we only occupied one *streaming multiprocessor* (SM) but the GPU has se
 To get the full performance we need to run our kernel not just with multiple threads, but also with multiple blocks. 
 
 In this technical blog from NVIDIA [CUDA Refresher: The CUDA Programming Model](https://developer.nvidia.com/blog/cuda-refresher-cuda-programming-model/) we can read more about it. 
-The following figure illustrates it quite nicelly: 
+The following figure illustrates it quite nicely: 
 \figenv{Kernel execution on GPU. <br>Original source: https://developer.nvidia.com/blog/cuda-refresher-cuda-programming-model/}{/assets/pages/hpc/kernel-execution-on-gpu-1.png}{}
 
-If you use blocks, the computation of you index in `M` becomes a bit more tricky to compute and you also need to have more storage for `M`.
+If you use blocks, the computation of your index in `M` becomes a bit more tricky to compute and you also need to have more storage for `M`.
 
-Similar as with the `threadIdx().x` we have a `blockIdx().x` and a `blockDim().x` to performe this computation. 
+Similar as with the `threadIdx().x` we have a `blockIdx().x` and a `blockDim().x` to perform this computation. 
 
 @@important
-Julia starst with indexing by 1. On the GPU this can become a bit confusing as CUDA in general does not. 
+Julia starts with indexing by `1`. On the GPU this can become a bit confusing as CUDA in general does not. 
 In this case we need to correct the `blockIdx()` by `1`.
 @@
 
@@ -437,7 +437,7 @@ This is still not the most efficient way to use the GPU and in addition it is ra
 So let us optimize it a bit further.
 Each of the threads should do `n` iterations. This means we need to define the number of blocks as 
 $$
- nblocks = \frac{N}{nthreads \, n}.
+ \operatorname{nblocks} = \frac{N}{\operatorname{nthreads} \cdot n}.
 $$
 The kernel is a combination of the two previous kernels:
 ```julia
@@ -475,11 +475,11 @@ julia> get_accuracy(in_unit_circle_gpu2, N)
 julia> @btime estimate_pi(in_unit_circle_gpu2, N);
   45.194 ms (155 allocations: 8.14 KiB)
 ```
-One thing you have to keep in mind, we definde `M` of type `Int8` to safe space and boost performance. 
+One thing you have to keep in mind, is that we have defined `M` of type `Int8` to save space and boost performance. 
 If `n` become larger than $2^7$ it might happen that the result is too large and can no longer be stored in an 8-Bit integer (as a result an overrun would occure). 
 
 ### Additional notes
 
-Like with the rest of the topics in this section we skimmed the surface and did not make a deep dive (like memory access, profiling to boot performance, multi GPU programming, multithreaded/distributed computing with GPUs and so forth). 
-Have a look at the excelent introduciton on [JuliaGPU](https://juliagpu.org/learn/) to see more about the topic and have a look at the YouTube Videos of Tim Besard for a start. 
-Her it was only possible to give you a sound idea on what is happening and how great and easy you can accieve all of it with Julia.
+Like with the rest of the topics in this section we skimmed the surface and did not make a deep dive (like memory access, profiling to find slow parts in the code, multi GPU programming, multithreaded/distributed computing with GPUs and so forth). 
+Have a look at the excellent introduction on [JuliaGPU](https://juliagpu.org/learn/) to see more about the topic and have a look at the YouTube Videos of Tim Besard for a start. 
+Here it was only possible to give you a sound idea on what is happening and how great and easy you can achieve all of it with Julia.
