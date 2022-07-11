@@ -107,7 +107,7 @@ function in_unit_circle_threaded1(N::Int64)
     M = 0
     
     @threads for i in 1:N
-        if (rand()^2 + rand()^2) < 1
+        if (rand() ^ 2 + rand() ^ 2) < 1
             M += 1
         end
     end
@@ -141,7 +141,7 @@ function in_unit_circle_threaded2(N::Int64)
     M = Atomic{Int}(0);
     
     @threads for i in 1:N
-        if (rand()^2 + rand()^2) < 1
+        if (rand() ^ 2 + rand() ^ 2) < 1
             atomic_add!(M, 1)
         end
     end
@@ -172,7 +172,7 @@ function in_unit_circle_threaded3(N::Int64)
     M = zeros(Int64, nthreads());
     
     @threads for i in 1:N
-        if (rand()^2 + rand()^2) < 1
+        if (rand() ^ 2 + rand() ^ 2) < 1
             @inbounds M[threadid()] += 1
         end
     end
@@ -239,7 +239,7 @@ function in_unit_circle_threaded4(N::Int64)
         m = 0
 
         for j in 1:len
-            if (rand(rng)^2 + rand(rng)^2) < 1
+            if (rand(rng) ^ 2 + rand(rng) ^ 2) < 1
                 m += 1
             end
         end

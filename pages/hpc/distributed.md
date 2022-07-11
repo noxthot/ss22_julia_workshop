@@ -199,7 +199,7 @@ Define a new function `in_unit_circle_distributed1` with the `@distributed` macr
 ```julia
 function in_unit_circle_distributed1(N::Int64)
     M = @distributed (+) for i in 1:N
-        if (rand()^2 + rand()^2) < 1
+        if (rand() ^ 2 + rand() ^ 2) < 1
             1
         else
             0
@@ -212,7 +212,7 @@ end
 # more compact for with the ternary operator
 function in_unit_circle_distributed1_1(N::Int64)
     M = @distributed (+) for i in 1:N
-        (rand()^2 + rand()^2) < 1 ? 1 : 0
+        (rand() ^ 2 + rand() ^ 2) < 1 ? 1 : 0
     end
 
     return M
@@ -295,7 +295,7 @@ Define a new function `in_unit_circle_distributed2` with the `@everywhere` macro
     M = 0
     
     for i in 1:N
-        if (rand()^2 + rand()^2) < 1
+        if (rand() ^ 2 + rand() ^ 2) < 1
             M += 1
         end
     end
