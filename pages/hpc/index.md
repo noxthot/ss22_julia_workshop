@@ -9,7 +9,7 @@ Since modern laptops and computers come with multiple cores parallel computing i
 
 
 @@important
-Julia has a excellent section dedicated to general [performance tips](https://docs.julialang.org/en/v1/manual/performance-tips/) that are a good read every couple of months.
+Julia has an excellent section dedicated to general [performance tips](https://docs.julialang.org/en/v1/manual/performance-tips/) that are a good read every couple of months.
 @@
 
 This part covers the following sections:
