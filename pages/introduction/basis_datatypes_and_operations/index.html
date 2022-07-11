@@ -129,7 +129,7 @@
 <span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> greekText = <span class="hljs-string">&quot;Στυπιδ Ρ&quot;</span>
 </span>&quot;Στυπιδ Ρ&quot;</code></pre>
 <h2 id="datatypes"><a href="#datatypes" class="header-anchor">Datatypes</a></h2>
-<p>Julia supports basic data types like Integers, Floating-Point Numbers, <a href="https://docs.julialang.org/en/v1/manual/types/">Strings and many more</a>. The most generic type is called <code>Any</code> and thus every type is a subtype of <code>Any</code>. Types are built in a hierarchical manner and can be visualized as a type graph &#40;examples for partial type graphs are given in <a href="https://en.wikibooks.org/wiki/Introducing_Julia/Types">Wikibooks - Introducing Julia</a>&#41;.</p>
+<p>Julia supports basic data types like Integers, Floating-Point Numbers, Strings and <a href="https://docs.julialang.org/en/v1/manual/types/">many more</a>. The most generic type is called <code>Any</code> and thus every type is a subtype of <code>Any</code>. Types are built in a hierarchical manner and can be visualized as a type graph &#40;examples for partial type graphs are given in <a href="https://en.wikibooks.org/wiki/Introducing_Julia/Types">Wikibooks - Introducing Julia</a>&#41;.</p>
 <p>Although Julia&#39;s type system is dynamic, it also allows to explicitly set a specific type for certain values and thus also gains advantages of static type systems.</p>
 <p>In the following we will briefly look into some basic data types and the operations defined on them. </p>
 <h3 id="numeric_types"><a href="#numeric_types" class="header-anchor">Numeric types</a></h3>
@@ -172,8 +172,31 @@
 
 <span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> typeof(<span class="hljs-number">3</span>//<span class="hljs-number">5</span>)
 </span>Rational{Int64}</code></pre>
-<p>You may ask yourself: Why is this important when Julia is dynamically typed and thus not requires types to be explicitly set? Among others, there are three primary purposes for using types: improve human readability, catch programmer errors and for making use of a concept called multiple dispatch &#40;which we will talk about later in this workshop&#41;. It may also get important when high precision, memory constraints or fast computation is required.</p>
-<p>For now we did not speak about basic mathematical operations which are of course defined for all primitive numeric types. <code>&#43;</code> corresponds to addition, <code>-</code> to subtraction, <code>*</code> to multiplication, <code>/</code> to division, <code>÷</code> for integer division and <code>x ^ y</code> raises <code>x</code> to the <code>y</code>th power:</p>
+<p>You may ask yourself: Why is this important when Julia is dynamically typed and thus not requires types to be explicitly set? Among others, there are three primary purposes for using types: </p>
+<ul>
+<li><p>improve human readability</p>
+</li>
+<li><p>catch programmer errors</p>
+</li>
+<li><p>for making use of a concept called <a href="functions#multiple_dispatch">multiple dispatch</a> &#40;which we will talk about later in this workshop&#41;. </p>
+</li>
+</ul>
+<p>It may also get important when high precision, memory constraints or fast computation is required.</p>
+<p>For now we did not speak about basic mathematical operations, which are of course defined for all primitive numeric types. </p>
+<ul>
+<li><p><code>&#43;</code> corresponds to addition, </p>
+</li>
+<li><p><code>-</code> to subtraction, </p>
+</li>
+<li><p><code>*</code> to multiplication, </p>
+</li>
+<li><p><code>/</code> to division, </p>
+</li>
+<li><p><code>÷</code> for integer division, and</p>
+</li>
+<li><p><code>x ^ y</code> raises <code>x</code> to the <code>y</code>th power</p>
+</li>
+</ul>
 <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> x = <span class="hljs-number">3</span> + <span class="hljs-number">2</span><span class="hljs-literal">im</span>
 </span>3 + 2im
 
@@ -197,10 +220,19 @@
 
 <span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> x ^ y
 </span>-784.728604218539 + 66.05617374305294im</code></pre>
-<p>Julia of course also deals with brackets and chained operations:</p>
+<p>Julia also deals with brackets and chained operations by usual mathematical rules:</p>
 <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-number">1</span> + <span class="hljs-number">5</span> * (<span class="hljs-number">3</span> - <span class="hljs-number">2.1</span>) + (<span class="hljs-number">2</span> ^ <span class="hljs-number">5</span>)
 </span>37.5</code></pre>
-<p><code>Bool</code> types are designed to build logical expressions and only carry two possible values <code>true</code> &#40;<code>1</code>&#41; and <code>false</code> &#40;<code>0</code>&#41;. They offer the following Boolean operators: <code>&#33;x</code> &#40;negation&#41;, <code>x &amp;&amp; y</code> &#40;logical AND&#41;, <code>x || y</code> &#40;logical OR&#41;. Note that <code>Bool</code> is still an integer type and and thus all the numerical operations are also defined for this type:</p>
+<p><code>Bool</code> types are designed to build logical expressions and only carry two possible values <code>true</code> &#40;<code>1</code>&#41; and <code>false</code> &#40;<code>0</code>&#41;. They offer the following Boolean operators: </p>
+<ul>
+<li><p><code>&#33;x</code> &#40;negation&#41;, </p>
+</li>
+<li><p><code>x &amp;&amp; y</code> &#40;logical AND&#41;, </p>
+</li>
+<li><p><code>x || y</code> &#40;logical OR&#41;. </p>
+</li>
+</ul>
+<p>Note that <code>Bool</code> is still an integer type and and thus all the numerical operations are also defined for this type:</p>
 <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-literal">true</span> &amp;&amp; <span class="hljs-literal">false</span>
 </span>false
 
@@ -260,7 +292,17 @@ Stacktrace:
 
 <span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> mytext[<span class="hljs-number">8</span>]
 </span>&#x27;S&#x27;: ASCII/Unicode U+0053 (category Lu: Letter, uppercase)</code></pre>
-<p>Common operations on strings are e.g. <code>a * b</code> for concatenating two strings <code>a</code> and <code>b</code>, <code>length&#40;a&#41;</code> to get the number of characters of a string <code>a</code>, <code>occursin&#40;a, b&#41;</code> to find out whether <code>a</code> is a substring of <code>b</code> and <a href="https://docs.julialang.org/en/v1/manual/strings/#Common-Operations">more</a>:</p>
+<p>Common operations on strings are:</p>
+<ul>
+<li><p><code>a * b</code> for concatenating two strings <code>a</code> and <code>b</code>,</p>
+</li>
+<li><p><code>length&#40;a&#41;</code> to get the number of characters of a string <code>a</code>,</p>
+</li>
+<li><p><code>occursin&#40;a, b&#41;</code> to find out whether <code>a</code> is a substring of <code>b</code> and </p>
+</li>
+<li><p><a href="https://docs.julialang.org/en/v1/manual/strings/#Common-Operations">more</a>.</p>
+</li>
+</ul>
 <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> mystring = <span class="hljs-string">&quot;Mathematik&quot;</span>
 </span>&quot;Mathematik&quot;
 
