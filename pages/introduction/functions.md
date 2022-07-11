@@ -6,7 +6,7 @@
 # Functions
 
 ## Syntax
-To improve the structure and ensure reusability of pieces of your program you can use the `function` command. You have already used functions when for example calling `typeof(input)`. Other examples of functions that can be found on any common calculator are `sin(x)` or `exp(x)`. The syntax to define your own functions is the following:
+To improve the structure and ensure reusability of pieces of your program you can use the `function` command. You have already used functions when, for example, calling `typeof(input)`. Other examples of functions that can be found on any common calculators are `sin(x)` or `exp(x)`. The syntax to define your own functions is the following:
 ```julia
 function foo(input)
     # function body that is executed when foo is called
@@ -18,6 +18,7 @@ So if you want to define a function which prints out and returns $\sin(\cos(x))$
 function sincos(x)
     result = sin(cos(x))
     println("sin(cos($x)) = $result")
+    
     return result
 end
 ```
@@ -26,8 +27,10 @@ If we wish to specify multiple inputs and outputs we can do so as well:
 function sincos(x, y)
     result1 = sin(cos(x))
     result2 = sin(cos(y))
+    
     println("sin(cos($x)) = $result1")
     println("sin(cos($y)) = $result2")
+    
     return result1, result2
 end
 ```
@@ -108,7 +111,7 @@ julia> x
  1.0
  1.0
 ```
-The reason for this behaviour is that `sincos1` changes the input as Julia functions work with call-by-reference. I.e., they do not generate a local copy of the input and instead directly work on the same memory that has been used by the caller. This memory is not reallocated due to the use of `.=`. On the other hand, `sincos2` allocates new memory, since `x = sin.(cos.(x))` will create new memory for `x` on which the values of `sin.(cos.(x))` are stored. Hence the memory of $x$ known to the caller is not modified and the original values are preserved. Note that the name `sincos2!(x)` is hence misleading and the function should be renamed to `sincos2(x)`.
+The reason for this behaviour is that `sincos1` changes the input as Julia functions work with call-by-reference. I.e., they do not generate a local copy of the input and instead directly work on the same memory that has been used by the caller. This memory is not reallocated due to the use of `.=`. On the other hand, `sincos2` allocates new memory, since `x = sin.(cos.(x))` will create new memory for `x` on which the values of `sin.(cos.(x))` are stored. Hence, the memory of $x$ known to the caller is not modified and the original values are preserved. Note that the name `sincos2!(x)` is hence misleading and the function should be renamed to `sincos2(x)`.
 2. We have
 ```julia
 function sincos1!(x)
@@ -196,7 +199,7 @@ My input is a vector.
 ```
 
 ## Element-wise operations
-As always you can use the dot operation to evaluate an array of inputs element-wise. Define the scalar function
+As always, you can use the dot operation `.` to evaluate an array of inputs element-wise. Define the scalar function
 ```julia
 function sincos(x::Float64)::Float64
     return sin(cos(x))
@@ -213,20 +216,15 @@ julia> sincos.(x)
  0.514395  0.514395  0.514395
 ```
 
-
-@@important
-I would like to reuse the result of this example/exercise in the parallel section
-@@
-
 \exercise{
 For a vector $V\in\mathrm{R}^n$ with elements $v$ compute the sum of all the elements in the following fashion
     
 1. Sum over the elements per index:
     $$s_1 = \sum_{i=1}^n v_i$$
-1. Sum over the elements (hint `for each`):
+2. Sum over the elements (hint `for each`):
     $$s_2 = \sum_{v\in V} v$$
-1. Transform these loops into functions
-1. Test against `V = rand(100_000)` and `s_1 ≈ s_2` (use `\approx + TAB` for ≈)
+3. Transform these loops into functions `mysum1` and `mysum2`
+4. Test against `V = rand(100_000)` and `s_1 ≈ s_2` (use `\approx + TAB` for ≈)
     
 Extra: Check the `@inbounds` macro for the first version.
 
