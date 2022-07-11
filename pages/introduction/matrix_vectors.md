@@ -5,7 +5,7 @@
 
 # Basic Matrix and Vector Operations
 
-In Julia vectors and matrices are derived from the basic [`Core.AbstracArray`](https://docs.julialang.org/en/v1/base/arrays/#lib-arrays) type. To get a better idea on what is happening we use the Julia REPL to show the examples. 
+In Julia vectors and matrices are derived from the basic [`Core.AbstracArray`](https://docs.julialang.org/en/v1/base/arrays/#lib-arrays) type. To get a better idea on what is happening we use the Julia REPL to type up some examples. 
 
 ## Vectors
 You can allocate a vector by typing:
@@ -40,7 +40,7 @@ julia> v // 2
 Note that the type of your vector changes with regards to the result of the operation. 
 @@
 
-If you try to define the vector without the `,` you will generate a $1 \times 3$ matrix:
+If you try to define the vector without the `,` separator you will generate a $1 \times 3$ matrix:
 ```julia-repl
 julia> w = [1 2 3]
 1×3 Matrix{Int64}:
@@ -102,21 +102,24 @@ julia> A * v
  30
  36
  42
+
 julia> A .* v
 3×3 Matrix{Int64}:
  1   4   7
  4  10  16
  9  18  27
-julia> A .^ 2
-3×3 Matrix{Int64}:
- 1  16  49
- 4  25  64
- 9  36  81
+
 julia> A ^ 2
 3×3 Matrix{Int64}:
  30  66  102
  36  81  126
  42  96  150
+
+julia> A .^ 2
+3×3 Matrix{Int64}:
+ 1  16  49
+ 4  25  64
+ 9  36  81
 ```
 
 ## Access specific elements
@@ -125,8 +128,10 @@ Indexing in Julia starts with 1 and we use square brackets `[]`. So in order to 
 ```julia-repl
 julia> v[2]
 2
+
 julia> A[1, 2]
 4
+
 julia> v[2] * A[1, 2]
 8
 ```
@@ -148,16 +153,19 @@ As soon as you include the [`LinearAlgebra`](https://docs.julialang.org/en/v1/st
 julia> using LinearAlgebra
 julia> tr(A)
 15
+
 julia> eigvals(A)
 3-element Vector{Float64}:
  -1.1168439698070436
  -5.70069118970987e-16
  16.116843969807064
+
 julia> sA = Symmetric(A)
 3×3 Symmetric{Int64, Matrix{Int64}}:
  1  4  7
  4  5  8
  7  8  9
+
 julia> sA \ v
 3-element Vector{Float64}:
  0.29999999999999993
@@ -191,5 +199,9 @@ $$
 2. Compute a vector $\mathbf{x}$ such that $\mathbf{T}\mathbf{x} = \mathbf{1}$ where $\mathbf{1} = (1,\cdots,1)^{\top}$.
 
 $\,$
+<<<<<<< HEAD
 }
 
+=======
+}
+>>>>>>> 9fe59d9f7871c397be5c465419fa2f54a6ee3b38

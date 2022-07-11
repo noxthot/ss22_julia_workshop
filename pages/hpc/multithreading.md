@@ -209,7 +209,7 @@ const ThreadRNG = Vector{Random.MersenneTwister}(undef, nthreads())
        ThreadRNG[threadid()] = Random.MersenneTwister()
 end
 ```
-What we do in the third line is define a [`const`](https://docs.julialang.org/en/v1/base/base/#const) variable. That is a global variable whose value will not change. In fact we define a Vector of size `nthreads()` and fill it with distinct [`Random.MersenneTwister`](https://docs.julialang.org/en/v1/stdlib/Random/#Random.MersenneTwister). This allows us to have a different random number generator for each thread by using
+What we do in the third line is define a [`const`](https://docs.julialang.org/en/v1/base/base/#const) variable. That is a global variable whose type will not change. In fact we define a Vector of size `nthreads()` and fill it with distinct [`Random.MersenneTwister`](https://docs.julialang.org/en/v1/stdlib/Random/#Random.MersenneTwister). This allows us to have a different random number generator for each thread by using
 ```julia
 rng = ThreadRNG[threadid()]
 rand(rng)

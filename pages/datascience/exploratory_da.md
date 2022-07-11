@@ -9,9 +9,9 @@
 
 ## Introduction
 
-In most data science projects *exploratory data analysis* (EDA) is an essential first step. The primary aim is to analyse a given data set to summarize its main characteristics. Therefore EDA often uses data visualization methods and statistical methods.
+In most data science projects *exploratory data analysis* (EDA) is an essential first step. The primary aim is to analyse a given data set to summarize its main characteristics. Therefore, EDA often uses data visualization methods and statistical methods.
 
-In this section we will continue to work with the Stack Overflow survey data set as shown in the [previous section](./pages/datascience/dataframes/). To summarize the necessary steps to start with this section, see the code below:
+In this section we will continue to work with the Stack Overflow survey data set as shown in the [previous section](./pages/datascience/dataframes/). To summarize, the necessary steps to start with this section can be found in the code snippet below:
 ```julia
 using CSV, DataFrames
 
@@ -54,7 +54,7 @@ Since most columns are `String` types, there is not that much to see but we stil
 
 After the previous exercise you should have $46844$ rows in your data set.
 
-Let us try to get an overview over the yearly compensation. Again we can use `describe` on just that column to get more detailed summary statistics:
+Let us try to get an overview over the yearly compensation. Again we can use `describe()`, just on that column, to get a more detailed summary statistics:
 ```julia-repl
 julia> describe(df.ConvertedCompYearly)
 Summary Stats:
@@ -71,7 +71,7 @@ Type:           Int64
 
 So we have $46844$ rows in this data set. We already removed the missing values, so there is no missing value left. The arithmetic mean is a lot higher than the median which indicates that the data is heavily skewed to the right. 25% of the data appears to be smaller than $27025$ and 75% of the data larger than $100000$. The maximum is given by an entry of over 45Mio and there are also participants with a yearly income of one Dollar. 
 
-Let us create some plots to gain deeper insights. We have already seen the use of `Plots.jl` before. In this section we will switch to `StatsPlots.jl`, which is a drop-in replacement for `Plots.jl` since on one hand it supports easy plotting of dataframes and on the other hand also offers additional statistical recipes.
+Let us create some plots to gain deeper insights. We have already seen the use of `Plots.jl` before. In this section, we will switch to `StatsPlots.jl` (which is a drop-in replacement for `Plots.jl`) since on one hand it supports easy plotting of dataframes and on the other hand also offers additional statistical recipes.
 
 Creating a boxplot is fairly simple:
 ```julia
@@ -83,7 +83,7 @@ using StatsPlots
 
 Note that `@df` is the call of the macro and the second `df` is the name of our dataframe.
 
-Apparently a couple of outliers totally screw our visualization. Fortunately there is an [undocumented function argument](https://github.com/JuliaPlots/StatsPlots.jl/blob/db1a9e2f58ff9fb4beb3a0f7d133fcc8fd72b812/src/boxplot.jl#L14) that allows to get rid of the outliers within the visualization:
+Apparently a couple of outliers totally screw our visualization. Fortunately, there is an [undocumented function argument](https://github.com/JuliaPlots/StatsPlots.jl/blob/db1a9e2f58ff9fb4beb3a0f7d133fcc8fd72b812/src/boxplot.jl#L14) that allows us to get rid of the outliers within the visualization:
 ```julia-repl
 @df df boxplot(:ConvertedCompYearly, outliers=false)
 ```
@@ -92,7 +92,7 @@ So apparently around 50% of the developers within the DACH region earn $27000$ t
 
 \figalt{Boxplot}{/assets/pages/datascience/exploratory_da_boxplot_no_outliers.png}
 
-Let us also have a look at the [cumulative distribution function (CDF)](https://en.wikipedia.org/wiki/Cumulative_distribution_function) of our data column. Therefor we simply sort the values of the column and plot them on the $y$ axis while we scale the $x$-axis from $0$ to $1$.
+Let us also have a look at the [cumulative distribution function (CDF)](https://en.wikipedia.org/wiki/Cumulative_distribution_function) of our data column. Therefore, we simply sort the values of the column and plot them on the $y$-axis while we scale the $x$-axis from $0$ to $1$.
 
 ```julia
 julia> plot(sort(df.ConvertedCompYearly), (1:nrow(df)) ./ nrow(df))
@@ -100,14 +100,16 @@ julia> plot(sort(df.ConvertedCompYearly), (1:nrow(df)) ./ nrow(df))
 
 \figalt{Cumulative distribution function plot}{/assets/pages/datascience/exploratory_da_cdf.png}
 
-The plot tells us (just like the quartiles already indicated) that most of the survey participates earn a lot less than 10Mio. Dollars. Removing outliers is a very controversial topic. Usually it is always good practice to try to understand the source of outliers and to consult a domain expert to decide whether or not to remove them. In this workshop we want to show the pitfalls when working with real data, but we also want to pragmatically clean the data to practice some data wrangling. So let us assume that it is very unusual for a software developer to earn more than 1Mio per year but to be sure, let us also check the entries where `ConvertedCompYear` exceeds 1Mio. We leave this as an exercise.
+The plot tells us (just like the quartiles already indicated) that most of the survey participates earn a lot less than 10Mio. Dollars. 
+
+Removing outliers is a very controversial topic. Usually it is always good practice to try to understand the source of outliers and to consult a domain expert to decide whether or not to remove them. In this workshop we want to show the pitfalls when working with real data, but we also want to pragmatically clean the data to practice some data wrangling. So let us assume that it is very unusual for a software developer to earn more than 1Mio per year but to be sure, let us also check the entries where `ConvertedCompYear` exceeds 1Mio. We leave this as an exercise.
 
 \exercise{
     Filter `df` for entries where `ConvertedCompYear` exceeds 1Mio and have a look at the remaining data rows. 
     Hints: Check the manual of `filter`. When you are running your code in the Julia REPL within VS Code you will find a dataframe viewer in your Julia extension's workspace. Otherwise it might also make sense to quickly write the dataframe to a CSV and have a look in one of the usual spreadsheet programs.
 }
 
-Apparently most of the top earners declared to be software developers. Let us filter the data set such that we only have entries $< 1$Mio from now on.
+Apparently, most of the top earners declared to be software developers. Let us filter the data set such that we only have entries $< 1$Mio from now on.
 
 \exercise{
     Filter (and store) `df` for entries where `ConvertedCompYear` is equal or less than 1Mio.
@@ -119,14 +121,15 @@ Now you should have $46237$ entries. Next, we only want to look at the DACH regi
     Filter (and store) `df` for `Country` being `Austria`, `Germany` or `Switzerland`.
 }
 
-Now we are down to $4212$ entries. Have a look at the column `Gender`. Besides `Man` and `Woman` there are lot more categories, but unfortunately with very little sample sizes. Thus adding these to further visualizations would lead to misleading conclusions. It would require additional engineering to address these little sample sizes and therefore is out of scope of this workshop.
-So let us also add a filter in this column.
+Now we are down to $4212$ entries. Have a look at the column `Gender`. Besides `Man` and `Woman` there are lot more categories, but unfortunately with very little sample sizes. Thus adding these to further visualizations would lead to misleading conclusions. It would require additional engineering to address these little sample sizes and therefore this is out of scope of this workshop.
+
+So instead,  let us also add a filter in this column.
 
 \exercise{
     Filter (and store) `df` for `Gender` being `Man` or `Woman`.
 }
 
-You should now see $4061$ entries. In a final step, let us convert the compensation from dollars into euros and store this information in a column named `EuroCompYearly`. As of 1st July, 2022 one dollar corresponds to $0.96$ Euros:
+You should now see $4061$ entries. In a final step, let us convert the compensation from dollars into euros and store this information in a column named `EuroCompYearly`. As of July 1st, 2022, one Dollar corresponds to $0.96$ Euros:
 ```julia
 df[!, :EuroCompYearly] = 0.96 * df[!, :ConvertedCompYearly]
 ```
@@ -160,6 +163,7 @@ Starting from this data set, let us conduct some case studies in the upcoming ex
 1. How does the median salary compare between full-time employments and independent contractors in Austria. Hint: `Statistics.jl` provides a `median` function.
 1. How does the median salary of data scientists compare to non data scientists in the DACH region. Hint: Have a look at `occursin` and `transform`.
 1. How many data scientists per country are left in our data set?
+$\,$
 }
 
 \solution{
@@ -217,14 +221,14 @@ julia> combine(groupby(df, [:Country, :isdatascientist]), nrow => :count)
 
 ## Data Visualisation
 
-In this workshop we have already used `Plots.jl` and `StatsPlots.jl` a couple of times to visualize functions and data. It may come to a surprise that `Plots.jl` and `StatsPlots.jl` are actually no plotting packages. They are rather plotting metapackages which provide an interface over many different plotting libraries. The specific plotting library that is actually being used to create the plots is referred to as the [*backend*](https://docs.juliaplots.org/stable/tutorial/#plotting-backends) and it is easy to switch and use different plotting libraries. So far we always used the default backend `GR` which is fast, but lacks interactivity. Depending on the requirements you might like to try `PlotlyJS` for interactivity or `PyPlot` because you like the functionality of Matplotlib (known from Python). To a get a good overview, have a look at the [Plots.jl documentation](https://docs.juliaplots.org/stable/backends/#backends).
+In this workshop we have already used `Plots.jl` and `StatsPlots.jl` a couple of times to visualize functions and data. It may come to a surprise that `Plots.jl` and `StatsPlots.jl` are actually no plotting packages. They are rather plotting metapackages which provide an interface over many different plotting libraries. The specific plotting library that is actually being used to create the plots is referred to as the [*backend*](https://docs.juliaplots.org/stable/tutorial/#plotting-backends) and it is easy to switch and therefore to use different plotting libraries. So far we always used the default backend `GR` which is fast, but lacks interactivity. Depending on the requirements you might like to try `PlotlyJS` for interactivity or `PyPlot` because you like the functionality of Matplotlib (known from Python). To get a good overview, have a look at the [`Plots.jl` documentation](https://docs.juliaplots.org/stable/backends/#backends).
 
 In the last section we used methods from `DataFrames.jl` and `Statistics.jl` to do some case studies. Now we will supplement the studies with visualisations.
 
 ### Barplot: Show survey participants by country
-In a previous exercise we already used `countmap` to get a dictionary which summarizes the number of participants per country. Fortunately `StatsPlots` is able to visualize this dictionary immediately. We will also switch the backend to `plotlyjs`, so we are able to interact with the graph and get more detailed information about the height of the bars by moving our mouse cursor over the top of the bars and looking at the hover label.
+In a previous exercise we already used `countmap` to get a dictionary which summarizes the number of participants per country. Fortunately, `StatsPlots` is able to visualize this dictionary immediately. We will also switch the backend to `plotlyjs`, so we are able to interact with the graph and get more detailed information about the height of the bars by moving our mouse cursor over the top of the bars and looking at the hover label.
 ```julia-repl
-julia > using StatsBase
+julia> using StatsBase
 
 julia> using StatsPlots; plotlyjs()
 Plots.PlotlyJSBackend()
@@ -246,7 +250,7 @@ Boxplots are a nice tool to visualize some distributional characteristics (local
 
 In the following plot we compare the salary of different employment states:
 ```julia-repl
-julia @df df boxplot(:Employment, :EuroCompYearly, xrotation=30, size=(500, 900), legend=false)
+julia> @df df boxplot(:Employment, :EuroCompYearly, xrotation=30, size=(500, 900), legend=false)
 ```
 
 We also used some optional arguments:
@@ -254,13 +258,13 @@ We also used some optional arguments:
 - `size=(500, 900)` such that the rotated labels are not cut off
 - `legend=false` to disable the legend
 
-The filled area of the boxes correspond to the 25% to 75% quantiles of the data, so 50% of the data samples live within the filled area. The whiskers capture 1.5 times the interquartile range ($1.5 \cdot (\operatorname{IQR}_{75} - \operatorname{IQR}_{25}$) and every data point that lies outside the whiskers is considered to be an outlier. The horizontal line inside the filled area corresponds to the median of the subset.
+The filled area of the boxes correspond to the 25% to 75% quantiles of the data, so 50% of the data samples live within the filled area. The whiskers capture 1.5 times the interquartile range ($1.5 \cdot (\operatorname{IQR}_{75} - \operatorname{IQR}_{25}))$ and every data point that lies outside the whiskers is considered to be an outlier. The horizontal line inside the filled area corresponds to the median of the subset.
 
 Please note that we create the figure using plotly, so the plot is interactive and you are able to zoom in and get additional information by pointing at certain details.
 
 \figalt{Boxplot visualizing salaries between different employment states}{/ss22_julia_workshop/assets/pages/datascience/plot_explorative_da_salary_1.json}
 
-Since visualizations usually condense information up to some extend it is always a good idea to look at the data from different perspectives. Adding e.g. a dots plot where every sample is visualized by a dot shows that two of the groups have only very little sample sizes.
+Since visualizations usually condense information up to some extend, it is always a good idea to look at the data from different perspectives. Adding e.g. a dots plot (where every sample is visualized by a dot) shows that two of the groups have only very little sample sizes.
 
 ```julia-repl
 julia> @df df boxplot(:Employment, :EuroCompYearly, xrotation=30, size=(500, 900), legend=false)
@@ -270,11 +274,11 @@ julia> @df df dotplot!(:Employment, :EuroCompYearly, legend=false)
 
 \figalt{Boxplot plus Dotsplot}{/ss22_julia_workshop/assets/pages/datascience/plot_explorative_da_salary_2.json}
 
-Combining the information of the two plots we obviously have too little data to judge about the empty and ~I prefer not to say~ category. Also it appears that the average salaries of freelancers are a lot higher than the salaries of employees. Also the 25% quantile of freelancers is comparable to the median salary of full-time employees.
+Combining the information of the two plots we obviously have too little data to judge about the empty and *I prefer not to say* category. Also it appears that the average salaries of freelancers are a lot higher than the salaries of employees. Also the 25% quantile of freelancers is comparable to the median salary of full-time employees.
 
-\exercise{The dataframe has a couple of interesting columns (see `names(df)`). Have a look at the [StatsPlots.jl documentation](https://github.com/JuliaPlots/StatsPlots.jl), get creative and generate some nice visualisations.}
+\exercise{The dataframe has a couple of interesting columns (see `names(df)`). Have a look at the [`StatsPlots.jl` documentation](https://github.com/JuliaPlots/StatsPlots.jl), get creative and generate some nice visualisations.}
 
-Of course there are many different plot types you can choose from. Have a look at [Plots.jl gallery](https://docs.juliaplots.org/stable/gallery/plotlyjs/) to get an overview. With [DataVoyager.jl](https://github.com/queryverse/DataVoyager.jl) there is also a nice package that allows to interactively explore your data by loading a given data frame into the Voyager data exploration tool:
+Of course there are many different plot types you can choose from. Have a look at the [`Plots.jl` gallery](https://docs.juliaplots.org/stable/gallery/plotlyjs/) to get an overview. With [`DataVoyager.jl`](https://github.com/queryverse/DataVoyager.jl) there is also a nice package that allows to interactively explore your data by loading a given data frame into the Voyager data exploration tool:
 ```julia-repl
 julia> using DataVoyager
 

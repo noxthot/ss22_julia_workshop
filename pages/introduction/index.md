@@ -9,8 +9,10 @@
 
 There are several ways to write and run Julia code:
 
-1. The Julia [REPL](https://docs.julialang.org/en/v1/stdlib/REPL/) (read-evaluate-print-loop): you can start it by typing `julia` (or the full path to the executable) on the command line. The REPL itself comes with four distinct modes that can be very useful to know:
-- **Julia mode** This is the default mode when you start Julia. The prompt starts with `julia>`. There you may type Julia expressions which get evaluated when pressing enter. The resulting output will be presented immediately after evaluation.
+### The Julia [REPL](https://docs.julialang.org/en/v1/stdlib/REPL/) (read-evaluate-print-loop)
+
+We can start it by typing `julia` (or the full path to the executable) on the command line. The REPL itself comes with four distinct modes that can be very useful to know:
+- **Julia mode**: This is the default mode when we start Julia. The prompt starts with `julia>`. Here we may type Julia expressions which get evaluated when pressing enter. The resulting output will be presented immediately after evaluation.
 \example{```julia-repl
 julia> 1+1
 2
@@ -18,7 +20,7 @@ julia> 1+1
 julia> 
 ```
 }
-- **Package mode** You can switch to this mode by typing `]` and the prompt will change to `(@v1.7) pkg>` (the version number will depend on your installation). Here you can directly interact with the package manager and add or update packages. To get a complete list of possibilities type `?`
+- **Package mode**: We can switch to this mode by typing `]` and the prompt will change to `(@v1.7) pkg>` (the version number will depend on the installation). Here we can directly interact with the [package manager](./package_manager) and add or update packages. To get a complete list of possibilities type `?`
 \example{```julia-repl
 (@v1.7) pkg> ?
   Welcome to the Pkg REPL-mode. To return to the julia> prompt, either press backspace when the input line is empty or press Ctrl+C.
@@ -80,7 +82,7 @@ julia>
 (@v1.7) pkg> 
 ```
 }
-- **Help mode** You can switch to this mode by typing `?` and the prompt will change to `help?>`. Julia will print the help and documentation for everything you ask for (related to Julia).
+- **Help mode**: We can switch to this mode by typing `?` and the prompt will change to `help?>`. Julia will print the help and documentation for everything we ask for (related to Julia).
 \example{
 ```julia-repl
 help?> +
@@ -109,7 +111,7 @@ search: +
 julia>
 ```
 }
-- **Shell mode** You can switch to this mode by typing `;` and the prompt will change to `shell>`. Now you are in the usual shell and you can type any commands you need to evaluate.
+- **Shell mode**: We can switch to this mode by typing `;` and the prompt will change to `shell>`. Now we are in the usual shell and we can type any commands we need to evaluate.
 \example{
 ```
 shell> pwd
@@ -120,13 +122,16 @@ shell>
 }
 
 **You exit all of the (non) Julia modes by pressing Backspace.**
-1. Visual Studio Code - see [Main introduction](../../index.html#julia_and_vscode)
-1. A lot of other IDEs or text editors like Jupyter, Sublime Text, Nano, vim and many more can also be used in connection with Julia. Some integrate the evaluation inside the editor for others you will have to do this in the command line. You can always run Julia code from command line by typing `julia myProgram.jl`
 
-If your are just exploring some possibilities the REPL is very useful, once you try running some program or simply want to repeat a process you will have to switch to running code from a file. In the REPL you can use the arrow keys *up* and *down* to navigate through previous calls (if your command line allows this).
+### Visual Studio Code 
+See [Main introduction](../../index.html#julia_and_vscode)
+
+### Other Interactive Development Environments 
+A lot of other IDEs or text editors like Jupyter, Sublime Text, Nano, vim and many more can also be used in connection with Julia. Some integrate the evaluation inside the editor for others we will have to do this in the command line. Note, that we can always run Julia code from command line by typing `julia myProgram.jl`
+
+If we are just exploring some possibilities the REPL is very useful, once we try running some program or simply want to repeat a process we will have to switch to running code from a file. In the REPL we can use the arrow keys *up* and *down* to navigate through previous calls (if our command line allows this).
 
 ## Additional sources
 
 If you are already familiar with another programming language it might be worth visiting [Noteworthy Differences from other Languages](https://docs.julialang.org/en/v1/manual/noteworthy-differences/) from the Julia documentation. 
 
-## Reading and writing

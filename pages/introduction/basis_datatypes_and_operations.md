@@ -27,7 +27,7 @@ julia> greekText = "Στυπιδ Ρ"
 
 ## Datatypes
 
-Julia supports basic data types like Integers, Floating-Point Numbers, [Strings and many more](https://docs.julialang.org/en/v1/manual/types/). The most generic type is called `Any` and thus every type is a subtype of `Any`. Types are built in a hierarchical manner and can be visualized as a type graph (examples for partial type graphs are given in [Wikibooks - Introducing Julia](https://en.wikibooks.org/wiki/Introducing_Julia/Types)).
+Julia supports basic data types like Integers, Floating-Point Numbers, Strings and [many more](https://docs.julialang.org/en/v1/manual/types/). The most generic type is called `Any` and thus every type is a subtype of `Any`. Types are built in a hierarchical manner and can be visualized as a type graph (examples for partial type graphs are given in [Wikibooks - Introducing Julia](https://en.wikibooks.org/wiki/Introducing_Julia/Types)).
 
 Although Julia's type system is dynamic, it also allows to explicitly set a specific type for certain values and thus also gains advantages of static type systems.
 
@@ -93,9 +93,20 @@ julia> typeof(3//5)
 Rational{Int64}
 ```
 
-You may ask yourself: Why is this important when Julia is dynamically typed and thus not requires types to be explicitly set? Among others, there are three primary purposes for using types: improve human readability, catch programmer errors and for making use of a concept called multiple dispatch (which we will talk about later in this workshop). It may also get important when high precision, memory constraints or fast computation is required.
+You may ask yourself: Why is this important when Julia is dynamically typed and thus not requires types to be explicitly set? Among others, there are three primary purposes for using types: 
+- improve human readability
+- catch programmer errors
+- for making use of a concept called [multiple dispatch](functions#multiple_dispatch) (which we will talk about later in this workshop). 
+It may also get important when high precision, memory constraints or fast computation is required.
 
-For now we did not speak about basic mathematical operations which are of course defined for all primitive numeric types. `+` corresponds to addition, `-` to subtraction, `*` to multiplication, `/` to division, `÷` for integer division and `x ^ y` raises `x` to the `y`th power:
+For now we did not speak about basic mathematical operations, which are of course defined for all primitive numeric types. 
+- `+` corresponds to addition, 
+- `-` to subtraction, 
+- `*` to multiplication, 
+- `/` to division, 
+- `÷` for integer division, and
+- `x ^ y` raises `x` to the `y`th power
+
 ```julia-repl
 julia> x = 3 + 2im
 3 + 2im
@@ -122,13 +133,18 @@ julia> x ^ y
 -784.728604218539 + 66.05617374305294im
 ```
 
-Julia of course also deals with brackets and chained operations:
+Julia also deals with brackets and chained operations by usual mathematical rules:
 ```julia-repl
 julia> 1 + 5 * (3 - 2.1) + (2 ^ 5)
 37.5
 ```
 
-`Bool` types are designed to build logical expressions and only carry two possible values `true` (`1`) and `false` (`0`). They offer the following Boolean operators: `!x` (negation), `x && y` (logical AND), `x || y` (logical OR). Note that `Bool` is still an integer type and and thus all the numerical operations are also defined for this type:
+`Bool` types are designed to build logical expressions and only carry two possible values `true` (`1`) and `false` (`0`). They offer the following Boolean operators: 
+- `!x` (negation), 
+- `x && y` (logical AND), 
+- `x || y` (logical OR). 
+
+Note that `Bool` is still an integer type and and thus all the numerical operations are also defined for this type:
 ```julia-repl
 julia> true && false
 false
@@ -207,7 +223,11 @@ julia> mytext[8]
 'S': ASCII/Unicode U+0053 (category Lu: Letter, uppercase)
 ```
 
-Common operations on strings are e.g. `a * b` for concatenating two strings `a` and `b`, `length(a)` to get the number of characters of a string `a`, `occursin(a, b)` to find out whether `a` is a substring of `b` and [more](https://docs.julialang.org/en/v1/manual/strings/#Common-Operations):
+Common operations on strings are:
+- `a * b` for concatenating two strings `a` and `b`,
+- `length(a)` to get the number of characters of a string `a`,
+- `occursin(a, b)` to find out whether `a` is a substring of `b` and 
+- [more](https://docs.julialang.org/en/v1/manual/strings/#Common-Operations).
 ```julia-repl
 julia> mystring = "Mathematik"
 "Mathematik"
