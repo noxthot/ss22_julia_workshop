@@ -112,11 +112,11 @@
 
 <!-- Content appended here (in class franklin-content) -->
 <div class="franklin-content"><h1 id="package_manager"><a href="#package_manager" class="header-anchor">Package manager</a></h1>
-<p>We have already worked a little bit with the Julia <a href="https://docs.julialang.org/en/v1/stdlib/Pkg/">package manager</a>. In the following we will discuss this feature in more detail. You already know how to open the package manager: To open the package manager press <code>&#93;</code> and with <code>?</code> you open the help page. Now, in order to for example add the <a href="https://docs.julialang.org/en/v1/stdlib/LinearAlgebra/">LinearAlgebra</a> package type </p>
+<p>We have already worked a little bit with the Julia <a href="https://docs.julialang.org/en/v1/stdlib/Pkg/">package manager</a>. In the following we will discuss this feature in more detail. You already know how to open the package manager: simply press <code>&#93;</code>. Now, in order to for example add the <a href="https://docs.julialang.org/en/v1/stdlib/LinearAlgebra/">LinearAlgebra</a> package type </p>
 <pre><code class="julia-repl hljs"><span class=hljs-metap>(@v1.7) pkg&gt;</span> add LinearAlgebra</code></pre>
 <p>Now, everytime you open Julia, you can type</p>
 <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-keyword">using</span> LinearAlgebra</span></code></pre>
-<p>which adds various linear algebra related functionalities to your session. We will discuss details of this specific package later. In the case you wish to remove this package you can open the package manager and type</p>
+<p>which adds various linear algebra related functionalities to your session. We will discuss details of this specific package later. In case you wish to remove this package you can open the package manager and type</p>
 <pre><code class="julia-repl hljs"><span class=hljs-metap>(@v1.7) pkg&gt;</span> rm LinearAlgebra</code></pre>
 <p>If you now want to install a specific version of a package you can add <code>@&lt;versionnumber&gt;</code> behind the package name. As an example, to install <code>LinearAlgebra</code> at version <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1.7.2</mn></mrow><annotation encoding="application/x-tex">1.7.2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1.7.2</span></span></span></span> type</p>
 <pre><code class="julia-repl hljs"><span class=hljs-metap>(@v1.7) pkg&gt;</span> add LinearAlgebra@1.7.2</code></pre>
@@ -126,7 +126,7 @@
 <pre><code class="julia-repl hljs"><span class=hljs-metap>(@v1.7) pkg&gt;</span> update LinearAlgebra</code></pre>
 <p>To get a list of all installed packages you can type</p>
 <pre><code class="julia-repl hljs"><span class=hljs-metap>(@v1.7) pkg&gt;</span> status</code></pre>
-<p>Quite often you want to only add certain packages for certain projects. This can be done by creating a new package environment. This can for example become handy when you want to add packages to your projects which have conflicts with already loaded packages. In this case open a new environment &#40;which we call example&#41; by typing</p>
+<p>It is good practice to add packages only for certain projects to prevent conflicting packages. This can be done by creating a new package environment. Here we create an environment called <code>example</code>:</p>
 <pre><code class="julia-repl hljs"><span class=hljs-metap>(@v1.7) pkg&gt;</span> activate example</code></pre>
 <p>If you check this new environment with the <code>status</code> command you will see that you have a clean package environment. You can return to the default environment by typing <code>activate</code>. If you want to create an environment that is identified with the project folder you are working on, type <code>activate .</code>. Whenever someone uses your project folder, this person can enter the same environment by typing <code>activate .</code> and install all needed packages with the used versions by typing <code>instantiate</code>. If you do not want to enter the julia environment, simply type</p>
 <pre><code class="shell hljs">julia --project=. main.jl</code></pre>
