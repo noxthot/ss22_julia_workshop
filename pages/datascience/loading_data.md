@@ -212,7 +212,7 @@ julia> df_survey = CSV.read("survey_results_public.csv", DataFrame; missingstrin
                                                                                                                                       4 columns and 83435 rows omitted
 ```
 
-Since `ConvertedCompYearly` is not displayed in this last output, we will take a look at the column type by applying `eltype()`:
+Since `ConvertedCompYearly` is not displayed in this last output, we will take a look at the data type of the column by applying `eltype()`:
 ```julia-repl
 julia> eltype(df_survey.ConvertedCompYearly)
 Union{Missing, Int64}
@@ -237,7 +237,6 @@ Union{Missing, Int64}
 
 Let us split up the call `collect(zip(names(df_survey), eltype.(eachcol(df_survey))))` and explain each part:
 - the function `eachcol()` creates a vector-like object that allows iterating over each dataframe column
-- `eltype()` returns the data type of an object
 - by using `eltype.()` we apply `eltype()` to each column. 
 - this returns a vector of column types but unfortunately we can not see the according column names
 - to also get the names we use `names()`
