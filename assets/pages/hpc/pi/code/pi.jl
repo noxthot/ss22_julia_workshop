@@ -21,5 +21,5 @@ function get_accuracy(f::Function, N::Int64)
         )
 end
 
-N = 2 ^ 30
+N = 2^30
 get_accuracy(in_unit_circle, N)

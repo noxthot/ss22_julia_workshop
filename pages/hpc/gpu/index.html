@@ -396,7 +396,7 @@ Stacktrace:
     j =  threadIdx().x 
     
     <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-number">1</span>:n
-        <span class="hljs-keyword">if</span> (rand() ^ <span class="hljs-number">2</span> + rand() ^ <span class="hljs-number">2</span>) &lt; <span class="hljs-number">1</span>
+        <span class="hljs-keyword">if</span> (rand()^<span class="hljs-number">2</span> + rand()^<span class="hljs-number">2</span>) &lt; <span class="hljs-number">1</span>
             <span class="hljs-meta">@inbounds</span> M[j] += <span class="hljs-number">1</span>
         <span class="hljs-keyword">end</span>
     <span class="hljs-keyword">end</span>
@@ -408,7 +408,7 @@ Stacktrace:
 <p>We use <code>Int8</code> as on GPUs the data type has quite a high impact on the performance.  With integers this is not that important but if we are not working on a high level server grades GPU the <em>double</em> &#40;<code>Float64</code>&#41; performance will be significantly slower than <em>single</em> &#40;<code>Float32</code>&#41;.  Secondly, there is usually less storage on the GPU.</p>
 <p>The resulting <em>host</em> side function looks as follows:</p>
 <pre><code class="julia hljs"><span class="hljs-keyword">function</span> in_unit_circle_gpu(N::<span class="hljs-built_in">Int64</span>)
-    nthreads = <span class="hljs-number">2</span> ^ <span class="hljs-number">10</span>
+    nthreads = <span class="hljs-number">2</span>^<span class="hljs-number">10</span>
     len, _ = divrem(N, nthreads)
     M = CUDA.zeros(<span class="hljs-built_in">Int8</span>, nthreads)
 
@@ -459,7 +459,7 @@ Stacktrace:
 <pre><code class="julia hljs"><span class="hljs-keyword">function</span> in_unit_circle_kernel2!(M)
     j = (blockIdx().x - <span class="hljs-number">1</span>) * blockDim().x + threadIdx().x
 
-    <span class="hljs-keyword">if</span> (rand() ^ <span class="hljs-number">2</span> + rand() ^ <span class="hljs-number">2</span>) &lt; <span class="hljs-number">1</span>
+    <span class="hljs-keyword">if</span> (rand()^<span class="hljs-number">2</span> + rand()^<span class="hljs-number">2</span>) &lt; <span class="hljs-number">1</span>
         <span class="hljs-meta">@inbounds</span> M[j] += <span class="hljs-number">1</span>
     <span class="hljs-keyword">end</span>
 
@@ -467,7 +467,7 @@ Stacktrace:
 <span class="hljs-keyword">end</span>
 
 <span class="hljs-keyword">function</span> in_unit_circle_gpu2(N::<span class="hljs-built_in">Int64</span>)
-    nthreads = <span class="hljs-number">2</span> ^ <span class="hljs-number">10</span>
+    nthreads = <span class="hljs-number">2</span>^<span class="hljs-number">10</span>
     nblocks, _ = divrem(N, nthreads)
     M = CUDA.zeros(<span class="hljs-built_in">Int8</span>, N)
 

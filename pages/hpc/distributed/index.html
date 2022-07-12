@@ -241,7 +241,7 @@
 <button type="button" class="collapsible" style="background-color:#b5ddff"> Exercise </button><div class="collapsiblecontent">  Define a new function <code>in_unit_circle_distributed1</code> with the <code>@distributed</code> macro and an appropriate <em>reducer</em> function &#40;the syntax is <code>x &#61; @distributed &#40;operator&#41; for ...</code>&#41;. Note that you might need to always return a value inside the loop. For comparison start 4 workers and test the accuracy and measure the performance. <div class="solution"> Solution </div><div class="solutioncollapsible">  </p>
 <pre><code class="julia hljs"><span class="hljs-keyword">function</span> in_unit_circle_distributed1(N::<span class="hljs-built_in">Int64</span>)
     M = <span class="hljs-meta">@distributed</span> (+) <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-number">1</span>:N
-        <span class="hljs-keyword">if</span> (rand() ^ <span class="hljs-number">2</span> + rand() ^ <span class="hljs-number">2</span>) &lt; <span class="hljs-number">1</span>
+        <span class="hljs-keyword">if</span> (rand()^<span class="hljs-number">2</span> + rand()^<span class="hljs-number">2</span>) &lt; <span class="hljs-number">1</span>
             <span class="hljs-number">1</span>
         <span class="hljs-keyword">else</span>
             <span class="hljs-number">0</span>
@@ -254,7 +254,7 @@
 <span class="hljs-comment"># more compact for with the ternary operator</span>
 <span class="hljs-keyword">function</span> in_unit_circle_distributed1_1(N::<span class="hljs-built_in">Int64</span>)
     M = <span class="hljs-meta">@distributed</span> (+) <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-number">1</span>:N
-        (rand() ^ <span class="hljs-number">2</span> + rand() ^ <span class="hljs-number">2</span>) &lt; <span class="hljs-number">1</span> ? <span class="hljs-number">1</span> : <span class="hljs-number">0</span>
+        (rand()^<span class="hljs-number">2</span> + rand()^<span class="hljs-number">2</span>) &lt; <span class="hljs-number">1</span> ? <span class="hljs-number">1</span> : <span class="hljs-number">0</span>
     <span class="hljs-keyword">end</span>
 
     <span class="hljs-keyword">return</span> M
@@ -311,7 +311,7 @@
     M = <span class="hljs-number">0</span>
     
     <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-number">1</span>:N
-        <span class="hljs-keyword">if</span> (rand() ^ <span class="hljs-number">2</span> + rand() ^ <span class="hljs-number">2</span>) &lt; <span class="hljs-number">1</span>
+        <span class="hljs-keyword">if</span> (rand()^<span class="hljs-number">2</span> + rand()^<span class="hljs-number">2</span>) &lt; <span class="hljs-number">1</span>
             M += <span class="hljs-number">1</span>
         <span class="hljs-keyword">end</span>
     <span class="hljs-keyword">end</span>

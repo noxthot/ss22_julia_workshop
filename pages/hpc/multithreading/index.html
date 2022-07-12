@@ -182,7 +182,7 @@
     M = <span class="hljs-number">0</span>
     
     <span class="hljs-meta">@threads</span> <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-number">1</span>:N
-        <span class="hljs-keyword">if</span> (rand() ^ <span class="hljs-number">2</span> + rand() ^ <span class="hljs-number">2</span>) &lt; <span class="hljs-number">1</span>
+        <span class="hljs-keyword">if</span> (rand()^<span class="hljs-number">2</span> + rand()^<span class="hljs-number">2</span>) &lt; <span class="hljs-number">1</span>
             M += <span class="hljs-number">1</span>
         <span class="hljs-keyword">end</span>
     <span class="hljs-keyword">end</span>
@@ -204,7 +204,7 @@
     M = Atomic{<span class="hljs-built_in">Int</span>}(<span class="hljs-number">0</span>);
     
     <span class="hljs-meta">@threads</span> <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-number">1</span>:N
-        <span class="hljs-keyword">if</span> (rand() ^ <span class="hljs-number">2</span> + rand() ^ <span class="hljs-number">2</span>) &lt; <span class="hljs-number">1</span>
+        <span class="hljs-keyword">if</span> (rand()^<span class="hljs-number">2</span> + rand()^<span class="hljs-number">2</span>) &lt; <span class="hljs-number">1</span>
             atomic_add!(M, <span class="hljs-number">1</span>)
         <span class="hljs-keyword">end</span>
     <span class="hljs-keyword">end</span>
@@ -225,7 +225,7 @@
     M = zeros(<span class="hljs-built_in">Int64</span>, nthreads());
     
     <span class="hljs-meta">@threads</span> <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-number">1</span>:N
-        <span class="hljs-keyword">if</span> (rand() ^ <span class="hljs-number">2</span> + rand() ^ <span class="hljs-number">2</span>) &lt; <span class="hljs-number">1</span>
+        <span class="hljs-keyword">if</span> (rand()^<span class="hljs-number">2</span> + rand()^<span class="hljs-number">2</span>) &lt; <span class="hljs-number">1</span>
             <span class="hljs-meta">@inbounds</span> M[threadid()] += <span class="hljs-number">1</span>
         <span class="hljs-keyword">end</span>
     <span class="hljs-keyword">end</span>
@@ -272,7 +272,7 @@ rand(rng)</code></pre>
         m = <span class="hljs-number">0</span>
 
         <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-number">1</span>:len
-            <span class="hljs-keyword">if</span> (rand(rng) ^ <span class="hljs-number">2</span> + rand(rng) ^ <span class="hljs-number">2</span>) &lt; <span class="hljs-number">1</span>
+            <span class="hljs-keyword">if</span> (rand(rng)^<span class="hljs-number">2</span> + rand(rng)^<span class="hljs-number">2</span>) &lt; <span class="hljs-number">1</span>
                 m += <span class="hljs-number">1</span>
             <span class="hljs-keyword">end</span>
         <span class="hljs-keyword">end</span>
