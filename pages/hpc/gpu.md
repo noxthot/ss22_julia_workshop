@@ -314,7 +314,7 @@ function in_unit_circle_kernel!(n::Int64, M)
     j =  threadIdx().x 
     
     for i in 1:n
-        if (rand() ^ 2 + rand() ^ 2) < 1
+        if (rand()^2 + rand()^2) < 1
             @inbounds M[j] += 1
         end
     end
@@ -336,7 +336,7 @@ Secondly, there is usually less storage on the GPU.
 The resulting *host* side function looks as follows:
 ```julia
 function in_unit_circle_gpu(N::Int64)
-    nthreads = 2 ^ 10
+    nthreads = 2^10
     len, _ = divrem(N, nthreads)
     M = CUDA.zeros(Int8, nthreads)
 
@@ -404,7 +404,7 @@ So we end up with the following code:
 function in_unit_circle_kernel2!(M)
     j = (blockIdx().x - 1) * blockDim().x + threadIdx().x
 
-    if (rand() ^ 2 + rand() ^ 2) < 1
+    if (rand()^2 + rand()^2) < 1
         @inbounds M[j] += 1
     end
 
@@ -412,7 +412,7 @@ function in_unit_circle_kernel2!(M)
 end
 
 function in_unit_circle_gpu2(N::Int64)
-    nthreads = 2 ^ 10
+    nthreads = 2^10
     nblocks, _ = divrem(N, nthreads)
     M = CUDA.zeros(Int8, N)
 
@@ -445,7 +445,7 @@ function in_unit_circle_kernel3!(n::Int64, M)
     j = (blockIdx().x - 1) * blockDim().x + threadIdx().x
 
     for _ in 1:n
-        if (rand() ^ 2 + rand() ^ 2) < 1
+        if (rand()^2 + rand()^2) < 1
             @inbounds M[j] += 1
         end
     end
@@ -456,8 +456,8 @@ end
 The calling function needs to compute the values as defined above: 
 ```julia
 function in_unit_circle_gpu3(N::Int64)
-    nthreads = 2 ^ 10
-    n = 2 ^ 6
+    nthreads = 2^10
+    n = 2^6
     
     nblocks, _ = divrem(N, n * nthreads)
     M = CUDA.zeros(Int8, nblocks * nthreads)
