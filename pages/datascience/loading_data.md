@@ -197,7 +197,7 @@ julia> df_survey[!, selcols]
                                                                                                                        5 columns and 83435 rows omitted
 ```
 
-Do we notice that something odd happened? `ConvertedCompYearly` apparently is stored as a `String15` (meaning a `String` with fixed length of 15 letters) column. Taking a closer look at the data and/or CSV file, this is due to `NA` being used as text in the CSV file. We obviously want this column to be of type `Integer` (to be more precise of type `Union{Integer, Missing}`) and the `NA`s should be `missing`. If we would have known about this earlier, we could have corrected this right at the start when reading the dataframe. This also counts for various other problems that often occur with this file format. Non-standard seperation letter, different symbols for writing decimal numbers to just name two. Reading the manual of `CSV.read` tells us how we should read the data correctly and we can tell the function that we only want to read specific columns:
+Do we notice that something odd happened? `ConvertedCompYearly` apparently is stored as a `String15` (meaning a `String` with fixed length of 15 letters) column. Taking a closer look at the data and/or CSV file, this is due to `NA` being used as text in the CSV file. We obviously want this column to be of type `Integer` (to be more precise of type `Union{Integer, Missing}`) and the `NA`s should be `missing` instead. If we would have known about this earlier, we could have corrected this right at the start when reading the dataframe. This also counts for various other problems that often occur with this file format. Non-standard seperation letter, different symbols for writing decimal numbers to just name two. Reading the manual of `CSV.read` tells us how we should read the data correctly and we can tell the function that we only want to read specific columns:
 ```julia-repl
 julia> df_survey = CSV.read("survey_results_public.csv", DataFrame; missingstring="NA", select=selcols)
 83439×9 DataFrame
@@ -217,6 +217,8 @@ Since `ConvertedCompYearly` is not displayed in this last output, we will take a
 julia> eltype(df_survey.ConvertedCompYearly)
 Union{Missing, Int64}
  ```
+
+ With the type `Missing` Julia provides support for representing missing values in a statistical sense. This is useful since many functions within the data science ecosystem offer options for dealing with `missing` entries, for example by allowing to skip them like in the reduction functions `mean()` or `median()` of the [`StatsBase.jl`](https://juliastats.org/StatsBase.jl/stable/) package. Find more information about this type in the [Julia documentation](https://docs.julialang.org/en/v1/manual/missing/).
 
  Let us also have a look at the types of the rest of the columns. This unfortunately is a bit technical:
 ```julia-repl
