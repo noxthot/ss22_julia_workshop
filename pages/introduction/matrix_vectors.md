@@ -225,7 +225,7 @@ The rest you need to know about vectors and matrices we will introduce along the
 \exercise{
 1. Create a sparse matrix $\mathbf{T}\in\mathbb{R}^{10 \times 10}$ of the form
 $$
-\mathbf{T} = \begin{pmatrix}
+\mathbf{L} = \begin{pmatrix}
     -1 & 1 &   &      &   \\
       & -1       & 1   &      &    \\
       &         & -1         & \ddots    &     \\
@@ -233,7 +233,44 @@ $$
       &         &           &           & -1
 \end{pmatrix}\;.
 $$
-2. Compute a vector $\mathbf{x}$ such that $\mathbf{T}\mathbf{x} = \mathbf{1}$ where $\mathbf{1} = (1,\cdots,1)^{\top}$.
+2. Compute a vector $\mathbf{x}$ such that $\mathbf{L}\mathbf{x} = \mathbf{1}$ where $\mathbf{1} = (1,\cdots,1)^{\top}$.
+
+\solution{
+1. We can store this matrix by again using a tridiagonal matrix which has a zero lower off-diagonal. That is,
+```julia-repl
+julia> L = Tridiagonal(zeros(9),-ones(10),ones(9))
+10×10 Tridiagonal{Float64, Vector{Float64}}:
+ -1.0   1.0    ⋅     ⋅     ⋅     ⋅     ⋅     ⋅     ⋅     ⋅ 
+  0.0  -1.0   1.0    ⋅     ⋅     ⋅     ⋅     ⋅     ⋅     ⋅ 
+   ⋅    0.0  -1.0   1.0    ⋅     ⋅     ⋅     ⋅     ⋅     ⋅ 
+   ⋅     ⋅    0.0  -1.0   1.0    ⋅     ⋅     ⋅     ⋅     ⋅ 
+   ⋅     ⋅     ⋅    0.0  -1.0   1.0    ⋅     ⋅     ⋅     ⋅ 
+   ⋅     ⋅     ⋅     ⋅    0.0  -1.0   1.0    ⋅     ⋅     ⋅ 
+   ⋅     ⋅     ⋅     ⋅     ⋅    0.0  -1.0   1.0    ⋅     ⋅ 
+   ⋅     ⋅     ⋅     ⋅     ⋅     ⋅    0.0  -1.0   1.0    ⋅ 
+   ⋅     ⋅     ⋅     ⋅     ⋅     ⋅     ⋅    0.0  -1.0   1.0
+   ⋅     ⋅     ⋅     ⋅     ⋅     ⋅     ⋅     ⋅    0.0  -1.0
+
+```
+2. We can use the backslash operator to solve the system:
+```julia-repl
+julia> y = ones(10);
+
+julia> x = L\y
+10-element Vector{Float64}:
+ -10.0
+  -9.0
+  -8.0
+  -7.0
+  -6.0
+  -5.0
+  -4.0
+  -3.0
+  -2.0
+  -1.0
+
+```
+}
 
 $\,$
 }
