@@ -27,7 +27,7 @@ df_survey = DataFrame(Arrow.Table("survey.arrow"))
 ```
 
 ## Data Wrangling
-In a first step, let us get a descriptive overview over the data by having a applying `describe()`. 
+In a first step, let us get a descriptive overview over the data by applying `describe()`. 
 Also note the additional arguments that are given to `show()`for displaying all rows and columns.
 ```julia
 julia> show(describe(df_survey), allrows=true, allcols=true)
@@ -69,7 +69,7 @@ Maximum:        45241312.000000
 Type:           Int64
 ```
 
-So we have $46844$ rows in this data set. We already removed the missing values, so there is no missing value left. The arithmetic mean is a lot higher than the median which indicates that the data is heavily skewed to the right. 25% of the data appears to be smaller than $27025$ and 75% of the data larger than $100000$. The maximum is given by an entry of over 45Mio and there are also participants with a yearly income of one Dollar. 
+So we have $46844$ rows in this data set. The arithmetic mean is a lot higher than the median which indicates that the data is heavily skewed to the right. 25% of the data appears to be smaller than $27025$ and 75% of the data larger than $100000$. The maximum is given by an entry of over 45Mio and there are also participants with a yearly income of one Dollar. 
 
 Let us create some plots to gain deeper insights. We have already seen the use of `Plots.jl` before. In this section, we will switch to `StatsPlots.jl` (which is a drop-in replacement for `Plots.jl`) since on one hand it supports easy plotting of dataframes and on the other hand also offers additional statistical recipes.
 
@@ -152,7 +152,7 @@ df_survey[!, :EuroCompYearly] = 0.96 * df_survey[!, :ConvertedCompYearly]
 }
 
 ## Case Studies
-Starting from this data set, let us conduct some case studies in the upcoming exercise.
+Continuing with the same data set, let us conduct some case studies in the upcoming exercise.
 
 \exercise{
 1. What is the number of austrian, german and swiss survey participants. 
