@@ -46,7 +46,7 @@ julia> show(describe(df_survey), allrows=true, allcols=true)
    9 │ ConvertedCompYearly  1.18426e5  1                         56211.0  45241312                              36595  Union{Missing, Int64}
 ```
 
-Since most columns are `String` types, there is not that much to see but we still get a helpful impression about the number of missing fields. In the last section we stated that we are interested to do a little study in terms of income, so missing values there are not really feasible. Let us remove that rows in an exercise.
+Since most columns are `String` types, there is not that much to see but we still get a helpful impression about the number of missing fields. In the last section we stated that we are interested to do a little study in terms of income, so missing values there are not really feasible. Let us remove these rows in an exercise.
 
 \exercise{
     Look at the manual of `dropmissing` and use that function to drop every row that is lacking an entry in `ConvertedCompYearly`. Hint: To not having to reload the initial data set whenever you did a mistake it might be a good idea to create a backup first: `backup_df = copy(df_survey)`. So later you can always bring it back by calling `df_survey = copy(backup_df)`.
