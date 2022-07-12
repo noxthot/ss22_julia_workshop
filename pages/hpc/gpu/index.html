@@ -492,7 +492,7 @@ Stacktrace:
     j = (blockIdx().x - <span class="hljs-number">1</span>) * blockDim().x + threadIdx().x
 
     <span class="hljs-keyword">for</span> _ <span class="hljs-keyword">in</span> <span class="hljs-number">1</span>:n
-        <span class="hljs-keyword">if</span> (rand() ^ <span class="hljs-number">2</span> + rand() ^ <span class="hljs-number">2</span>) &lt; <span class="hljs-number">1</span>
+        <span class="hljs-keyword">if</span> (rand()^<span class="hljs-number">2</span> + rand()^<span class="hljs-number">2</span>) &lt; <span class="hljs-number">1</span>
             <span class="hljs-meta">@inbounds</span> M[j] += <span class="hljs-number">1</span>
         <span class="hljs-keyword">end</span>
     <span class="hljs-keyword">end</span>
@@ -501,8 +501,8 @@ Stacktrace:
 <span class="hljs-keyword">end</span></code></pre>
 <p>The calling function needs to compute the values as defined above: </p>
 <pre><code class="julia hljs"><span class="hljs-keyword">function</span> in_unit_circle_gpu3(N::<span class="hljs-built_in">Int64</span>)
-    nthreads = <span class="hljs-number">2</span> ^ <span class="hljs-number">10</span>
-    n = <span class="hljs-number">2</span> ^ <span class="hljs-number">6</span>
+    nthreads = <span class="hljs-number">2</span>^<span class="hljs-number">10</span>
+    n = <span class="hljs-number">2</span>^<span class="hljs-number">6</span>
     
     nblocks, _ = divrem(N, n * nthreads)
     M = CUDA.zeros(<span class="hljs-built_in">Int8</span>, nblocks * nthreads)
