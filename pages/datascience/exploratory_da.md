@@ -121,7 +121,7 @@ Now you should have $46237$ entries. Next, we only want to look at the DACH regi
 
 Now we are down to $4212$ entries. Have a look at the column `Gender`. Besides `Man` and `Woman` there are lot more categories, but unfortunately with very little sample sizes. Thus adding these to further visualizations would lead to misleading conclusions. It would require additional engineering to address these little sample sizes and therefore this is out of scope of this workshop.
 
-So instead,  let us also add a filter in this column.
+So instead, let us also add a filter in this column.
 
 \exercise{
     Filter (and store) `df_survey` for `Gender` being `Man` or `Woman`.
@@ -258,7 +258,7 @@ We also used some optional arguments:
 - `size=(500, 900)` such that the rotated labels are not cut off,
 - `legend=false` to disable the legend.
 
-The filled area of the boxes correspond to the 25% to 75% quantiles of the data, so 50% of the data samples live within the filled area. The whiskers capture 1.5 times the interquartile range ($1.5 \cdot (\operatorname{IQR}_{75} - \operatorname{IQR}_{25}))$ and every data point that lies outside the whiskers is considered to be an outlier. The horizontal line inside the filled area corresponds to the median of the subset.
+The filled area of the boxes correspond to the 25% to 75% quantiles of the data, so 50% of the data samples live within the filled area. The whiskers capture 1.5 times the interquartile range ($1.5 \cdot (\operatorname{IQR}_{75} - \operatorname{IQR}_{25})$) and every data point that lies outside the whiskers is considered to be an outlier. The horizontal line inside the filled area corresponds to the median of the subset.
 
 Please note that we create the figure using plotly, so the plot is interactive and you are able to zoom in and get additional information by pointing at certain details.
 
