@@ -146,7 +146,7 @@ julia> A .* v
  4  10  16
  9  18  27
 
-julia> A ^ 2
+julia> A^2
 3×3 Matrix{Int64}:
  30  66  102
  36  81  126

@@ -43,7 +43,7 @@ A = zeros(N,N)
 
 for i in 1:N
     for j in 1:N
-        A[i, j] = (i - j) ^ 2;
+        A[i, j] = (i - j)^2;
     end
 end
 

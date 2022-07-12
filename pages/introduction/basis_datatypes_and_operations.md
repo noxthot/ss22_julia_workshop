@@ -105,7 +105,7 @@ For now we did not speak about basic mathematical operations, which are of cours
 - `*` to multiplication, 
 - `/` to division, 
 - `÷` for integer division, and
-- `x ^ y` raises `x` to the `y`th power
+- `x^y` raises `x` to the `y`th power
 
 ```julia-repl
 julia> x = 3 + 2im
@@ -129,13 +129,13 @@ julia> x / y
 julia> y ÷ 3    # to type ÷, simply enter \div followed by tab
 1.0
 
-julia> x ^ y
+julia> x^y
 -784.728604218539 + 66.05617374305294im
 ```
 
 Julia also deals with brackets and chained operations by usual mathematical rules:
 ```julia-repl
-julia> 1 + 5 * (3 - 2.1) + (2 ^ 5)
+julia> 1 + 5 * (3 - 2.1) + (2^5)
 37.5
 ```
 
