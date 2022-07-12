@@ -28,12 +28,15 @@ VPlus = Diagonal([zeros(midMinus); v[(midPlus + 1):end]])
 # create scattering matrix
 G = ones(nv, nv) .* w - I
 
+# allocate memory
+ψ_new = zeros(size(ψ))
+
 # advance in time
 Δt = 0.01
 nT = 40
 
 for n in 1:nT
-    ψ_new = ψ + Δt * (-DPlus * ψ * VPlus - DMinus * ψ * VMinus + ψ * G)
+    ψ_new .= ψ .+ Δt .* (-DPlus * ψ * VPlus .- DMinus * ψ * VMinus + ψ * G)
     ψ .= ψ_new
 end
 
