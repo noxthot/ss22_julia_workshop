@@ -131,7 +131,7 @@ help?> CSV.read
 
 Equipped with this knowledge we are now ready to load the file:
 ```julia-repl
-julia> df = CSV.read("survey_results_public.csv", DataFrame)
+julia> df_survey = CSV.read("survey_results_public.csv", DataFrame)
 83439×48 DataFrame
    Row │ ResponseId  MainBranch                         Employment                         Country                            US_State       UK_Coun ⋯
        │ Int64       String                             String                             String                             String         String3 ⋯
@@ -151,9 +151,9 @@ julia> df = CSV.read("survey_results_public.csv", DataFrame)
                                                                                                                      43 columns and 83428 rows omitted
 ```
 
-The first thing we notice when working with real data is that there is more data than you can fit on one screen. So let us look at a couple of methods which help us to get an overview. `names(df)` gives us list of columns:
+The first thing we notice when working with real data is that there is more data than you can fit on one screen. So let us look at a couple of methods which help us to get an overview. `names(df_survey)` gives us list of columns:
 ```julia-repl
-julia> names(df)
+julia> names(df_survey)
 48-element Vector{String}:
  :ResponseId
  :MainBranch
@@ -175,16 +175,16 @@ julia> names(df)
 
 Unfortunately, the vector has too many elements and also gets summarized. The full output can be shown with `show`:
 ```julia-repl
-julia> show(names(df))
+julia> show(names(df_survey))
 ["ResponseId", "MainBranch", "Employment", "Country", "US_State", "UK_Country", "EdLevel", "Age1stCode", "LearnCode", "YearsCode", "YearsCodePro", "DevType", "OrgSize", "Currency", "CompTotal", "CompFreq", "LanguageHaveWorkedWith", "LanguageWantToWorkWith", "DatabaseHaveWorkedWith", "DatabaseWantToWorkWith", "PlatformHaveWorkedWith", "PlatformWantToWorkWith", "WebframeHaveWorkedWith", "WebframeWantToWorkWith", "MiscTechHaveWorkedWith", "MiscTechWantToWorkWith", "ToolsTechHaveWorkedWith", "ToolsTechWantToWorkWith", "NEWCollabToolsHaveWorkedWith", "NEWCollabToolsWantToWorkWith", "OpSys", "NEWStuck", "NEWSOSites", "SOVisitFreq", "SOAccount", "SOPartFreq", "SOComm", "NEWOtherComms", "Age", "Gender", "Trans", "Sexuality", "Ethnicity", "Accessibility", "MentalHealth", "SurveyLength", "SurveyEase", "ConvertedCompYearly"]
 ```
 
-Let us assume that we are conducting a little study on the income of different developer roles and therefore we are only interested in the columns: `["Age", "Country", "ConvertedCompYearly", "DevType", "Employment", "Ethnicity", "Gender", "OrgSize", "YearsCode"]`. Unfortunately, `ConvertedCompYearly` is not further described within the dataset schema but it is reasonably fair to assume that this reflects the annual income in dollars. Selecting various columns works with the `df[!, cols]` notation:
+Let us assume that we are conducting a little study on the income of different developer roles and therefore we are only interested in the columns: `["Age", "Country", "ConvertedCompYearly", "DevType", "Employment", "Ethnicity", "Gender", "OrgSize", "YearsCode"]`. Unfortunately, `ConvertedCompYearly` is not further described within the dataset schema but it is reasonably fair to assume that this reflects the annual income in dollars. Selecting various columns works with the `df_survey[!, cols]` notation:
 ```julia-repl
 julia> selcols = ["Age", "Country", "ConvertedCompYearly", "DevType", "Employment", "Ethnicity", "Gender", "OrgSize", "YearsCode"]
 [...]
 
-julia> df[!, selcols]
+julia> df_survey[!, selcols]
 83439×9 DataFrame
    Row │ Age              Country                            ConvertedCompYearly  DevType                            Employment                       ⋯
        │ String31         String                             String15             String                             String                           ⋯
@@ -199,7 +199,7 @@ julia> df[!, selcols]
 
 Do we notice that something odd happened? `ConvertedCompYearly` apparently is stored as a `String15` (meaning a `String` with fixed length of 15 letters) column. Taking a closer look at the data and/or CSV file, this is due to `NA` being used as text in the CSV file. We obviously want this column to be of type `Integer` (to be more precise of type `Union{Integer, Missing}`) and the `NA`s should be `missing`. If we would have known about this earlier, we could have corrected this right at the start when reading the dataframe. This also counts for various other problems that often occur with this file format. Non-standard seperation letter, different symbols for writing decimal numbers to just name two. Reading the manual of `CSV.read` tells us how we should read the data correctly and we can tell the function that we only want to read specific columns:
 ```julia-repl
-julia> df = CSV.read("survey_results_public.csv", DataFrame; missingstring="NA", select=selcols)
+julia> df_survey = CSV.read("survey_results_public.csv", DataFrame; missingstring="NA", select=selcols)
 83439×9 DataFrame
    Row │ Employment                         Country                            YearsCode  DevType                            OrgSize                            Age  ⋯
        │ String?                            String                             String31?  String?                            String?                            Stri ⋯
@@ -214,13 +214,13 @@ julia> df = CSV.read("survey_results_public.csv", DataFrame; missingstring="NA",
 
 Since `ConvertedCompYearly` is not displayed in this last output, we will take a look at the column type by applying `eltype()`:
 ```julia-repl
-julia> eltype(df.ConvertedCompYearly)
+julia> eltype(df_survey.ConvertedCompYearly)
 Union{Missing, Int64}
  ```
 
  Let us also have a look at the types of the rest of the columns. This unfortunately is a bit technical:
 ```julia-repl
- julia> collect(zip(names(df), eltype.(eachcol(df))))
+ julia> collect(zip(names(df_survey), eltype.(eachcol(df_survey))))
 9-element Vector{Tuple{String, Type}}:
  ("Employment", Union{Missing, String})
  ("Country", String)
@@ -233,7 +233,7 @@ Union{Missing, Int64}
  ("ConvertedCompYearly", Union{Missing, Int64})
  ```
 
-Let us split up the call `collect(zip(names(df), eltype.(eachcol(df))))` and explain each part:
+Let us split up the call `collect(zip(names(df_survey), eltype.(eachcol(df_survey))))` and explain each part:
 - the function `eachcol()` creates a vector-like object that allows iterating over each dataframe column
 - `eltype()` returns the data type of an object
 - by using `eltype.()` we apply `eltype()` to each column. 

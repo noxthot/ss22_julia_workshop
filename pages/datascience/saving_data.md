@@ -10,12 +10,12 @@ Now that we prepared our data source and noticed how much work it was to restore
 To write a dataframe into an arrow-file simply call:
 ```julia
 using Arrow
-Arrow.write("survey.arrow", df)
+Arrow.write("survey.arrow", df_survey)
 ```
 
 Loading the file again is slightly more complicated since we need to transform the loaded Arrow Table back into a DataFrame:
 ```julia
 using Arrow, DataFrames
 
-df = DataFrame(Arrow.Table("survey.arrow"))
+df_survey = DataFrame(Arrow.Table("survey.arrow"))
 ```

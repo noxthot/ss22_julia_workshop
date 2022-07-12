@@ -16,21 +16,21 @@ In this section we will continue to work with the Stack Overflow survey data set
 using CSV, DataFrames
 
 selcols = ["Age", "Country", "ConvertedCompYearly", "DevType", "Employment", "Ethnicity", "Gender", "OrgSize", "YearsCode"]
-df = CSV.read("survey_results_public.csv", DataFrame; missingstring="NA", select=selcols)
+df_survey = CSV.read("survey_results_public.csv", DataFrame; missingstring="NA", select=selcols)
 ```
 
 Alternatively you can also load the arrow-file which we created in the previous section:
 ```julia
 using Arrow, DataFrames
 
-df = DataFrame(Arrow.Table("survey.arrow"))
+df_survey = DataFrame(Arrow.Table("survey.arrow"))
 ```
 
 ## Data Wrangling
 In a first step, let us get a descriptive overview over the data by having a applying `describe()`. 
 Also note the additional arguments that are given to `show()`for displaying all rows and columns.
 ```julia
-julia> show(describe(df), allrows=true, allcols=true)
+julia> show(describe(df_survey), allrows=true, allcols=true)
 9×7 DataFrame
  Row │ variable             mean       min                       median   max                                nmissing  eltype                   
      │ Symbol               Union…     Any                       Union…   Any                                Int64     Type                     
@@ -49,14 +49,14 @@ julia> show(describe(df), allrows=true, allcols=true)
 Since most columns are `String` types, there is not that much to see but we still get a helpful impression about the number of missing fields. In the last section we stated that we are interested to do a little study in terms of income, so missing values there are not really feasible. Let us remove that rows in an exercise.
 
 \exercise{
-    Look at the manual of `dropmissing` and use that function to drop every row that is lacking an entry in `ConvertedCompYearly`. Hint: To not having to reload the initial data set whenever you did a mistake it might be a good idea to create a backup first: `backup_df = copy(df)`. So later you can always bring it back by calling `df = copy(backup_df)`.
+    Look at the manual of `dropmissing` and use that function to drop every row that is lacking an entry in `ConvertedCompYearly`. Hint: To not having to reload the initial data set whenever you did a mistake it might be a good idea to create a backup first: `backup_df = copy(df_survey)`. So later you can always bring it back by calling `df_survey = copy(backup_df)`.
 }
 
 After the previous exercise you should have $46844$ rows in your data set.
 
 Let us try to get an overview over the yearly compensation. Again we can use `describe()`, just on that column, to get a more detailed summary statistics:
 ```julia-repl
-julia> describe(df.ConvertedCompYearly)
+julia> describe(df_survey.ConvertedCompYearly)
 Summary Stats:
 Length:         46844
 Missing Count:  0
@@ -73,19 +73,17 @@ So we have $46844$ rows in this data set. We already removed the missing values,
 
 Let us create some plots to gain deeper insights. We have already seen the use of `Plots.jl` before. In this section, we will switch to `StatsPlots.jl` (which is a drop-in replacement for `Plots.jl`) since on one hand it supports easy plotting of dataframes and on the other hand also offers additional statistical recipes.
 
-Creating a boxplot is fairly simple:
+Creating a boxplot is fairly simple using the `@df` macro:
 ```julia
 using StatsPlots
-@df df boxplot(:ConvertedCompYearly)
+@df df_survey boxplot(:ConvertedCompYearly)
 ```
 
 \figalt{Boxplot}{/assets/pages/datascience/exploratory_da_boxplot.png}
 
-Note that `@df` is the call of the macro and the second `df` is the name of our dataframe.
-
 Apparently a couple of outliers totally screw our visualization. Fortunately, there is an [undocumented function argument](https://github.com/JuliaPlots/StatsPlots.jl/blob/db1a9e2f58ff9fb4beb3a0f7d133fcc8fd72b812/src/boxplot.jl#L14) that allows us to get rid of the outliers within the visualization:
 ```julia-repl
-@df df boxplot(:ConvertedCompYearly, outliers=false)
+@df df_survey boxplot(:ConvertedCompYearly, outliers=false)
 ```
 
 So apparently around 50% of the developers within the DACH region earn $27000$ to $100000$ euros per year, the median being at about $56000$.
@@ -95,7 +93,7 @@ So apparently around 50% of the developers within the DACH region earn $27000$ t
 Let us also have a look at the [cumulative distribution function (CDF)](https://en.wikipedia.org/wiki/Cumulative_distribution_function) of our data column. Therefore, we simply sort the values of the column and plot them on the $y$-axis while we scale the $x$-axis from $0$ to $1$.
 
 ```julia
-julia> plot(sort(df.ConvertedCompYearly), (1:nrow(df)) ./ nrow(df))
+julia> plot(sort(df_survey.ConvertedCompYearly), (1:nrow(df_survey)) ./ nrow(df_survey))
 ```
 
 \figalt{Cumulative distribution function plot}{/assets/pages/datascience/exploratory_da_cdf.png}
@@ -105,20 +103,20 @@ The plot tells us (just like the quartiles already indicated) that most of the s
 Removing outliers is a very controversial topic. Usually it is always good practice to try to understand the source of outliers and to consult a domain expert to decide whether or not to remove them. In this workshop we want to show the pitfalls when working with real data, but we also want to pragmatically clean the data to practice some data wrangling. So let us assume that it is very unusual for a software developer to earn more than 1Mio per year but to be sure, let us also check the entries where `ConvertedCompYear` exceeds 1Mio. We leave this as an exercise.
 
 \exercise{
-    Filter `df` for entries where `ConvertedCompYear` exceeds 1Mio and have a look at the remaining data rows. 
+    Filter `df_survey` for entries where `ConvertedCompYear` exceeds 1Mio and have a look at the remaining data rows. 
     Hints: Check the manual of `filter`. When you are running your code in the Julia REPL within VS Code you will find a dataframe viewer in your Julia extension's workspace. Otherwise it might also make sense to quickly write the dataframe to a CSV and have a look in one of the usual spreadsheet programs.
 }
 
 Apparently, most of the top earners declared to be software developers. Let us filter the data set such that we only have entries $< 1$Mio from now on.
 
 \exercise{
-    Filter (and store) `df` for entries where `ConvertedCompYear` is equal or less than 1Mio.
+    Filter (and store) `df_survey` for entries where `ConvertedCompYear` is equal or less than 1Mio.
 }
 
 Now you should have $46237$ entries. Next, we only want to look at the DACH region.
 
 \exercise{
-    Filter (and store) `df` for `Country` being `Austria`, `Germany` or `Switzerland`.
+    Filter (and store) `df_survey` for `Country` being `Austria`, `Germany` or `Switzerland`.
 }
 
 Now we are down to $4212$ entries. Have a look at the column `Gender`. Besides `Man` and `Woman` there are lot more categories, but unfortunately with very little sample sizes. Thus adding these to further visualizations would lead to misleading conclusions. It would require additional engineering to address these little sample sizes and therefore this is out of scope of this workshop.
@@ -126,12 +124,12 @@ Now we are down to $4212$ entries. Have a look at the column `Gender`. Besides `
 So instead,  let us also add a filter in this column.
 
 \exercise{
-    Filter (and store) `df` for `Gender` being `Man` or `Woman`.
+    Filter (and store) `df_survey` for `Gender` being `Man` or `Woman`.
 }
 
 You should now see $4061$ entries. In a final step, let us convert the compensation from dollars into euros and store this information in a column named `EuroCompYearly`. As of July 1st, 2022, one Dollar corresponds to $0.96$ Euros:
 ```julia
-df[!, :EuroCompYearly] = 0.96 * df[!, :ConvertedCompYearly]
+df_survey[!, :EuroCompYearly] = 0.96 * df_survey[!, :ConvertedCompYearly]
 ```
 
 Here you find the solution for all manipulating tasks in this section.
@@ -141,15 +139,15 @@ using CSV, DataFrames
 
 selcols = ["Age", "Country", "ConvertedCompYearly", "DevType", "Employment", "Ethnicity", "Gender", "OrgSize", "YearsCode"]
 
-df = CSV.read("survey_results_public.csv", DataFrame; missingstring="NA", select=selcols)
+df_survey = CSV.read("survey_results_public.csv", DataFrame; missingstring="NA", select=selcols)
 
-dropmissing!(df, :ConvertedCompYearly)
+dropmissing!(df_survey, :ConvertedCompYearly)
 
-filter!(x -> x.ConvertedCompYearly <= 1e6, df)
-filter!(x -> x.Country in ["Austria", "Germany", "Switzerland"], df)
-filter!(x -> !ismissing(x.Gender) && (x.Gender in ["Man", "Woman"]), df)
+filter!(x -> x.ConvertedCompYearly <= 1e6, df_survey)
+filter!(x -> x.Country in ["Austria", "Germany", "Switzerland"], df_survey)
+filter!(x -> !ismissing(x.Gender) && (x.Gender in ["Man", "Woman"]), df_survey)
 
-df[!, :EuroCompYearly] = 0.96 * df[!, :ConvertedCompYearly]
+df_survey[!, :EuroCompYearly] = 0.96 * df_survey[!, :ConvertedCompYearly]
 ```
 }
 
@@ -169,7 +167,7 @@ $\,$
 \solution{
 1. 
 ```julia-repl
-julia> combine(groupby(df, :Country), nrow => :count)
+julia> combine(groupby(df_survey, :Country), nrow => :count)
 3×2 DataFrame
  Row │ Country      count 
      │ String       Int64 
@@ -182,7 +180,7 @@ julia> combine(groupby(df, :Country), nrow => :count)
 1. 
 ```julia-repl
 julia> using Statistics
-julia> combine(groupby(filter(x -> x.Country == "Austria", df), :Employment), :EuroCompYearly  => median)
+julia> combine(groupby(filter(x -> x.Country == "Austria", df_survey), :Employment), :EuroCompYearly  => median)
 4×2 DataFrame
  Row │ Employment                         EuroCompYearly_median 
      │ String?                            Float64               
@@ -195,8 +193,8 @@ julia> combine(groupby(filter(x -> x.Country == "Austria", df), :Employment), :E
 
 1. 
 ```julia-repl
-julia> transform!(df, :DevType => ByRow(x -> !ismissing(x) && occursin(x, "Data Scientist")) => :isdatascientist)
-julia> combine(groupby(df, :isdatascientist), :EuroCompYearly => median)
+julia> transform!(df_survey, :DevType => ByRow(x -> !ismissing(x) && occursin(x, "Data Scientist")) => :isdatascientist)
+julia> combine(groupby(df_survey, :isdatascientist), :EuroCompYearly => median)
 2×2 DataFrame
  Row │ isdatascientist  EuroCompYearly_median 
      │ Bool             Float64               
@@ -207,7 +205,7 @@ julia> combine(groupby(df, :isdatascientist), :EuroCompYearly => median)
 
 1. 
 ```julia-repl
-julia> combine(groupby(df, [:Country, :isdatascientist]), nrow => :count)
+julia> combine(groupby(df_survey, [:Country, :isdatascientist]), nrow => :count)
 4×3 DataFrame
  Row │ Country      isdatascientist  count 
      │ String       Bool             Int64 
@@ -233,13 +231,13 @@ julia> using StatsBase
 julia> using StatsPlots; plotlyjs()
 Plots.PlotlyJSBackend()
 
-julia> countmap(df.Country)
+julia> countmap(df_survey.Country)
 Dict{String, Int64} with 3 entries:
   "Switzerland" => 529
   "Germany"     => 3095
   "Austria"     => 437
 
-julia> @df df bar(countmap(:Country), legend=false)
+julia> @df df_survey bar(countmap(:Country), legend=false)
 ```
 
 \figalt{Barplot showing participants per country}{/ss22_julia_workshop/assets/pages/datascience/plot_explorative_da_country.json}
@@ -250,7 +248,7 @@ Boxplots are a nice tool to visualize some distributional characteristics (local
 
 In the following plot we compare the salary of different employment states:
 ```julia-repl
-julia> @df df boxplot(:Employment, :EuroCompYearly, xrotation=30, size=(500, 900), legend=false)
+julia> @df df_survey boxplot(:Employment, :EuroCompYearly, xrotation=30, size=(500, 900), legend=false)
 ```
 
 We also used some optional arguments:
@@ -267,22 +265,22 @@ Please note that we create the figure using plotly, so the plot is interactive a
 Since visualizations usually condense information up to some extend, it is always a good idea to look at the data from different perspectives. Adding e.g. a dots plot (where every sample is visualized by a dot) shows that two of the groups have only very little sample sizes.
 
 ```julia-repl
-julia> @df df boxplot(:Employment, :EuroCompYearly, xrotation=30, size=(500, 900), legend=false)
+julia> @df df_survey boxplot(:Employment, :EuroCompYearly, xrotation=30, size=(500, 900), legend=false)
 
-julia> @df df dotplot!(:Employment, :EuroCompYearly, legend=false)
+julia> @df df_survey dotplot!(:Employment, :EuroCompYearly, legend=false)
 ```
 
 \figalt{Boxplot plus Dotsplot}{/ss22_julia_workshop/assets/pages/datascience/plot_explorative_da_salary_2.json}
 
 Combining the information of the two plots we obviously have too little data to judge about the empty and *I prefer not to say* category. Also it appears that the average salaries of freelancers are a lot higher than the salaries of employees. Also the 25% quantile of freelancers is comparable to the median salary of full-time employees.
 
-\exercise{The dataframe has a couple of interesting columns (see `names(df)`). Have a look at the [`StatsPlots.jl` documentation](https://github.com/JuliaPlots/StatsPlots.jl), get creative and generate some nice visualisations.}
+\exercise{The dataframe has a couple of interesting columns (see `names(df_survey)`). Have a look at the [`StatsPlots.jl` documentation](https://github.com/JuliaPlots/StatsPlots.jl), get creative and generate some nice visualisations.}
 
 Of course there are many different plot types you can choose from. Have a look at the [`Plots.jl` gallery](https://docs.juliaplots.org/stable/gallery/plotlyjs/) to get an overview. With [`DataVoyager.jl`](https://github.com/queryverse/DataVoyager.jl) there is also a nice package that allows to interactively explore your data by loading a given data frame into the Voyager data exploration tool:
 ```julia-repl
 julia> using DataVoyager
 
-julia> v = Voyager(df)
+julia> v = Voyager(df_survey)
 ```
 
 Here is a screenshot that shows this tool in action:
