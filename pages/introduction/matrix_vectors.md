@@ -37,7 +37,7 @@ julia> w = rand(3)
  0.7384134175744227
  0.5859991546122274
 ```
-which automatically assumes the types to be `Float64`. If you want to specify a certain datatype, you can use `w = zeros(Int64,3)`. If you want to create a vector with entries $0$ to $1$ with $3$ entries, write
+which automatically assumes the types to be `Float64`. If you want to specify a certain datatype, you can use `w = zeros(Int64, 3)`. If you want to create a vector with entries ranging from $0$ to $1$ with $3$ entries, write
 ```julia-repl
 julia> u = collect(range(0, 1, 3))
 3-element Vector{Float64}:
