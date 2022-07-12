@@ -323,7 +323,7 @@ function in_unit_circle_kernel!(n::Int64, M)
 end
 ```
 This looks very similar to our function [`in_unit_circle_threaded3`](multithreading#actually_distribute_the_work). 
-Instead of `treadid()` as we had it in multithreading, this time the *id* is queried by `threadIdx().x`. 
+Instead of `treadId()` as we had it in multithreading, this time the *id* is queried by `threadIdx().x`. 
 The `.x` is due to the fact that we could also have two or three dimensional arrays (remember GPUs were designed to work with images).
 
 The kernel is now called with the `@cuda` macro and the number of threads given as an argument. 
