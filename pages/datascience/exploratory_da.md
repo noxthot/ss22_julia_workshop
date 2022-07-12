@@ -29,7 +29,7 @@ df_survey = DataFrame(Arrow.Table("survey.arrow"))
 ## Data Wrangling
 In a first step, let us get a descriptive overview over the data by applying `describe()`. 
 Also note the additional arguments that are given to `show()`for displaying all rows and columns.
-```julia
+```julia-repl
 julia> show(describe(df_survey), allrows=true, allcols=true)
 9×7 DataFrame
  Row │ variable             mean       min                       median   max                                nmissing  eltype                   
