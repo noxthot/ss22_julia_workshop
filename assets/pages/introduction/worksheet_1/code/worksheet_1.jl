@@ -41,12 +41,12 @@ for n in 1:nT
 end
 
 # store phi for plotting
-phi = zeros(nx)
+Φ = zeros(nx)
 
 for j in 1:nx
-    phi[j] = sum(ψ[j, :] .* w)
+    Φ[j] = sum(ψ[j, :] .* w)
 end
 
 # plot phi
-plot(x, phi, labels=L"\Phi")
+plot(x, Φ, labels=L"\Phi")
 xlabel!("x")

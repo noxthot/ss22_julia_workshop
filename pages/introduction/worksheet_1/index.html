@@ -231,17 +231,17 @@ VPlus = Diagonal([zeros(midMinus); v[(midPlus + <span class="hljs-number">1</spa
 <span class="hljs-keyword">end</span></code></pre>
 <p>Note that we are using <code>.&#61;</code> insead of <code>&#61;</code> to copy values from <code>ψ_new</code> to <code>ψ</code> and to write new values on <code>ψ_new</code>. This ensures that no additional memory is allocated in very iteration step. </div>
 <p>Now, we are interested in plotting <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ϕ</mi><mo stretchy="false">(</mo><msub><mi>t</mi><mrow><mi mathvariant="normal">e</mi><mi mathvariant="normal">n</mi><mi mathvariant="normal">d</mi></mrow></msub><mo separator="true">,</mo><mi>x</mi><mo stretchy="false">)</mo><mo>:</mo><mo>=</mo><msubsup><mo>∫</mo><mrow><mo>−</mo><mn>1</mn></mrow><mn>1</mn></msubsup><mi>ψ</mi><mo stretchy="false">(</mo><msub><mi>t</mi><mrow><mi mathvariant="normal">e</mi><mi mathvariant="normal">n</mi><mi mathvariant="normal">d</mi></mrow></msub><mo separator="true">,</mo><mi>x</mi><mo separator="true">,</mo><mi>v</mi><mo stretchy="false">)</mo><mtext> </mtext><mi mathvariant="normal">d</mi><mi>v</mi></mrow><annotation encoding="application/x-tex">\phi(t_{\mathrm{end}},x) := \int_{-1}^1 \psi(t_{\mathrm{end}},x,v)\, \mathrm{d}v</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">ϕ</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">t</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathrm mtight">end</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">x</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.4232em;vertical-align:-0.4142em;"></span><span class="mop"><span class="mop op-symbol small-op" style="margin-right:0.19445em;position:relative;top:-0.0006em;">∫</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.009em;"><span style="top:-2.3442em;margin-left:-0.1945em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">−</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.2579em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.4142em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">ψ</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">t</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathrm mtight">end</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">x</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathrm">d</span><span class="mord mathnormal" style="margin-right:0.03588em;">v</span></span></span></span>. On a numerical level, we can compute this via</p>
-<pre><code class="julia hljs">phi = zeros(nx)
+<pre><code class="julia hljs">Φ = zeros(nx)
 
 <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-number">1</span>:nx
-    phi[j] = sum(ψ[j, :] .* w)
+    Φ[j] = sum(ψ[j, :] .* w)
 <span class="hljs-keyword">end</span></code></pre>
 <h2 id="plotting"><a href="#plotting" class="header-anchor">Plotting</a></h2>
 <p>Luckily Julia can include the <code>Plots</code> package. Install and add it to your code. Then run</p>
 <pre><code class="julia hljs"><span class="hljs-keyword">using</span> LaTeXStrings
 <span class="hljs-keyword">using</span> Plots; gr()
 
-plot(x, phi, labels=<span class="hljs-string">L&quot;\Phi&quot;</span>)
+plot(x, Φ, labels=<span class="hljs-string">L&quot;\Phi&quot;</span>)
 xlabel!(<span class="hljs-string">&quot;x&quot;</span>)</code></pre>
 <p>The output that you should get is <img src="/ss22_julia_workshop/assets/pages/introduction/worksheet_1/code/output/worksheet_1.png" alt="radiation therapy"></p>
 <p>What you see is the particle density <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Φ</mi></mrow><annotation encoding="application/x-tex">\Phi</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord">Φ</span></span></span></span> over the spatial domain. Congratulations, you have just computed your first radiation transport problem using Julia. If you look at your code, you will see that it looks quite messy. you can add a comment <em>test comment</em> with <code># test comment</code>. Use the comment command to explain what you did and double check if you understood everything. Also, commonly the <code>using</code> commands are executed in the first lines of the code, so move all these commands to the top.</p>
@@ -314,14 +314,14 @@ nT = <span class="hljs-number">40</span>
 <span class="hljs-keyword">end</span>
 
 <span class="hljs-comment"># store phi for plotting</span>
-phi = zeros(nx)
+Φ = zeros(nx)
 
 <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-number">1</span>:nx
-    phi[j] = sum(ψ[j, :] .* w)
+    Φ[j] = sum(ψ[j, :] .* w)
 <span class="hljs-keyword">end</span>
 
 <span class="hljs-comment"># plot phi</span>
-plot(x, phi, labels=<span class="hljs-string">L&quot;\Phi&quot;</span>)
+plot(x, Φ, labels=<span class="hljs-string">L&quot;\Phi&quot;</span>)
 xlabel!(<span class="hljs-string">&quot;x&quot;</span>)</code></pre>
 <div class="page-foot">
     <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> Gregor Ehrensperger, Peter Kandolf, Jonas Kusch. Last modified: July 12, 2022.
