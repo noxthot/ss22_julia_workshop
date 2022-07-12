@@ -87,7 +87,7 @@ end
 ```
 1. Evaluate both functions with the input `x = ones(2)`. How does $x$ change after calling the function? Explain this behaviour. Correct the function names accordingly.
 2. Build in the function `pointer_from_objref(x)` to see how the memory changes and to validate your previous answer.
-3. Write a method which evaluates $\sin(\cos(x))$ and stores the result on $x$ such that $x$ is modified for the caller.
+3. Write a method which evaluates $\sin(\cos(x))$, where $x\in\mathbb{R}$ is a scalar and stores the result on $x$ such that $x$ is modified for the caller.
 \solution{
 1. The function `sincos1!(x)` will modify the input:
 ```julia-repl
