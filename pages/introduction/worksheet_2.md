@@ -27,7 +27,7 @@ $$
 where $\sigma = 0.03^2$. Write an initial condition that you can call for a given $x$ and specify that $x$ is a real scalar.
 
 ```julia:./code/worksheet_2.jl
-function IC(x::Float64)::Float64
+function IC(x::Float64)
   sigma2 = 0.0009
   floor = 1e-4
   x0 = 0.0
@@ -72,7 +72,7 @@ end
 Now, note that we have fixed $\sigma$ insice the `IC` function. Very often, you want to use $\sigma = 0.0009$, but sometimes you want to change this sigma to test your code. See if you can rewrite your `IC` function to include this option.
 
 ```julia:./code/worksheet_2.jl
-function IC(x::Float64, sigma2::Float64=0.0009)::Float64
+function IC(x::Float64, sigma2::Float64=0.0009)
   floor = 1e-4
   x0 = 0.0
   return max(floor, 1.0 / (sqrt(2 * pi * sigma2)) * exp(-(x - 0.5)^2 / (2.0 * sigma2)))
@@ -88,13 +88,13 @@ using LinearAlgebra
 using Plots; gr()
 
 # definition of the initial condition
-function IC(x::Float64, sigma2::Float64=0.0009)::Float64
+function IC(x::Float64, sigma2::Float64=0.0009)
     floor = 1e-4
     x0 = 0.0
     return max(floor, 1.0 / (sqrt(2 * pi * sigma2)) * exp(-(x - 0.5)^2 / (2.0 * sigma2)))
 end
 
-function runPlaneSource(nv::Int=10, nx::Int=101)::Tuple{Vector{Float64}, Vector{Float64}}
+function runPlaneSource(nv::Int=10, nx::Int=101)
     # define velocity grid according to gauss quadrature
     v, w = gausslegendre(nv)
     x = collect(range(0, 1; length=nx))
@@ -229,7 +229,7 @@ function IC(obj::Settings, x::Float64)
   return max(floor, 1.0 / (sqrt(2 * pi * obj.sigma2)) * exp(-(x - 0.5 * (obj.b - obj.a) - obj.a)^2 / (2.0 * obj.sigma2)))
 end
 
-function runPlaneSource(obj::Settings)::Tuple{Vector{Float64}, Vector{Float64}}
+function runPlaneSource(obj::Settings)
     nx = obj.nx
     nv = obj.nv
 
