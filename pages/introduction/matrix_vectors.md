@@ -39,7 +39,7 @@ julia> w = rand(3)
 ```
 which automatically assumes the types to be `Float64`. If you want to specify a certain datatype, you can use `w = zeros(Int64,3)`. If you want to create a vector with entries $0$ to $1$ with $3$ entries, write
 ```julia-repl
-julia> u = collect(range(0,1,3))
+julia> u = collect(range(0, 1, 3))
 3-element Vector{Float64}:
  0.0
  0.5
@@ -89,7 +89,7 @@ julia> w'
 ## Matrices
  If we have vectors the jump to matrices is not very far. Again, we have the command
 ```julia-repl
-julia> B = ones(3,3)
+julia> B = ones(3, 3)
 3×3 Matrix{Float64}:
  1.0  1.0  1.0
  1.0  1.0  1.0
