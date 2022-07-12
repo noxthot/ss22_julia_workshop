@@ -212,10 +212,10 @@ Note that we are using `.=` insead of `=` to copy values from `ψ_new` to `ψ` a
  Now, we are interested in plotting $\phi(t_{\mathrm{end}},x) := \int_{-1}^1 \psi(t_{\mathrm{end}},x,v)\, \mathrm{d}v$. On a numerical level, we can compute this via
 
 ```julia:./code/worksheet_1.jl
-phi = zeros(nx)
+Φ = zeros(nx)
 
 for j in 1:nx
-    phi[j] = sum(ψ[j, :] .* w)
+    Φ[j] = sum(ψ[j, :] .* w)
 end
 ```
 
@@ -227,7 +227,7 @@ Luckily Julia can include the `Plots` package. Install and add it to your code. 
 using LaTeXStrings
 using Plots; gr()
 
-plot(x, phi, labels=L"\Phi")
+plot(x, Φ, labels=L"\Phi")
 xlabel!("x")
 savefig(joinpath(@OUTPUT, "worksheet_1.png")) # hide
 ```
@@ -312,13 +312,13 @@ for n in 1:nT
 end
 
 # store phi for plotting
-phi = zeros(nx)
+Φ = zeros(nx)
 
 for j in 1:nx
-    phi[j] = sum(ψ[j, :] .* w)
+    Φ[j] = sum(ψ[j, :] .* w)
 end
 
 # plot phi
-plot(x, phi, labels=L"\Phi")
+plot(x, Φ, labels=L"\Phi")
 xlabel!("x")
 ```
