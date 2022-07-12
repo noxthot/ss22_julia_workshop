@@ -115,7 +115,7 @@
 <div class="franklin-toc"><ol><li><a href="#introduction">Introduction</a></li><li><a href="#data_wrangling">Data Wrangling</a></li><li><a href="#case_studies">Case Studies</a></li><li><a href="#data_visualisation">Data Visualisation</a><ol><li><a href="#barplot_show_survey_participants_by_country">Barplot: Show survey participants by country</a></li><li><a href="#boxplot_salary_in_comparison_to_employment_status">Boxplot: Salary in comparison to employment status</a></li></ol></li></ol></div>
 <h2 id="introduction"><a href="#introduction" class="header-anchor">Introduction</a></h2>
 <p>In most data science projects <em>exploratory data analysis</em> &#40;EDA&#41; is an essential first step. The primary aim is to analyse a given data set to summarize its main characteristics. Therefore, EDA often uses data visualization methods and statistical methods.</p>
-<p>In this section we will continue to work with the Stack Overflow survey data set as shown in the <a href="./pages/datascience/dataframes/">previous section</a>. To summarize, the necessary steps to start with this section can be found in the code snippet below:</p>
+<p>In this section we will continue to work with the Stack Overflow survey data set as shown in the previous section <a href="loading_data">Loading data</a>. To summarize, the necessary steps to start with this section can be found in the code snippet below:</p>
 <pre><code class="julia hljs"><span class="hljs-keyword">using</span> CSV, DataFrames
 
 selcols = [<span class="hljs-string">&quot;Age&quot;</span>, <span class="hljs-string">&quot;Country&quot;</span>, <span class="hljs-string">&quot;ConvertedCompYearly&quot;</span>, <span class="hljs-string">&quot;DevType&quot;</span>, <span class="hljs-string">&quot;Employment&quot;</span>, <span class="hljs-string">&quot;Ethnicity&quot;</span>, <span class="hljs-string">&quot;Gender&quot;</span>, <span class="hljs-string">&quot;OrgSize&quot;</span>, <span class="hljs-string">&quot;YearsCode&quot;</span>]
@@ -275,9 +275,9 @@ df[!, :EuroCompYearly] = <span class="hljs-number">0.96</span> * df[!, :Converte
   &quot;Austria&quot;     =&gt; 437
 
 <span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@df</span> df bar(countmap(:Country), legend=<span class="hljs-literal">false</span>)</span></code></pre>
-<div id="fdprza" style=""></div>
+<div id="fdpxru" style=""></div>
 <script>
-graphDiv = document.getElementById("fdprza");
+graphDiv = document.getElementById("fdpxru");
 plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_explorative_da_country.json');
 </script>
 
@@ -296,9 +296,9 @@ plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datas
 </ul>
 <p>The filled area of the boxes correspond to the 25&#37; to 75&#37; quantiles of the data, so 50&#37; of the data samples live within the filled area. The whiskers capture 1.5 times the interquartile range &#40;<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1.5</mn><mo>⋅</mo><mo stretchy="false">(</mo><msub><mrow><mi mathvariant="normal">IQR</mi><mo>⁡</mo></mrow><mn>75</mn></msub><mo>−</mo><msub><mrow><mi mathvariant="normal">IQR</mi><mo>⁡</mo></mrow><mn>25</mn></msub><mo stretchy="false">)</mo><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">1.5 \cdot (\operatorname{IQR}_{75} - \operatorname{IQR}_{25}))</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1.5</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mop"><span class="mop"><span class="mord mathrm">IQR</span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.207em;"><span style="top:-2.4559em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">75</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2441em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">−</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mop"><span class="mop"><span class="mord mathrm">IQR</span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.207em;"><span style="top:-2.4559em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">25</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2441em;"><span></span></span></span></span></span></span><span class="mclose">))</span></span></span></span> and every data point that lies outside the whiskers is considered to be an outlier. The horizontal line inside the filled area corresponds to the median of the subset.</p>
 <p>Please note that we create the figure using plotly, so the plot is interactive and you are able to zoom in and get additional information by pointing at certain details.</p>
-<div id="fdpdgk" style=""></div>
+<div id="fdpkni" style=""></div>
 <script>
-graphDiv = document.getElementById("fdpdgk");
+graphDiv = document.getElementById("fdpkni");
 plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_explorative_da_salary_1.json');
 </script>
 
@@ -306,9 +306,9 @@ plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datas
 <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@df</span> df boxplot(:Employment, :EuroCompYearly, xrotation=<span class="hljs-number">30</span>, size=(<span class="hljs-number">500</span>, <span class="hljs-number">900</span>), legend=<span class="hljs-literal">false</span>)
 </span>
 <span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@df</span> df dotplot!(:Employment, :EuroCompYearly, legend=<span class="hljs-literal">false</span>)</span></code></pre>
-<div id="fdpfly" style=""></div>
+<div id="fdpwcq" style=""></div>
 <script>
-graphDiv = document.getElementById("fdpfly");
+graphDiv = document.getElementById("fdpwcq");
 plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_explorative_da_salary_2.json');
 </script>
 
