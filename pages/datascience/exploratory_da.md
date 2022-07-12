@@ -254,9 +254,9 @@ julia> @df df_survey boxplot(:Employment, :EuroCompYearly, xrotation=30, size=(5
 \figalt{Boxplot visualizing salaries between different employment states}{/ss22_julia_workshop/assets/pages/datascience/plot_explorative_da_salary_1.json}
 
 We also used some optional arguments:
-- `xrotation=30` such that $x$-axis labels do not overlap
-- `size=(500, 900)` such that the rotated labels are not cut off
-- `legend=false` to disable the legend
+- `xrotation=30` such that $x$-axis labels do not overlap,
+- `size=(500, 900)` such that the rotated labels are not cut off,
+- `legend=false` to disable the legend.
 
 The filled area of the boxes correspond to the 25% to 75% quantiles of the data, so 50% of the data samples live within the filled area. The whiskers capture 1.5 times the interquartile range ($1.5 \cdot (\operatorname{IQR}_{75} - \operatorname{IQR}_{25}))$ and every data point that lies outside the whiskers is considered to be an outlier. The horizontal line inside the filled area corresponds to the median of the subset.
 
