@@ -140,7 +140,7 @@ df_survey = DataFrame(Arrow.Table(<span class="hljs-string">&quot;survey.arrow&q
    7 │ Gender                          Man                                Woman;Or, in your own words:           1153  Union{Missing, String}
    8 │ Ethnicity                       Biracial                           White or of European descent;Sou…      3975  Union{Missing, String}
    9 │ ConvertedCompYearly  1.18426e5  1                         56211.0  45241312                              36595  Union{Missing, Int64}</code></pre>
-<p>Since most columns are <code>String</code> types, there is not that much to see but we still get a helpful impression about the number of missing fields. In the last section we stated that we are interested to do a little study in terms of income, so missing values there are not really feasible. Let us remove that rows in an exercise.</p>
+<p>Since most columns are <code>String</code> types, there is not that much to see but we still get a helpful impression about the number of missing fields. In the last section we stated that we are interested to do a little study in terms of income, so missing values there are not really feasible. Let us remove these rows in an exercise.</p>
 <button type="button" class="collapsible" style="background-color:#b5ddff"> Exercise </button><div class="collapsiblecontent">  Look at the manual of <code>dropmissing</code> and use that function to drop every row that is lacking an entry in <code>ConvertedCompYearly</code>. Hint: To not having to reload the initial data set whenever you did a mistake it might be a good idea to create a backup first: <code>backup_df &#61; copy&#40;df_survey&#41;</code>. So later you can always bring it back by calling <code>df_survey &#61; copy&#40;backup_df&#41;</code>. </div>
 <p>After the previous exercise you should have <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>46844</mn></mrow><annotation encoding="application/x-tex">46844</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">46844</span></span></span></span> rows in your data set.</p>
 <p>Let us try to get an overview over the yearly compensation. Again we can use <code>describe&#40;&#41;</code>, just on that column, to get a more detailed summary statistics:</p>
@@ -274,9 +274,9 @@ df_survey[!, :EuroCompYearly] = <span class="hljs-number">0.96</span> * df_surve
   &quot;Austria&quot;     =&gt; 437
 
 <span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@df</span> df_survey bar(countmap(:Country), legend=<span class="hljs-literal">false</span>)</span></code></pre>
-<div id="fdplnj" style=""></div>
+<div id="fdphyu" style=""></div>
 <script>
-graphDiv = document.getElementById("fdplnj");
+graphDiv = document.getElementById("fdphyu");
 plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_explorative_da_country.json');
 </script>
 
@@ -284,9 +284,9 @@ plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datas
 <p>Boxplots are a nice tool to visualize some distributional characteristics &#40;locality, spread, skewness&#41; of a given data sample. Dividing the data set into different groups allows an easy comparison.</p>
 <p>In the following plot we compare the salary of different employment states:</p>
 <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@df</span> df_survey boxplot(:Employment, :EuroCompYearly, xrotation=<span class="hljs-number">30</span>, size=(<span class="hljs-number">500</span>, <span class="hljs-number">900</span>), legend=<span class="hljs-literal">false</span>)</span></code></pre>
-<div id="fdpaux" style=""></div>
+<div id="fdpfuh" style=""></div>
 <script>
-graphDiv = document.getElementById("fdpaux");
+graphDiv = document.getElementById("fdpfuh");
 plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_explorative_da_salary_1.json');
 </script>
 
@@ -305,9 +305,9 @@ plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datas
 <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@df</span> df_survey boxplot(:Employment, :EuroCompYearly, xrotation=<span class="hljs-number">30</span>, size=(<span class="hljs-number">500</span>, <span class="hljs-number">900</span>), legend=<span class="hljs-literal">false</span>)
 </span>
 <span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@df</span> df_survey dotplot!(:Employment, :EuroCompYearly, legend=<span class="hljs-literal">false</span>)</span></code></pre>
-<div id="fdphse" style=""></div>
+<div id="fdpuno" style=""></div>
 <script>
-graphDiv = document.getElementById("fdphse");
+graphDiv = document.getElementById("fdpuno");
 plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_explorative_da_salary_2.json');
 </script>
 
