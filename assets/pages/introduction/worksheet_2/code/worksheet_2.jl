@@ -33,7 +33,7 @@ function IC(obj::Settings, x::Float64)
   return max(floor, 1.0 / (sqrt(2 * pi * obj.sigma2)) * exp(-(x - 0.5 * (obj.b - obj.a) - obj.a)^2 / (2.0 * obj.sigma2)))
 end
 
-function runPlaneSource(obj::Settings)::Tuple{Vector{Float64}, Vector{Float64}}
+function runPlaneSource(obj::Settings)
     nx = obj.nx
     nv = obj.nv
 
