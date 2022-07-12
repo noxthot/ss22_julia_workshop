@@ -119,32 +119,32 @@
 <pre><code class="julia hljs"><span class="hljs-keyword">using</span> CSV, DataFrames
 
 selcols = [<span class="hljs-string">&quot;Age&quot;</span>, <span class="hljs-string">&quot;Country&quot;</span>, <span class="hljs-string">&quot;ConvertedCompYearly&quot;</span>, <span class="hljs-string">&quot;DevType&quot;</span>, <span class="hljs-string">&quot;Employment&quot;</span>, <span class="hljs-string">&quot;Ethnicity&quot;</span>, <span class="hljs-string">&quot;Gender&quot;</span>, <span class="hljs-string">&quot;OrgSize&quot;</span>, <span class="hljs-string">&quot;YearsCode&quot;</span>]
-df = CSV.read(<span class="hljs-string">&quot;survey_results_public.csv&quot;</span>, DataFrame; missingstring=<span class="hljs-string">&quot;NA&quot;</span>, select=selcols)</code></pre>
+df_survey = CSV.read(<span class="hljs-string">&quot;survey_results_public.csv&quot;</span>, DataFrame; missingstring=<span class="hljs-string">&quot;NA&quot;</span>, select=selcols)</code></pre>
 <p>Alternatively you can also load the arrow-file which we created in the previous section:</p>
 <pre><code class="julia hljs"><span class="hljs-keyword">using</span> Arrow, DataFrames
 
-df = DataFrame(Arrow.Table(<span class="hljs-string">&quot;survey.arrow&quot;</span>))</code></pre>
+df_survey = DataFrame(Arrow.Table(<span class="hljs-string">&quot;survey.arrow&quot;</span>))</code></pre>
 <h2 id="data_wrangling"><a href="#data_wrangling" class="header-anchor">Data Wrangling</a></h2>
-<p>In a first step, let us get a descriptive overview over the data by having a applying <code>describe&#40;&#41;</code>.  Also note the additional arguments that are given to <code>show&#40;&#41;</code>for displaying all rows and columns.</p>
-<pre><code class="julia hljs">julia&gt; show(describe(df), allrows=<span class="hljs-literal">true</span>, allcols=<span class="hljs-literal">true</span>)
-<span class="hljs-number">9</span>×<span class="hljs-number">7</span> DataFrame
+<p>In a first step, let us get a descriptive overview over the data by applying <code>describe&#40;&#41;</code>.  Also note the additional arguments that are given to <code>show&#40;&#41;</code>for displaying all rows and columns.</p>
+<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> show(describe(df_survey), allrows=<span class="hljs-literal">true</span>, allcols=<span class="hljs-literal">true</span>)
+</span>9×7 DataFrame
  Row │ variable             mean       min                       median   max                                nmissing  eltype                   
-     │ <span class="hljs-built_in">Symbol</span>               Union…     <span class="hljs-built_in">Any</span>                       Union…   <span class="hljs-built_in">Any</span>                                <span class="hljs-built_in">Int64</span>     <span class="hljs-built_in">Type</span>                     
+     │ Symbol               Union…     Any                       Union…   Any                                Int64     Type                     
 ─────┼──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-   <span class="hljs-number">1</span> │ Employment                      Employed full-time                 Student, part-time                      <span class="hljs-number">116</span>  <span class="hljs-built_in">Union</span>{<span class="hljs-built_in">Missing</span>, <span class="hljs-built_in">String</span>}
-   <span class="hljs-number">2</span> │ Country                         Afghanistan                        Zimbabwe                                  <span class="hljs-number">0</span>  <span class="hljs-built_in">String</span>
-   <span class="hljs-number">3</span> │ YearsCode                       <span class="hljs-number">1</span>                                  More than <span class="hljs-number">50</span> years                     <span class="hljs-number">1798</span>  <span class="hljs-built_in">Union</span>{<span class="hljs-built_in">Missing</span>, String31}
-   <span class="hljs-number">4</span> │ DevType                         Academic researcher                System administrator;Senior Exec…     <span class="hljs-number">16955</span>  <span class="hljs-built_in">Union</span>{<span class="hljs-built_in">Missing</span>, <span class="hljs-built_in">String</span>}
-   <span class="hljs-number">5</span> │ OrgSize                         <span class="hljs-number">1</span>,<span class="hljs-number">000</span> to <span class="hljs-number">4</span>,<span class="hljs-number">999</span> employees           Just me - I am a freelancer, sol…     <span class="hljs-number">22713</span>  <span class="hljs-built_in">Union</span>{<span class="hljs-built_in">Missing</span>, <span class="hljs-built_in">String</span>}
-   <span class="hljs-number">6</span> │ Age                             <span class="hljs-number">18</span>-<span class="hljs-number">24</span> years old                    Under <span class="hljs-number">18</span> years old                     <span class="hljs-number">1032</span>  <span class="hljs-built_in">Union</span>{<span class="hljs-built_in">Missing</span>, String31}
-   <span class="hljs-number">7</span> │ Gender                          Man                                Woman;Or, <span class="hljs-keyword">in</span> your own words:           <span class="hljs-number">1153</span>  <span class="hljs-built_in">Union</span>{<span class="hljs-built_in">Missing</span>, <span class="hljs-built_in">String</span>}
-   <span class="hljs-number">8</span> │ Ethnicity                       Biracial                           White or of European descent;Sou…      <span class="hljs-number">3975</span>  <span class="hljs-built_in">Union</span>{<span class="hljs-built_in">Missing</span>, <span class="hljs-built_in">String</span>}
-   <span class="hljs-number">9</span> │ ConvertedCompYearly  <span class="hljs-number">1.18426e5</span>  <span class="hljs-number">1</span>                         <span class="hljs-number">56211.0</span>  <span class="hljs-number">45241312</span>                              <span class="hljs-number">36595</span>  <span class="hljs-built_in">Union</span>{<span class="hljs-built_in">Missing</span>, <span class="hljs-built_in">Int64</span>}</code></pre>
+   1 │ Employment                      Employed full-time                 Student, part-time                      116  Union{Missing, String}
+   2 │ Country                         Afghanistan                        Zimbabwe                                  0  String
+   3 │ YearsCode                       1                                  More than 50 years                     1798  Union{Missing, String31}
+   4 │ DevType                         Academic researcher                System administrator;Senior Exec…     16955  Union{Missing, String}
+   5 │ OrgSize                         1,000 to 4,999 employees           Just me - I am a freelancer, sol…     22713  Union{Missing, String}
+   6 │ Age                             18-24 years old                    Under 18 years old                     1032  Union{Missing, String31}
+   7 │ Gender                          Man                                Woman;Or, in your own words:           1153  Union{Missing, String}
+   8 │ Ethnicity                       Biracial                           White or of European descent;Sou…      3975  Union{Missing, String}
+   9 │ ConvertedCompYearly  1.18426e5  1                         56211.0  45241312                              36595  Union{Missing, Int64}</code></pre>
 <p>Since most columns are <code>String</code> types, there is not that much to see but we still get a helpful impression about the number of missing fields. In the last section we stated that we are interested to do a little study in terms of income, so missing values there are not really feasible. Let us remove that rows in an exercise.</p>
-<button type="button" class="collapsible" style="background-color:#b5ddff"> Exercise </button><div class="collapsiblecontent">  Look at the manual of <code>dropmissing</code> and use that function to drop every row that is lacking an entry in <code>ConvertedCompYearly</code>. Hint: To not having to reload the initial data set whenever you did a mistake it might be a good idea to create a backup first: <code>backup_df &#61; copy&#40;df&#41;</code>. So later you can always bring it back by calling <code>df &#61; copy&#40;backup_df&#41;</code>. </div>
+<button type="button" class="collapsible" style="background-color:#b5ddff"> Exercise </button><div class="collapsiblecontent">  Look at the manual of <code>dropmissing</code> and use that function to drop every row that is lacking an entry in <code>ConvertedCompYearly</code>. Hint: To not having to reload the initial data set whenever you did a mistake it might be a good idea to create a backup first: <code>backup_df &#61; copy&#40;df_survey&#41;</code>. So later you can always bring it back by calling <code>df_survey &#61; copy&#40;backup_df&#41;</code>. </div>
 <p>After the previous exercise you should have <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>46844</mn></mrow><annotation encoding="application/x-tex">46844</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">46844</span></span></span></span> rows in your data set.</p>
 <p>Let us try to get an overview over the yearly compensation. Again we can use <code>describe&#40;&#41;</code>, just on that column, to get a more detailed summary statistics:</p>
-<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> describe(df.ConvertedCompYearly)
+<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> describe(df_survey.ConvertedCompYearly)
 </span>Summary Stats:
 Length:         46844
 Missing Count:  0
@@ -155,49 +155,48 @@ Median:         56211.000000
 3rd Quartile:   100000.000000
 Maximum:        45241312.000000
 Type:           Int64</code></pre>
-<p>So we have <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>46844</mn></mrow><annotation encoding="application/x-tex">46844</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">46844</span></span></span></span> rows in this data set. We already removed the missing values, so there is no missing value left. The arithmetic mean is a lot higher than the median which indicates that the data is heavily skewed to the right. 25&#37; of the data appears to be smaller than <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>27025</mn></mrow><annotation encoding="application/x-tex">27025</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">27025</span></span></span></span> and 75&#37; of the data larger than <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>100000</mn></mrow><annotation encoding="application/x-tex">100000</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">100000</span></span></span></span>. The maximum is given by an entry of over 45Mio and there are also participants with a yearly income of one Dollar. </p>
+<p>So we have <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>46844</mn></mrow><annotation encoding="application/x-tex">46844</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">46844</span></span></span></span> rows in this data set. The arithmetic mean is a lot higher than the median which indicates that the data is heavily skewed to the right. 25&#37; of the data appears to be smaller than <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>27025</mn></mrow><annotation encoding="application/x-tex">27025</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">27025</span></span></span></span> and 75&#37; of the data larger than <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>100000</mn></mrow><annotation encoding="application/x-tex">100000</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">100000</span></span></span></span>. The maximum is given by an entry of over 45Mio and there are also participants with a yearly income of one Dollar. </p>
 <p>Let us create some plots to gain deeper insights. We have already seen the use of <code>Plots.jl</code> before. In this section, we will switch to <code>StatsPlots.jl</code> &#40;which is a drop-in replacement for <code>Plots.jl</code>&#41; since on one hand it supports easy plotting of dataframes and on the other hand also offers additional statistical recipes.</p>
-<p>Creating a boxplot is fairly simple:</p>
+<p>Creating a boxplot is fairly simple using the <code>@df</code> macro:</p>
 <pre><code class="julia hljs"><span class="hljs-keyword">using</span> StatsPlots
-<span class="hljs-meta">@df</span> df boxplot(:ConvertedCompYearly)</code></pre>
+<span class="hljs-meta">@df</span> df_survey boxplot(:ConvertedCompYearly)</code></pre>
 <img src="/ss22_julia_workshop/assets/pages/datascience/exploratory_da_boxplot.png" alt="Boxplot">
-<p>Note that <code>@df</code> is the call of the macro and the second <code>df</code> is the name of our dataframe.</p>
 <p>Apparently a couple of outliers totally screw our visualization. Fortunately, there is an <a href="https://github.com/JuliaPlots/StatsPlots.jl/blob/db1a9e2f58ff9fb4beb3a0f7d133fcc8fd72b812/src/boxplot.jl#L14">undocumented function argument</a> that allows us to get rid of the outliers within the visualization:</p>
-<pre><code class="julia-repl hljs">@df df boxplot(:ConvertedCompYearly, outliers=false)</code></pre>
+<pre><code class="julia-repl hljs">@df df_survey boxplot(:ConvertedCompYearly, outliers=false)</code></pre>
 <p>So apparently around 50&#37; of the developers within the DACH region earn <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>27000</mn></mrow><annotation encoding="application/x-tex">27000</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">27000</span></span></span></span> to <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>100000</mn></mrow><annotation encoding="application/x-tex">100000</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">100000</span></span></span></span> euros per year, the median being at about <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>56000</mn></mrow><annotation encoding="application/x-tex">56000</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">56000</span></span></span></span>.</p>
 <img src="/ss22_julia_workshop/assets/pages/datascience/exploratory_da_boxplot_no_outliers.png" alt="Boxplot">
 <p>Let us also have a look at the <a href="https://en.wikipedia.org/wiki/Cumulative_distribution_function">cumulative distribution function &#40;CDF&#41;</a> of our data column. Therefore, we simply sort the values of the column and plot them on the <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi></mrow><annotation encoding="application/x-tex">y</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span></span></span></span>-axis while we scale the <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">x</span></span></span></span>-axis from <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0</span></span></span></span> to <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn></mrow><annotation encoding="application/x-tex">1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span>.</p>
-<pre><code class="julia hljs">julia&gt; plot(sort(df.ConvertedCompYearly), (<span class="hljs-number">1</span>:nrow(df)) ./ nrow(df))</code></pre>
+<pre><code class="julia hljs">julia&gt; plot(sort(df_survey.ConvertedCompYearly), (<span class="hljs-number">1</span>:nrow(df_survey)) ./ nrow(df_survey))</code></pre>
 <img src="/ss22_julia_workshop/assets/pages/datascience/exploratory_da_cdf.png" alt="Cumulative distribution function plot">
 <p>The plot tells us &#40;just like the quartiles already indicated&#41; that most of the survey participates earn a lot less than 10Mio. Dollars. </p>
 <p>Removing outliers is a very controversial topic. Usually it is always good practice to try to understand the source of outliers and to consult a domain expert to decide whether or not to remove them. In this workshop we want to show the pitfalls when working with real data, but we also want to pragmatically clean the data to practice some data wrangling. So let us assume that it is very unusual for a software developer to earn more than 1Mio per year but to be sure, let us also check the entries where <code>ConvertedCompYear</code> exceeds 1Mio. We leave this as an exercise.</p>
-<button type="button" class="collapsible" style="background-color:#b5ddff"> Exercise </button><div class="collapsiblecontent">  Filter <code>df</code> for entries where <code>ConvertedCompYear</code> exceeds 1Mio and have a look at the remaining data rows.      Hints: Check the manual of <code>filter</code>. When you are running your code in the Julia REPL within VS Code you will find a dataframe viewer in your Julia extension&#39;s workspace. Otherwise it might also make sense to quickly write the dataframe to a CSV and have a look in one of the usual spreadsheet programs. </div>
+<button type="button" class="collapsible" style="background-color:#b5ddff"> Exercise </button><div class="collapsiblecontent">  Filter <code>df_survey</code> for entries where <code>ConvertedCompYear</code> exceeds 1Mio and have a look at the remaining data rows.      Hints: Check the manual of <code>filter</code>. When you are running your code in the Julia REPL within VS Code you will find a dataframe viewer in your Julia extension&#39;s workspace. Otherwise it might also make sense to quickly write the dataframe to a CSV and have a look in one of the usual spreadsheet programs. </div>
 <p>Apparently, most of the top earners declared to be software developers. Let us filter the data set such that we only have entries <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>&lt;</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">&lt; 1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5782em;vertical-align:-0.0391em;"></span><span class="mrel">&lt;</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span>Mio from now on.</p>
-<button type="button" class="collapsible" style="background-color:#b5ddff"> Exercise </button><div class="collapsiblecontent">  Filter &#40;and store&#41; <code>df</code> for entries where <code>ConvertedCompYear</code> is equal or less than 1Mio. </div>
+<button type="button" class="collapsible" style="background-color:#b5ddff"> Exercise </button><div class="collapsiblecontent">  Filter &#40;and store&#41; <code>df_survey</code> for entries where <code>ConvertedCompYear</code> is equal or less than 1Mio. </div>
 <p>Now you should have <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>46237</mn></mrow><annotation encoding="application/x-tex">46237</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">46237</span></span></span></span> entries. Next, we only want to look at the DACH region.</p>
-<button type="button" class="collapsible" style="background-color:#b5ddff"> Exercise </button><div class="collapsiblecontent">  Filter &#40;and store&#41; <code>df</code> for <code>Country</code> being <code>Austria</code>, <code>Germany</code> or <code>Switzerland</code>. </div>
+<button type="button" class="collapsible" style="background-color:#b5ddff"> Exercise </button><div class="collapsiblecontent">  Filter &#40;and store&#41; <code>df_survey</code> for <code>Country</code> being <code>Austria</code>, <code>Germany</code> or <code>Switzerland</code>. </div>
 <p>Now we are down to <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>4212</mn></mrow><annotation encoding="application/x-tex">4212</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">4212</span></span></span></span> entries. Have a look at the column <code>Gender</code>. Besides <code>Man</code> and <code>Woman</code> there are lot more categories, but unfortunately with very little sample sizes. Thus adding these to further visualizations would lead to misleading conclusions. It would require additional engineering to address these little sample sizes and therefore this is out of scope of this workshop.</p>
 <p>So instead,  let us also add a filter in this column.</p>
-<button type="button" class="collapsible" style="background-color:#b5ddff"> Exercise </button><div class="collapsiblecontent">  Filter &#40;and store&#41; <code>df</code> for <code>Gender</code> being <code>Man</code> or <code>Woman</code>. </div>
+<button type="button" class="collapsible" style="background-color:#b5ddff"> Exercise </button><div class="collapsiblecontent">  Filter &#40;and store&#41; <code>df_survey</code> for <code>Gender</code> being <code>Man</code> or <code>Woman</code>. </div>
 <p>You should now see <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>4061</mn></mrow><annotation encoding="application/x-tex">4061</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">4061</span></span></span></span> entries. In a final step, let us convert the compensation from dollars into euros and store this information in a column named <code>EuroCompYearly</code>. As of July 1st, 2022, one Dollar corresponds to <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.96</mn></mrow><annotation encoding="application/x-tex">0.96</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0.96</span></span></span></span> Euros:</p>
-<pre><code class="julia hljs">df[!, :EuroCompYearly] = <span class="hljs-number">0.96</span> * df[!, :ConvertedCompYearly]</code></pre>
+<pre><code class="julia hljs">df_survey[!, :EuroCompYearly] = <span class="hljs-number">0.96</span> * df_survey[!, :ConvertedCompYearly]</code></pre>
 <p>Here you find the solution for all manipulating tasks in this section. <div class="solution"> Solution </div><div class="solutioncollapsible">  </p>
 <pre><code class="julia hljs"><span class="hljs-keyword">using</span> CSV, DataFrames
 
 selcols = [<span class="hljs-string">&quot;Age&quot;</span>, <span class="hljs-string">&quot;Country&quot;</span>, <span class="hljs-string">&quot;ConvertedCompYearly&quot;</span>, <span class="hljs-string">&quot;DevType&quot;</span>, <span class="hljs-string">&quot;Employment&quot;</span>, <span class="hljs-string">&quot;Ethnicity&quot;</span>, <span class="hljs-string">&quot;Gender&quot;</span>, <span class="hljs-string">&quot;OrgSize&quot;</span>, <span class="hljs-string">&quot;YearsCode&quot;</span>]
 
-df = CSV.read(<span class="hljs-string">&quot;survey_results_public.csv&quot;</span>, DataFrame; missingstring=<span class="hljs-string">&quot;NA&quot;</span>, select=selcols)
+df_survey = CSV.read(<span class="hljs-string">&quot;survey_results_public.csv&quot;</span>, DataFrame; missingstring=<span class="hljs-string">&quot;NA&quot;</span>, select=selcols)
 
-dropmissing!(df, :ConvertedCompYearly)
+dropmissing!(df_survey, :ConvertedCompYearly)
 
-filter!(x -&gt; x.ConvertedCompYearly &lt;= <span class="hljs-number">1e6</span>, df)
-filter!(x -&gt; x.Country <span class="hljs-keyword">in</span> [<span class="hljs-string">&quot;Austria&quot;</span>, <span class="hljs-string">&quot;Germany&quot;</span>, <span class="hljs-string">&quot;Switzerland&quot;</span>], df)
-filter!(x -&gt; !ismissing(x.Gender) &amp;&amp; (x.Gender <span class="hljs-keyword">in</span> [<span class="hljs-string">&quot;Man&quot;</span>, <span class="hljs-string">&quot;Woman&quot;</span>]), df)
+filter!(x -&gt; x.ConvertedCompYearly &lt;= <span class="hljs-number">1e6</span>, df_survey)
+filter!(x -&gt; x.Country <span class="hljs-keyword">in</span> [<span class="hljs-string">&quot;Austria&quot;</span>, <span class="hljs-string">&quot;Germany&quot;</span>, <span class="hljs-string">&quot;Switzerland&quot;</span>], df_survey)
+filter!(x -&gt; !ismissing(x.Gender) &amp;&amp; (x.Gender <span class="hljs-keyword">in</span> [<span class="hljs-string">&quot;Man&quot;</span>, <span class="hljs-string">&quot;Woman&quot;</span>]), df_survey)
 
-df[!, :EuroCompYearly] = <span class="hljs-number">0.96</span> * df[!, :ConvertedCompYearly]</code></pre>
+df_survey[!, :EuroCompYearly] = <span class="hljs-number">0.96</span> * df_survey[!, :ConvertedCompYearly]</code></pre>
 <p></div></p>
 <h2 id="case_studies"><a href="#case_studies" class="header-anchor">Case Studies</a></h2>
-<p>Starting from this data set, let us conduct some case studies in the upcoming exercise.</p>
+<p>Continuing with the same data set, let us conduct some case studies in the upcoming exercise.</p>
 <button type="button" class="collapsible" style="background-color:#b5ddff"> Exercise </button><div class="collapsiblecontent">  1. What is the number of austrian, german and swiss survey participants. </p>
 <ol>
 <li><p>Use <code>groupby</code>, <code>combine</code> and <code>nrow</code>.</p>
@@ -213,7 +212,7 @@ df[!, :EuroCompYearly] = <span class="hljs-number">0.96</span> * df[!, :Converte
 </ol>
 <p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext> </mtext></mrow><annotation encoding="application/x-tex">\,</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0em;"></span><span class="mspace" style="margin-right:0.1667em;"></span></span></span></span> </div>
 <div class="solution"> Solution </div><div class="solutioncollapsible">  1. </p>
-<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> combine(groupby(df, :Country), nrow =&gt; :count)
+<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> combine(groupby(df_survey, :Country), nrow =&gt; :count)
 </span>3×2 DataFrame
  Row │ Country      count 
      │ String       Int64 
@@ -225,7 +224,7 @@ df[!, :EuroCompYearly] = <span class="hljs-number">0.96</span> * df[!, :Converte
 <li></li>
 </ol>
 <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-keyword">using</span> Statistics
-</span><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> combine(groupby(filter(x -&gt; x.Country == <span class="hljs-string">&quot;Austria&quot;</span>, df), :Employment), :EuroCompYearly  =&gt; median)
+</span><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> combine(groupby(filter(x -&gt; x.Country == <span class="hljs-string">&quot;Austria&quot;</span>, df_survey), :Employment), :EuroCompYearly  =&gt; median)
 </span>4×2 DataFrame
  Row │ Employment                         EuroCompYearly_median 
      │ String?                            Float64               
@@ -237,8 +236,8 @@ df[!, :EuroCompYearly] = <span class="hljs-number">0.96</span> * df[!, :Converte
 <ol>
 <li></li>
 </ol>
-<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> transform!(df, :DevType =&gt; ByRow(x -&gt; !ismissing(x) &amp;&amp; occursin(x, <span class="hljs-string">&quot;Data Scientist&quot;</span>)) =&gt; :isdatascientist)
-</span><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> combine(groupby(df, :isdatascientist), :EuroCompYearly =&gt; median)
+<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> transform!(df_survey, :DevType =&gt; ByRow(x -&gt; !ismissing(x) &amp;&amp; occursin(x, <span class="hljs-string">&quot;Data Scientist&quot;</span>)) =&gt; :isdatascientist)
+</span><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> combine(groupby(df_survey, :isdatascientist), :EuroCompYearly =&gt; median)
 </span>2×2 DataFrame
  Row │ isdatascientist  EuroCompYearly_median 
      │ Bool             Float64               
@@ -248,7 +247,7 @@ df[!, :EuroCompYearly] = <span class="hljs-number">0.96</span> * df[!, :Converte
 <ol>
 <li></li>
 </ol>
-<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> combine(groupby(df, [:Country, :isdatascientist]), nrow =&gt; :count)
+<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> combine(groupby(df_survey, [:Country, :isdatascientist]), nrow =&gt; :count)
 </span>4×3 DataFrame
  Row │ Country      isdatascientist  count 
      │ String       Bool             Int64 
@@ -268,23 +267,23 @@ df[!, :EuroCompYearly] = <span class="hljs-number">0.96</span> * df[!, :Converte
 <span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-keyword">using</span> StatsPlots; plotlyjs()
 </span>Plots.PlotlyJSBackend()
 
-<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> countmap(df.Country)
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> countmap(df_survey.Country)
 </span>Dict{String, Int64} with 3 entries:
   &quot;Switzerland&quot; =&gt; 529
   &quot;Germany&quot;     =&gt; 3095
   &quot;Austria&quot;     =&gt; 437
 
-<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@df</span> df bar(countmap(:Country), legend=<span class="hljs-literal">false</span>)</span></code></pre>
-<div id="fdpxru" style=""></div>
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@df</span> df_survey bar(countmap(:Country), legend=<span class="hljs-literal">false</span>)</span></code></pre>
+<div id="fdpzon" style=""></div>
 <script>
-graphDiv = document.getElementById("fdpxru");
+graphDiv = document.getElementById("fdpzon");
 plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_explorative_da_country.json');
 </script>
 
 <h3 id="boxplot_salary_in_comparison_to_employment_status"><a href="#boxplot_salary_in_comparison_to_employment_status" class="header-anchor">Boxplot: Salary in comparison to employment status</a></h3>
 <p>Boxplots are a nice tool to visualize some distributional characteristics &#40;locality, spread, skewness&#41; of a given data sample. Dividing the data set into different groups allows an easy comparison.</p>
 <p>In the following plot we compare the salary of different employment states:</p>
-<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@df</span> df boxplot(:Employment, :EuroCompYearly, xrotation=<span class="hljs-number">30</span>, size=(<span class="hljs-number">500</span>, <span class="hljs-number">900</span>), legend=<span class="hljs-literal">false</span>)</span></code></pre>
+<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@df</span> df_survey boxplot(:Employment, :EuroCompYearly, xrotation=<span class="hljs-number">30</span>, size=(<span class="hljs-number">500</span>, <span class="hljs-number">900</span>), legend=<span class="hljs-literal">false</span>)</span></code></pre>
 <p>We also used some optional arguments:</p>
 <ul>
 <li><p><code>xrotation&#61;30</code> such that <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">x</span></span></span></span>-axis labels do not overlap</p>
@@ -296,28 +295,28 @@ plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datas
 </ul>
 <p>The filled area of the boxes correspond to the 25&#37; to 75&#37; quantiles of the data, so 50&#37; of the data samples live within the filled area. The whiskers capture 1.5 times the interquartile range &#40;<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1.5</mn><mo>⋅</mo><mo stretchy="false">(</mo><msub><mrow><mi mathvariant="normal">IQR</mi><mo>⁡</mo></mrow><mn>75</mn></msub><mo>−</mo><msub><mrow><mi mathvariant="normal">IQR</mi><mo>⁡</mo></mrow><mn>25</mn></msub><mo stretchy="false">)</mo><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">1.5 \cdot (\operatorname{IQR}_{75} - \operatorname{IQR}_{25}))</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1.5</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mop"><span class="mop"><span class="mord mathrm">IQR</span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.207em;"><span style="top:-2.4559em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">75</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2441em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">−</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mop"><span class="mop"><span class="mord mathrm">IQR</span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.207em;"><span style="top:-2.4559em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">25</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2441em;"><span></span></span></span></span></span></span><span class="mclose">))</span></span></span></span> and every data point that lies outside the whiskers is considered to be an outlier. The horizontal line inside the filled area corresponds to the median of the subset.</p>
 <p>Please note that we create the figure using plotly, so the plot is interactive and you are able to zoom in and get additional information by pointing at certain details.</p>
-<div id="fdpkni" style=""></div>
+<div id="fdpjue" style=""></div>
 <script>
-graphDiv = document.getElementById("fdpkni");
+graphDiv = document.getElementById("fdpjue");
 plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_explorative_da_salary_1.json');
 </script>
 
 <p>Since visualizations usually condense information up to some extend, it is always a good idea to look at the data from different perspectives. Adding e.g. a dots plot &#40;where every sample is visualized by a dot&#41; shows that two of the groups have only very little sample sizes.</p>
-<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@df</span> df boxplot(:Employment, :EuroCompYearly, xrotation=<span class="hljs-number">30</span>, size=(<span class="hljs-number">500</span>, <span class="hljs-number">900</span>), legend=<span class="hljs-literal">false</span>)
+<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@df</span> df_survey boxplot(:Employment, :EuroCompYearly, xrotation=<span class="hljs-number">30</span>, size=(<span class="hljs-number">500</span>, <span class="hljs-number">900</span>), legend=<span class="hljs-literal">false</span>)
 </span>
-<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@df</span> df dotplot!(:Employment, :EuroCompYearly, legend=<span class="hljs-literal">false</span>)</span></code></pre>
-<div id="fdpwcq" style=""></div>
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@df</span> df_survey dotplot!(:Employment, :EuroCompYearly, legend=<span class="hljs-literal">false</span>)</span></code></pre>
+<div id="fdpynz" style=""></div>
 <script>
-graphDiv = document.getElementById("fdpwcq");
+graphDiv = document.getElementById("fdpynz");
 plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_explorative_da_salary_2.json');
 </script>
 
 <p>Combining the information of the two plots we obviously have too little data to judge about the empty and <em>I prefer not to say</em> category. Also it appears that the average salaries of freelancers are a lot higher than the salaries of employees. Also the 25&#37; quantile of freelancers is comparable to the median salary of full-time employees.</p>
-<button type="button" class="collapsible" style="background-color:#b5ddff"> Exercise </button><div class="collapsiblecontent">  The dataframe has a couple of interesting columns &#40;see <code>names&#40;df&#41;</code>&#41;. Have a look at the <a href="https://github.com/JuliaPlots/StatsPlots.jl"><code>StatsPlots.jl</code> documentation</a>, get creative and generate some nice visualisations. </div>
+<button type="button" class="collapsible" style="background-color:#b5ddff"> Exercise </button><div class="collapsiblecontent">  The dataframe has a couple of interesting columns &#40;see <code>names&#40;df_survey&#41;</code>&#41;. Have a look at the <a href="https://github.com/JuliaPlots/StatsPlots.jl"><code>StatsPlots.jl</code> documentation</a>, get creative and generate some nice visualisations. </div>
 <p>Of course there are many different plot types you can choose from. Have a look at the <a href="https://docs.juliaplots.org/stable/gallery/plotlyjs/"><code>Plots.jl</code> gallery</a> to get an overview. With <a href="https://github.com/queryverse/DataVoyager.jl"><code>DataVoyager.jl</code></a> there is also a nice package that allows to interactively explore your data by loading a given data frame into the Voyager data exploration tool:</p>
 <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-keyword">using</span> DataVoyager
 </span>
-<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> v = Voyager(df)</span></code></pre>
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> v = Voyager(df_survey)</span></code></pre>
 <p>Here is a screenshot that shows this tool in action: <img src="/ss22_julia_workshop/assets/pages/datascience/datavoyager.png" alt="Data Voyager"></p>
 <button type="button" class="collapsible" style="background-color:#b5ddff"> Exercise </button><div class="collapsiblecontent">  Explore our dataframe with <code>DataVoyager.jl</code>. </div>
 <div class="page-foot">

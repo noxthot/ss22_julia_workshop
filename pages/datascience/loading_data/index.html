@@ -214,7 +214,7 @@ help?&gt; CSV.read
   sinks like DataFrame.
 [..]</code></pre>
 <p>Equipped with this knowledge we are now ready to load the file:</p>
-<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> df = CSV.read(<span class="hljs-string">&quot;survey_results_public.csv&quot;</span>, DataFrame)
+<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> df_survey = CSV.read(<span class="hljs-string">&quot;survey_results_public.csv&quot;</span>, DataFrame)
 </span>83439×48 DataFrame
    Row │ ResponseId  MainBranch                         Employment                         Country                            US_State       UK_Coun ⋯
        │ Int64       String                             String                             String                             String         String3 ⋯
@@ -232,8 +232,8 @@ help?&gt; CSV.read
  83438 │      83438  I am a developer by profession     Employed full-time                 Canada                             NA             NA
  83439 │      83439  I am a developer by profession     Employed full-time                 Brazil                             NA             NA
                                                                                                                      43 columns and 83428 rows omitted</code></pre>
-<p>The first thing we notice when working with real data is that there is more data than you can fit on one screen. So let us look at a couple of methods which help us to get an overview. <code>names&#40;df&#41;</code> gives us list of columns:</p>
-<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> names(df)
+<p>The first thing we notice when working with real data is that there is more data than you can fit on one screen. So let us look at a couple of methods which help us to get an overview. <code>names&#40;df_survey&#41;</code> gives us list of columns:</p>
+<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> names(df_survey)
 </span>48-element Vector{String}:
  :ResponseId
  :MainBranch
@@ -252,13 +252,13 @@ help?&gt; CSV.read
  :SurveyEase
  :ConvertedCompYearly</code></pre>
 <p>Unfortunately, the vector has too many elements and also gets summarized. The full output can be shown with <code>show</code>:</p>
-<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> show(names(df))
+<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> show(names(df_survey))
 </span>[&quot;ResponseId&quot;, &quot;MainBranch&quot;, &quot;Employment&quot;, &quot;Country&quot;, &quot;US_State&quot;, &quot;UK_Country&quot;, &quot;EdLevel&quot;, &quot;Age1stCode&quot;, &quot;LearnCode&quot;, &quot;YearsCode&quot;, &quot;YearsCodePro&quot;, &quot;DevType&quot;, &quot;OrgSize&quot;, &quot;Currency&quot;, &quot;CompTotal&quot;, &quot;CompFreq&quot;, &quot;LanguageHaveWorkedWith&quot;, &quot;LanguageWantToWorkWith&quot;, &quot;DatabaseHaveWorkedWith&quot;, &quot;DatabaseWantToWorkWith&quot;, &quot;PlatformHaveWorkedWith&quot;, &quot;PlatformWantToWorkWith&quot;, &quot;WebframeHaveWorkedWith&quot;, &quot;WebframeWantToWorkWith&quot;, &quot;MiscTechHaveWorkedWith&quot;, &quot;MiscTechWantToWorkWith&quot;, &quot;ToolsTechHaveWorkedWith&quot;, &quot;ToolsTechWantToWorkWith&quot;, &quot;NEWCollabToolsHaveWorkedWith&quot;, &quot;NEWCollabToolsWantToWorkWith&quot;, &quot;OpSys&quot;, &quot;NEWStuck&quot;, &quot;NEWSOSites&quot;, &quot;SOVisitFreq&quot;, &quot;SOAccount&quot;, &quot;SOPartFreq&quot;, &quot;SOComm&quot;, &quot;NEWOtherComms&quot;, &quot;Age&quot;, &quot;Gender&quot;, &quot;Trans&quot;, &quot;Sexuality&quot;, &quot;Ethnicity&quot;, &quot;Accessibility&quot;, &quot;MentalHealth&quot;, &quot;SurveyLength&quot;, &quot;SurveyEase&quot;, &quot;ConvertedCompYearly&quot;]</code></pre>
-<p>Let us assume that we are conducting a little study on the income of different developer roles and therefore we are only interested in the columns: <code>&#91;&quot;Age&quot;, &quot;Country&quot;, &quot;ConvertedCompYearly&quot;, &quot;DevType&quot;, &quot;Employment&quot;, &quot;Ethnicity&quot;, &quot;Gender&quot;, &quot;OrgSize&quot;, &quot;YearsCode&quot;&#93;</code>. Unfortunately, <code>ConvertedCompYearly</code> is not further described within the dataset schema but it is reasonably fair to assume that this reflects the annual income in dollars. Selecting various columns works with the <code>df&#91;&#33;, cols&#93;</code> notation:</p>
+<p>Let us assume that we are conducting a little study on the income of different developer roles and therefore we are only interested in the columns: <code>&#91;&quot;Age&quot;, &quot;Country&quot;, &quot;ConvertedCompYearly&quot;, &quot;DevType&quot;, &quot;Employment&quot;, &quot;Ethnicity&quot;, &quot;Gender&quot;, &quot;OrgSize&quot;, &quot;YearsCode&quot;&#93;</code>. Unfortunately, <code>ConvertedCompYearly</code> is not further described within the dataset schema but it is reasonably fair to assume that this reflects the annual income in dollars. Selecting various columns works with the <code>df_survey&#91;&#33;, cols&#93;</code> notation:</p>
 <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> selcols = [<span class="hljs-string">&quot;Age&quot;</span>, <span class="hljs-string">&quot;Country&quot;</span>, <span class="hljs-string">&quot;ConvertedCompYearly&quot;</span>, <span class="hljs-string">&quot;DevType&quot;</span>, <span class="hljs-string">&quot;Employment&quot;</span>, <span class="hljs-string">&quot;Ethnicity&quot;</span>, <span class="hljs-string">&quot;Gender&quot;</span>, <span class="hljs-string">&quot;OrgSize&quot;</span>, <span class="hljs-string">&quot;YearsCode&quot;</span>]
 </span>[...]
 
-<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> df[!, selcols]
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> df_survey[!, selcols]
 </span>83439×9 DataFrame
    Row │ Age              Country                            ConvertedCompYearly  DevType                            Employment                       ⋯
        │ String31         String                             String15             String                             String                           ⋯
@@ -270,7 +270,7 @@ help?&gt; CSV.read
  83439 │ 18-24 years old  Brazil                             21168                Developer, front-end;Developer, …  Employed full-time
                                                                                                                        5 columns and 83435 rows omitted</code></pre>
 <p>Do we notice that something odd happened? <code>ConvertedCompYearly</code> apparently is stored as a <code>String15</code> &#40;meaning a <code>String</code> with fixed length of 15 letters&#41; column. Taking a closer look at the data and/or CSV file, this is due to <code>NA</code> being used as text in the CSV file. We obviously want this column to be of type <code>Integer</code> &#40;to be more precise of type <code>Union&#123;Integer, Missing&#125;</code>&#41; and the <code>NA</code>s should be <code>missing</code>. If we would have known about this earlier, we could have corrected this right at the start when reading the dataframe. This also counts for various other problems that often occur with this file format. Non-standard seperation letter, different symbols for writing decimal numbers to just name two. Reading the manual of <code>CSV.read</code> tells us how we should read the data correctly and we can tell the function that we only want to read specific columns:</p>
-<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> df = CSV.read(<span class="hljs-string">&quot;survey_results_public.csv&quot;</span>, DataFrame; missingstring=<span class="hljs-string">&quot;NA&quot;</span>, select=selcols)
+<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> df_survey = CSV.read(<span class="hljs-string">&quot;survey_results_public.csv&quot;</span>, DataFrame; missingstring=<span class="hljs-string">&quot;NA&quot;</span>, select=selcols)
 </span>83439×9 DataFrame
    Row │ Employment                         Country                            YearsCode  DevType                            OrgSize                            Age  ⋯
        │ String?                            String                             String31?  String?                            String?                            Stri ⋯
@@ -282,10 +282,10 @@ help?&gt; CSV.read
  83439 │ Employed full-time                 Brazil                             14         Developer, front-end;Developer, …  I don’t know                       18-2
                                                                                                                                       4 columns and 83435 rows omitted</code></pre>
 <p>Since <code>ConvertedCompYearly</code> is not displayed in this last output, we will take a look at the column type by applying <code>eltype&#40;&#41;</code>:</p>
-<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> eltype(df.ConvertedCompYearly)
+<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> eltype(df_survey.ConvertedCompYearly)
 </span>Union{Missing, Int64}</code></pre>
 <p>Let us also have a look at the types of the rest of the columns. This unfortunately is a bit technical:</p>
-<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> collect(zip(names(df), eltype.(eachcol(df))))
+<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> collect(zip(names(df_survey), eltype.(eachcol(df_survey))))
 </span>9-element Vector{Tuple{String, Type}}:
  (&quot;Employment&quot;, Union{Missing, String})
  (&quot;Country&quot;, String)
@@ -296,7 +296,7 @@ help?&gt; CSV.read
  (&quot;Gender&quot;, Union{Missing, String})
  (&quot;Ethnicity&quot;, Union{Missing, String})
  (&quot;ConvertedCompYearly&quot;, Union{Missing, Int64})</code></pre>
-<p>Let us split up the call <code>collect&#40;zip&#40;names&#40;df&#41;, eltype.&#40;eachcol&#40;df&#41;&#41;&#41;&#41;</code> and explain each part:</p>
+<p>Let us split up the call <code>collect&#40;zip&#40;names&#40;df_survey&#41;, eltype.&#40;eachcol&#40;df_survey&#41;&#41;&#41;&#41;</code> and explain each part:</p>
 <ul>
 <li><p>the function <code>eachcol&#40;&#41;</code> creates a vector-like object that allows iterating over each dataframe column</p>
 </li>
