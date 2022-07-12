@@ -5,7 +5,7 @@
 
 # Loading data into dataframes
 
-Data science mostly requires to work with tabular data. With [`DataFrames.jl`](https://dataframes.juliadata.org/stable/) Julia provides a set of tools for working with tabular data. When you are already familiar with `pandas` (Python) or `dplyr` (R) you will be quickly able to get started with data wrangling using `DataFrames.jl`, since design and functionality are quite similar.
+Data science mostly requires to work with tabular data. With [`DataFrames.jl`](https://dataframes.juliadata.org/stable/) Julia provides a set of tools for reading, exploring and manipulating tabular data. When you are already familiar with `pandas` (Python) or `dplyr` (R) you will be quickly able to get started with data wrangling using `DataFrames.jl`, since design and functionality are quite similar. Before we actually work with a given data set, we need to understand how to read and store it.
 
 First of all, you need to add and load the package:
 ```julia-repl
