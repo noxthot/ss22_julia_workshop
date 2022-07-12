@@ -60,7 +60,7 @@ nx = 101
 x = collect(range(0, 1; length=nx))
 ```
 
-The `range` command will generate $\operatorname{nx}$ values from 0 to 1. We use the `collect` command to store these values into a vector. The next step is to set up our solution matrix $\bm{\psi}$. The matrix should have dimension $\operatorname{nx}\times\operatorname{nv}$. Initially, the solution is zero except for $\psi_{50,k}=1$ for all $k$. Compute the described matrix.
+The `range` command will generate $\operatorname{nx}$ values from $0$ to $1$. We use the `collect` command to store these values into a vector. The next step is to set up our solution matrix $\bm{\psi}$. The matrix should have dimension $\operatorname{nx}\times\operatorname{nv}$. Initially, the solution is zero except for $\psi_{50,k}=1$ for all $k$. Compute the described matrix.
 
 \example{
 To generate a zero matrix of dimension $n\times m$ we can use the `zeros(n, m)` command. Hence, to create a matrix with dimension $\operatorname{nx} \times \operatorname{nv}$ type

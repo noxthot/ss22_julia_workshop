@@ -16,7 +16,36 @@ julia> v = [1, 2, 3]
  2
  3
 ```
-As you can see, Julia found out that all the numbers are integers and therefore you have now defined a 3-element vector of type `Int64`. You can now do operations on this vector in the usual fashion:
+As you can see, Julia found out that all the numbers are integers and therefore you have now defined a 3-element vector of type `Int64`. 
+Alternatively, if you want to generate a vector with zeros, ones or random numbers, you can use
+```julia-repl
+julia> w = zeros(3)
+3-element Vector{Float64}:
+ 0.0
+ 0.0
+ 0.0
+
+julia> w = ones(3)
+3-element Vector{Float64}:
+ 1.0
+ 1.0
+ 1.0
+
+julia> w = rand(3)
+3-element Vector{Float64}:
+ 0.5895742185814302
+ 0.7384134175744227
+ 0.5859991546122274
+```
+which automatically assumes the types to be `Float64`. If you want to specify a certain datatype, you can use `w = zeros(Int64,3)`. If you want to create a vector with entries $0$ to $1$ with $3$ entries, write
+```julia-repl
+julia> u = collect(range(0,1,3))
+3-element Vector{Float64}:
+ 0.0
+ 0.5
+ 1.0
+```
+You can now do operations on a vector in the usual fashion:
 ```julia-repl
 julia> v * 2
 3-element Vector{Int64}:
@@ -58,7 +87,15 @@ julia> w'
  ```
 
 ## Matrices
- If we have vectors the jump to matrices is not very far. Simply wrap everything in another set of brackets and we are good to go:
+ If we have vectors the jump to matrices is not very far. Again, we have the command
+```julia-repl
+julia> B = ones(3,3)
+3×3 Matrix{Float64}:
+ 1.0  1.0  1.0
+ 1.0  1.0  1.0
+ 1.0  1.0  1.0
+```
+The same holds for `zeros` and `rand`. To directly specify values inside a matrix, simply wrap the code used for vectors in another set of brackets and we are good to go:
  ```julia-repl
  julia> A = [[1, 2, 3] [4, 5, 6] [7, 8, 9]]
 3×3 Matrix{Int64}:
