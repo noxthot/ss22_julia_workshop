@@ -244,17 +244,17 @@ Address output: Ptr{Nothing} @0x00007f33266e2310</code></pre>
  </div>
 <h2 id="multiple_dispatch"><a href="#multiple_dispatch" class="header-anchor">Multiple dispatch</a></h2>
 <p>You might have observed that since we did not specify any data types, we were able to call functions using vectors and scalars. However, if we call <code>sincos1&#33;&#40;1.0&#41;</code> you see that this might not always be the best idea. Some functions should only be called with a certain data type. We can specify the data type of input and output in the following way:</p>
-<pre><code class="julia hljs"><span class="hljs-keyword">function</span> sincos1!(x::<span class="hljs-built_in">Array</span>{<span class="hljs-built_in">Float64</span>, <span class="hljs-number">1</span>})::<span class="hljs-built_in">Array</span>{<span class="hljs-built_in">Float64</span>, <span class="hljs-number">1</span>}
+<pre><code class="julia hljs"><span class="hljs-keyword">function</span> sincos1!(x::<span class="hljs-built_in">Array</span>{<span class="hljs-built_in">Float64</span>, <span class="hljs-number">1</span>})
     x .= sin.(cos.(x))
     <span class="hljs-keyword">return</span> x
 <span class="hljs-keyword">end</span></code></pre>
 <p>In the same way, we can define functions that have the same name but which perform different operations depending on the data type. For example, we can define the function <code>sincos&#40;x&#41;</code> which evaluates <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>sin</mi><mo>⁡</mo><mo stretchy="false">(</mo><mi>cos</mi><mo>⁡</mo><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\sin(\cos(x))</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mop">sin</span><span class="mopen">(</span><span class="mop">cos</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">))</span></span></span></span> when <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">x</span></span></span></span> is a matrix or vector and returns a vector. In order to rearrange a matrix <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi></mrow><annotation encoding="application/x-tex">M</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span></span></span></span> to a vector <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>m</mi></mrow><annotation encoding="application/x-tex">m</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">m</span></span></span></span> we can use <code>m &#61; vec&#40;M&#41;</code>. Then, we get:</p>
-<pre><code class="julia hljs"><span class="hljs-keyword">function</span> sincos(x::<span class="hljs-built_in">Array</span>{<span class="hljs-built_in">Float64</span>, <span class="hljs-number">1</span>})::<span class="hljs-built_in">Array</span>{<span class="hljs-built_in">Float64</span>, <span class="hljs-number">1</span>}
+<pre><code class="julia hljs"><span class="hljs-keyword">function</span> sincos(x::<span class="hljs-built_in">Array</span>{<span class="hljs-built_in">Float64</span>, <span class="hljs-number">1</span>})
     println(<span class="hljs-string">&quot;My input is a vector.&quot;</span>)
     <span class="hljs-keyword">return</span> sin.(cos.(x))
 <span class="hljs-keyword">end</span>
 
-<span class="hljs-keyword">function</span> sincos(x::<span class="hljs-built_in">Array</span>{<span class="hljs-built_in">Float64</span>, <span class="hljs-number">2</span>})::<span class="hljs-built_in">Array</span>{<span class="hljs-built_in">Float64</span>, <span class="hljs-number">1</span>}
+<span class="hljs-keyword">function</span> sincos(x::<span class="hljs-built_in">Array</span>{<span class="hljs-built_in">Float64</span>, <span class="hljs-number">2</span>})
     println(<span class="hljs-string">&quot;My input is a matrix.&quot;</span>)
     <span class="hljs-keyword">return</span> vec(sin.(cos.(x)))
 <span class="hljs-keyword">end</span></code></pre>
@@ -280,7 +280,7 @@ Address output: Ptr{Nothing} @0x00007f33266e2310</code></pre>
  0.5143952585235492</code></pre>
 <h2 id="element-wise_operations"><a href="#element-wise_operations" class="header-anchor">Element-wise operations</a></h2>
 <p>As always, you can use the dot operation <code>.</code> to evaluate an array of inputs element-wise. Define the scalar function</p>
-<pre><code class="julia hljs"><span class="hljs-keyword">function</span> sincos(x::<span class="hljs-built_in">Float64</span>)::<span class="hljs-built_in">Float64</span>
+<pre><code class="julia hljs"><span class="hljs-keyword">function</span> sincos(x::<span class="hljs-built_in">Float64</span>)
     <span class="hljs-keyword">return</span> sin(cos(x))
     
 <span class="hljs-keyword">end</span></code></pre>
