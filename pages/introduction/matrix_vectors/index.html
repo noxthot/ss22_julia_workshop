@@ -120,7 +120,31 @@
  1
  2
  3</code></pre>
-<p>As you can see, Julia found out that all the numbers are integers and therefore you have now defined a 3-element vector of type <code>Int64</code>. You can now do operations on this vector in the usual fashion:</p>
+<p>As you can see, Julia found out that all the numbers are integers and therefore you have now defined a 3-element vector of type <code>Int64</code>.  Alternatively, if you want to generate a vector with zeros, ones or random numbers, you can use</p>
+<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> w = zeros(<span class="hljs-number">3</span>)
+</span>3-element Vector{Float64}:
+ 0.0
+ 0.0
+ 0.0
+
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> w = ones(<span class="hljs-number">3</span>)
+</span>3-element Vector{Float64}:
+ 1.0
+ 1.0
+ 1.0
+
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> w = rand(<span class="hljs-number">3</span>)
+</span>3-element Vector{Float64}:
+ 0.5895742185814302
+ 0.7384134175744227
+ 0.5859991546122274</code></pre>
+<p>which automatically assumes the types to be <code>Float64</code>. If you want to specify a certain datatype, you can use <code>w &#61; zeros&#40;Int64,3&#41;</code>. If you want to create a vector with entries <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0</span></span></span></span> to <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn></mrow><annotation encoding="application/x-tex">1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span> with <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>3</mn></mrow><annotation encoding="application/x-tex">3</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">3</span></span></span></span> entries, write</p>
+<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> u = collect(range(<span class="hljs-number">0</span>,<span class="hljs-number">1</span>,<span class="hljs-number">3</span>))
+</span>3-element Vector{Float64}:
+ 0.0
+ 0.5
+ 1.0</code></pre>
+<p>You can now do operations on a vector in the usual fashion:</p>
 <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> v * <span class="hljs-number">2</span>
 </span>3-element Vector{Int64}:
  2
@@ -151,7 +175,13 @@
  2
  3</code></pre>
 <h2 id="matrices"><a href="#matrices" class="header-anchor">Matrices</a></h2>
-<p>If we have vectors the jump to matrices is not very far. Simply wrap everything in another set of brackets and we are good to go:</p>
+<p>If we have vectors the jump to matrices is not very far. Again, we have the command</p>
+<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> B = ones(<span class="hljs-number">3</span>,<span class="hljs-number">3</span>)
+</span>3×3 Matrix{Float64}:
+ 1.0  1.0  1.0
+ 1.0  1.0  1.0
+ 1.0  1.0  1.0</code></pre>
+<p>The same holds for <code>zeros</code> and <code>rand</code>. To directly specify values inside a matrix, simply wrap the code used for vectors in another set of brackets and we are good to go:</p>
 <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> A = [[<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>] [<span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>] [<span class="hljs-number">7</span>, <span class="hljs-number">8</span>, <span class="hljs-number">9</span>]]
 </span>3×3 Matrix{Int64}:
  1  4  7
