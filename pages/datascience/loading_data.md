@@ -245,4 +245,4 @@ Let us split up the call `collect(zip(names(df_survey), eltype.(eachcol(df_surve
 - finally `collect()` returns an array of all items within that iterator
 
 \exercise{
- When having a look at the output it might seem like `Age`, `YearsCode` and `OrgSize` probably should also be of a numeric type. Apply `unique()` to these columns to check whether those columns should be converted.}
+ When having a look at the output it might seem like `Age`, `YearsCode` and `OrgSize` probably should also be of a numeric type. By applying `unique()` to each of these columns we will receive an array containing the unique elements within these columns. This helps us to explore the content and decide whether the columns' need to be converted to another data type.}
