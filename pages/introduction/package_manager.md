@@ -5,11 +5,11 @@
 
 # Package manager
 
-We have already worked a little bit with the Julia [package manager](https://docs.julialang.org/en/v1/stdlib/Pkg/). In the following, we will discuss this feature in more detail. You already know how to open the package manager: simply press `]`. Now, in order to, for example, add the [FastGaussQuadrature](https://juliaapproximation.github.io/FastGaussQuadrature.jl/stable/) package type 
+We have already seen the Julia [package manager](https://docs.julialang.org/en/v1/stdlib/Pkg/). In the following, we will discuss this feature in more detail. You already know how to open the package manager: Simply press `]`. Now, in order to, for example, add the [FastGaussQuadrature](https://juliaapproximation.github.io/FastGaussQuadrature.jl/stable/) package type 
 ```julia-repl
 (@v1.7) pkg> add FastGaussQuadrature
 ```
-Now, every time you open Julia, you can type
+From now on, every time you open Julia, you can type
 ```julia-repl
 julia> using FastGaussQuadrature
 ```
@@ -48,7 +48,7 @@ julia --project=. main.jl
 2. Make sure you can use the `Plots` package in the new project environment.
 3. Check if you can use this package. You can for example plot the connection between two points $(1,1)$ and $(2,3)$ by `plot([1; 2],[2; 3])`.
 4. Check if the `Plots` package is available in the standard environment.
-5. Install the latest version of the `LinearAlgbra` package in the standard environment and version $1.5$ in your project environment.
+5. Install the latest version of the `LinearAlgebra` package in the standard environment and version $1.5$ in your project environment.
 
 \solution{
 ```julia-repl
