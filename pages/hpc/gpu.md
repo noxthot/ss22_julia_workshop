@@ -445,7 +445,7 @@ function in_unit_circle_kernel3!(n::Int64, M)
     j = (blockIdx().x - 1) * blockDim().x + threadIdx().x
 
     for _ in 1:n
-        if (rand() ^ 2 + rand() ^ 2) < 1
+        if (rand()^2 + rand()^2) < 1
             @inbounds M[j] += 1
         end
     end
@@ -456,8 +456,8 @@ end
 The calling function needs to compute the values as defined above: 
 ```julia
 function in_unit_circle_gpu3(N::Int64)
-    nthreads = 2 ^ 10
-    n = 2 ^ 6
+    nthreads = 2^10
+    n = 2^6
     
     nblocks, _ = divrem(N, n * nthreads)
     M = CUDA.zeros(Int8, nblocks * nthreads)
