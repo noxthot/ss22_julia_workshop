@@ -158,19 +158,19 @@ Address output: Ptr{Nothing} @0x00007f33266e2310
 ## Multiple dispatch
 You might have observed that since we did not specify any data types, we were able to call functions using vectors and scalars. However, if we call `sincos1!(1.0)` you see that this might not always be the best idea. Some functions should only be called with a certain data type. We can specify the data type of input and output in the following way:
 ```julia
-function sincos1!(x::Array{Float64, 1})::Array{Float64, 1}
+function sincos1!(x::Array{Float64, 1})
     x .= sin.(cos.(x))
     return x
 end
 ```
 In the same way, we can define functions that have the same name but which perform different operations depending on the data type. For example, we can define the function `sincos(x)` which evaluates $\sin(\cos(x))$ when $x$ is a matrix or vector and returns a vector. In order to rearrange a matrix $M$ to a vector $m$ we can use `m = vec(M)`. Then, we get:
 ```julia
-function sincos(x::Array{Float64, 1})::Array{Float64, 1}
+function sincos(x::Array{Float64, 1})
     println("My input is a vector.")
     return sin.(cos.(x))
 end
 
-function sincos(x::Array{Float64, 2})::Array{Float64, 1}
+function sincos(x::Array{Float64, 2})
     println("My input is a matrix.")
     return vec(sin.(cos.(x)))
 end
@@ -201,7 +201,7 @@ My input is a vector.
 ## Element-wise operations
 As always, you can use the dot operation `.` to evaluate an array of inputs element-wise. Define the scalar function
 ```julia
-function sincos(x::Float64)::Float64
+function sincos(x::Float64)
     return sin(cos(x))
     
 end
