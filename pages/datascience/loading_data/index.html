@@ -281,7 +281,7 @@ help?&gt; CSV.read
  83438 │ Employed full-time                 Canada                             5          Developer, back-end                20 to 99 employees                 25-3
  83439 │ Employed full-time                 Brazil                             14         Developer, front-end;Developer, …  I don’t know                       18-2
                                                                                                                                       4 columns and 83435 rows omitted</code></pre>
-<p>Since <code>ConvertedCompYearly</code> is not displayed in this last output, we will take a look at the column type by applying <code>eltype&#40;&#41;</code>:</p>
+<p>Since <code>ConvertedCompYearly</code> is not displayed in this last output, we will take a look at the data type of the column by applying <code>eltype&#40;&#41;</code>:</p>
 <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> eltype(df_survey.ConvertedCompYearly)
 </span>Union{Missing, Int64}</code></pre>
 <p>With the type <code>Missing</code> Julia provides support for representing missing values in a statistical sense. This is useful since many functions within the data science ecosystem offer options for dealing with <code>missing</code> entries, for example by allowing to skip them like in the reduction functions <code>mean&#40;&#41;</code> or <code>median&#40;&#41;</code> of the <a href="https://juliastats.org/StatsBase.jl/stable/"><code>StatsBase.jl</code></a> package. Find more information about this type in the <a href="https://docs.julialang.org/en/v1/manual/missing/">Julia documentation</a>.</p>
@@ -300,8 +300,6 @@ help?&gt; CSV.read
 <p>Let us split up the call <code>collect&#40;zip&#40;names&#40;df_survey&#41;, eltype.&#40;eachcol&#40;df_survey&#41;&#41;&#41;&#41;</code> and explain each part:</p>
 <ul>
 <li><p>the function <code>eachcol&#40;&#41;</code> creates a vector-like object that allows iterating over each dataframe column</p>
-</li>
-<li><p><code>eltype&#40;&#41;</code> returns the data type of an object</p>
 </li>
 <li><p>by using <code>eltype.&#40;&#41;</code> we apply <code>eltype&#40;&#41;</code> to each column. </p>
 </li>
