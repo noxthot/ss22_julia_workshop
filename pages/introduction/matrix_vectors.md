@@ -189,19 +189,15 @@ The rest you need to know about vectors and matrices we will introduce along the
 1. Create a sparse matrix $\mathbf{T}\in\mathbb{R}^{10 \times 10}$ of the form
 $$
 \mathbf{T} = \begin{pmatrix}
-    -1 & 1 & -1   &      &   \\
+    -1 & 1 &   &      &   \\
       & -1       & 1   &      &    \\
       &         & -1         & \ddots    &     \\
-      &         &           &     -1      & 1   \\
+      &         &           &    \ddots      & 1   \\
       &         &           &           & -1
 \end{pmatrix}\;.
 $$
 2. Compute a vector $\mathbf{x}$ such that $\mathbf{T}\mathbf{x} = \mathbf{1}$ where $\mathbf{1} = (1,\cdots,1)^{\top}$.
 
 $\,$
-<<<<<<< HEAD
 }
 
-=======
-}
->>>>>>> 9fe59d9f7871c397be5c465419fa2f54a6ee3b38
