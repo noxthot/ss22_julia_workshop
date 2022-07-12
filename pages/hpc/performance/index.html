@@ -125,9 +125,9 @@
 a = rand(<span class="hljs-number">100_000</span>)
 <span class="hljs-meta">@time</span> mysum(a)
 <span class="hljs-meta">@time</span> mysum(a)</code></pre>
-<pre><code class="plaintext hljs">  0.008442 seconds (4.16 k allocations: 222.597 KiB, 97.72% compilation time)
-  0.000176 seconds (1 allocation: 16 bytes)
-49944.91966243711</code></pre>
+<pre><code class="plaintext hljs">  0.007172 seconds (4.16 k allocations: 222.597 KiB, 97.46% compilation time)
+  0.000172 seconds (1 allocation: 16 bytes)
+49984.053559284446</code></pre>
 <p>The downside with the <code>@time</code> macro is, that it really just measures the execution time of what is given to it. This means if the function is not already compiled this might include compiling or if the CPU is busy with something else it is often not accurate. </p>
 <p>Therefore, if you are serious about measuring  performance you should stick to the <a href="https://juliaci.github.io/BenchmarkTools.jl/stable/"><code>BenchmarkTools</code></a>. It comes with a couple of macros that you should test out:</p>
 <button type="button" class="collapsible" style="background-color:#b5ddff"> Exercise </button><div class="collapsiblecontent">  In order to use the BenchmarkTools you need to include it with <code>using BenchmarkTools</code>, as any other package.  Benchmark your <code>mysum</code> function with the following macros:</p>
@@ -144,13 +144,13 @@ a = rand(<span class="hljs-number">100_000</span>)
 
 <span class="hljs-meta">@benchmark</span> mysum($a)</code></pre>
 <p><pre><code class="plaintext hljs">BenchmarkTools.Trial: 10000 samples with 1 evaluation.
- Range (min … max):  160.399 μs … 284.600 μs  ┊ GC (min … max): 0.00% … 0.00%
- Time  (median):     160.400 μs               ┊ GC (median):    0.00%
- Time  (mean ± σ):   160.753 μs ±   2.042 μs  ┊ GC (mean ± σ):  0.00% ± 0.00%
+ Range (min … max):  160.398 μs … 199.799 μs  ┊ GC (min … max): 0.00% … 0.00%
+ Time  (median):     160.399 μs               ┊ GC (median):    0.00%
+ Time  (mean ± σ):   160.662 μs ±   1.255 μs  ┊ GC (mean ± σ):  0.00% ± 0.00%
 
-  █                                                             ▁
-  █▇▆▃▁▁▁▁▃▁▄▆██▆▄▄▃▄▃▁▁▁▁▁▁▁▁▁▁▁▁▁▄▇▆▇█▇▇▄▅▆▄▅▆▅▅▄▄▆▅▅▆▅▆▅▄▆▄▅ █
-  160 μs        Histogram: log(frequency) by time        169 μs &lt;
+  █▅                                                            ▁
+  ██▆▄▄▁▃▃▁▁▁▁▃▁▄▁▆██▇▅▄▄▁▁▃▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▅▆███▇▇▇▆▆▆▅▄▅ █
+  160 μs        Histogram: log(frequency) by time        166 μs &lt;
 
  Memory estimate: 0 bytes, allocs estimate: 0.</code></pre> the full details with </p>
 <pre><code class="julia hljs">t = <span class="hljs-meta">@benchmark</span> mysum($a)
@@ -165,14 +165,14 @@ dump(t)</code></pre>
     gcsample: Bool false
     time_tolerance: Float64 0.05
     memory_tolerance: Float64 0.01
-  times: Array{Float64}((10000,)) [168499.0, 162199.0, 173799.0, 160399.0, 160399.0, 160499.0, 160399.0, 160399.0, 160499.0, 160499.0  …  160399.0, 160398.0, 160399.0, 160399.0, 160399.0, 160399.0, 160399.0, 160399.0, 160399.0, 160399.0]
+  times: Array{Float64}((10000,)) [177998.0, 160799.0, 160399.0, 160499.0, 160399.0, 160399.0, 160399.0, 160399.0, 160399.0, 160399.0  …  160399.0, 160399.0, 160399.0, 160399.0, 160399.0, 160399.0, 160399.0, 160399.0, 160399.0, 160399.0]
   gctimes: Array{Float64}((10000,)) [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0  …  0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
   memory: Int64 0
   allocs: Int64 0
 </code></pre> and the often used sanity check, that actually also shows you the output of your code.</p>
 <pre><code class="julia hljs"><span class="hljs-meta">@btime</span> mysum($a)</code></pre>
 <p><pre><code class="plaintext hljs">  160.398 μs (0 allocations: 0 bytes)
-49944.91966243711</code></pre> </div> </div>
+49984.053559284446</code></pre> </div> </div>
 <p>We can also use the <a href="https://docs.julialang.org/en/v1/manual/profile/#Profiling"><code>Profiler</code></a> package to really dig into profiling the code but this is a bit too much of a deep dive for this class, it would look like this:</p>
 <pre><code class="julia hljs"><span class="hljs-keyword">using</span> Profile
 
