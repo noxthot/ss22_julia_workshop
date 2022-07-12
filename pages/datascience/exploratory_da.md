@@ -240,7 +240,7 @@ Dict{String, Int64} with 3 entries:
 julia> @df df_survey bar(countmap(:Country), legend=false)
 ```
 
-\figalt{Barplot showing participants per country}{/ss22_julia_workshop/assets/pages/datascience/plot_explorative_da_country.json}
+\figalt{Barplot showing participants per country}{/assets/pages/datascience/plot_explorative_da_country.json}
 
 ### Boxplot: Salary in comparison to employment status
 
@@ -251,7 +251,7 @@ In the following plot we compare the salary of different employment states:
 julia> @df df_survey boxplot(:Employment, :EuroCompYearly, xrotation=30, size=(500, 900), legend=false)
 ```
 
-\figalt{Boxplot visualizing salaries between different employment states}{/ss22_julia_workshop/assets/pages/datascience/plot_explorative_da_salary_1.json}
+\figalt{Boxplot visualizing salaries between different employment states}{/assets/pages/datascience/plot_explorative_da_salary_1.json}
 
 We also used some optional arguments:
 - `xrotation=30` such that $x$-axis labels do not overlap,
@@ -270,7 +270,7 @@ julia> @df df_survey boxplot(:Employment, :EuroCompYearly, xrotation=30, size=(5
 julia> @df df_survey dotplot!(:Employment, :EuroCompYearly, legend=false)
 ```
 
-\figalt{Boxplot plus Dotsplot}{/ss22_julia_workshop/assets/pages/datascience/plot_explorative_da_salary_2.json}
+\figalt{Boxplot plus Dotsplot}{/assets/pages/datascience/plot_explorative_da_salary_2.json}
 
 Combining the information of the two plots we obviously have too little data to judge about the empty and *I prefer not to say* category. Also it appears that the average salaries of freelancers are a lot higher than the salaries of employees. Also the 25% quantile of freelancers is comparable to the median salary of full-time employees.
 
