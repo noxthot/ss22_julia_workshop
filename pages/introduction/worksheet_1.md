@@ -135,6 +135,8 @@ midPlus = Int(floor(nv / 2))
 VMinus = Diagonal([v[1:midMinus]; zeros(midPlus)])
 VPlus = Diagonal([zeros(midMinus); v[(midPlus + 1):end]])
 ```
+
+Recall that in Julia, you do not need to specify data types. However, sometimes it becomes handy or even necessary to do so. Here, we have explicitly stated that `midMinus = Int(ceil(nv / 2))` must be an integer. This was needed, since we interpret `midMinus` as an index in an array. 
 }
 
 Lastly, the so called scattering matrix $\mathbf{G}$ is given as 
@@ -199,7 +201,7 @@ nT = 40
 ψ_new = zeros(size(ψ));
 
 for n in 1:nT
-    ψ_new .= ψ + Δt * (-DPlus * ψ * VPlus - DMinus * ψ * VMinus + ψ * G)
+    ψ_new .= ψ .+ Δt .* (-DPlus * ψ * VPlus .- DMinus * ψ * VMinus .+ ψ * G)
     ψ .= ψ_new
 end
 ```
@@ -235,9 +237,13 @@ The output that you should get is
 
 What you see is the particle density $\Phi$ over the spatial domain. Congratulations, you have just computed your first radiation transport problem using Julia. If you look at your code, you will see that it looks quite messy. you can add a comment *test comment* with `# test comment`. Use the comment command to explain what you did and double check if you understood everything. Also, commonly the `using` commands are executed in the first lines of the code, so move all these commands to the top.
 
-## Element-wise operations and data types
+## Element-wise operations
 
-Let us remark a few things that we did not discuss before
+To better understand element-wise operations, see how we computed the scattering matrix $\mathbf{G}$ and see if you can write this in terms of for-loops. You can use the `if` command.
+
+\example{
+
+Recall the main concepts of element-wise operations that have also been previously applied:
 
 **Element-wise operations**:
 * We have used `.=` and `.*` commands. The *dot* denotes an element-wise operation. So assume you have two vectors $v$ and $w$. Then, `y = v .* w` will scalar multiply all elements and save them in a new vector $y$, hence $y_i = v_i \cdot w_i$.
@@ -245,7 +251,7 @@ Let us remark a few things that we did not discuss before
 * These pointwise operations can be extended to multiple situations. Assume for example we have a matrix $\mathbf{A}\in\mathbb{R}^{n\times m}$ and a scalar $c\in\mathbb{R}$. Then `A .- c` will substract $c$ from every element in $\mathbf{A}$. Moreover if $v\in\mathbb{R}^n$, `y = v .* A` will scalar multiply $v$ to $A$, i.e., $y_{ij} = A_{ij}\cdot w_j$.
 * Dot-wise operations can be used for functions as well. For example, `y = exp.(A)` will evaluate the exponential function for every element in $\mathbf{A}$, that is, $y_{ij} = e^{A_{ij}}$.
 
-To better understand element-wise operations, see how we computed the scattering matrix $\mathbf{G}$ and see if you can write this as a for-loop. You can use the `if` command.
+Then, the compact element-wise operation formulation of the scattering matrix becomes
 
 ```julia:./code/worksheet_1.jl
 G = zeros(nv, nv);
@@ -260,10 +266,7 @@ for i in 1:nv
 end
 ```
 
-**Data types**:
-* In Julia, you do not need to specify data types. However, sometimes it becomes handy to do so. As an example, we have explicitly stated that `midMinus = Int(ceil(nv / 2))` must be an integer. This was needed, since we interpret `midMinus` as an index in an array. 
-* Moreover, when defining functions (which we will do later) you can explictly state the datatypes of the input to ensure the function is used correctly.
-* You can define datatypes of a variable $v$ as `v::datatype`. For example, if $v$ is an integer type `v::Integer`, if $v$ is a $64$ bit floating point number type `v::Float64`, if $v$ is an array of inegers type `v::Array{Int,1}` or for a matrix type `v::Array{Int,2}`.
+}
 
 ## Full sample solution
 ```julia:./code/worksheet_1.jl
@@ -296,12 +299,15 @@ VPlus = Diagonal([zeros(midMinus); v[(midPlus + 1):end]])
 # create scattering matrix
 G = ones(nv, nv) .* w - I
 
+# allocate memory
+ψ_new = zeros(size(ψ))
+
 # advance in time
 Δt = 0.01
 nT = 40
 
 for n in 1:nT
-    ψ_new = ψ + Δt * (-DPlus * ψ * VPlus - DMinus * ψ * VMinus + ψ * G)
+    ψ_new .= ψ .+ Δt .* (-DPlus * ψ * VPlus .- DMinus * ψ * VMinus + ψ * G)
     ψ .= ψ_new
 end
 
