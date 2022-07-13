@@ -30,7 +30,7 @@ julia> done
 julia> 
 ```
 
-The main idea is, that a task can be interrupted and the order of tasks is not set. This means if you have multiple tasks the order of execution is not guarantied. This also means, that the main Julia process is not blocked by a task but works independently. If you want to wait for the task to finish before the calling task continues, you can do this with `wait(t)`.
+The main idea is, that a task can be interrupted and the order of tasks is not set. This means if you have multiple tasks the order of execution is not guaranteed. This also means, that the main Julia process is not blocked by a task but works independently. If you want to wait for the task to finish before the calling task continues, you can do this with `wait(t)`.
 
 Most of the time you create a task and schedule it right away. This can be done by the `@async` macro. It is basically equivalent to `schedule(@task x)`. You can also catch the task (and therefore the state) with `t = @async x`. If you want to wait for several tasks you can use the `@sync` macro. It will wait until all enclosed tasks spanned by `@async`, `@spawn`, `@spawnat`, and `@distributed` are completed. 
 
