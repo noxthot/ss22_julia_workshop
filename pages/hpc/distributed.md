@@ -143,7 +143,7 @@ julia> using Distributed
 julia> addprocs(4)
 5
 ```
-This added for workers and in total we have now 5 processes, hence the return value.
+This added four workers and in total we have now 5 processes, hence the return value.
 Consequently, we can remove workers again by calling
 ```julia-repl
 julia> rmprocs(2:5)
