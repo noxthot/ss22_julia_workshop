@@ -53,14 +53,20 @@ $\,$
 
 ## Array generation and access
 
-Now, to generate the spatial positions on which we want to evaluate the solution we can use the built-in `range` command
+Now, to generate the spatial positions on which we want to evaluate the solution we can use the `range` command. Build a spatial grid $x\in\mathbb{R}^{n_x}$ with $n_x = 101$ where $x$ contains the spatial positions from $x_0 = 0$ to $x_1 = 1$.
+
+\example{
 
 ```julia:./code/worksheet_1.jl
 nx = 101
 x = collect(range(0, 1; length=nx))
 ```
 
-The `range` command will generate $\operatorname{nx}$ values from $0$ to $1$. We use the `collect` command to convert the returned object into a vector. The next step is to set up our solution matrix $\bm{\psi}$. The matrix should have dimension $\operatorname{nx}\times\operatorname{nv}$. Initially, the solution is zero except for $\psi_{50,k}=1$ for all $k$. Compute the described matrix.
+The `range` command will generate $\operatorname{nx}$ values from $0$ to $1$. We use the `collect` command to convert the returned object into a vector.
+
+ }
+
+The next step is to set up our solution matrix $\bm{\psi}$. The matrix should have dimension $\operatorname{nx}\times\operatorname{nv}$. Initially, the solution is zero except for $\psi_{50,k}=1$ for all $k$. Compute the described matrix.
 
 \example{
 To generate a zero matrix of dimension $n\times m$ we can use the `zeros(n, m)` command. Hence, to create a matrix with dimension $\operatorname{nx} \times \operatorname{nv}$ type
@@ -127,7 +133,7 @@ $\,$
 The matrices $\mathbf{V}^{\pm}\in\mathbb{R}^{n_v\times n_v}$ are diagonal matrices, where $\mathbf{V}^-$ collects all negative velocities on the diagonal, i.e., $\mathbf{V}^- = \text{diag}(v_1,\cdots,v_{5},0,\cdots,0)$ and $\mathbf{V}^+$ collects all positive velocities, i.e., $\mathbf{V}^+ = \text{diag}(0,\cdots,0,v_{6},\cdots,v_{10})$. Implement these two matrices. To write your code for general $\operatorname{nv}$, use the `ceil` and `floor` commands.
 
 \example{
-The command to create a diagonal matrix with diagonal $y$ is `Diagonal(y)`. You can append two vectors $a$ and $b$ by `[a; b]`. Set up $\mathbf{V}^{\pm}$. If you want to later change the number of velocity points you can work with the `ceil` and `floor` commands to determine the midpoint of your velocity vector by e.g. `Int(ceil(nv))`. This determines $\operatorname{ceil}{n_v}$ and then transforms the resuling floating point number to an integer. 
+The command to create a diagonal matrix with diagonal $y$ is `Diagonal(y)`. You can append two vectors $a$ and $b$ by `[a; b]`. We can use the `ceil` and `floor` commands to determine the midpoint of your velocity vector by e.g. `Int(ceil(nv))`. This determines $\operatorname{ceil}{n_v}$ and then transforms the resuling floating point number to an integer.
 
 ```julia:./code/worksheet_1.jl
 midMinus = Int(ceil(nv / 2))
@@ -192,7 +198,7 @@ julia> ψ_new[midIndex-1:midIndex+1,:]
 
 ## Loops
 
-Now, we do not want to know the solution at $\Delta t$, but at $t_{\mathrm{end}}=1.0$. If we just choose $\Delta t=0.4$ our approximation of the time derivative is inaccurate. Therefore, we wish to repeat the update with $\Delta t = 0.01$ fourty times. Use a loop to implement the repeated updates
+Now, we do not want to know the solution at $\Delta t$, but at $t_{\mathrm{end}}=1.0$. If we just choose $\Delta t=1.0$ our approximation of the time derivative is inaccurate. Therefore, we wish to repeat the update with $\Delta t = 0.01$ fourty times. Use a loop to implement the repeated updates
 
 \example{
 
