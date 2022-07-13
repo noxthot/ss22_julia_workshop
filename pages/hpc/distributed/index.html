@@ -305,7 +305,7 @@
  6</code></pre>
 <p>The second example also includes an <a href="https://docs.julialang.org/en/v1/manual/functions/#man-anonymous-functions">anonymous function</a>.  The idea is simply to have a function that is not needed outside of the scope of a function call. </div>
 <p>Now, <code>pmap</code> just distributes the map function on workers.  It has a lot of optional arguments to influence how this is done but we will not need this. </p>
-<button type="button" class="collapsible" style="background-color:#b5ddff"> Exercise </button><div class="collapsiblecontent">  Define a new function <code>in_unit_circle_distributed2</code> with the <code>@everywhere</code> macro and the <code>pmap</code> function. Hint: define a inner function that is distributed to all workers via <code>@everywhere</code> and collect the results with <code>pmap</code>. Split up the works similar as for the last example in tasks. </p>
+<button type="button" class="collapsible" style="background-color:#b5ddff"> Exercise </button><div class="collapsiblecontent">  Define a new function <code>in_unit_circle_distributed2</code> with the <code>@everywhere</code> macro and the <code>pmap</code> function. Hint: define an inner function that is distributed to all workers via <code>@everywhere</code> and collect the results with <code>pmap</code>. Split up the works similar as for the last example in tasks. </p>
 <p><div class="solution"> Solution </div><div class="solutioncollapsible">  </p>
 <pre><code class="julia hljs"><span class="hljs-meta">@everywhere</span> <span class="hljs-keyword">function</span> in_unit_circle_distributed2_inner(N::<span class="hljs-built_in">Int64</span>)
     M = <span class="hljs-number">0</span>
