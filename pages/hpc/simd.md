@@ -152,4 +152,4 @@ methods(+)
 
 This shows us two things. First, we did not think anybody will print this workshop out or we would have gone for shorter outputs. Second, and more importantly, every time you call a function, Julia will look at the type of each argument and search for the function that fits the best. As a result you can write optimized code for different types and in general this is one key stone in the excellent performance numbers of Julia. 
 
-Before we continue to the other parallel computation concepts we introduce an example that will help as along, same as the sum did for the beginning of this section. 
+Before we continue to the other parallel computation concepts we introduce an [example](pi) that will help us along, same as the sum did for the beginning of this section. 
