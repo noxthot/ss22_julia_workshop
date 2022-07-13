@@ -287,7 +287,7 @@ Now, `pmap` just distributes the map function on workers.
 It has a lot of optional arguments to influence how this is done but we will not need this. 
 
 \exercise{
-Define a new function `in_unit_circle_distributed2` with the `@everywhere` macro and the `pmap` function. Hint: define a inner function that is distributed to all workers via `@everywhere` and collect the results with `pmap`. Split up the works similar as for the last example in tasks. 
+Define a new function `in_unit_circle_distributed2` with the `@everywhere` macro and the `pmap` function. Hint: define an inner function that is distributed to all workers via `@everywhere` and collect the results with `pmap`. Split up the works similar as for the last example in tasks. 
 
 \solution{
 ```julia
