@@ -51,6 +51,10 @@ julia> Threads.threadid()
 By default, the Julia REPL, or the main Julia process for that matter, will always run on the thread with id '1'.
 We do not have the time for a deep dive into all the dirty details on how do do proper multithreaded programming (raise conditions, locks, atomic operations, thread safe programming, ...), therefore we keep it light and simple with the `@threads` macro and introduce the needed concepts when we need them along the way.
 
+@@important
+For comparison, all the benchmarks and computations are performed with `4` threads. 
+@@
+
 Like all the other macros it gives us the possibility to bring something rather complex in our code by still staying very readable as the following example shows.
 
 \example{
