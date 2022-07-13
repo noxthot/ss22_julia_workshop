@@ -204,7 +204,7 @@
 <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-keyword">using</span> Distributed
 </span><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> addprocs(<span class="hljs-number">4</span>)
 </span>5</code></pre>
-<p>This added for workers and in total we have now 5 processes, hence the return value. Consequently, we can remove workers again by calling</p>
+<p>This added four workers and in total we have now 5 processes, hence the return value. Consequently, we can remove workers again by calling</p>
 <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> rmprocs(<span class="hljs-number">2</span>:<span class="hljs-number">5</span>)
 </span>Task (done) @0x00007fb859fc1430</code></pre>
 <p>and with <code>myid&#40;&#41;</code> we get the id of the process we are on.  </p>
