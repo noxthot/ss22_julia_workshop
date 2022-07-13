@@ -434,7 +434,7 @@ This is still not the most efficient way to use the GPU and in addition it is ra
 
 ### Multiple operations per thread
 
-So let us optimize the compuation a bit further.
+So let us optimize the computation a bit further.
 Each of the threads should do `n` iterations. This means we need to define the number of blocks as 
 $$
  \operatorname{nblocks} = \frac{N}{\operatorname{nthreads} \cdot n}.
