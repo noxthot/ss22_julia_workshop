@@ -4,5 +4,5 @@ for i in 1:10
         continue
     end
 
-    println("Iteration index is ", i)
+    println("Iteration index is $i")
 end

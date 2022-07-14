@@ -159,7 +159,7 @@ vNew = A * v / norm(A * v)
     vNew .= A * v ./ norm(A * v)
 <span class="hljs-keyword">end</span>
 <span class="hljs-comment">#4.</span>
-println(<span class="hljs-string">&quot;Approximated dominant eigenvalue is &quot;</span>, norm(A * vNew))</code></pre>
+println(<span class="hljs-string">&quot;Approximated dominant eigenvalue is <span class="hljs-subst">$(norm(A * vNew)</span>)&quot;</span>)</code></pre>
 <p></div> </div>
 <p>In order to stop a loop or skip an evaluation of the loop body at a specific iteration index, if a certain condition is fulfilled, we can use the <code>break</code> and <code>continue</code> commands. The <code>break</code> command will exit the loop. A simple example is</p>
 <pre><code class="julia hljs"><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-number">1</span>:<span class="hljs-number">10</span>
@@ -167,7 +167,7 @@ println(<span class="hljs-string">&quot;Approximated dominant eigenvalue is &quo
         <span class="hljs-keyword">break</span>
     <span class="hljs-keyword">end</span>
 
-    println(<span class="hljs-string">&quot;Iteration index is &quot;</span>, i)
+    println(<span class="hljs-string">&quot;Iteration index is <span class="hljs-variable">$i</span>&quot;</span>)
 <span class="hljs-keyword">end</span>
 println(<span class="hljs-string">&quot;Loop stopped.&quot;</span>)</code></pre>
 <p><pre><code class="plaintext hljs">Iteration index is 1
@@ -182,7 +182,7 @@ Loop stopped.
         <span class="hljs-keyword">continue</span>
     <span class="hljs-keyword">end</span>
 
-    println(<span class="hljs-string">&quot;Iteration index is &quot;</span>, i)
+    println(<span class="hljs-string">&quot;Iteration index is <span class="hljs-variable">$i</span>&quot;</span>)
 <span class="hljs-keyword">end</span></code></pre>
 <p><pre><code class="plaintext hljs">Iteration index is 1
 Iteration index is 2
