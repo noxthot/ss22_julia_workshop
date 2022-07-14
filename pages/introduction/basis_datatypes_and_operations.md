@@ -279,7 +279,7 @@ julia> p.x = 3.0
 julia> p.y
 2.0
 ```
-Note, that a point does not necessarily need to be have coordinates of type `Float64`. Here, Julia provides us with the concept of *type parameters*:
+Note, that a point does not necessarily need to be have coordinates of type `Float64`. To extend usability of structs, Julia provides us with the concept of *type parameters*:
 ```julia-repl
 julia> struct Point{T}
           x::T
@@ -294,32 +294,32 @@ Point{Int64}(1, 2)
 ```
 Note that using `{T}` behind the struct name lets us use `T` as a new type that can be defined when creating an object of type Point. You can also have two different types in one object. To account for such situations, we can define
 ```julia-repl
-julia> struct Point{T, R}
+julia> struct Point1{T, R}
           x::T
           y::R
        end
 
-julia> pFloat = Point{Float64, Float32}(1.0, 2.0)
-Point{Float64, Float32}(1.0, 2.0f0)
+julia> pFloat = Point1{Float64, Float32}(1.0, 2.0)
+Point1{Float64, Float32}(1.0, 2.0f0)
 
-julia> pInt = Point{Int, Float64}(1, 2.0)
-Point{Int64, Float64}(1, 2.0)
+julia> pInt = Point1{Int, Float64}(1, 2.0)
+Point1{Int64, Float64}(1, 2.0)
 ```
 Moreover, we can restrict our `T` to a certain set of types. If `T` is supposed to be a subtype of `Real`, we can write
 ```julia-repl
-julia> struct Point{T, R<:Real}
+julia> struct Point2{T, R<:Real}
           x::T
           y::R
        end
 
-julia> pFloat = Point{Float64, Float32}(1.0, 2.0)
-Point{Float64, Float32}(1.0, 2.0f0)
+julia> pFloat = Point2{Float64, Float32}(1.0, 2.0)
+Point2{Float64, Float32}(1.0, 2.0f0)
 
-julia> pInt = Point{Int, Float64}(1, 2.0)
-Point{Int64, Float64}(1, 2.0)
+julia> pInt = Point2{Int, Float64}(1, 2.0)
+Point2{Int64, Float64}(1, 2.0)
 
-julia> pComplex = Point{Int, Complex}(1, 2im)
-ERROR: TypeError: in Point, in R, expected R<:Real, got Type{Complex}
+julia> pComplex = Point2{Int, Complex}(1, 2im)
+ERROR: TypeError: in Point2, in R, expected R<:Real, got Type{Complex}
 Stacktrace:
  [1] top-level scope
    @ REPL[4]:1
