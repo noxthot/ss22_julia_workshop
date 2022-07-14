@@ -244,3 +244,64 @@ julia> length(mystring)
 julia> occursin("alan", mystring)
 true
 ```
+
+Moreover, Julia allows you to define your own datatypes via `struct`. As an example, let us define a a point
+```julia-repl
+julia> struct PointObject
+          x::Float64
+          y::Float64
+       end
+
+julia> p = PointObject(1.0, 2.0)
+PointObject(1.0, 2.0)
+
+julia> p.x
+1.0
+
+julia> p.y
+2.0
+```
+Note that creating a point by `p = Point(1.0,2.0)` directly fixes the $x$ and $y$ coordinate. If you wish to change these coordinates, you will observe that Julia does not allow you to modify an already created struct object. To allow for changes in a defined object, we can use the `mutable` command, which gives
+```julia-repl
+julia> mutable struct PointMutable
+          x::Float64
+          y::Float64
+       end
+
+julia> p = PointMutable(1.0, 2.0)
+PointMutable(1.0, 2.0)
+
+julia> p.x = 3.0
+3.0
+
+julia> p.y
+2.0
+```
+Note, that a point does not necessarily need to be an element of $\mathbb{R}^2$, i.e., have coordinates of type `Float64`. Here, Julia provides us with the concept of *type parameters*:
+```julia-repl
+julia> struct Point{T}
+          x::T
+          y::T
+       end
+
+julia> pFloat = Point{Float64}(1.0, 2.0)
+Point{Float64}(1.0, 2.0)
+
+julia> pInt = Point{Int}(1, 2)
+Point{Int64}(1, 2)
+```
+Note that using `{T}` behind the struct name lets us use `T` as a new type that can be defined when creating an object of the struct. Sometimes, you do not want to specify all parameters of a struct during construction. We will revisit this problem once we have introduced functions.
+
+An alternative for storing multiple objects are *dictionaries*. If we want to store multiple parameters, we can use
+```julia-repl
+julia> params = Dict("α"=>1, "β"=>2.4)
+Dict{String, Real} with 2 entries:
+  "α" => 1
+  "β" => 2.4
+
+julia> params["α"]
+1
+
+julia> params["β"]
+2.4
+```
