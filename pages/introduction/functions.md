@@ -354,11 +354,11 @@ PointFull{Int64}(1, 2, 1.7320508075688772)
 ```
 Note that this is quite tedious since we need to copy paste the same formula for the norm everytime we construct on object. Conveniently, Julia provides us with [constructors](https://docs.julialang.org/en/v1/manual/constructors/#man-constructors), which are functions that are called whenever we create on object of our struct. The syntax is the following:
 ```julia
-struct PointFull{T<:Real}
+struct PointFull1{T<:Real}
     x::T
     y::T
     norm
-    function PointFull(x::T, y::T) where {T<:Real}
+    function PointFull1(x::T, y::T) where {T<:Real}
         norm = sqrt(x^2 + y^2)
         new{T}(x, y, norm)
     end
@@ -366,14 +366,14 @@ end
 ```
 Now, we can call
 ```julia-repl
-julia> PointFull(1.0,2.0)
-PointFull{Float64}(1.0, 2.0, 2.23606797749979)
+julia> PointFull1(1.0,2.0)
+PointFull1{Float64}(1.0, 2.0, 2.23606797749979)
 
-julia> PointFull(1,2)
-PointFull{Int64}(1, 2, 2.23606797749979)
+julia> PointFull1(1,2)
+PointFull1{Int64}(1, 2, 2.23606797749979)
 
-julia> PointFull(1im,2im)
-ERROR: MethodError: no method matching PointFull(::Complex{Int64}, ::Complex{Int64})
+julia> PointFull1(1im,2im)
+ERROR: MethodError: no method matching PointFull1(::Complex{Int64}, ::Complex{Int64})
 Stacktrace:
  [1] top-level scope
    @ REPL[20]:1
