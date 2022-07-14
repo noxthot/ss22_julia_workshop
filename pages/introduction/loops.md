@@ -57,7 +57,7 @@ while norm(v - vNew) > 1e-5
     vNew .= A * v ./ norm(A * v)
 end
 #4.
-println("Approximated dominant eigenvalue is ", norm(A * vNew))
+println("Approximated dominant eigenvalue is $(norm(A * vNew))")
 ```
 }
 }
@@ -69,7 +69,7 @@ for i in 1:10
         break
     end
 
-    println("Iteration index is ", i)
+    println("Iteration index is $i")
 end
 println("Loop stopped.")
 ```
@@ -81,7 +81,7 @@ for i in 1:10
         continue
     end
 
-    println("Iteration index is ", i)
+    println("Iteration index is $i")
 end
 ```
 \show{./code/loop.jl}
