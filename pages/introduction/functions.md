@@ -244,7 +244,7 @@ My input is a vector.
  0.5143952585235492
 ```
 
-## Element-wise operations
+## Element-wise operations and input specifications
 As always, you can use the dot operation `.` to evaluate an array of inputs element-wise. Define the scalar function
 ```julia
 function sincos(x::Float64)
@@ -262,6 +262,20 @@ julia> sincos.(x)
  0.514395  0.514395  0.514395
 ```
 
+Moreover, you can assign values to inputs in the function definition. If the caller does not specify the input, these values will be used instead.
+```julia
+function sincos(x::Float64=0.5 * pi)
+    return sin.(cos.(x))
+end
+```
+You can now call this function via
+```julia-repl
+julia> sincos()
+6.123233995736766e-17
+
+julia> sincos(0.0)
+0.8414709848078965
+```
 
 ## Parametric types for functions
 
