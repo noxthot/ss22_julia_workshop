@@ -263,7 +263,7 @@ julia> p.x
 julia> p.y
 2.0
 ```
-Note that creating a point by `p = PointObject(1.0,2.0)` directly fixes the $x$ and $y$ coordinate. If you wish to change these coordinates, you will observe that Julia does not allow you to modify an already created object of your struct. To allow for changes in a defined object, we can use the `mutable` command, which gives
+Now we have created our own datatype *PointObject*, which stores an $x$ and a $y$ coordinate. Note that creating a point by `p = PointObject(1.0,2.0)` directly fixes the $x$ and $y$ coordinate. If you wish to change these coordinates after construction, you will observe that Julia forbids you to do so. To allow for changes in a defined object, we can use the `mutable` command when defining the struct, which gives
 ```julia-repl
 julia> mutable struct PointMutable
           x::Float64
@@ -279,7 +279,7 @@ julia> p.x = 3.0
 julia> p.y
 2.0
 ```
-Note, that a point does not necessarily need to be an element of $\mathbb{R}^2$, i.e., have coordinates of type `Float64`. Here, Julia provides us with the concept of *type parameters*:
+Note, that a point does not necessarily need to be have coordinates of type `Float64`. Here, Julia provides us with the concept of *type parameters*:
 ```julia-repl
 julia> struct Point{T}
           x::T
@@ -292,7 +292,7 @@ Point{Float64}(1.0, 2.0)
 julia> pInt = Point{Int}(1, 2)
 Point{Int64}(1, 2)
 ```
-Note that using `{T}` behind the struct name lets us use `T` as a new type that can be defined when creating an object of the struct. You can also have two different types in one object. To account for such situations, we can define
+Note that using `{T}` behind the struct name lets us use `T` as a new type that can be defined when creating an object of type Point. You can also have two different types in one object. To account for such situations, we can define
 ```julia-repl
 julia> struct Point{T, R}
           x::T
