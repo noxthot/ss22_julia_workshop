@@ -149,6 +149,50 @@ sin(cos(1.5)) = 0.07067822452613834
 </span>
 <span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> res[<span class="hljs-number">1</span>]
 </span>0.5143952585235492</code></pre>
+<p>Let us pratice this syntax by revisiting loops:</p>
+<button type="button" class="collapsible" style="background-color:#b5ddff"> Exercise </button><div class="collapsiblecontent">  For a vector <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>V</mi><mo>∈</mo><msup><mi mathvariant="normal">R</mi><mi>n</mi></msup></mrow><annotation encoding="application/x-tex">V\in\mathrm{R}^n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7224em;vertical-align:-0.0391em;"></span><span class="mord mathnormal" style="margin-right:0.22222em;">V</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord"><span class="mord mathrm">R</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6644em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span></span></span></span></span></span></span></span> with elements <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>v</mi></mrow><annotation encoding="application/x-tex">v</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">v</span></span></span></span> compute the sum of all the elements in the following fashion</p>
+<ol>
+<li><p>Sum over the elements per index:</p>
+</li>
+</ol>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>s</mi><mn>1</mn></msub><mo>=</mo><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></munderover><msub><mi>v</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">s_1 = \sum_{i=1}^n v_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">s</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.9291em;vertical-align:-1.2777em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.6514em;"><span style="top:-1.8723em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.05em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span><span style="top:-4.3em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.2777em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span>
+<ol start="2">
+<li><p>Sum over the elements &#40;hint <code>for each</code>&#41;:</p>
+</li>
+</ol>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>s</mi><mn>2</mn></msub><mo>=</mo><munder><mo>∑</mo><mrow><mi>v</mi><mo>∈</mo><mi>V</mi></mrow></munder><mi>v</mi></mrow><annotation encoding="application/x-tex">s_2 = \sum_{v\in V} v</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">s</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.3717em;vertical-align:-1.3217em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.05em;"><span style="top:-1.8557em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.03588em;">v</span><span class="mrel mtight">∈</span><span class="mord mathnormal mtight" style="margin-right:0.22222em;">V</span></span></span></span><span style="top:-3.05em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.3217em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">v</span></span></span></span></span>
+<ol start="3">
+<li><p>Transform these loops into functions <code>mysum1</code> and <code>mysum2</code></p>
+</li>
+<li><p>Test against <code>V &#61; rand&#40;100_000&#41;</code> and <code>s_1 ≈ s_2</code> &#40;use <code>\approx &#43; TAB</code> for ≈&#41;</p>
+</li>
+</ol>
+<p>Extra: Check the <code>@inbounds</code> macro for the first version.</p>
+<p><div class="solution"> Solution </div><div class="solutioncollapsible">  </p>
+<pre><code class="julia hljs"><span class="hljs-keyword">function</span> mysum1(V)
+    s = zero(eltype(V))
+
+    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> eachindex(V)
+        s += V[i]
+    <span class="hljs-keyword">end</span>
+
+    <span class="hljs-keyword">return</span> s
+<span class="hljs-keyword">end</span>
+
+<span class="hljs-keyword">function</span> mysum2(V)
+    s = zero(eltype(V))
+
+    <span class="hljs-keyword">for</span> v <span class="hljs-keyword">in</span> V
+        s += v
+    <span class="hljs-keyword">end</span>
+
+    <span class="hljs-keyword">return</span> s
+<span class="hljs-keyword">end</span>
+
+V = rand(<span class="hljs-number">100_000</span>)
+mysum1(V) ≈ mysum2(V)
+isapprox(mysum1(V),  mysum2(V); atol=<span class="hljs-number">1e-10</span>, rtol=<span class="hljs-number">1e-10</span>)</code></pre>
+<p></div> </div>
 <h2 id="call_by_reference"><a href="#call_by_reference" class="header-anchor">Call by reference</a></h2>
 <p>Julia functions do not copy the input but directly operate on the input data. This means that changing values of the input in the function body will also change this data for the function caller. Whenever you define a function which will modify the input, you should indicate this with a <code>&#33;</code> behind the function name:</p>
 <pre><code class="julia hljs"><span class="hljs-keyword">function</span> sincos!(x)
@@ -291,49 +335,108 @@ Address output: Ptr{Nothing} @0x00007f33266e2310</code></pre>
 </span>2×3 Matrix{Float64}:
  0.514395  0.514395  0.514395
  0.514395  0.514395  0.514395</code></pre>
-<button type="button" class="collapsible" style="background-color:#b5ddff"> Exercise </button><div class="collapsiblecontent">  For a vector <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>V</mi><mo>∈</mo><msup><mi mathvariant="normal">R</mi><mi>n</mi></msup></mrow><annotation encoding="application/x-tex">V\in\mathrm{R}^n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7224em;vertical-align:-0.0391em;"></span><span class="mord mathnormal" style="margin-right:0.22222em;">V</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord"><span class="mord mathrm">R</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6644em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span></span></span></span></span></span></span></span> with elements <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>v</mi></mrow><annotation encoding="application/x-tex">v</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">v</span></span></span></span> compute the sum of all the elements in the following fashion</p>
-<ol>
-<li><p>Sum over the elements per index:</p>
-</li>
-</ol>
-<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>s</mi><mn>1</mn></msub><mo>=</mo><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></munderover><msub><mi>v</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">s_1 = \sum_{i=1}^n v_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">s</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.9291em;vertical-align:-1.2777em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.6514em;"><span style="top:-1.8723em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.05em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span><span style="top:-4.3em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.2777em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span>
-<ol start="2">
-<li><p>Sum over the elements &#40;hint <code>for each</code>&#41;:</p>
-</li>
-</ol>
-<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>s</mi><mn>2</mn></msub><mo>=</mo><munder><mo>∑</mo><mrow><mi>v</mi><mo>∈</mo><mi>V</mi></mrow></munder><mi>v</mi></mrow><annotation encoding="application/x-tex">s_2 = \sum_{v\in V} v</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">s</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.3717em;vertical-align:-1.3217em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.05em;"><span style="top:-1.8557em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.03588em;">v</span><span class="mrel mtight">∈</span><span class="mord mathnormal mtight" style="margin-right:0.22222em;">V</span></span></span></span><span style="top:-3.05em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.3217em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">v</span></span></span></span></span>
-<ol start="3">
-<li><p>Transform these loops into functions <code>mysum1</code> and <code>mysum2</code></p>
-</li>
-<li><p>Test against <code>V &#61; rand&#40;100_000&#41;</code> and <code>s_1 ≈ s_2</code> &#40;use <code>\approx &#43; TAB</code> for ≈&#41;</p>
-</li>
-</ol>
-<p>Extra: Check the <code>@inbounds</code> macro for the first version.</p>
+<h2 id="parametric_types_for_functions"><a href="#parametric_types_for_functions" class="header-anchor">Parametric types for functions</a></h2>
+<p>Notice that it is very restrictive to tell our method to only accept inputs of type <code>Float64</code>. It makes perfect sense to evaluate our function at <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">x = 1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span>, where <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">x</span></span></span></span> can be an integer. In fact, it is considered to be good practice if we make function inputs as general as possible. Just as for <em>structs</em>, we can use parametric types to make the input more general. If we want the input to be a real number &#40;i.e., a subtype of <code>Real</code>&#41;, we can write this as </p>
+<pre><code class="julia hljs"><span class="hljs-keyword">function</span> sincos(x::T) <span class="hljs-keyword">where</span> T&lt;:<span class="hljs-built_in">Real</span>
+    <span class="hljs-keyword">return</span> sin(cos(x))
+<span class="hljs-keyword">end</span></code></pre>
+<p>Now, <code>T</code> can be any subtype of <code>Real</code>, that is, we can write</p>
+<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> sincos(<span class="hljs-number">1</span>)
+</span>0.5143952585235492
+
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> sincos(<span class="hljs-number">1.0</span>)
+</span>0.5143952585235492
+
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> sincos(<span class="hljs-number">1</span>//<span class="hljs-number">2</span>)
+</span>0.7691963548410085</code></pre>
+<button type="button" class="collapsible" style="background-color:#b5ddff"> Exercise </button><div class="collapsiblecontent">  Write functions <code>sincos</code> which can take any real number as well as the point struct we defined earlier</p>
+<pre><code class="julia hljs"><span class="hljs-keyword">struct</span> Point{T}
+    x::T
+    y::T
+<span class="hljs-keyword">end</span></code></pre>
+<p>where <code>T</code> must be a real number as input. When the input is an object of type Point, the function returns <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>sin</mi><mo>⁡</mo><mo stretchy="false">(</mo><mi>cos</mi><mo>⁡</mo><mo stretchy="false">(</mo><mi mathvariant="normal">∥</mi><mi>x</mi><mi mathvariant="normal">∥</mi><mo stretchy="false">)</mo><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\sin(\cos(\Vert x \Vert))</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mop">sin</span><span class="mopen">(</span><span class="mop">cos</span><span class="mopen">(</span><span class="mord">∥</span><span class="mord mathnormal">x</span><span class="mord">∥</span><span class="mclose">))</span></span></span></span>, where <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">∥</mi><mi>x</mi><mi mathvariant="normal">∥</mi><mo>=</mo><msqrt><mrow><msup><mi>x</mi><mn>2</mn></msup><mo>+</mo><msup><mi>y</mi><mn>2</mn></msup></mrow></msqrt></mrow><annotation encoding="application/x-tex">\Vert x \Vert = \sqrt{x^2 + y^2}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">∥</span><span class="mord mathnormal">x</span><span class="mord">∥</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.24em;vertical-align:-0.2822em;"></span><span class="mord sqrt"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.9578em;"><span class="svg-align" style="top:-3.2em;"><span class="pstrut" style="height:3.2em;"></span><span class="mord" style="padding-left:1em;"><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7401em;"><span style="top:-2.989em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7401em;"><span style="top:-2.989em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span><span style="top:-2.9178em;"><span class="pstrut" style="height:3.2em;"></span><span class="hide-tail" style="min-width:1.02em;height:1.28em;"><svg xmlns="http://www.w3.org/2000/svg" width='400em' height='1.28em' viewBox='0 0 400000 1296' preserveAspectRatio='xMinYMin slice'><path d='M263,681c0.7,0,18,39.7,52,119
+c34,79.3,68.167,158.7,102.5,238c34.3,79.3,51.8,119.3,52.5,120
+c340,-704.7,510.7,-1060.3,512,-1067
+l0 -0
+c4.7,-7.3,11,-11,19,-11
+H40000v40H1012.3
+s-271.3,567,-271.3,567c-38.7,80.7,-84,175,-136,283c-52,108,-89.167,185.3,-111.5,232
+c-22.3,46.7,-33.8,70.3,-34.5,71c-4.7,4.7,-12.3,7,-23,7s-12,-1,-12,-1
+s-109,-253,-109,-253c-72.7,-168,-109.3,-252,-110,-252c-10.7,8,-22,16.7,-34,26
+c-22,17.3,-33.3,26,-34,26s-26,-26,-26,-26s76,-59,76,-59s76,-60,76,-60z
+M1001 80h400000v40h-400000z'/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2822em;"><span></span></span></span></span></span></span></span></span> is the Euclidean norm.</p>
 <p><div class="solution"> Solution </div><div class="solutioncollapsible">  </p>
-<pre><code class="julia hljs"><span class="hljs-keyword">function</span> mysum1(V)
-    s = zero(eltype(V))
-
-    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> eachindex(V)
-        s += V[i]
-    <span class="hljs-keyword">end</span>
-
-    <span class="hljs-keyword">return</span> s
+<pre><code class="julia hljs"><span class="hljs-keyword">struct</span> Point{T&lt;:<span class="hljs-built_in">Real</span>}
+    x::T
+    y::T
 <span class="hljs-keyword">end</span>
 
-<span class="hljs-keyword">function</span> mysum2(V)
-    s = zero(eltype(V))
-
-    <span class="hljs-keyword">for</span> v <span class="hljs-keyword">in</span> V
-        s += v
-    <span class="hljs-keyword">end</span>
-
-    <span class="hljs-keyword">return</span> s
+<span class="hljs-keyword">function</span> sincos(x::T) <span class="hljs-keyword">where</span> T&lt;:<span class="hljs-built_in">Real</span>
+    <span class="hljs-keyword">return</span> sin(cos(x))
 <span class="hljs-keyword">end</span>
 
-V = rand(<span class="hljs-number">100_000</span>)
-mysum1(V) ≈ mysum2(V)
-isapprox(mysum1(V),  mysum2(V); atol=<span class="hljs-number">1e-10</span>, rtol=<span class="hljs-number">1e-10</span>)</code></pre>
+<span class="hljs-keyword">function</span> sincos(x::Point{T}) <span class="hljs-keyword">where</span> T&lt;:<span class="hljs-built_in">Real</span>
+    norm = sqrt(x.x^<span class="hljs-number">2</span> + x.y^<span class="hljs-number">2</span>)
+    <span class="hljs-keyword">return</span> sin(cos(norm))
+<span class="hljs-keyword">end</span></code></pre>
+<p>Then, we get</p>
+<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> p = Point{<span class="hljs-built_in">Float64</span>}(<span class="hljs-number">1.0</span>, <span class="hljs-number">2.0</span>)
+</span>Point{Float64}(1.0, 2.0)
+
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> sincos(p)
+</span>-0.578813455551511
+
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> pim = Point{<span class="hljs-built_in">Complex</span>}(<span class="hljs-number">1</span><span class="hljs-literal">im</span>, <span class="hljs-number">2.0</span>)
+</span>Point{Complex}(0 + 1im, 2.0 + 0.0im)
+
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> sincos(pim)
+</span>ERROR: MethodError: no method matching sincos(::Point{Complex})
+You may have intended to import Base.sincos
+Closest candidates are:
+  sincos(::T) where T&lt;:Real at REPL[3]:1
+  sincos(::Point{T}) where T&lt;:Real at REPL[4]:1
+Stacktrace:
+ [1] top-level scope
+   @ REPL[9]:1</code></pre>
 <p></div> </div>
+<h2 id="constructors"><a href="#constructors" class="header-anchor">Constructors</a></h2>
+<p>Note from the previous exercise, that it might be convenient if every object of type Point computes and stores the norm. Of course this can be done by defining</p>
+<pre><code class="julia hljs"><span class="hljs-keyword">struct</span> PointFull{T&lt;:<span class="hljs-built_in">Real</span>}
+    x::T
+    y::T
+    norm
+<span class="hljs-keyword">end</span></code></pre>
+<p>and creating objects of type PointFull via</p>
+<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> p = PointFull{<span class="hljs-built_in">Float64</span>}(<span class="hljs-number">1.0</span>, <span class="hljs-number">2.0</span>, sqrt(<span class="hljs-number">1.0</span>^<span class="hljs-number">2</span> + <span class="hljs-number">2.0</span>^<span class="hljs-number">2</span>))
+</span>PointFull{Float64}(1.0, 2.0, 2.23606797749979)
+
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> p = PointFull{<span class="hljs-built_in">Float32</span>}(<span class="hljs-number">1.0</span>, <span class="hljs-number">2.0</span>, sqrt(<span class="hljs-number">1.0</span>^<span class="hljs-number">2</span> + <span class="hljs-number">2.0</span>^<span class="hljs-number">2</span>))
+</span>PointFull{Float32}(1.0f0, 2.0f0, 2.23606797749979)
+
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> p = PointFull{<span class="hljs-built_in">Int64</span>}(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, sqrt(<span class="hljs-number">1</span> + <span class="hljs-number">2</span>))
+</span>PointFull{Int64}(1, 2, 1.7320508075688772)</code></pre>
+<p>Note that this is quite tedious since we need to copy paste the same formula for the norm everytime we construct on object. Conveniently, Julia provides us with <a href="https://docs.julialang.org/en/v1/manual/constructors/#man-constructors">constructors</a>, which are functions that are called whenever we create on object of our struct. The syntax is the following:</p>
+<pre><code class="julia hljs"><span class="hljs-keyword">struct</span> PointFull{T&lt;:<span class="hljs-built_in">Real</span>}
+    x::T
+    y::T
+    norm
+    <span class="hljs-keyword">function</span> PointFull(x::T, y::T) <span class="hljs-keyword">where</span> {T&lt;:<span class="hljs-built_in">Real</span>}
+        norm = sqrt(x^<span class="hljs-number">2</span> + y^<span class="hljs-number">2</span>)
+        new{T}(x, y, norm)
+    <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">end</span></code></pre>
+<p>Now, we can call</p>
+<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> PointFull(<span class="hljs-number">1.0</span>,<span class="hljs-number">2.0</span>)
+</span>PointFull{Float64}(1.0, 2.0, 2.23606797749979)
+
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> PointFull(<span class="hljs-number">1</span>,<span class="hljs-number">2</span>)
+</span>PointFull{Int64}(1, 2, 2.23606797749979)
+
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> PointFull(<span class="hljs-number">1</span><span class="hljs-literal">im</span>,<span class="hljs-number">2</span><span class="hljs-literal">im</span>)
+</span>ERROR: MethodError: no method matching PointFull(::Complex{Int64}, ::Complex{Int64})
+Stacktrace:
+ [1] top-level scope
+   @ REPL[20]:1</code></pre>
 <div class="page-foot">
     <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> Gregor Ehrensperger, Peter Kandolf, Jonas Kusch. Last modified: July 14, 2022.
     Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
