@@ -271,7 +271,7 @@
 </span>  649.564 ms (289 allocations: 12.27 KiB)</code></pre>
 <p></div> </div>
 <p>We can see that this is a very easy way to parallelize and this time the <code>rand&#40;&#41;</code> function is not causing problems. We are already faster than the basic implementation and close to the optimised four threads implementation.</p>
-<p>The <em>distributed for loop</em> with <code>@distributed</code> is designed to work well for situations where each iteration is tiny.  Of course there is also the other possibility, that we have a function with a massive workload and work with the results of these calls.</p>
+<p>The <em>distributed for loop</em> with <code>@distributed</code> is designed to work well for situations where each iteration is tiny &#40;in terms of computational effort/workload&#41;.  Of course there is also the other possibility, that we have a function with a massive workload and work with the results of these calls.</p>
 <h3 id="the_pmap_and_the_everywhere_macro"><a href="#the_pmap_and_the_everywhere_macro" class="header-anchor">The <code>pmap</code> and the <code>@everywhere</code> macro</a></h3>
 <p>As mentioned before, we need to get functions to all the workers, in order to execute them.  For distributing a functions or for loading modules we can use the <code>@everywhere</code> macro.  As the name suggests, it will make sure that the function is available in the scope of each worker and the main process.  We simply prepend a function with <code>@everywhere</code> and nothing more is required.  There are some things to note for this case:</p>
 <ul>
@@ -344,7 +344,7 @@
 <p>There is a lot more to say about distributed computing.  Have a read in the <a href="https://docs.julialang.org/en/v1/manual/distributed-computing/">docs</a> but here are some things we want to mention.   For example Julia is able to define <a href="https://docs.julialang.org/en/v1/manual/distributed-computing/#man-shared-arrays">shared arrays</a>.  A shared array means the content can be accessed by each worker and it is consistent over all workers.</p>
 <p>Furthermore, it is possible to have a cluster, e.g. a managed pool of workers. This cluster can be distributed on several machines.  You can define various ways of accessing these machines so you can become really flexible about this and maybe start a worker on the laptop of a colleague.  For this we have the <a href="https://docs.julialang.org/en/v1/manual/distributed-computing/#ClusterManagers"><code>ClusterManager</code></a> package.</p>
 <div class="page-foot">
-    <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> Gregor Ehrensperger, Peter Kandolf, Jonas Kusch. Last modified: July 13, 2022.
+    <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> Gregor Ehrensperger, Peter Kandolf, Jonas Kusch. Last modified: July 14, 2022.
     Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
 </div>
 </div><!-- CONTENT ENDS HERE -->
