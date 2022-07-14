@@ -51,6 +51,50 @@ julia> res[1]
 0.5143952585235492
 ```
 
+Let us pratice this syntax by revisiting loops:
+
+\exercise{
+For a vector $V\in\mathrm{R}^n$ with elements $v$ compute the sum of all the elements in the following fashion
+    
+1. Sum over the elements per index:
+    $$s_1 = \sum_{i=1}^n v_i$$
+2. Sum over the elements (hint `for each`):
+    $$s_2 = \sum_{v\in V} v$$
+3. Transform these loops into functions `mysum1` and `mysum2`
+4. Test against `V = rand(100_000)` and `s_1 ≈ s_2` (use `\approx + TAB` for ≈)
+    
+Extra: Check the `@inbounds` macro for the first version.
+
+\solution{
+```julia
+function mysum1(V)
+    s = zero(eltype(V))
+
+    for i in eachindex(V)
+        s += V[i]
+    end
+
+    return s
+end
+
+function mysum2(V)
+    s = zero(eltype(V))
+
+    for v in V
+        s += v
+    end
+
+    return s
+end
+
+V = rand(100_000)
+mysum1(V) ≈ mysum2(V)
+isapprox(mysum1(V),  mysum2(V); atol=1e-10, rtol=1e-10)
+```
+}
+}
+
+
 ## Call by reference
 Julia functions do not copy the input but directly operate on the input data. This means that changing values of the input in the function body will also change this data for the function caller. Whenever you define a function which will modify the input, you should indicate this with a `!` behind the function name:
 ```julia
@@ -70,7 +114,9 @@ julia> x
  0.5143952585235492
  0.5143952585235492
 ```
+
 \exercise{
+
 Consider two implementations
 ```julia
 function sincos1!(x)
@@ -216,43 +262,119 @@ julia> sincos.(x)
  0.514395  0.514395  0.514395
 ```
 
-\exercise{
-For a vector $V\in\mathrm{R}^n$ with elements $v$ compute the sum of all the elements in the following fashion
-    
-1. Sum over the elements per index:
-    $$s_1 = \sum_{i=1}^n v_i$$
-2. Sum over the elements (hint `for each`):
-    $$s_2 = \sum_{v\in V} v$$
-3. Transform these loops into functions `mysum1` and `mysum2`
-4. Test against `V = rand(100_000)` and `s_1 ≈ s_2` (use `\approx + TAB` for ≈)
-    
-Extra: Check the `@inbounds` macro for the first version.
 
+## Parametric types for functions
+
+Notice that it is very restrictive to tell our method to only accept inputs of type `Float64`. It makes perfect sense to evaluate our function at $x = 1$, where $x$ can be an integer. In fact, it is considered to be good practice if we make function inputs as general as possible. Just as for *structs*, we can use parametric types to make the input more general. If we want the input to be a real number (i.e., a subtype of `Real`), we can write this as 
+```julia
+function sincos(x::T) where T<:Real
+    return sin(cos(x))
+end
+```
+Now, `T` can be any subtype of `Real`, that is, we can write
+```julia-repl
+julia> sincos(1)
+0.5143952585235492
+
+julia> sincos(1.0)
+0.5143952585235492
+
+julia> sincos(1//2)
+0.7691963548410085
+```
+
+\exercise{
+    Write functions `sincos` which can take any real number as well as the point struct we defined earlier
+```julia
+struct Point{T}
+    x::T
+    y::T
+end
+```
+    where `T` must be a real number as input. When the input is an object of type Point, the function returns $\sin(\cos(\Vert x \Vert))$, where $\Vert x \Vert = \sqrt{x^2 + y^2}$ is the Euclidean norm.
 \solution{
 ```julia
-function mysum1(V)
-    s = zero(eltype(V))
-
-    for i in eachindex(V)
-        s += V[i]
-    end
-
-    return s
+struct Point{T<:Real}
+    x::T
+    y::T
 end
 
-function mysum2(V)
-    s = zero(eltype(V))
-
-    for v in V
-        s += v
-    end
-
-    return s
+function sincos(x::T) where T<:Real
+    return sin(cos(x))
 end
 
-V = rand(100_000)
-mysum1(V) ≈ mysum2(V)
-isapprox(mysum1(V),  mysum2(V); atol=1e-10, rtol=1e-10)
+function sincos(x::Point{T}) where T<:Real
+    norm = sqrt(x.x^2 + x.y^2)
+    return sin(cos(norm))
+end
+```
+Then, we get
+```julia-repl
+julia> p = Point{Float64}(1.0, 2.0)
+Point{Float64}(1.0, 2.0)
+
+julia> sincos(p)
+-0.578813455551511
+
+julia> pim = Point{Complex}(1im, 2.0)
+Point{Complex}(0 + 1im, 2.0 + 0.0im)
+
+julia> sincos(pim)
+ERROR: MethodError: no method matching sincos(::Point{Complex})
+You may have intended to import Base.sincos
+Closest candidates are:
+  sincos(::T) where T<:Real at REPL[3]:1
+  sincos(::Point{T}) where T<:Real at REPL[4]:1
+Stacktrace:
+ [1] top-level scope
+   @ REPL[9]:1
 ```
 }
 }
+
+## Constructors
+Note from the previous exercise, that it might be convenient if every object of type Point computes and stores the norm. Of course this can be done by defining
+```julia
+struct PointFull{T<:Real}
+    x::T
+    y::T
+    norm
+end
+```
+and creating objects of type PointFull via
+```julia-repl
+julia> p = PointFull{Float64}(1.0, 2.0, sqrt(1.0^2 + 2.0^2))
+PointFull{Float64}(1.0, 2.0, 2.23606797749979)
+
+julia> p = PointFull{Float32}(1.0, 2.0, sqrt(1.0^2 + 2.0^2))
+PointFull{Float32}(1.0f0, 2.0f0, 2.23606797749979)
+
+julia> p = PointFull{Int64}(1, 2, sqrt(1 + 2))
+PointFull{Int64}(1, 2, 1.7320508075688772)
+```
+Note that this is quite tedious since we need to copy paste the same formula for the norm everytime we construct on object. Conveniently, Julia provides us with [constructors](https://docs.julialang.org/en/v1/manual/constructors/#man-constructors), which are functions that are called whenever we create on object of our struct. The syntax is the following:
+```julia
+struct PointFull{T<:Real}
+    x::T
+    y::T
+    norm
+    function PointFull(x::T, y::T) where {T<:Real}
+        norm = sqrt(x^2 + y^2)
+        new{T}(x, y, norm)
+    end
+end
+```
+Now, we can call
+```julia-repl
+julia> PointFull(1.0,2.0)
+PointFull{Float64}(1.0, 2.0, 2.23606797749979)
+
+julia> PointFull(1,2)
+PointFull{Int64}(1, 2, 2.23606797749979)
+
+julia> PointFull(1im,2im)
+ERROR: MethodError: no method matching PointFull(::Complex{Int64}, ::Complex{Int64})
+Stacktrace:
+ [1] top-level scope
+   @ REPL[20]:1
+```
