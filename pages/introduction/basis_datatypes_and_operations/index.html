@@ -317,7 +317,7 @@ Stacktrace:
 
 <span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> occursin(<span class="hljs-string">&quot;alan&quot;</span>, mystring)
 </span>true</code></pre>
-<p>Moreover, Julia allows you to define your own datatypes via <code>struct</code>. As an example, let us define a a point</p>
+<p>Moreover, Julia allows you to define your own datatypes via <code>struct</code>. As an example, let us define a point</p>
 <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-keyword">struct</span> PointObject
           x::<span class="hljs-built_in">Float64</span>
           y::<span class="hljs-built_in">Float64</span>
@@ -331,7 +331,7 @@ Stacktrace:
 
 <span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> p.y
 </span>2.0</code></pre>
-<p>Note that creating a point by <code>p &#61; Point&#40;1.0,2.0&#41;</code> directly fixes the <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">x</span></span></span></span> and <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi></mrow><annotation encoding="application/x-tex">y</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span></span></span></span> coordinate. If you wish to change these coordinates, you will observe that Julia does not allow you to modify an already created struct object. To allow for changes in a defined object, we can use the <code>mutable</code> command, which gives</p>
+<p>Note that creating a point by <code>p &#61; PointObject&#40;1.0,2.0&#41;</code> directly fixes the <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">x</span></span></span></span> and <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi></mrow><annotation encoding="application/x-tex">y</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span></span></span></span> coordinate. If you wish to change these coordinates, you will observe that Julia does not allow you to modify an already created struct. To allow for changes in a defined object, we can use the <code>mutable</code> command, which gives</p>
 <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-keyword">mutable struct</span> PointMutable
           x::<span class="hljs-built_in">Float64</span>
           y::<span class="hljs-built_in">Float64</span>
