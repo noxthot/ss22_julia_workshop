@@ -261,7 +261,7 @@ julia> p.x
 julia> p.y
 2.0
 ```
-Note that creating a point by `p = PointObject(1.0,2.0)` directly fixes the $x$ and $y$ coordinate. If you wish to change these coordinates, you will observe that Julia does not allow you to modify an already created struct. To allow for changes in a defined object, we can use the `mutable` command, which gives
+Note that creating a point by `p = PointObject(1.0,2.0)` directly fixes the $x$ and $y$ coordinate. If you wish to change these coordinates, you will observe that Julia does not allow you to modify an already created object of your struct. To allow for changes in a defined object, we can use the `mutable` command, which gives
 ```julia-repl
 julia> mutable struct PointMutable
           x::Float64
@@ -290,7 +290,39 @@ Point{Float64}(1.0, 2.0)
 julia> pInt = Point{Int}(1, 2)
 Point{Int64}(1, 2)
 ```
-Note that using `{T}` behind the struct name lets us use `T` as a new type that can be defined when creating an object of the struct. Sometimes, you do not want to specify all parameters of a struct during construction. We will revisit this problem once we have introduced functions.
+Note that using `{T}` behind the struct name lets us use `T` as a new type that can be defined when creating an object of the struct. You can also have two different types in one object. To account for such situations, we can define
+```julia-repl
+julia> struct Point{T, R}
+          x::T
+          y::R
+       end
+
+julia> pFloat = Point{Float64, Float32}(1.0, 2.0)
+Point{Float64, Float32}(1.0, 2.0f0)
+
+julia> pInt = Point{Int, Float64}(1, 2.0)
+Point{Int64, Float64}(1, 2.0)
+```
+Moreover, we can restrict our `T` to a certain set of types. If `T` is supposed to be a subtype of `Real`, we can write
+```julia-repl
+julia> struct Point{T, R<:Real}
+          x::T
+          y::R
+       end
+
+julia> pFloat = Point{Float64, Float32}(1.0, 2.0)
+Point{Float64, Float32}(1.0, 2.0f0)
+
+julia> pInt = Point{Int, Float64}(1, 2.0)
+Point{Int64, Float64}(1, 2.0)
+
+julia> pComplex = Point{Int, Complex}(1, 2im)
+ERROR: TypeError: in Point, in R, expected R<:Real, got Type{Complex}
+Stacktrace:
+ [1] top-level scope
+   @ REPL[4]:1
+```
+Sometimes, you do not want to specify all parameters of a struct during construction. We will revisit this problem once we have introduced functions.
 
 An alternative for storing multiple objects are *dictionaries*. If we want to store multiple parameters, we can use
 ```julia-repl
