@@ -245,7 +245,7 @@ julia> occursin("alan", mystring)
 true
 ```
 
-Moreover, Julia allows you to define your own datatypes via `struct`. As an example, let us define a a point
+Moreover, Julia allows you to define your own datatypes via `struct`. As an example, let us define a point
 ```julia-repl
 julia> struct PointObject
           x::Float64
@@ -261,7 +261,7 @@ julia> p.x
 julia> p.y
 2.0
 ```
-Note that creating a point by `p = Point(1.0,2.0)` directly fixes the $x$ and $y$ coordinate. If you wish to change these coordinates, you will observe that Julia does not allow you to modify an already created struct object. To allow for changes in a defined object, we can use the `mutable` command, which gives
+Note that creating a point by `p = PointObject(1.0,2.0)` directly fixes the $x$ and $y$ coordinate. If you wish to change these coordinates, you will observe that Julia does not allow you to modify an already created struct. To allow for changes in a defined object, we can use the `mutable` command, which gives
 ```julia-repl
 julia> mutable struct PointMutable
           x::Float64
