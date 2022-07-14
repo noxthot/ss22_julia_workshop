@@ -317,6 +317,57 @@ Stacktrace:
 
 <span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> occursin(<span class="hljs-string">&quot;alan&quot;</span>, mystring)
 </span>true</code></pre>
+<p>Moreover, Julia allows you to define your own datatypes via <code>struct</code>. As an example, let us define a a point</p>
+<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-keyword">struct</span> PointObject
+          x::<span class="hljs-built_in">Float64</span>
+          y::<span class="hljs-built_in">Float64</span>
+       <span class="hljs-keyword">end</span>
+</span>
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> p = PointObject(<span class="hljs-number">1.0</span>, <span class="hljs-number">2.0</span>)
+</span>PointObject(1.0, 2.0)
+
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> p.x
+</span>1.0
+
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> p.y
+</span>2.0</code></pre>
+<p>Note that creating a point by <code>p &#61; Point&#40;1.0,2.0&#41;</code> directly fixes the <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">x</span></span></span></span> and <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi></mrow><annotation encoding="application/x-tex">y</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span></span></span></span> coordinate. If you wish to change these coordinates, you will observe that Julia does not allow you to modify an already created struct object. To allow for changes in a defined object, we can use the <code>mutable</code> command, which gives</p>
+<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-keyword">mutable struct</span> PointMutable
+          x::<span class="hljs-built_in">Float64</span>
+          y::<span class="hljs-built_in">Float64</span>
+       <span class="hljs-keyword">end</span>
+</span>
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> p = PointMutable(<span class="hljs-number">1.0</span>, <span class="hljs-number">2.0</span>)
+</span>PointMutable(1.0, 2.0)
+
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> p.x = <span class="hljs-number">3.0</span>
+</span>3.0
+
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> p.y
+</span>2.0</code></pre>
+<p>Note, that a point does not necessarily need to be an element of <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi mathvariant="double-struck">R</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">\mathbb{R}^2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord mathbb">R</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span>, i.e., have coordinates of type <code>Float64</code>. Here, Julia provides us with the concept of <em>type parameters</em>:</p>
+<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-keyword">struct</span> Point{T}
+          x::T
+          y::T
+       <span class="hljs-keyword">end</span>
+</span>
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> pFloat = Point{<span class="hljs-built_in">Float64</span>}(<span class="hljs-number">1.0</span>, <span class="hljs-number">2.0</span>)
+</span>Point{Float64}(1.0, 2.0)
+
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> pInt = Point{<span class="hljs-built_in">Int</span>}(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>)
+</span>Point{Int64}(1, 2)</code></pre>
+<p>Note that using <code>&#123;T&#125;</code> behind the struct name lets us use <code>T</code> as a new type that can be defined when creating an object of the struct. Sometimes, you do not want to specify all parameters of a struct during construction. We will revisit this problem once we have introduced functions.</p>
+<p>An alternative for storing multiple objects are <em>dictionaries</em>. If we want to store multiple parameters, we can use</p>
+<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> params = <span class="hljs-built_in">Dict</span>(<span class="hljs-string">&quot;α&quot;</span>=&gt;<span class="hljs-number">1</span>, <span class="hljs-string">&quot;β&quot;</span>=&gt;<span class="hljs-number">2.4</span>)
+</span>Dict{String, Real} with 2 entries:
+  &quot;α&quot; =&gt; 1
+  &quot;β&quot; =&gt; 2.4
+
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> params[<span class="hljs-string">&quot;α&quot;</span>]
+</span>1
+
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> params[<span class="hljs-string">&quot;β&quot;</span>]
+</span>2.4</code></pre>
 <div class="page-foot">
     <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> Gregor Ehrensperger, Peter Kandolf, Jonas Kusch. Last modified: July 14, 2022.
     Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
