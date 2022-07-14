@@ -245,6 +245,8 @@ julia> occursin("alan", mystring)
 true
 ```
 
+### Structs and Dictionaries
+
 Moreover, Julia allows you to define your own datatypes via `struct`. As an example, let us define a point
 ```julia-repl
 julia> struct PointObject
