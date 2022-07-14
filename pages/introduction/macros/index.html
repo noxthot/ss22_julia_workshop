@@ -51,7 +51,7 @@
   }
 </style>
 
-   <title>Parallel Computing - Performance</title>  
+   <title>Introduction - Macros</title>  
 </head>
 <body>                      <!-- closed in foot.html -->
 <div class="page-wrap">   <!-- closed in foot.html -->
@@ -67,7 +67,7 @@
     <div class="menu" id="side-menu">
       <ul class="menu-list">
         <li class="menu-list-item "><a href="/ss22_julia_workshop/" class="menu-list-link ">Start</a>
-        <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/" class="menu-list-link ">Introduction</a>
+        <li class="menu-list-item active"><a href="/ss22_julia_workshop/pages/introduction/" class="menu-list-link active">Introduction</a>
           <ul class="menu-list-child-list ">
             <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/basis_datatypes_and_operations" class="menu-list-link ">Basic Datatypes and Operations</a>
             <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/package_manager" class="menu-list-link ">Package Manager</a>
@@ -75,7 +75,7 @@
             <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/conditional_evaluations" class="menu-list-link ">Conditional evaluations</a>
             <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/loops" class="menu-list-link ">Loops</a>
             <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/functions" class="menu-list-link ">Functions</a>
-            <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/macros" class="menu-list-link ">Macros</a>
+            <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/macros" class="menu-list-link active">Macros</a>
             <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/worksheet_1" class="menu-list-link ">Worksheet 1</a>
             <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/worksheet_2" class="menu-list-link ">Worksheet 2</a>
           </ul>
@@ -86,9 +86,9 @@
             <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/datascience/exploratory_da" class="menu-list-link ">Exploratory Data Analysis</a>
             <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/datascience/unsupervised_learning" class="menu-list-link ">Unsupervised Learning</a>
           </ul>
-        <li class="menu-list-item active"><a href="/ss22_julia_workshop/pages/hpc/" class="menu-list-link active">Parallel computing</a>
+        <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/hpc/" class="menu-list-link ">Parallel computing</a>
           <ul class="menu-list-child-list ">
-            <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/hpc/performance" class="menu-list-link active">Measuring performance</a>
+            <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/hpc/performance" class="menu-list-link ">Measuring performance</a>
             <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/hpc/simd" class="menu-list-link ">Single Instruction Multiple Data</a>
             <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/hpc/pi" class="menu-list-link ">&pi; example</a>
             <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/hpc/multithreading" class="menu-list-link ">Multithreading</a>
@@ -111,96 +111,65 @@
 
 
 <!-- Content appended here (in class franklin-content) -->
-<div class="franklin-content"><h1 id="how_to_measure_performance_in_julia"><a href="#how_to_measure_performance_in_julia" class="header-anchor">How to measure performance in Julia</a></h1>
-<p>For that, we recall the loops example from the introduction to <a href="../../introduction/loops.html">loops</a> and include the simple <code>@time</code> macro.</p>
-<pre><code class="julia hljs"><span class="hljs-keyword">function</span> mysum(a)
-    result = zero(eltype(a))
+<div class="franklin-content"><h1 id="macros"><a href="#macros" class="header-anchor">Macros</a></h1>
+<p><a href="https://docs.julialang.org/en/v1/manual/metaprogramming/#man-macros">Macros</a> are a very powerful concept in Julia and we will use them throughout the next sessions. The main idea of macros is to allow the generation of code in the final body of a program. At its basis a macro is similar to a function, as it maps a tuple of arguments to an returned expression.  There are two major differences:</p>
+<ul>
+<li><p>the expression is compiled directly and not at the first call</p>
+</li>
+<li><p>the macro is executed when the code is parsed</p>
+</li>
+</ul>
+<p>The second feature is important as you can manipulate the code at runtime. An easy example from the <a href="https://docs.julialang.org/en/v1/manual/metaprogramming/#man-macros">Julia documentation on macros</a> is the following:</p>
+<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-keyword">macro</span> sayhello(name)
+          <span class="hljs-keyword">return</span> :( println(<span class="hljs-string">&quot;Hello, &quot;</span>, $name) )
+       <span class="hljs-keyword">end</span>
+</span>@sayhello (macro with 1 method)
 
-    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> eachindex(a)
-        <span class="hljs-meta">@inbounds</span> result += a[i]
-    <span class="hljs-keyword">end</span>
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@sayhello</span>(<span class="hljs-string">&quot;student n&quot;</span>)
+</span>Hello, student n
 
-    <span class="hljs-keyword">return</span> result
-<span class="hljs-keyword">end</span>
-
-a = rand(<span class="hljs-number">100_000</span>)
-<span class="hljs-meta">@time</span> mysum(a)
-<span class="hljs-meta">@time</span> mysum(a)</code></pre>
-<pre><code class="plaintext hljs">  0.009784 seconds (4.16 k allocations: 222.597 KiB, 94.04% compilation time)
-  0.000129 seconds (1 allocation: 16 bytes)
-49967.60446577057</code></pre>
-<p>The downside with the <code>@time</code> macro is, that it really just measures the execution time of what is given to it. This means if the function is not already compiled this might include compiling or if the CPU is busy with something else it is often not accurate. </p>
-<p>Therefore, if you are serious about measuring  performance you should stick to the <a href="https://juliaci.github.io/BenchmarkTools.jl/stable/"><code>BenchmarkTools</code></a>. It comes with a couple of macros that you should test out:</p>
-<button type="button" class="collapsible" style="background-color:#b5ddff"> Exercise </button><div class="collapsiblecontent">  In order to use the BenchmarkTools you need to include it with <code>using BenchmarkTools</code>, as any other package.  Benchmark your <code>mysum</code> function with the following macros:</p>
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@sayhello</span> <span class="hljs-string">&quot;student n+1&quot;</span>
+</span>Hello, student n+1</code></pre>
+<p>The nice thing about macro is, you can insert quite powerful code but you keep the readability high. </p>
+<p>One example is the <code>@macroexpand</code> macro, it allows you to view what a macro is doing with an argument:</p>
+<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@macroexpand</span> <span class="hljs-meta">@sayhello</span> <span class="hljs-string">&quot;Student n+1&quot;</span>
+</span>:(Main.println(&quot;Hello, &quot;, &quot;Student n+1&quot;))</code></pre>
+<p>Of course you can also use the other features of Julia with macros, like multiple dispatch.</p>
+<button type="button" class="collapsible" style="background-color:#b5ddff"> Exercise </button><div class="collapsiblecontent">  1. Write a macro <code>m</code> with different invocations for one argument and for two arguments. Just print <code>x arguments</code> as result. </p>
 <ol>
-<li><p><code>@benchmark</code></p>
+<li><p>Add a version where the input is an integer and test return <code>an Integer</code></p>
 </li>
-<li><p><code>@btime</code> </p>
-</li>
-<li><p>Look at the detailed output of your benchmark with <code>dump&#40;t&#41;</code>, where <code>t</code> is the output result of a <code>@benchmark</code> run.</p>
+<li><p>What happens when you call the code <code>x &#61; 1; @m x</code></p>
 </li>
 </ol>
-<p>and compare the output and results. <div class="solution"> Solution </div><div class="solutioncollapsible">  To measure the performance of the above code we do the following:</p>
-<pre><code class="julia hljs"><span class="hljs-keyword">using</span> BenchmarkTools
+<p><div class="solution"> Solution </div><div class="solutioncollapsible">  </p>
+<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-keyword">macro</span> m(x)
+           println(<span class="hljs-string">&quot;One arguments&quot;</span>)
+       <span class="hljs-keyword">end</span>
+</span>@m (macro with 1 method)
 
-<span class="hljs-meta">@benchmark</span> mysum($a)</code></pre>
-<p><pre><code class="plaintext hljs">BenchmarkTools.Trial: 10000 samples with 1 evaluation.
- Range (min … max):  111.304 μs …  5.240 ms  ┊ GC (min … max): 0.00% … 0.00%
- Time  (median):     111.405 μs              ┊ GC (median):    0.00%
- Time  (mean ± σ):   117.132 μs ± 75.012 μs  ┊ GC (mean ± σ):  0.00% ± 0.00%
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-keyword">macro</span> m(x,y)
+           println(<span class="hljs-string">&quot;Two arguments&quot;</span>)
+       <span class="hljs-keyword">end</span>
+</span>@m (macro with 2 methods)
 
-  █ ▂▁▃                                                        ▁
-  █████▇███▆▆█▇▇▆▆▆▄▆▅▅▅▅▅▆▅▄▆▇▇▇▆▆▅▅▆▃▄▄▅▃▄▄▄▄▅▁▄▃▃▅▁▃▄▄▁▄▄▃▄ █
-  111 μs        Histogram: log(frequency) by time       180 μs &lt;
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-keyword">macro</span> m(::<span class="hljs-built_in">Int</span>)
+           println(<span class="hljs-string">&quot;An Integer&quot;</span>)
+       <span class="hljs-keyword">end</span>
+</span>@m (macro with 3 methods)
 
- Memory estimate: 0 bytes, allocs estimate: 0.</code></pre> the full details with </p>
-<pre><code class="julia hljs">t = <span class="hljs-meta">@benchmark</span> mysum($a)
-dump(t)</code></pre>
-<p><pre><code class="plaintext hljs">BenchmarkTools.Trial
-  params: BenchmarkTools.Parameters
-    seconds: Float64 5.0
-    samples: Int64 10000
-    evals: Int64 1
-    overhead: Float64 0.0
-    gctrial: Bool true
-    gcsample: Bool false
-    time_tolerance: Float64 0.05
-    memory_tolerance: Float64 0.01
-  times: Array{Float64}((10000,)) [128706.0, 111405.0, 111304.0, 111304.0, 111304.0, 111405.0, 111405.0, 111305.0, 111305.0, 111305.0  …  111305.0, 111405.0, 111305.0, 111305.0, 111305.0, 111405.0, 111405.0, 111405.0, 115605.0, 111305.0]
-  gctimes: Array{Float64}((10000,)) [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0  …  0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-  memory: Int64 0
-  allocs: Int64 0
-</code></pre> and the often used sanity check, that actually also shows you the output of your code.</p>
-<pre><code class="julia hljs"><span class="hljs-meta">@btime</span> mysum($a)</code></pre>
-<p><pre><code class="plaintext hljs">  111.305 μs (0 allocations: 0 bytes)
-49967.60446577057</code></pre> </div> </div>
-<p>We can also use the <a href="https://docs.julialang.org/en/v1/manual/profile/#Profiling"><code>Profiler</code></a> package to really dig into profiling the code but this is a bit too much of a deep dive for this class, it would look like this:</p>
-<pre><code class="julia hljs"><span class="hljs-keyword">using</span> Profile
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@m</span> <span class="hljs-number">2</span>
+</span>An Integer
 
-Profile.clear()
-<span class="hljs-meta">@profile</span> <span class="hljs-keyword">for</span> _ <span class="hljs-keyword">in</span> <span class="hljs-number">1</span>:<span class="hljs-number">100_000</span>; mysum(a); <span class="hljs-keyword">end</span>
-Profile.print(maxdepth=<span class="hljs-number">15</span>)</code></pre>
-<pre><code class="bash hljs">Overhead ╎ [+additional indent] Count File:Line; Function
-=========================================================
-    ╎8281  @Base/client.jl:495; _start()
-    ╎ 8281  @Base/client.jl:309; exec_options(opts::Base.JLOptions)
-    ╎  8281  @Base/client.jl:379; run_main_repl(interactive::Bool, quiet::Bool, banner::Bool, history_file::Bool, color_set::Bool)
-    ╎   8281  @Base/essentials.jl:714; invokelatest
-    ╎    8281  @Base/essentials.jl:716; <span class="hljs-comment">#invokelatest#2</span>
-    ╎     8281  @Base/client.jl:394; (::Base.var<span class="hljs-string">&quot;#936#938&quot;</span>{Bool, Bool, Bool})(REPL::Module)
-    ╎    ╎ 8281  ...r/worker/package_linux64/build/usr/share/julia/stdlib/v1.7/REPL/src/REPL.jl:351; run_repl(repl::REPL.AbstractREPL, consumer::Any)
-    ╎    ╎  8281  ...r/worker/package_linux64/build/usr/share/julia/stdlib/v1.7/REPL/src/REPL.jl:364; run_repl(repl::REPL.AbstractREPL, consumer::Any; backend_on_current_task::Bool)
-    ╎    ╎   8281  .../worker/package_linux64/build/usr/share/julia/stdlib/v1.7/REPL/src/REPL.jl:231; start_repl_backend(backend::REPL.REPLBackend, consumer::Any)
-    ╎    ╎    8281  .../worker/package_linux64/build/usr/share/julia/stdlib/v1.7/REPL/src/REPL.jl:246; repl_backend_loop(backend::REPL.REPLBackend)
-    ╎    ╎     8281  ...worker/package_linux64/build/usr/share/julia/stdlib/v1.7/REPL/src/REPL.jl:150; eval_user_input(ast::Any, backend::REPL.REPLBackend)
-    ╎    ╎    ╎ 8281  @Base/boot.jl:373; <span class="hljs-built_in">eval</span>
-    ╎    ╎    ╎  8281  .../package_linux64/build/usr/share/julia/stdlib/v1.7/Profile/src/Profile.jl:28; top-level scope
-   1╎    ╎    ╎   8281  REPL[18]:1; macro expansion
-    ╎    ╎    ╎    1     REPL[7]:3; mysum(a::Vector{Float64})
-    ╎    ╎    ╎     1     @Base/abstractarray.jl:279; eachindex
-    ╎    ╎    ╎    8279  REPL[7]:4; mysum(a::Vector{Float64})
-    ╎    ╎    ╎     8279  @Base/range.jl:837; iterate
-Total snapshots: 16562</code></pre>
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@m</span> x y
+</span>Two arguments
+
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> x = <span class="hljs-number">2</span>
+</span>2
+
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@m</span> x
+</span>One arguments</code></pre>
+<p></div> </div>
 <div class="page-foot">
     <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> Gregor Ehrensperger, Peter Kandolf, Jonas Kusch. Last modified: July 14, 2022.
     Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
