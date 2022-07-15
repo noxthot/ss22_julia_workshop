@@ -30,7 +30,7 @@ where $\sigma = 0.03^2$. Write an initial condition that you can call for a give
 
 The function of the initial condition can look as follows:
 ```julia:./code/worksheet_2.jl
-function IC(x::Float64)
+function IC(x::T) where T<:Real
   sigma2 = 0.0009
   floor = 1e-4
   x0 = 0.0
@@ -77,7 +77,7 @@ Now, note that we have fixed $\sigma$ insice the `IC` function. Very often, you 
 \collapssol{
 
 ```julia:./code/worksheet_2.jl
-function IC(x::Float64, sigma2::Float64=0.0009)
+function IC(x::T, sigma2::T=0.0009) where T<:Real
   floor = 1e-4
   x0 = 0.0
   return max(floor, 1.0 / (sqrt(2 * pi * sigma2)) * exp(-(x - 0.5)^2 / (2.0 * sigma2)))
@@ -99,7 +99,7 @@ using LinearAlgebra
 using Plots; gr()
 
 # definition of the initial condition
-function IC(x::Float64, sigma2::Float64=0.0009)
+function IC(x::T, sigma2::T=0.0009) where T<:Real
     floor = 1e-4
     x0 = 0.0
     return max(floor, 1.0 / (sqrt(2 * pi * sigma2)) * exp(-(x - 0.5)^2 / (2.0 * sigma2)))
@@ -165,24 +165,24 @@ You can now try out different numbers of velocities and spatial cells. See how t
 ## Structs
 You might have observed that the solution crashes if you are choosing too many spatial cells. The reason for this is that the chosen $\Delta t$ must fulfill $\Delta t \leq \Delta x$, otherwise the method is unstable. Also, you have maybe observed that a lot of parameters cannot be changed from outside the function call and you might want to add further parameters like the end time `tEnd`, the time step size `dt` or the variance of the initial condition `sigma2` to the input arguments of the function. To structure the input we can create a new object, which stores all these values. As you already know, this can either be a `struct` or a `dictionary`.
 
-Define a struct which stores all relevant information and use it as an input.
+Define a struct which stores all relevant information and use it as an input. Make sure that all floating point numbers are of type `AbstractFloat`
 
 
 \collapssol{
 
 ```julia
-struct Settings
+struct Settings{T<:AbstractFloat}
   nx::Int # number of spatial cells
   nv::Int # number of velocity points
   nt::Int # number of time steps
-  dt::Float64 # time step size
-  dx::Float64 # spatial grid cell size
-  tEnd::Float64 # end time of simulation
-  a::Float64 # start point of spatial domain
-  b::Float64 # end point of spatial domain
-  sigma2::Float64 # variance of initial condition
+  dt::T # time step size
+  dx::T # spatial grid cell size
+  tEnd::T # end time of simulation
+  a::T # start point of spatial domain
+  b::T # end point of spatial domain
+  sigma2::T # variance of initial condition
 
-  function Settings(nx::Int=101, nv::Int=10, sigma2::Float64=0.0009)
+  function Settings(nx::Int=101, nv::Int=10, sigma2::T=0.0009) where {T<:AbstractFloat}
     tEnd = 0.4
     a = -1.0;
     b = 1.0;
@@ -190,7 +190,7 @@ struct Settings
     dt = dx
     nt = Int(floor(tEnd / dt))
 
-    return new(nx, nv, nt, dt, dx, tEnd, a, b, sigma2)
+    return new{T}(nx, nv, nt, dt, dx, tEnd, a, b, sigma2)
   end
 end
 ```
@@ -209,18 +209,18 @@ using LaTeXStrings
 using LinearAlgebra
 using Plots; gr()
 
-struct Settings
+struct Settings{T<:AbstractFloat}
   nx::Int # number of spatial cells
   nv::Int # number of velocity points
   nt::Int # number of time steps
-  dt::Float64 # time step size
-  dx::Float64 # spatial grid cell size
-  tEnd::Float64 # end time of simulation
-  a::Float64 # start point of spatial domain
-  b::Float64 # end point of spatial domain
-  sigma2::Float64 # variance of initial condition
+  dt::T # time step size
+  dx::T # spatial grid cell size
+  tEnd::T # end time of simulation
+  a::T # start point of spatial domain
+  b::T # end point of spatial domain
+  sigma2::T # variance of initial condition
 
-  function Settings(nx::Int=101, nv::Int=10, sigma2::Float64=0.0009)
+  function Settings(nx::Int=101, nv::Int=10, sigma2::T=0.0009) where {T<:AbstractFloat}
     tEnd = 0.4
     a = -1.0;
     b = 1.0;
@@ -228,12 +228,12 @@ struct Settings
     dt = dx
     nt = Int(floor(tEnd / dt))
 
-    return new(nx, nv, nt, dt, dx, tEnd, a, b, sigma2)
+    return new{T}(nx, nv, nt, dt, dx, tEnd, a, b, sigma2)
   end
 end
 
 # definition of the initial condition
-function IC(obj::Settings, x::Float64)
+function IC(obj::Settings, x::T) where T<:Real
   floor = 1e-4
   return max(floor, 1.0 / (sqrt(2 * pi * obj.sigma2)) * exp(-(x - 0.5 * (obj.b - obj.a) - obj.a)^2 / (2.0 * obj.sigma2)))
 end
