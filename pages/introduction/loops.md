@@ -11,7 +11,7 @@ for i in 1:N
     # loop body
 end
 ```
-Here, Julia performs instructions inside the loop body for $i = 1, \ldots, N$. You can modify the iterates by `for i in indexStart:increment:indexEnd`. Hence, if we want to iterate from $N$ to $1$ with an increment of $2$, we have 
+Here, Julia performs instructions inside the loop body for $i = 1, \ldots, N$. We can modify the iterates by `for i in indexStart:increment:indexEnd`. Hence, if we want to iterate from $N$ to $1$ with an increment of $2$, we have 
 ```julia
 for i in N:-2:1
     # loop body
@@ -71,6 +71,7 @@ for i in 1:10
 
     println("Iteration index is $i")
 end
+
 println("Loop stopped.")
 ```
 \show{./code/loop.jl}
