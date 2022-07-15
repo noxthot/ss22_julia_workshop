@@ -99,7 +99,7 @@ You may ask yourself: Why is this important when Julia is dynamically typed and 
 - for making use of a concept called [multiple dispatch](functions#multiple_dispatch) (which we will talk about later in this workshop). 
 It may also get important when high precision, memory constraints or fast computation is required.
 
-For now we did not speak about basic mathematical operations, which are of course defined for all primitive numeric types. 
+So far, we did not speak about basic mathematical operations, which are of course defined for all primitive numeric types. 
 - `+` corresponds to addition, 
 - `-` to subtraction, 
 - `*` to multiplication, 
@@ -305,7 +305,7 @@ Point1{Float64, Float32}(1.0, 2.0f0)
 julia> pInt = Point1{Int, Float64}(1, 2.0)
 Point1{Int64, Float64}(1, 2.0)
 ```
-Moreover, we can restrict our `T` to a certain set of types. If `T` is supposed to be a subtype of `Real`, we can write
+Moreover, we can restrict our `R` to a certain set of types. If `R` is supposed to be a subtype of `Real`, we can write
 ```julia-repl
 julia> struct Point2{T, R<:Real}
           x::T
@@ -324,9 +324,9 @@ Stacktrace:
  [1] top-level scope
    @ REPL[4]:1
 ```
-Sometimes, you do not want to specify all parameters of a struct during construction. We will revisit this problem once we have introduced functions.
+Sometimes, we do not want to specify all parameters of a struct during construction. We will revisit this problem once we have introduced functions.
 
-An alternative for storing multiple objects are *dictionaries*. If we want to store multiple parameters, we can use
+An alternative for storing multiple objects under one primary name are *dictionaries*. If we want to store multiple parameters, we can use
 ```julia-repl
 julia> params = Dict("α"=>1, "β"=>2.4)
 Dict{String, Real} with 2 entries:
