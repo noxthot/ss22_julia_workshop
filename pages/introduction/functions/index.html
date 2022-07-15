@@ -150,7 +150,7 @@ sin(cos(1.5)) = 0.07067822452613834
 </span>
 <span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> res[<span class="hljs-number">1</span>]
 </span>0.5143952585235492</code></pre>
-<p>Let us pratice this syntax by revisiting loops:</p>
+<p>Let us practice this syntax by revisiting loops:</p>
 <button type="button" class="collapsible" style="background-color:#b5ddff"> Exercise </button><div class="collapsiblecontent">  For a vector <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>V</mi><mo>∈</mo><msup><mi mathvariant="normal">R</mi><mi>n</mi></msup></mrow><annotation encoding="application/x-tex">V\in\mathrm{R}^n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7224em;vertical-align:-0.0391em;"></span><span class="mord mathnormal" style="margin-right:0.22222em;">V</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord"><span class="mord mathrm">R</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6644em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span></span></span></span></span></span></span></span> with elements <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>v</mi></mrow><annotation encoding="application/x-tex">v</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">v</span></span></span></span> compute the sum of all the elements in the following fashion</p>
 <ol>
 <li><p>Sum over the elements per index:</p>
@@ -168,7 +168,6 @@ sin(cos(1.5)) = 0.07067822452613834
 <li><p>Test against <code>V &#61; rand&#40;100_000&#41;</code> and <code>s_1 ≈ s_2</code> &#40;use <code>\approx &#43; TAB</code> for ≈&#41;</p>
 </li>
 </ol>
-<p>Extra: Check the <code>@inbounds</code> macro for the first version.</p>
 <p><div class="solution"> Solution </div><div class="solutioncollapsible">  </p>
 <pre><code class="julia hljs"><span class="hljs-keyword">function</span> mysum1(V)
     s = zero(eltype(V))
@@ -220,7 +219,7 @@ isapprox(mysum1(V),  mysum2(V); atol=<span class="hljs-number">1e-10</span>, rto
     <span class="hljs-keyword">return</span> x
 <span class="hljs-keyword">end</span></code></pre>
 <ol>
-<li><p>Evaluate both functions with the input <code>x &#61; ones&#40;2&#41;</code>. How does <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">x</span></span></span></span> change after calling the function? Explain this behaviour. Correct the function names accordingly.</p>
+<li><p>Evaluate both functions with the input <code>x &#61; ones&#40;2&#41;</code>. How does <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">x</span></span></span></span> change after calling the function? Explain this behavior. Correct the function names accordingly.</p>
 </li>
 <li><p>Build in the function <code>pointer_from_objref&#40;x&#41;</code> to see how the memory changes and to validate your previous answer.</p>
 </li>
@@ -245,7 +244,7 @@ isapprox(mysum1(V),  mysum2(V); atol=<span class="hljs-number">1e-10</span>, rto
 </span>2-element Vector{Float64}:
  1.0
  1.0</code></pre>
-<p>The reason for this behaviour is that <code>sincos1</code> changes the input as Julia functions work with call-by-reference. I.e., they do not generate a local copy of the input and instead directly work on the same memory that has been used by the caller. This memory is not reallocated due to the use of <code>.&#61;</code>. On the other hand, <code>sincos2</code> allocates new memory, since <code>x &#61; sin.&#40;cos.&#40;x&#41;&#41;</code> will create new memory for <code>x</code> on which the values of <code>sin.&#40;cos.&#40;x&#41;&#41;</code> are stored. Hence, the memory of <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">x</span></span></span></span> known to the caller is not modified and the original values are preserved. Note that the name <code>sincos2&#33;&#40;x&#41;</code> is hence misleading and the function should be renamed to <code>sincos2&#40;x&#41;</code>.</p>
+<p>The reason for this behavior is that <code>sincos1</code> changes the input as Julia functions work with call-by-reference. I.e., they do not generate a local copy of the input and instead directly work on the same memory that has been used by the caller. This memory is not reallocated due to the use of <code>.&#61;</code>. On the other hand, <code>sincos2</code> allocates new memory, since <code>x &#61; sin.&#40;cos.&#40;x&#41;&#41;</code> will create new memory for <code>x</code> on which the values of <code>sin.&#40;cos.&#40;x&#41;&#41;</code> are stored. Hence, the memory of <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">x</span></span></span></span> known to the caller is not modified and the original values are preserved. Note that the name <code>sincos2&#33;&#40;x&#41;</code> is hence misleading and the function should be renamed to <code>sincos2&#40;x&#41;</code>.</p>
 <ol start="2">
 <li><p>We have</p>
 </li>
@@ -426,7 +425,7 @@ Stacktrace:
 
 <span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> p = PointFull{<span class="hljs-built_in">Int64</span>}(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, sqrt(<span class="hljs-number">1</span> + <span class="hljs-number">2</span>))
 </span>PointFull{Int64}(1, 2, 1.7320508075688772)</code></pre>
-<p>Note that this is quite tedious since we need to copy paste the same formula for the norm everytime we construct on object. Conveniently, Julia provides us with <a href="https://docs.julialang.org/en/v1/manual/constructors/#man-constructors">constructors</a>, which are functions that are called whenever we create on object of our struct. The syntax is the following:</p>
+<p>Note that this is quite tedious since we need to copy paste the same formula for the norm every time we construct on object. Conveniently, Julia provides us with <a href="https://docs.julialang.org/en/v1/manual/constructors/#man-constructors">constructors</a>, which are functions that are called whenever we create on object of our struct. The syntax is the following:</p>
 <pre><code class="julia hljs"><span class="hljs-keyword">struct</span> PointFull1{T&lt;:<span class="hljs-built_in">Real</span>}
     x::T
     y::T
@@ -449,7 +448,7 @@ Stacktrace:
  [1] top-level scope
    @ REPL[20]:1</code></pre>
 <div class="page-foot">
-    <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> Gregor Ehrensperger, Peter Kandolf, Jonas Kusch. Last modified: July 14, 2022.
+    <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> Gregor Ehrensperger, Peter Kandolf, Jonas Kusch. Last modified: July 15, 2022.
     Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
 </div>
 </div><!-- CONTENT ENDS HERE -->
