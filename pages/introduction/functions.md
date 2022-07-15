@@ -6,14 +6,15 @@
 # Functions
 
 ## Syntax
-To improve the structure and ensure reusability of pieces of your program you can use the `function` command. You have already used functions when, for example, calling `typeof(input)`. Other examples of functions that can be found on any common calculators are `sin(x)` or `exp(x)`. The syntax to define your own functions is the following:
+To improve the structure and ensure reusability of pieces of our program we can use the `function` command. We have already used functions when, for example, calling `typeof(input)`. Other examples of functions that can be found on any common calculators are `sin(x)` or `exp(x)`. The syntax to define our own functions is the following:
 ```julia
 function foo(input)
     # function body that is executed when foo is called
+
     return output
 end
 ```
-So if you want to define a function which prints out and returns $\sin(\cos(x))$ we can write
+So if we want to define a function which prints out and returns $\sin(\cos(x))$ we can write
 ```julia
 function sincos(x)
     result = sin(cos(x))
@@ -34,7 +35,7 @@ function sincos(x, y)
     return result1, result2
 end
 ```
-You can call a function with multiple outputs via `out = foo(input)` and access the output at index $i$ through `out[i]`. You can also write (assuming two outputs) `out1, out2 = foo(input)`.
+We can call a function with multiple outputs via `out = foo(input)` and access the output at index $i$ through `out[i]`. We can also write (assuming two outputs) `out1, out2 = foo(input)` and `out1, _ = foo(input)` if we only need one of the outputs.
 ```julia-repl
 julia> x = 1; y = 1.5;
 julia> res1, res2 = sincos(x, y)
@@ -94,7 +95,7 @@ isapprox(mysum1(V),  mysum2(V); atol=1e-10, rtol=1e-10)
 
 
 ## Call by reference
-Julia functions do not copy the input but directly operate on the input data. This means that changing values of the input in the function body will also change this data for the function caller. Whenever you define a function which will modify the input, you should indicate this with a `!` behind the function name:
+Julia functions do not copy the input but directly operate on the input data. This means that changing values of the input in the function body will also change this data for the function caller. Whenever we define a function which will modify the input, we should indicate this with a `!` behind the function name:
 ```julia
 function sincos!(x)
     x .= sin.(cos.(x))
@@ -200,7 +201,7 @@ Address output: Ptr{Nothing} @0x00007f33266e2310
 }
 
 ## Multiple dispatch
-You might have observed that since we did not specify any data types, we were able to call functions using vectors and scalars. However, if we call `sincos1!(1.0)` you see that this might not always be the best idea. Some functions should only be called with a certain data type. We can specify the data type of input and output in the following way:
+One might have observed that since we did not specify any data types, we were able to call functions using vectors and scalars. However, if we call `sincos1!(1.0)` we see that this might not always be the best idea. Some functions should only be called with a certain data type. We can specify the data type of input and output in the following way:
 ```julia
 function sincos1!(x::Array{Float64, 1})
     x .= sin.(cos.(x))
@@ -243,7 +244,7 @@ My input is a vector.
 ```
 
 ## Element-wise operations and input specifications
-As always, you can use the dot operation `.` to evaluate an array of inputs element-wise. Define the scalar function
+As always, we can use the dot operation `.` to evaluate an array of inputs element-wise. Define the scalar function
 ```julia
 function sincos(x::Float64)
     return sin(cos(x))
@@ -260,13 +261,13 @@ julia> sincos.(x)
  0.514395  0.514395  0.514395
 ```
 
-Moreover, you can assign values to inputs in the function definition. If the caller does not specify the input, these values will be used instead.
+Moreover, we can assign values to inputs in the function definition. If the caller does not specify the input, these values will be used instead.
 ```julia
 function sincos(x::Float64 = 0.5 * pi)
     return sin.(cos.(x))
 end
 ```
-You can now call this function via
+We can now call this function via
 ```julia-repl
 julia> sincos()
 6.123233995736766e-17
@@ -296,7 +297,7 @@ julia> sincos(1//2)
 ```
 
 \exercise{
-    Write functions `sincos` which can take any real number as well as the point struct we defined earlier
+    Write a function `sincos` which can take any real number as well as the point struct we defined earlier
 ```julia
 struct Point{T}
     x::T
