@@ -14,6 +14,7 @@ The previously presented example is similar to the (in the radiation transport c
 ```julia
 function runPlaneSource()
   ...
+
   return x, phi
 end
 ```
@@ -24,7 +25,7 @@ Then, write a new function for the initial condition and use it in your code. Th
 $$
 \psi_{jk}(t=0) = \max\left(10^{-4},\frac{1}{\sqrt{2\pi\sigma^2}}\exp\left(-\frac{(x_j-0.5)^2}{2\sigma^2}\right)\right),
 $$
-where $\sigma = 0.03^2$. Write an initial condition that you can call for a given $x$ and specify that $x$ is a real scalar. Then replace your initial condition from Sheet 1 by the above function call, which you need to evaluate at all spatial cells and all velocity points.
+where $\sigma = 0.03^2$. Write a function for the initial condition that you can call for fixed $j$ and therefore a given real scalar $x$. Then replace your initial condition from [Worksheet 1](worksheet_1) by the above function call, which you need to evaluate at all spatial cells and all velocity points.
 
 \collapssol{
 
