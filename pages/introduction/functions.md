@@ -371,6 +371,7 @@ struct PointFull1{T<:Real}
     x::T
     y::T
     norm
+    
     function PointFull1(x::T, y::T) where {T<:Real}
         norm = sqrt(x^2 + y^2)
         new{T}(x, y, norm)
@@ -379,13 +380,13 @@ end
 ```
 Now, we can call
 ```julia-repl
-julia> PointFull1(1.0,2.0)
+julia> PointFull1(1.0, 2.0)
 PointFull1{Float64}(1.0, 2.0, 2.23606797749979)
 
-julia> PointFull1(1,2)
+julia> PointFull1(1, 2)
 PointFull1{Int64}(1, 2, 2.23606797749979)
 
-julia> PointFull1(1im,2im)
+julia> PointFull1(1im, 2im)
 ERROR: MethodError: no method matching PointFull1(::Complex{Int64}, ::Complex{Int64})
 Stacktrace:
  [1] top-level scope
