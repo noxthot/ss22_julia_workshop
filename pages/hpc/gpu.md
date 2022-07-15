@@ -24,7 +24,7 @@ They support the three big vendor frameworks:
 where `CUDA.jl` comes with the most features. 
 Nevertheless, in good Julia practice, the team behind JuliaGPU also included an abstraction layer, such that a lot of common functionality can be implemented without the need to specify a vendor and to do some generic GPU programming.
 
-\figenv{Compile strategy for JuliaGPU <br>Original source: https://www.youtube.com/watch?v=Hz9IMJuW5hU}{/assets/pages/hpc/GPUBackend.png}{}
+\figenvsource{Compile strategy for JuliaGPU}{/assets/pages/hpc/GPUBackend.png}{}{https://www.youtube.com/watch?v=Hz9IMJuW5hU}
 
 Nevertheless, for the rest of the section we will focus on `CUDA.jl` as the card at hand is CUDA compatible. 
 
@@ -388,7 +388,7 @@ To get the full performance we need to run our kernel not just with multiple thr
 
 In this technical blog from NVIDIA [CUDA Refresher: The CUDA Programming Model](https://developer.nvidia.com/blog/cuda-refresher-cuda-programming-model/) we can read more about it. 
 The following figure illustrates it quite nicely: 
-\figenv{Kernel execution on GPU. <br>Original source: https://developer.nvidia.com/blog/cuda-refresher-cuda-programming-model/}{/assets/pages/hpc/kernel-execution-on-gpu-1.png}{}
+\figenvsource{Kernel execution on GPU.}{/assets/pages/hpc/kernel-execution-on-gpu-1.png}{}{ https://developer.nvidia.com/blog/cuda-refresher-cuda-programming-model/}
 
 If you use blocks, the computation of your index in `M` becomes a bit more tricky to compute and you also need to have more storage for `M`.
 

@@ -45,3 +45,11 @@ Add here global latex commands to use throughout your pages.
 </figure>
 ~~~
 }
+\newcommand{\figenvsource}[4]{
+~~~
+<figure style="text-align:center;">
+<img src="!#2" style="padding:0;#3" alt="#1"/>
+<figcaption>#1 Original source: <p style="font-size:11px"><a href="#4">#4</a></p></figcaption>
+</figure>
+~~~
+}

@@ -19,7 +19,7 @@ In this section we will quickly glimpse into clustering with an algorithm called
 To demonstrate applications of unsupervised learning algorithms we have a look at the famous MNIST data set. This data set contains 70.000 images of handwritten digits and additionally a label that tells the digit which is displayed in the invidiual images. In this section the labels are not consumed by the algorithms, but we will use them to illustrate some results.
 
 The data set looks like this:
-\figenv{MNIST data set. <br>Original source: https://en.wikipedia.org/wiki/MNIST_database#/media/File:MnistExamples.png}{/assets/pages/datascience/MnistExamples.png}{}
+\figenvsource{MNIST data set.}{/assets/pages/datascience/MnistExamples.png}{}{Original source: https://en.wikipedia.org/wiki/MNIST_database#/media/File:MnistExamples.png}
 
 For this section, let us imagine that we only have a folder with 10.000 images of random hand written digits without any label and we would like to sort them into ten buckets: One bucket where we only have images of 0s, one bucket where we only have images of 1s and so on. Technically speaking, we are expecting to see ten different digits (*categories*) and within each category, the similarity between the images is expected to be *high*. How are we able to tackle this problem?
 
@@ -37,7 +37,7 @@ The naive algorithm works iteratively for a given $k$:
 1. Repeat until the cluster centers are stable (with some tolerance).
 
 The following animation illustrates this process:
-\figenv{K means convergence. <br>Original source: https://commons.wikimedia.org/wiki/File:K-means_convergence.gif}{/assets/pages/datascience/K-means_convergence.gif}{}
+\figenvsource{K means convergence.}{/assets/pages/datascience/K-means_convergence.gif}{}{https://commons.wikimedia.org/wiki/File:K-means_convergence.gif}
 
 
 
