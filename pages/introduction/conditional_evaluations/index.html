@@ -112,11 +112,11 @@
 
 <!-- Content appended here (in class franklin-content) -->
 <div class="franklin-content"><h1 id="conditional_evaluations"><a href="#conditional_evaluations" class="header-anchor">Conditional evaluations</a></h1>
-<p>In the following, we start discussing <a href="https://docs.julialang.org/en/v1/manual/control-flow/#Control-Flow">control flows</a>. Let us start with conditional statements. Recall that Julia provides boolians, that is, variables that can be either <code>true</code> or <code>false</code>. Often, an algorithm wants to react to a statement being <code>true</code> or <code>false</code>. As an example, we would like to check if a given input is correct and if it is not print a warning message. This sentence already shows that we need an <code>if</code> statement, which takes the form</p>
+<p>In the following, we start discussing <a href="https://docs.julialang.org/en/v1/manual/control-flow/#Control-Flow">control flows</a>. Let us start with conditional statements. Recall that Julia provides boolians, that is, variables that can be either <code>true</code> or <code>false</code>. Often, an algorithm wants to react to a statement being <code>true</code> or <code>false</code>. As an example, we would like to check if a given input is correct and if it is not, print a warning message. This sentence already shows that we need an <code>if</code> statement, which takes the form</p>
 <pre><code class="julia hljs"><span class="hljs-keyword">if</span> condition
     <span class="hljs-comment"># code to be run if condition is true</span>
 <span class="hljs-keyword">end</span></code></pre>
-<p>As an example, let us choose a number and check if this number is stored as a Float of an Int</p>
+<p>As an example, let us choose a number and check if this number is stored as a <em>Floating Point Number</em> &#40;or float for short&#41; or an <em>Integer</em></p>
 <pre><code class="julia hljs">number  = <span class="hljs-number">2</span>
 <span class="hljs-keyword">if</span> number <span class="hljs-keyword">isa</span> <span class="hljs-built_in">Integer</span>
     println(<span class="hljs-string">&quot;This number is an integer&quot;</span>)
