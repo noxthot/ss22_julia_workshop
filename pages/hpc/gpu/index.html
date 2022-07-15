@@ -128,8 +128,8 @@
 <p>where <code>CUDA.jl</code> comes with the most features.  Nevertheless, in good Julia practice, the team behind JuliaGPU also included an abstraction layer, such that a lot of common functionality can be implemented without the need to specify a vendor and to do some generic GPU programming.</p>
 
 <figure style="text-align:center;">
-<img src="/ss22_julia_workshop/assets/pages/hpc/GPUBackend.png" style="padding:0; " alt=" Compile strategy for JuliaGPU <br>Original source: https://www.youtube.com/watch?v=Hz9IMJuW5hU"/>
-<figcaption> Compile strategy for JuliaGPU <br>Original source: https://www.youtube.com/watch?v=Hz9IMJuW5hU</figcaption>
+<img src="/ss22_julia_workshop/assets/pages/hpc/GPUBackend.png" style="padding:0; " alt=" Compile strategy for JuliaGPU"/>
+<figcaption> Compile strategy for JuliaGPU Original source: <p style="font-size:11px"><a href=" https://www.youtube.com/watch?v=Hz9IMJuW5hU"> https://www.youtube.com/watch?v=Hz9IMJuW5hU</a></p></figcaption>
 </figure>
 
 <p>Nevertheless, for the rest of the section we will focus on <code>CUDA.jl</code> as the card at hand is CUDA compatible. </p>
@@ -449,8 +449,8 @@ Stacktrace:
 <p>To get the full performance we need to run our kernel not just with multiple threads, but also with multiple blocks. </p>
 <p>In this technical blog from NVIDIA <a href="https://developer.nvidia.com/blog/cuda-refresher-cuda-programming-model/">CUDA Refresher: The CUDA Programming Model</a> we can read more about it.  The following figure illustrates it quite nicely: 
 <figure style="text-align:center;">
-<img src="/ss22_julia_workshop/assets/pages/hpc/kernel-execution-on-gpu-1.png" style="padding:0; " alt=" Kernel execution on GPU. <br>Original source: https://developer.nvidia.com/blog/cuda-refresher-cuda-programming-model/"/>
-<figcaption> Kernel execution on GPU. <br>Original source: https://developer.nvidia.com/blog/cuda-refresher-cuda-programming-model/</figcaption>
+<img src="/ss22_julia_workshop/assets/pages/hpc/kernel-execution-on-gpu-1.png" style="padding:0; " alt=" Kernel execution on GPU."/>
+<figcaption> Kernel execution on GPU. Original source: <p style="font-size:11px"><a href=" https://developer.nvidia.com/blog/cuda-refresher-cuda-programming-model/"> https://developer.nvidia.com/blog/cuda-refresher-cuda-programming-model/</a></p></figcaption>
 </figure>
 </p>
 <p>If you use blocks, the computation of your index in <code>M</code> becomes a bit more tricky to compute and you also need to have more storage for <code>M</code>.</p>

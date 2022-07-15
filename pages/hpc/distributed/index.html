@@ -271,7 +271,7 @@
 <span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@btime</span> estimate_pi(in_unit_circle_distributed1, N);
 </span>  649.564 ms (289 allocations: 12.27 KiB)</code></pre>
 <p></div> </div>
-<p>We can see that this is a very easy way to parallelize and this time the <code>rand&#40;&#41;</code> function is not causing problems. We are already faster than the basic implementation and close to the optimised four threads implementation.</p>
+<p>We can see that this is a very easy way to parallelize and this time the <code>rand&#40;&#41;</code> function is not causing problems. We are already faster than the basic implementation and close to the optimized four threads implementation.</p>
 <p>The <em>distributed for loop</em> with <code>@distributed</code> is designed to work well for situations where each iteration is tiny &#40;in terms of computational effort/workload&#41;.  Of course there is also the other possibility, that we have a function with a massive workload and work with the results of these calls.</p>
 <h3 id="the_pmap_and_the_everywhere_macro"><a href="#the_pmap_and_the_everywhere_macro" class="header-anchor">The <code>pmap</code> and the <code>@everywhere</code> macro</a></h3>
 <p>As mentioned before, we need to get functions to all the workers, in order to execute them.  For distributing a functions or for loading modules we can use the <code>@everywhere</code> macro.  As the name suggests, it will make sure that the function is available in the scope of each worker and the main process.  We simply prepend a function with <code>@everywhere</code> and nothing more is required.  There are some things to note for this case:</p>
