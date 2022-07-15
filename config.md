@@ -34,6 +34,9 @@ Add here global latex commands to use throughout your pages.
 \newcommand{\exercise}[1]{
 ~~~<button type="button" class="collapsible" style="background-color:#b5ddff">~~~ Exercise ~~~</button><div class="collapsiblecontent">~~~ #1 ~~~</div>~~~
 }
+\newcommand{\collapssol}[1]{
+~~~<button type="button" class="collapsible" style="background-color:#fffca5">~~~ Solution ~~~</button><div class="collapsiblecontent">~~~ #1 ~~~</div>~~~
+}
 
 \newcommand{\solution}[1]{~~~<div class="solution">~~~ Solution ~~~</div><div class="solutioncollapsible">~~~ #1 ~~~</div>~~~}
 

@@ -19,13 +19,10 @@ So let us give a little bit of background: The radiation transport equation desc
 
 Let us first generate the velocity grid, which are commonly chosen to be the so-called Gauss-Legendre points. Luckily, these points are already implemented in Julia. All we need to do is to install the Julia Package `FastGaussQuadrature`. The $\operatorname{nv} = 10$ points can be accessed and stored in a vector $v$ by calling `v, w = gausslegendre(nv)`. Note that $v$ contains the Gauss-Legendre points and $w$ contains the so-called quadrature weights used to compute integrals. Recall that it can be advantageous to create a new environment for this project. 
 
-\example{
+\collapssol{
 First, we need to open a new project and install the `FastGaussQuadrature` package:
 
 ```julia-repl
-shell> cd ..
-/home/jonas/Projects
-
 shell> mkdir LinearTransportSolver
 
 shell> cd LinearTransportSolver
@@ -55,7 +52,7 @@ $\,$
 
 Now, to generate the spatial positions on which we want to evaluate the solution we can use the `range` command. Build a spatial grid $x\in\mathbb{R}^{n_x}$ with $n_x = 101$ where $x$ contains the spatial positions from $x_0 = 0$ to $x_1 = 1$.
 
-\example{
+\collapssol{
 
 ```julia:./code/worksheet_1.jl
 nx = 101
@@ -68,7 +65,7 @@ The `range` command will generate $\operatorname{nx}$ values from $0$ to $1$. We
 
 The next step is to set up our solution matrix $\bm{\psi}$. The matrix should have dimension $\operatorname{nx}\times\operatorname{nv}$. Initially, the solution is zero except for $\psi_{50,k}=1$ for all $k$. Compute the described matrix.
 
-\example{
+\collapssol{
 To generate a zero matrix of dimension $n\times m$ we can use the `zeros(n, m)` command. Hence, to create a matrix with dimension $\operatorname{nx} \times \operatorname{nv}$ type
 
 ```julia:./code/worksheet_1.jl
@@ -111,7 +108,7 @@ $$
 $$
 Set up these two matrices in your code.
 
-\example{
+\collapssol{
 To setup tridiagonal matrices you need to load the `LinearAlgebra` package:
 ```julia-repl
 (LinearTransportSolver) pkg> add LinearAlgebra
@@ -132,7 +129,7 @@ $\,$
 
 The matrices $\mathbf{V}^{\pm}\in\mathbb{R}^{n_v\times n_v}$ are diagonal matrices, where $\mathbf{V}^-$ collects all negative velocities on the diagonal, i.e., $\mathbf{V}^- = \text{diag}(v_1,\cdots,v_{5},0,\cdots,0)$ and $\mathbf{V}^+$ collects all positive velocities, i.e., $\mathbf{V}^+ = \text{diag}(0,\cdots,0,v_{6},\cdots,v_{10})$. Implement these two matrices. To write your code for general $\operatorname{nv}$, use the `ceil` and `floor` commands.
 
-\example{
+\collapssol{
 The command to create a diagonal matrix with diagonal $y$ is `Diagonal(y)`. You can append two vectors $a$ and $b$ by `[a; b]`. We can use the `ceil` and `floor` commands to determine the midpoint of your velocity vector by e.g. `Int(ceil(nv))`. This determines $\operatorname{ceil}{n_v}$ and then transforms the resuling floating point number to an integer.
 
 ```julia:./code/worksheet_1.jl
@@ -165,7 +162,7 @@ $$
 $$
 Implement this matrix. You can try to not use `for` loops to test your element-wise operation skills.
 
-\example{
+\collapssol{
 
 ```julia:./code/worksheet_1.jl
 G = ones(nv, nv) .* w-I
@@ -180,7 +177,7 @@ $$  \bm{\psi}_{new} = \bm{\psi} -\Delta t\mathbf{D}^+\bm{\psi}\mathbf{V}^+ - \De
 
 Implement the above formular using a time step size $\Delta t = 0.01$. Try to use dot operations whenever possible. You can already check how the solution has changed by inspecting `ψ_new` in the center. You already know how this works. If you want you can interpret the physical process that you observe. 
 
-\example{
+\collapssol{
 
 We can use dot operations for additions and scalar multiplications. A possible implementation reads
 ```julia:./code/worksheet_1.jl
@@ -200,7 +197,7 @@ julia> ψ_new[midIndex-1:midIndex+1,:]
 
 Now, we do not want to know the solution at $\Delta t$, but at $t_{\mathrm{end}}=1.0$. If we just choose $\Delta t=1.0$ our approximation of the time derivative is inaccurate. Therefore, we wish to repeat the update with $\Delta t = 0.01$ fourty times. Use a loop to implement the repeated updates
 
-\example{
+\collapssol{
 
 ```julia:./code/worksheet_1.jl
 nT = 40
@@ -247,7 +244,7 @@ What you see is the particle density $\Phi$ over the spatial domain. Congratulat
 
 To better understand element-wise operations, see how we computed the scattering matrix $\mathbf{G}$ and see if you can write this in terms of for-loops. You can use the `if` command.
 
-\example{
+\collapssol{
 
 Recall the main concepts of element-wise operations that have also been previously applied:
 
