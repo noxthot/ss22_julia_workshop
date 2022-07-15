@@ -112,8 +112,8 @@
 
 <!-- Content appended here (in class franklin-content) -->
 <div class="franklin-content"><h1 id="getting_started_with_julia"><a href="#getting_started_with_julia" class="header-anchor">Getting started with Julia</a></h1>
-<p>Julia is a free and open source scientific programming language with a vast ecosystem of libraries that aim towards scientific computing. Visit <a href="https://julialang.org">julialang.org</a> for the download, documentation, learning materials and much more. Julia manages allow the best of both worlds, high-level interpreter and low-level compiler languages. It offers the high performance of compiled languages like C or Fortran by still bringing in the simplicity of dynamic languages like Python or R. Julia recently entered its teens and for this occasion a blog post was published with the title <a href="https://julialang.org/blog/2022/02/10years/">Why We Use Julia, 10 Years Later</a> as a follow up to the <a href="https://julialang.org/blog/2012/02/why-we-created-julia/">Why We Created Julia</a>. Both entries are a good read and give you an insight into the language and its creators.</p>
-<p>In this workshop we are going to take a look at Julia by starting with the basics and working our way up to advanced topics like multi processor programming and Data Frames.</p>
+<p>Julia is a free and open source scientific programming language with a vast ecosystem of libraries that aim towards scientific computing. Visit <a href="https://julialang.org">julialang.org</a> for the download, documentation, learning materials and much more. Julia manages to allow the best of two worlds, high-level interpreter and low-level compiler language. It offers the high performance of compiled languages like C or Fortran by still bringing in the simplicity of dynamic languages like Python or R. Julia recently entered its teens and for this occasion a blog post was published with the title <a href="https://julialang.org/blog/2022/02/10years/">Why We Use Julia, 10 Years Later</a> as a follow up to the <a href="https://julialang.org/blog/2012/02/why-we-created-julia/">Why We Created Julia</a>. Both entries are a good read and give you an insight into the language and its creators.</p>
+<p>In this workshop we are going to take a look at Julia by starting with the basics and working our way up to advanced topics like data science and multi processor programming.</p>
 <h2 id="some_general_words_on_the_organisation_of_this_workshop"><a href="#some_general_words_on_the_organisation_of_this_workshop" class="header-anchor">Some general words on the organisation of this workshop</a></h2>
 <p>For this workshop you do not need to be an Julia expert, not even a programming expert. We will introduce programming and Julia concepts along with examples. For this purpose you will find code blocks that you can copy if necessary &#40;top right corner <code>copy</code>&#41;. Furthermore, if we think something is very important we will highlight it with a box:</p>
 <div class="important">Pay extra attention to the content here.</div>
@@ -137,8 +137,8 @@
 <p>On the above link you will also find instructions on how to uninstall Julia, even though we are quite sure you will not want to do it ;&#41;.</p>
 <h4 id="addition_for_linux"><a href="#addition_for_linux" class="header-anchor">Addition for Linux:</a></h4>
 <p>Some distributions allow the installation via the package manager or the software center, note that this is often a very old version, so this method is not recommend for beginners. </p>
-<p>A convenient location for the Julia folder is <code>/opt/</code> and creating a link to the binary in <code>/usr/local/bin/</code> to make sure it is found on the path. </p>
-<p>In your terminal use <code>wget</code> to download the late</p>
+<p>A convenient location for the Julia folder is <code>/opt/</code> and by creating a link to the binary in <code>/usr/local/bin/</code> we can make sure it is found in the path. </p>
+<p>In your terminal use <code>wget</code> to download the latest version</p>
 <pre><code class="bash hljs">wget https://julialang-s3.julialang.org/bin/linux/x64/1.7/julia-1.7.3-linux-x86_64.tar.gz</code></pre>
 <p>extract the tar ball with</p>
 <pre><code class="bash hljs">tar -xvzf julia-1.7.3-linux-x86_64.tar.gz</code></pre>
@@ -152,7 +152,7 @@
 <h3 id="installing_the_julia_extension_for_visual_studio_code"><a href="#installing_the_julia_extension_for_visual_studio_code" class="header-anchor">Installing the Julia extension for Visual Studio Code</a></h3>
 <p>Follow the instructions on <a href="https://www.julia-vscode.org/docs/dev/gettingstarted/#Installing-the-Julia-extension">VSCode Julia extension</a> to install and configure the extension. You find the basic instructions from above here as well.</p>
 <button type="button" class="collapsible" style="background-color:#b5ddff"> Exercise </button><div class="collapsiblecontent">  Please try the small test example from <a href="https://www.julia-vscode.org/docs/dev/gettingstarted/#Creating-Your-First-Julia-Hello-World-program">here</a> to see if everything works. </div>
-<p>If you run into difficulties with VSCode in connection to Julia, the <a href="https://www.julia-vscode.org/docs/dev/">documentation</a> of the Julia extension is an excellent source for help. </p>
+<p>If you run into difficulties with VSCode in connection with Julia, the <a href="https://www.julia-vscode.org/docs/dev/">documentation</a> of the Julia extension is an excellent source for help. </p>
 <h2 id="julia_and_vscode"><a href="#julia_and_vscode" class="header-anchor">Julia and VSCode</a></h2>
 <p>There is no better resource than <a href="https://www.julia-vscode.org">https://www.julia-vscode.org</a> to explain how to program Julia with VSCode, you also get an interactive view that explains some of the following items. Nevertheless, we recall the most basic setup. </p>
 <ul>
@@ -160,7 +160,7 @@
 </li>
 <li><p>Right next to it you get additional information with regards to the current context. For example you will see files, when you are in <strong>Explorer</strong> or you see your <em>Workspace</em>, <em>Documentation</em>, and <em>Plot Navigation</em> in the <strong>Julia</strong> context.</p>
 </li>
-<li><p>When opening a Julia file &#40;ending in <code>.jl</code>&#41; &#40;double click in the <strong>Explorer</strong> - single click only give you a quick view and the file will not stay open if you click another file&#41; you have syntax highlighting and auto complete right away. </p>
+<li><p>When opening a Julia file &#40;ending in <code>.jl</code>&#41; &#40;double click in the <strong>Explorer</strong> - single click only gives you a quick view and the file will not stay open if you click another file&#41; you have syntax highlighting and auto complete right away. </p>
 </li>
 <li><p>To run a Julia program, click the small arrow on the top left or <code>Ctrl&#43;F5</code> if you prefer keyboard shortcuts. Both will run the code in the Julia REPL and you see the output on the bottom.</p>
 </li>
