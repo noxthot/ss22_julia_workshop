@@ -7,7 +7,7 @@
 
 [Macros](https://docs.julialang.org/en/v1/manual/metaprogramming/#man-macros) are a very powerful concept in Julia and we will use them throughout the next sessions.
 The main idea of macros is to allow the generation of code in the final body of a program.
-At its basis, a macro is similar to a function, as it maps a tuple of arguments to an returned expression. 
+At its basis, a macro is similar to a function, as it maps a tuple of arguments to a returned expression. 
 Therefore, in order to distinguish macros in the code, Julia reserves the `@` symbol as the first character for macro definitions. 
 Apart from that convention, there are two major differences between macros and functions.
 The macros:
