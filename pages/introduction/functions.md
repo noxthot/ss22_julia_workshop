@@ -263,7 +263,7 @@ julia> sincos.(x)
 
 Moreover, we can assign values to inputs in the function definition. If the caller does not specify the input, these values will be used instead.
 ```julia
-function sincos(x::Float64 = 0.5 * pi)
+function sincos(x::Float64=(0.5 * pi))
     return sin.(cos.(x))
 end
 ```
@@ -371,7 +371,7 @@ struct PointFull1{T<:Real}
     x::T
     y::T
     norm
-    
+
     function PointFull1(x::T, y::T) where {T<:Real}
         norm = sqrt(x^2 + y^2)
         new{T}(x, y, norm)
