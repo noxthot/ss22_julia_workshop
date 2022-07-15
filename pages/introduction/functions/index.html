@@ -336,7 +336,7 @@ Address output: Ptr{Nothing} @0x00007f33266e2310</code></pre>
  0.514395  0.514395  0.514395
  0.514395  0.514395  0.514395</code></pre>
 <p>Moreover, you can assign values to inputs in the function definition. If the caller does not specify the input, these values will be used instead.</p>
-<pre><code class="julia hljs"><span class="hljs-keyword">function</span> sincos(x::<span class="hljs-built_in">Float64</span>=<span class="hljs-number">0.5</span> * <span class="hljs-literal">pi</span>)
+<pre><code class="julia hljs"><span class="hljs-keyword">function</span> sincos(x::<span class="hljs-built_in">Float64</span> = <span class="hljs-number">0.5</span> * <span class="hljs-literal">pi</span>)
     <span class="hljs-keyword">return</span> sin.(cos.(x))
 <span class="hljs-keyword">end</span></code></pre>
 <p>You can now call this function via</p>
