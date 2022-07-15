@@ -262,7 +262,7 @@ julia> sincos.(x)
 
 Moreover, you can assign values to inputs in the function definition. If the caller does not specify the input, these values will be used instead.
 ```julia
-function sincos(x::Float64=0.5 * pi)
+function sincos(x::Float64 = 0.5 * pi)
     return sin.(cos.(x))
 end
 ```
