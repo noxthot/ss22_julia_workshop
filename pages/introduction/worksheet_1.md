@@ -11,7 +11,7 @@
 
 In this workshop, we wish to use a programming example from radiation transport. Do not worry, if you do not understand all details. Essentially everything boils down to solving  a simple matrix ordinary differential equation. And if that sounds complicated, we can also say it boils down to matrix vector multiplications that your code should execute in the end. 
 
-So let us give a little bit of background: The radiation transport equation describes radiation particles moving through a background material. In a one-dimensional geometry, particles can travel into directions $v\in [-1, 1]$ and are located at a spatial position $x\in[0, 1]$. One application which requires the simulation of radiation particles is radiation therapy, where photons are shot at the tumor to destroy cancerous cells. The radiation received by the patient is stored in a matrix $\bm{\psi}\in\R^{n_x \times n_{v}}$, where $n_x$ is the number of spatial cells and $n_v$ is the number of velocities. Below you for example find a treatment planning result from radiation oncology. The treatment is chosen to destroy the lung tumor without harming important organs.
+So let us give a little bit of background: The radiation transport equation describes radiation particles moving through a background material. In a one-dimensional geometry, particles can travel into directions $v\in [-1, 1]$ and are located at a spatial position $x\in[0, 1]$. One application which requires the simulation of radiation particles is radiation therapy, where photons are shot at a tumor to destroy cancerous cells. The radiation received by the patient is stored in a matrix $\bm{\psi}\in\R^{n_x \times n_{v}}$, where $n_x$ is the number of spatial cells and $n_v$ is the number of velocities. Below you find an example of a treatment planning result from radiation oncology. The treatment is chosen to destroy the lung tumor without harming important organs.
 
 \figalt{radiation therapy}{/assets/pages/introduction/radiationTransport.png}
 
@@ -50,7 +50,7 @@ $\,$
 
 ## Array generation and access
 
-Now, to generate the spatial positions on which we want to evaluate the solution we can use the `range` command. Build a spatial grid $x\in\mathbb{R}^{n_x}$ with $n_x = 101$ where $x$ contains the spatial positions from $x_0 = 0$ to $x_1 = 1$.
+Now, to generate the spatial positions on which we want to evaluate the solution we can use the `range` command. Build a spatial grid $x\in\mathbb{R}^{n_x}$, with $n_x = 101$, where $x$ contains the spatial positions from $x_0 = 0$ to $x_1 = 1$.
 
 \collapssol{
 
@@ -165,7 +165,7 @@ Implement this matrix. You can try to not use `for` loops to test your element-w
 \collapssol{
 
 ```julia:./code/worksheet_1.jl
-G = ones(nv, nv) .* w-I
+G = ones(nv, nv) .* w - I
 ```
 
 }
@@ -186,9 +186,9 @@ We can use dot operations for additions and scalar multiplications. A possible i
 ```
 To check the change of $\psi$ after a single time step around the center of the spatial domain you can for example type
  ```julia-repl
-julia> midIndex = Int(floor(nx/2));
+julia> midIndex = Int(floor(nx / 2));
 
-julia> ψ_new[midIndex-1:midIndex+1,:]
+julia> ψ_new[midIndex-1:midIndex + 1, :]
 ```
 
 }
@@ -224,7 +224,7 @@ end
 
 ## Plotting
 
-Luckily Julia can include the `Plots` package. Install and add it to your code. Then run
+Luckily, Julia can include the `Plots` package. Install and add it to your code. Then run
 
 ```julia:./code/worksheet_1.jl
 using LaTeXStrings
