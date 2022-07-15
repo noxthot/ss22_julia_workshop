@@ -4,18 +4,18 @@ using LaTeXStrings
 using LinearAlgebra
 using Plots; gr()
 
-struct Settings
+struct Settings{T<:AbstractFloat}
   nx::Int # number of spatial cells
   nv::Int # number of velocity points
   nt::Int # number of time steps
-  dt::Float64 # time step size
-  dx::Float64 # spatial grid cell size
-  tEnd::Float64 # end time of simulation
-  a::Float64 # start point of spatial domain
-  b::Float64 # end point of spatial domain
-  sigma2::Float64 # variance of initial condition
+  dt::T # time step size
+  dx::T # spatial grid cell size
+  tEnd::T # end time of simulation
+  a::T # start point of spatial domain
+  b::T # end point of spatial domain
+  sigma2::T # variance of initial condition
 
-  function Settings(nx::Int=101, nv::Int=10, sigma2::Float64=0.0009)
+  function Settings(nx::Int=101, nv::Int=10, sigma2::T=0.0009) where {T<:AbstractFloat}
     tEnd = 0.4
     a = -1.0;
     b = 1.0;
@@ -23,12 +23,12 @@ struct Settings
     dt = dx
     nt = Int(floor(tEnd / dt))
 
-    return new(nx, nv, nt, dt, dx, tEnd, a, b, sigma2)
+    return new{T}(nx, nv, nt, dt, dx, tEnd, a, b, sigma2)
   end
 end
 
 # definition of the initial condition
-function IC(obj::Settings, x::Float64)
+function IC(obj::Settings, x::T) where T<:Real
   floor = 1e-4
   return max(floor, 1.0 / (sqrt(2 * pi * obj.sigma2)) * exp(-(x - 0.5 * (obj.b - obj.a) - obj.a)^2 / (2.0 * obj.sigma2)))
 end
