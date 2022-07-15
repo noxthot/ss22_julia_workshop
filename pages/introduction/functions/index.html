@@ -417,7 +417,7 @@ Stacktrace:
     y::T
     norm
 <span class="hljs-keyword">end</span></code></pre>
-<p>and creating objects of type PointFull via</p>
+<p>and creating objects of type <code>PointFull</code> via</p>
 <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> p = PointFull{<span class="hljs-built_in">Float64</span>}(<span class="hljs-number">1.0</span>, <span class="hljs-number">2.0</span>, sqrt(<span class="hljs-number">1.0</span>^<span class="hljs-number">2</span> + <span class="hljs-number">2.0</span>^<span class="hljs-number">2</span>))
 </span>PointFull{Float64}(1.0, 2.0, 2.23606797749979)
 
@@ -431,19 +431,20 @@ Stacktrace:
     x::T
     y::T
     norm
+    
     <span class="hljs-keyword">function</span> PointFull1(x::T, y::T) <span class="hljs-keyword">where</span> {T&lt;:<span class="hljs-built_in">Real</span>}
         norm = sqrt(x^<span class="hljs-number">2</span> + y^<span class="hljs-number">2</span>)
         new{T}(x, y, norm)
     <span class="hljs-keyword">end</span>
 <span class="hljs-keyword">end</span></code></pre>
 <p>Now, we can call</p>
-<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> PointFull1(<span class="hljs-number">1.0</span>,<span class="hljs-number">2.0</span>)
+<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> PointFull1(<span class="hljs-number">1.0</span>, <span class="hljs-number">2.0</span>)
 </span>PointFull1{Float64}(1.0, 2.0, 2.23606797749979)
 
-<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> PointFull1(<span class="hljs-number">1</span>,<span class="hljs-number">2</span>)
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> PointFull1(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>)
 </span>PointFull1{Int64}(1, 2, 2.23606797749979)
 
-<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> PointFull1(<span class="hljs-number">1</span><span class="hljs-literal">im</span>,<span class="hljs-number">2</span><span class="hljs-literal">im</span>)
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> PointFull1(<span class="hljs-number">1</span><span class="hljs-literal">im</span>, <span class="hljs-number">2</span><span class="hljs-literal">im</span>)
 </span>ERROR: MethodError: no method matching PointFull1(::Complex{Int64}, ::Complex{Int64})
 Stacktrace:
  [1] top-level scope
