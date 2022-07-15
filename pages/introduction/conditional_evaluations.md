@@ -5,13 +5,13 @@
 
 # Conditional evaluations
 In the following, we start discussing [control flows](https://docs.julialang.org/en/v1/manual/control-flow/#Control-Flow). Let us start with conditional statements.
-Recall that Julia provides boolians, that is, variables that can be either `true` or `false`. Often, an algorithm wants to react to a statement being `true` or `false`. As an example, we would like to check if a given input is correct and if it is not print a warning message. This sentence already shows that we need an `if` statement, which takes the form
+Recall that Julia provides boolians, that is, variables that can be either `true` or `false`. Often, an algorithm wants to react to a statement being `true` or `false`. As an example, we would like to check if a given input is correct and if it is not, print a warning message. This sentence already shows that we need an `if` statement, which takes the form
 ```julia
 if condition
     # code to be run if condition is true
 end
 ```
-As an example, let us choose a number and check if this number is stored as a Float of an Int
+As an example, let us choose a number and check if this number is stored as a *Floating Point Number* (or float for short) or an *Integer*
 ```julia:./code/cd.jl
 number  = 2
 if number isa Integer
