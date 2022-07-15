@@ -56,6 +56,11 @@ and the often used sanity check, that actually also shows you the output of your
 }
 }
 
+@@important
+Note that for the benchmarking we often use the `$` literal for variables to tell the Julia interpreter to use interpolation. 
+This will make sure that the variable is not allocated inside the function and the measurement is more accurate, or more likely what we actually want to know. 
+@@ 
+
 We can also use the [`Profiler`](https://docs.julialang.org/en/v1/manual/profile/#Profiling) package to really dig into profiling the code but this is a bit too much of a deep dive for this class, it would look like this:
 ```julia:./code/performance.jl
 using Profile
