@@ -183,7 +183,7 @@ julia> A[:,end-2]
 ```
 # Concatenation
 
-You can alse concatenate (or slice together) different matrices and vectors. I.e., if you have a matrix `A = zeros(2, 4)` and a vector `a = ones(2)` we can add $a$ as a column to $A$ by 
+We can alse concatenate (or slice together) different matrices and vectors. I.e., if we have a matrix `A = zeros(2, 4)` and a vector `a = ones(2)` we can add $a$ as a column to $A$ by 
 ```julia-repl
 julia> A = zeros(2, 4)
 2×4 Matrix{Float64}:
