@@ -113,23 +113,23 @@
 
 <!-- Content appended here (in class franklin-content) -->
 <div class="franklin-content"><h1 id="package_manager"><a href="#package_manager" class="header-anchor">Package manager</a></h1>
-<p>We have already seen the Julia <a href="https://docs.julialang.org/en/v1/stdlib/Pkg/">package manager</a>. In the following, we will discuss this feature in more detail. You already know how to open the package manager: Simply press <code>&#93;</code>. Now, in order to, for example, add the <a href="https://juliaapproximation.github.io/FastGaussQuadrature.jl/stable/">FastGaussQuadrature</a> package type </p>
+<p>We have already seen the Julia <a href="https://docs.julialang.org/en/v1/stdlib/Pkg/">package manager</a>. In the following, we will discuss this feature in more detail. We already know how to open the package manager: Simply press <code>&#93;</code>. Now, in order to, for example, add the <a href="https://juliaapproximation.github.io/FastGaussQuadrature.jl/stable/">FastGaussQuadrature</a> package type </p>
 <pre><code class="julia-repl hljs"><span class=hljs-metap>(@v1.7) pkg&gt;</span> add FastGaussQuadrature</code></pre>
-<p>From now on, every time you open Julia, you can type</p>
+<p>From now on, every time we open Julia, we can type</p>
 <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-keyword">using</span> FastGaussQuadrature</span></code></pre>
-<p>which in this case adds functionalities to numerically compute integrals to your session. Note that the specific details of this package are not important at this point and we will revisit this package in our work sheets. In case you wish to remove this package you can open the package manager and type</p>
+<p>which in this case adds functionalities to numerically compute integrals to our session. Note that the specific details of this package are not important at this point and we will revisit this package in our work sheets. In case we wish to remove this package again we can open the package manager and type</p>
 <pre><code class="julia-repl hljs"><span class=hljs-metap>(@v1.7) pkg&gt;</span> rm FastGaussQuadrature</code></pre>
-<p>If you now want to install a specific version of a package you can add <code>@&lt;versionnumber&gt;</code> behind the package name. As an example, to install <code>FastGaussQuadrature</code> at version <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.4.8</mn></mrow><annotation encoding="application/x-tex">0.4.8</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0.4.8</span></span></span></span> type</p>
+<p>If we now want to install a specific version of a package we can add <code>@&lt;versionnumber&gt;</code> behind the package name. As an example, to install <code>FastGaussQuadrature</code> at version <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.4.8</mn></mrow><annotation encoding="application/x-tex">0.4.8</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0.4.8</span></span></span></span> we type</p>
 <pre><code class="julia-repl hljs"><span class=hljs-metap>(@v1.7) pkg&gt;</span> add FastGaussQuadrature@0.4.8</code></pre>
-<p>Moreover, you can update all packages that you have added by typing</p>
+<p>Moreover, we can update all packages that we have added by typing</p>
 <pre><code class="julia-repl hljs"><span class=hljs-metap>(@v1.7) pkg&gt;</span> update</code></pre>
 <p>or just a specific package &#40;for example FastGaussQuadrature&#41; by typing</p>
 <pre><code class="julia-repl hljs"><span class=hljs-metap>(@v1.7) pkg&gt;</span> update FastGaussQuadrature</code></pre>
-<p>To get a list of all installed packages you can type</p>
+<p>To get a list of all installed packages we can type</p>
 <pre><code class="julia-repl hljs"><span class=hljs-metap>(@v1.7) pkg&gt;</span> status</code></pre>
-<p>It is good practice to add packages only for certain projects to prevent conflicting packages. This can be done by creating a new package environment. Here we create an environment called <code>example</code>:</p>
+<p>It is good practice to add packages only for certain projects to prevent conflicting packages, see <a href="https://en.wikipedia.org/wiki/Dependency_hell">dependency hell</a>. This can be done by creating a new package environment. Here we create an environment called <code>example</code>:</p>
 <pre><code class="julia-repl hljs"><span class=hljs-metap>(@v1.7) pkg&gt;</span> activate example</code></pre>
-<p>If you check this new environment with the <code>status</code> command you will see that you have a clean package environment. You can return to the default environment by typing <code>activate</code>. Type <code>activate .</code>, if you want to create an environment that is identified with the project folder you are working on. Whenever someone uses your project folder, this person can enter the same environment by typing <code>activate .</code> and install all needed packages with the used versions by typing <code>instantiate</code>. If you do not want to enter the julia environment, simply type</p>
+<p>If we check this new environment with the <code>status</code> command we will see that we have a clean package environment. We can return to the default environment by typing <code>activate</code>. We type <code>activate .</code>, if we want to create an environment that is identified with the project folder we are currently working in. Whenever someone uses this project folder, this person can enter the same environment by typing <code>activate .</code> and install all needed packages with the used versions by typing <code>instantiate</code>. If we do not want to start the REPL we can still include the environment by simply typing</p>
 <pre><code class="shell hljs">julia --project=. main.jl</code></pre>
 <button type="button" class="collapsible" style="background-color:#b5ddff"> Exercise </button><div class="collapsiblecontent">  Let us practice the learned concepts a little bit.</p>
 <ol>
