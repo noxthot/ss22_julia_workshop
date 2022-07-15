@@ -248,6 +248,37 @@
  1
  2
  3</code></pre>
+<h1 id="concatenation"><a href="#concatenation" class="header-anchor">Concatenation</a></h1>
+<p>You can alse concatenate &#40;or slice together&#41; different matrices and vectors. I.e., if you have a matrix <code>A &#61; zeros&#40;2, 4&#41;</code> and a vector <code>a &#61; ones&#40;2&#41;</code> we can add <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi></mrow><annotation encoding="application/x-tex">a</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">a</span></span></span></span> as a column to <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi></mrow><annotation encoding="application/x-tex">A</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">A</span></span></span></span> by </p>
+<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> A = zeros(<span class="hljs-number">2</span>, <span class="hljs-number">4</span>)
+</span>2×4 Matrix{Float64}:
+ 0.0  0.0  0.0  0.0
+ 0.0  0.0  0.0  0.0
+
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> a = ones(<span class="hljs-number">2</span>)
+</span>2-element Vector{Float64}:
+ 1.0
+ 1.0
+
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> B = [A a]
+</span>2×5 Matrix{Float64}:
+ 0.0  0.0  0.0  0.0  1.0
+ 0.0  0.0  0.0  0.0  1.0</code></pre>
+<p>We can also add a row <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>b</mi></mrow><annotation encoding="application/x-tex">b</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal">b</span></span></span></span> by</p>
+<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> b = <span class="hljs-number">2</span> .* ones(<span class="hljs-number">5</span>)
+</span>5-element Vector{Float64}:
+ 2.0
+ 2.0
+ 2.0
+ 2.0
+ 2.0
+
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> C = [B; b&#x27;]
+</span>3×5 Matrix{Float64}:
+ 0.0  0.0  0.0  0.0  1.0
+ 0.0  0.0  0.0  0.0  1.0
+ 2.0  2.0  2.0  2.0  2.0</code></pre>
+<button type="button" class="collapsible" style="background-color:#b5ddff"> Exercise </button><div class="collapsiblecontent">  TODO </div>
 <p>To find the entire list of operations that can be performed and a lot more on arrays in Julia visit the <a href="https://docs.julialang.org/en/v1/base/arrays/#lib-arrays">docs</a>.</p>
 <h1 id="linear_algebra"><a href="#linear_algebra" class="header-anchor">Linear Algebra</a></h1>
 <p>As soon as we include the <a href="https://docs.julialang.org/en/v1/stdlib/LinearAlgebra/"><code>LinearAlgebra</code></a> or the <a href="https://docs.julialang.org/en/v1/stdlib/SuiteSparse/"><code>SparseLinearAlgebra</code></a> package we have a lot more operations available, both are part of the Julia Standard Library.</p>
