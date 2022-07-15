@@ -114,12 +114,13 @@
 <!-- Content appended here (in class franklin-content) -->
 <div class="franklin-content"><h1 id="functions"><a href="#functions" class="header-anchor">Functions</a></h1>
 <h2 id="syntax"><a href="#syntax" class="header-anchor">Syntax</a></h2>
-<p>To improve the structure and ensure reusability of pieces of your program you can use the <code>function</code> command. You have already used functions when, for example, calling <code>typeof&#40;input&#41;</code>. Other examples of functions that can be found on any common calculators are <code>sin&#40;x&#41;</code> or <code>exp&#40;x&#41;</code>. The syntax to define your own functions is the following:</p>
+<p>To improve the structure and ensure reusability of pieces of our program we can use the <code>function</code> command. We have already used functions when, for example, calling <code>typeof&#40;input&#41;</code>. Other examples of functions that can be found on any common calculators are <code>sin&#40;x&#41;</code> or <code>exp&#40;x&#41;</code>. The syntax to define our own functions is the following:</p>
 <pre><code class="julia hljs"><span class="hljs-keyword">function</span> foo(input)
     <span class="hljs-comment"># function body that is executed when foo is called</span>
+
     <span class="hljs-keyword">return</span> output
 <span class="hljs-keyword">end</span></code></pre>
-<p>So if you want to define a function which prints out and returns <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>sin</mi><mo>⁡</mo><mo stretchy="false">(</mo><mi>cos</mi><mo>⁡</mo><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\sin(\cos(x))</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mop">sin</span><span class="mopen">(</span><span class="mop">cos</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">))</span></span></span></span> we can write</p>
+<p>So if we want to define a function which prints out and returns <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>sin</mi><mo>⁡</mo><mo stretchy="false">(</mo><mi>cos</mi><mo>⁡</mo><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\sin(\cos(x))</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mop">sin</span><span class="mopen">(</span><span class="mop">cos</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">))</span></span></span></span> we can write</p>
 <pre><code class="julia hljs"><span class="hljs-keyword">function</span> sincos(x)
     result = sin(cos(x))
     println(<span class="hljs-string">&quot;sin(cos(<span class="hljs-variable">$x</span>)) = <span class="hljs-variable">$result</span>&quot;</span>)
@@ -136,7 +137,7 @@
     
     <span class="hljs-keyword">return</span> result1, result2
 <span class="hljs-keyword">end</span></code></pre>
-<p>You can call a function with multiple outputs via <code>out &#61; foo&#40;input&#41;</code> and access the output at index <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi></mrow><annotation encoding="application/x-tex">i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6595em;"></span><span class="mord mathnormal">i</span></span></span></span> through <code>out&#91;i&#93;</code>. You can also write &#40;assuming two outputs&#41; <code>out1, out2 &#61; foo&#40;input&#41;</code>.</p>
+<p>We can call a function with multiple outputs via <code>out &#61; foo&#40;input&#41;</code> and access the output at index <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi></mrow><annotation encoding="application/x-tex">i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6595em;"></span><span class="mord mathnormal">i</span></span></span></span> through <code>out&#91;i&#93;</code>. We can also write &#40;assuming two outputs&#41; <code>out1, out2 &#61; foo&#40;input&#41;</code> and <code>out1, _ &#61; foo&#40;input&#41;</code> if we only need one of the outputs.</p>
 <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> x = <span class="hljs-number">1</span>; y = <span class="hljs-number">1.5</span>;
 </span><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> res1, res2 = sincos(x, y)
 </span>sin(cos(1)) = 0.5143952585235492
@@ -194,7 +195,7 @@ mysum1(V) ≈ mysum2(V)
 isapprox(mysum1(V),  mysum2(V); atol=<span class="hljs-number">1e-10</span>, rtol=<span class="hljs-number">1e-10</span>)</code></pre>
 <p></div> </div>
 <h2 id="call_by_reference"><a href="#call_by_reference" class="header-anchor">Call by reference</a></h2>
-<p>Julia functions do not copy the input but directly operate on the input data. This means that changing values of the input in the function body will also change this data for the function caller. Whenever you define a function which will modify the input, you should indicate this with a <code>&#33;</code> behind the function name:</p>
+<p>Julia functions do not copy the input but directly operate on the input data. This means that changing values of the input in the function body will also change this data for the function caller. Whenever we define a function which will modify the input, we should indicate this with a <code>&#33;</code> behind the function name:</p>
 <pre><code class="julia hljs"><span class="hljs-keyword">function</span> sincos!(x)
     x .= sin.(cos.(x))
     <span class="hljs-keyword">return</span> x
@@ -287,7 +288,7 @@ Address output: Ptr{Nothing} @0x00007f33266e2310</code></pre>
 </ol>
  </div>
 <h2 id="multiple_dispatch"><a href="#multiple_dispatch" class="header-anchor">Multiple dispatch</a></h2>
-<p>You might have observed that since we did not specify any data types, we were able to call functions using vectors and scalars. However, if we call <code>sincos1&#33;&#40;1.0&#41;</code> you see that this might not always be the best idea. Some functions should only be called with a certain data type. We can specify the data type of input and output in the following way:</p>
+<p>One might have observed that since we did not specify any data types, we were able to call functions using vectors and scalars. However, if we call <code>sincos1&#33;&#40;1.0&#41;</code> we see that this might not always be the best idea. Some functions should only be called with a certain data type. We can specify the data type of input and output in the following way:</p>
 <pre><code class="julia hljs"><span class="hljs-keyword">function</span> sincos1!(x::<span class="hljs-built_in">Array</span>{<span class="hljs-built_in">Float64</span>, <span class="hljs-number">1</span>})
     x .= sin.(cos.(x))
     <span class="hljs-keyword">return</span> x
@@ -323,7 +324,7 @@ Address output: Ptr{Nothing} @0x00007f33266e2310</code></pre>
  0.5143952585235492
  0.5143952585235492</code></pre>
 <h2 id="element-wise_operations_and_input_specifications"><a href="#element-wise_operations_and_input_specifications" class="header-anchor">Element-wise operations and input specifications</a></h2>
-<p>As always, you can use the dot operation <code>.</code> to evaluate an array of inputs element-wise. Define the scalar function</p>
+<p>As always, we can use the dot operation <code>.</code> to evaluate an array of inputs element-wise. Define the scalar function</p>
 <pre><code class="julia hljs"><span class="hljs-keyword">function</span> sincos(x::<span class="hljs-built_in">Float64</span>)
     <span class="hljs-keyword">return</span> sin(cos(x))
     
@@ -335,11 +336,11 @@ Address output: Ptr{Nothing} @0x00007f33266e2310</code></pre>
 </span>2×3 Matrix{Float64}:
  0.514395  0.514395  0.514395
  0.514395  0.514395  0.514395</code></pre>
-<p>Moreover, you can assign values to inputs in the function definition. If the caller does not specify the input, these values will be used instead.</p>
+<p>Moreover, we can assign values to inputs in the function definition. If the caller does not specify the input, these values will be used instead.</p>
 <pre><code class="julia hljs"><span class="hljs-keyword">function</span> sincos(x::<span class="hljs-built_in">Float64</span> = <span class="hljs-number">0.5</span> * <span class="hljs-literal">pi</span>)
     <span class="hljs-keyword">return</span> sin.(cos.(x))
 <span class="hljs-keyword">end</span></code></pre>
-<p>You can now call this function via</p>
+<p>We can now call this function via</p>
 <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> sincos()
 </span>6.123233995736766e-17
 
@@ -359,7 +360,7 @@ Address output: Ptr{Nothing} @0x00007f33266e2310</code></pre>
 
 <span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> sincos(<span class="hljs-number">1</span>//<span class="hljs-number">2</span>)
 </span>0.7691963548410085</code></pre>
-<button type="button" class="collapsible" style="background-color:#b5ddff"> Exercise </button><div class="collapsiblecontent">  Write functions <code>sincos</code> which can take any real number as well as the point struct we defined earlier</p>
+<button type="button" class="collapsible" style="background-color:#b5ddff"> Exercise </button><div class="collapsiblecontent">  Write a function <code>sincos</code> which can take any real number as well as the point struct we defined earlier</p>
 <pre><code class="julia hljs"><span class="hljs-keyword">struct</span> Point{T}
     x::T
     y::T
