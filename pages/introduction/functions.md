@@ -51,7 +51,7 @@ julia> res[1]
 0.5143952585235492
 ```
 
-Let us pratice this syntax by revisiting loops:
+Let us practice this syntax by revisiting loops:
 
 \exercise{
 For a vector $V\in\mathrm{R}^n$ with elements $v$ compute the sum of all the elements in the following fashion
@@ -62,8 +62,6 @@ For a vector $V\in\mathrm{R}^n$ with elements $v$ compute the sum of all the ele
     $$s_2 = \sum_{v\in V} v$$
 3. Transform these loops into functions `mysum1` and `mysum2`
 4. Test against `V = rand(100_000)` and `s_1 ≈ s_2` (use `\approx + TAB` for ≈)
-    
-Extra: Check the `@inbounds` macro for the first version.
 
 \solution{
 ```julia
@@ -131,7 +129,7 @@ function sincos2!(x)
     return x
 end
 ```
-1. Evaluate both functions with the input `x = ones(2)`. How does $x$ change after calling the function? Explain this behaviour. Correct the function names accordingly.
+1. Evaluate both functions with the input `x = ones(2)`. How does $x$ change after calling the function? Explain this behavior. Correct the function names accordingly.
 2. Build in the function `pointer_from_objref(x)` to see how the memory changes and to validate your previous answer.
 3. Write a method which evaluates $\sin(\cos(x))$, where $x\in\mathbb{R}$ is a scalar and stores the result on $x$ such that $x$ is modified for the caller.
 \solution{
@@ -157,7 +155,7 @@ julia> x
  1.0
  1.0
 ```
-The reason for this behaviour is that `sincos1` changes the input as Julia functions work with call-by-reference. I.e., they do not generate a local copy of the input and instead directly work on the same memory that has been used by the caller. This memory is not reallocated due to the use of `.=`. On the other hand, `sincos2` allocates new memory, since `x = sin.(cos.(x))` will create new memory for `x` on which the values of `sin.(cos.(x))` are stored. Hence, the memory of $x$ known to the caller is not modified and the original values are preserved. Note that the name `sincos2!(x)` is hence misleading and the function should be renamed to `sincos2(x)`.
+The reason for this behavior is that `sincos1` changes the input as Julia functions work with call-by-reference. I.e., they do not generate a local copy of the input and instead directly work on the same memory that has been used by the caller. This memory is not reallocated due to the use of `.=`. On the other hand, `sincos2` allocates new memory, since `x = sin.(cos.(x))` will create new memory for `x` on which the values of `sin.(cos.(x))` are stored. Hence, the memory of $x$ known to the caller is not modified and the original values are preserved. Note that the name `sincos2!(x)` is hence misleading and the function should be renamed to `sincos2(x)`.
 2. We have
 ```julia
 function sincos1!(x)
@@ -366,7 +364,7 @@ PointFull{Float32}(1.0f0, 2.0f0, 2.23606797749979)
 julia> p = PointFull{Int64}(1, 2, sqrt(1 + 2))
 PointFull{Int64}(1, 2, 1.7320508075688772)
 ```
-Note that this is quite tedious since we need to copy paste the same formula for the norm everytime we construct on object. Conveniently, Julia provides us with [constructors](https://docs.julialang.org/en/v1/manual/constructors/#man-constructors), which are functions that are called whenever we create on object of our struct. The syntax is the following:
+Note that this is quite tedious since we need to copy paste the same formula for the norm every time we construct on object. Conveniently, Julia provides us with [constructors](https://docs.julialang.org/en/v1/manual/constructors/#man-constructors), which are functions that are called whenever we create on object of our struct. The syntax is the following:
 ```julia
 struct PointFull1{T<:Real}
     x::T
