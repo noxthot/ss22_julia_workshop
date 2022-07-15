@@ -234,7 +234,7 @@ julia> @btime estimate_pi(in_unit_circle_distributed1, N);
 }
 
 We can see that this is a very easy way to parallelize and this time the `rand()` function is not causing problems.
-We are already faster than the basic implementation and close to the optimised four threads implementation.
+We are already faster than the basic implementation and close to the optimized four threads implementation.
 
 The *distributed for loop* with `@distributed` is designed to work well for situations where each iteration is tiny (in terms of computational effort/workload). 
 Of course there is also the other possibility, that we have a function with a massive workload and work with the results of these calls.
