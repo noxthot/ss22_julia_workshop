@@ -219,7 +219,7 @@ $$
       &         &           &     a_{N-1}      & b_N
   \end{pmatrix}\;,
 $$ 
-we can use `T = Tridiagonal(a,b,c)`.
+we can use `T = Tridiagonal(a, b, c)`.
 The rest we need to know about vectors and matrices we will introduce along the way.
 
 \exercise{
@@ -238,7 +238,7 @@ $$
 \solution{
 1. We can store this matrix by again using a tridiagonal matrix which has a zero lower off-diagonal. That is,
 ```julia-repl
-julia> L = Tridiagonal(zeros(9),-ones(10),ones(9))
+julia> L = Tridiagonal(zeros(9), -ones(10), ones(9))
 10×10 Tridiagonal{Float64, Vector{Float64}}:
  -1.0   1.0    ⋅     ⋅     ⋅     ⋅     ⋅     ⋅     ⋅     ⋅ 
   0.0  -1.0   1.0    ⋅     ⋅     ⋅     ⋅     ⋅     ⋅     ⋅ 
@@ -256,7 +256,7 @@ julia> L = Tridiagonal(zeros(9),-ones(10),ones(9))
 ```julia-repl
 julia> y = ones(10);
 
-julia> x = L\y
+julia> x = L \ y
 10-element Vector{Float64}:
  -10.0
   -9.0
