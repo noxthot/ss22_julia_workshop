@@ -8,7 +8,7 @@
 In Julia vectors and matrices are derived from the basic [`Core.AbstracArray`](https://docs.julialang.org/en/v1/base/arrays/#lib-arrays) type. To get a better idea on what is happening we use the Julia REPL to type up some examples. 
 
 ## Vectors
-You can allocate a vector by typing:
+We can allocate a vector by typing:
 ```julia-repl
 julia> v = [1, 2, 3]
 3-element Vector{Int64}:
@@ -16,8 +16,8 @@ julia> v = [1, 2, 3]
  2
  3
 ```
-As you can see, Julia found out that all the numbers are integers and therefore you have now defined a 3-element vector of type `Int64`. 
-Alternatively, if you want to generate a vector with zeros, ones or random numbers, you can use
+As we can see, Julia found out that all the numbers are integers and therefore we have now defined a 3-element vector of type `Int64`. 
+Alternatively, if we want to generate a vector with zeros, ones or random numbers, we can use
 ```julia-repl
 julia> w = zeros(3)
 3-element Vector{Float64}:
@@ -37,7 +37,7 @@ julia> w = rand(3)
  0.7384134175744227
  0.5859991546122274
 ```
-which automatically assumes the types to be `Float64`. If you want to specify a certain datatype, you can use `w = zeros(Int64, 3)`. If you want to create a vector with entries ranging from $0$ to $1$ with $3$ entries, write
+which automatically assumes the types to be `Float64`. If we want to specify a certain datatype, we can use `w = zeros(Int64, 3)`. If we want to create a vector with entries ranging from $0$ to $1$ with $3$ entries, we write
 ```julia-repl
 julia> u = collect(range(0, 1, 3))
 3-element Vector{Float64}:
@@ -45,7 +45,7 @@ julia> u = collect(range(0, 1, 3))
  0.5
  1.0
 ```
-You can now do operations on a vector in the usual fashion:
+We can now do operations on a vector in the usual fashion:
 ```julia-repl
 julia> v * 2
 3-element Vector{Int64}:
@@ -66,10 +66,10 @@ julia> v // 2
  3//2
 ```
 @@important
-Note that the type of your vector changes with regards to the result of the operation. 
+Note that the type of our vector changes with regards to the result of the operation. 
 @@
 
-If you try to define the vector without the `,` separator you will generate a $1 \times 3$ matrix:
+If we try to define the vector without the `,` separator we will generate a $1 \times 3$ matrix:
 ```julia-repl
 julia> w = [1 2 3]
 1×3 Matrix{Int64}:
@@ -87,7 +87,7 @@ julia> w'
  ```
 
 ## Matrices
- If we have vectors the jump to matrices is not very far. Again, we have the command
+ If we have vectors, the jump to matrices is not very far. Again, we have the command
 ```julia-repl
 julia> B = ones(3, 3)
 3×3 Matrix{Float64}:
@@ -95,7 +95,7 @@ julia> B = ones(3, 3)
  1.0  1.0  1.0
  1.0  1.0  1.0
 ```
-The same holds for `zeros` and `rand`. To directly specify values inside a matrix, simply wrap the code used for vectors in another set of brackets and we are good to go:
+The same holds for `zeros` and `rand`. To directly specify values inside a matrix, we simply wrap the code used for vectors in another set of brackets and we are good to go:
  ```julia-repl
  julia> A = [[1, 2, 3] [4, 5, 6] [7, 8, 9]]
 3×3 Matrix{Int64}:
@@ -114,7 +114,7 @@ julia> B = [1 2 3; 4 5 6; 7 8 9]
  ```
  where we use semicolon `;` to separate the rows.
 
-Again, the basic operations ship with Julia and you need no additional packages. 
+Again, the basic operations ship with Julia and we need no additional packages. 
 ```julia-repl
 julia> A + A * 2im
 3×3 Matrix{Complex{Int64}}:
@@ -161,7 +161,7 @@ julia> A .^ 2
 
 ## Access specific elements
 
-Indexing in Julia starts with 1 and we use square brackets `[]`. So in order to compute $v_2 A_{1,2}$ we say
+Indexing in Julia starts with 1 and we use square brackets `[]` for accessing specific elements. So in order to compute $v_2 A_{1,2}$ we have
 ```julia-repl
 julia> v[2]
 2
@@ -173,7 +173,7 @@ julia> v[2] * A[1, 2]
 8
 ```
 
-You can also use the `end` keyword and the colon `:` placeholder to access a range of elements:
+We can also use the `end` keyword and the colon `:` placeholder to access a range of elements:
 ```julia-repl
 julia> A[:,end-2]
 3-element Vector{Int64}:
@@ -185,7 +185,7 @@ To find the entire list of operations that can be performed and a lot more on ar
 
 # Linear Algebra
 
-As soon as you include the [`LinearAlgebra`](https://docs.julialang.org/en/v1/stdlib/LinearAlgebra/) or the [`SparseLinearAlgebra`](https://docs.julialang.org/en/v1/stdlib/SuiteSparse/) package you have a lot more operations available, both are part of the Julia Standard Library.
+As soon as we include the [`LinearAlgebra`](https://docs.julialang.org/en/v1/stdlib/LinearAlgebra/) or the [`SparseLinearAlgebra`](https://docs.julialang.org/en/v1/stdlib/SuiteSparse/) package we have a lot more operations available, both are part of the Julia Standard Library.
 ```julia-repl
 julia> using LinearAlgebra
 julia> tr(A)
@@ -209,7 +209,7 @@ julia> sA \ v
  1.1102230246251565e-16
  0.09999999999999995
 ```
-A further functionality of the LinearAlgebra package is given by efficient storage routines for sparse matrices, i.e., matrices that are zero except for a small number of entries. A very common sparse matrix is a diagonal matrix. To create a diagonal matrix $D$ which has entries $d = (d_1,\cdots,d_{10})$ on the diagonal, we can use `D = Diagonal(d)`. If the matrix is a tridiagonal matrix, that is, it has the form
+A further functionality of the LinearAlgebra package is given by efficient storage routines for sparse matrices, i.e., matrices that are zero except for a small number of entries. A very common sparse matrix is a diagonal matrix. To create a diagonal matrix $D$ which has entries $d = (d_1, \cdots, d_{10})$ on the diagonal, we can use `D = Diagonal(d)`. If the matrix is a tridiagonal matrix, that is, it has the form
 $$
 \mathbf{T} = \begin{pmatrix}
     b_1 & c_1 &  &      &   \\
@@ -220,7 +220,7 @@ $$
   \end{pmatrix}\;,
 $$ 
 we can use `T = Tridiagonal(a,b,c)`.
-The rest you need to know about vectors and matrices we will introduce along the way.
+The rest we need to know about vectors and matrices we will introduce along the way.
 
 \exercise{
 1. Create a sparse matrix $\mathbf{T}\in\mathbb{R}^{10 \times 10}$ of the form
