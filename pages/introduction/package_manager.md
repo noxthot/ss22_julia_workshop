@@ -5,23 +5,23 @@
 
 # Package manager
 
-We have already seen the Julia [package manager](https://docs.julialang.org/en/v1/stdlib/Pkg/). In the following, we will discuss this feature in more detail. You already know how to open the package manager: Simply press `]`. Now, in order to, for example, add the [FastGaussQuadrature](https://juliaapproximation.github.io/FastGaussQuadrature.jl/stable/) package type 
+We have already seen the Julia [package manager](https://docs.julialang.org/en/v1/stdlib/Pkg/). In the following, we will discuss this feature in more detail. We already know how to open the package manager: Simply press `]`. Now, in order to, for example, add the [FastGaussQuadrature](https://juliaapproximation.github.io/FastGaussQuadrature.jl/stable/) package type 
 ```julia-repl
 (@v1.7) pkg> add FastGaussQuadrature
 ```
-From now on, every time you open Julia, you can type
+From now on, every time we open Julia, we can type
 ```julia-repl
 julia> using FastGaussQuadrature
 ```
-which in this case adds functionalities to numerically compute integrals to your session. Note that the specific details of this package are not important at this point and we will revisit this package in our work sheets. In case you wish to remove this package you can open the package manager and type
+which in this case adds functionalities to numerically compute integrals to our session. Note that the specific details of this package are not important at this point and we will revisit this package in our work sheets. In case we wish to remove this package again we can open the package manager and type
 ```julia-repl
 (@v1.7) pkg> rm FastGaussQuadrature
 ```
-If you now want to install a specific version of a package you can add `@<versionnumber>` behind the package name. As an example, to install `FastGaussQuadrature` at version $0.4.8$ type
+If we now want to install a specific version of a package we can add `@<versionnumber>` behind the package name. As an example, to install `FastGaussQuadrature` at version $0.4.8$ we type
 ```julia-repl
 (@v1.7) pkg> add FastGaussQuadrature@0.4.8
 ```
-Moreover, you can update all packages that you have added by typing
+Moreover, we can update all packages that we have added by typing
 ```julia-repl
 (@v1.7) pkg> update
 ```
@@ -29,15 +29,15 @@ or just a specific package (for example FastGaussQuadrature) by typing
 ```julia-repl
 (@v1.7) pkg> update FastGaussQuadrature
 ```
-To get a list of all installed packages you can type
+To get a list of all installed packages we can type
 ```julia-repl
 (@v1.7) pkg> status
 ```
-It is good practice to add packages only for certain projects to prevent conflicting packages. This can be done by creating a new package environment. Here we create an environment called `example`:
+It is good practice to add packages only for certain projects to prevent conflicting packages, see [dependency hell](https://en.wikipedia.org/wiki/Dependency_hell). This can be done by creating a new package environment. Here we create an environment called `example`:
 ```julia-repl
 (@v1.7) pkg> activate example
 ```
-If you check this new environment with the `status` command you will see that you have a clean package environment. You can return to the default environment by typing `activate`. Type `activate .`, if you want to create an environment that is identified with the project folder you are working on. Whenever someone uses your project folder, this person can enter the same environment by typing `activate .` and install all needed packages with the used versions by typing `instantiate`. If you do not want to enter the julia environment, simply type
+If we check this new environment with the `status` command we will see that we have a clean package environment. We can return to the default environment by typing `activate`. We type `activate .`, if we want to create an environment that is identified with the project folder we are currently working in. Whenever someone uses this project folder, this person can enter the same environment by typing `activate .` and install all needed packages with the used versions by typing `instantiate`. If we do not want to start the REPL we can still include the environment by simply typing
 ```shell
 julia --project=. main.jl
 ```
