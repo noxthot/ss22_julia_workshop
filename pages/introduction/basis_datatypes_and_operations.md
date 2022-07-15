@@ -263,7 +263,7 @@ julia> p.x
 julia> p.y
 2.0
 ```
-Now we have created our own datatype *PointObject*, which stores an $x$ and a $y$ coordinate. Note that creating a point by `p = PointObject(1.0,2.0)` directly fixes the coordinates. If you wish to change these after construction, you will observe that Julia forbids you to do so. To allow modifying values, we can use the `mutable` command when defining the struct, which gives
+Now we have created our own datatype *PointObject*, which stores an $x$ and a $y$ coordinate. Note that creating a point by `p = PointObject(1.0, 2.0)` directly fixes the coordinates. If you wish to change these after construction, you will observe that Julia forbids you to do so. To allow modifying values, we can use the `mutable` command when defining the struct, which gives
 ```julia-repl
 julia> mutable struct PointMutable
           x::Float64
