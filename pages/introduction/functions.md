@@ -354,7 +354,7 @@ struct PointFull{T<:Real}
     norm
 end
 ```
-and creating objects of type PointFull via
+and creating objects of type `PointFull` via
 ```julia-repl
 julia> p = PointFull{Float64}(1.0, 2.0, sqrt(1.0^2 + 2.0^2))
 PointFull{Float64}(1.0, 2.0, 2.23606797749979)
