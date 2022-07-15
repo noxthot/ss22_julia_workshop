@@ -181,6 +181,47 @@ julia> A[:,end-2]
  2
  3
 ```
+# Concatenation
+
+You can alse concatenate (or slice together) different matrices and vectors. I.e., if you have a matrix `A = zeros(2, 4)` and a vector `a = ones(2)` we can add $a$ as a column to $A$ by 
+```julia-repl
+julia> A = zeros(2, 4)
+2×4 Matrix{Float64}:
+ 0.0  0.0  0.0  0.0
+ 0.0  0.0  0.0  0.0
+
+julia> a = ones(2)
+2-element Vector{Float64}:
+ 1.0
+ 1.0
+
+julia> B = [A a]
+2×5 Matrix{Float64}:
+ 0.0  0.0  0.0  0.0  1.0
+ 0.0  0.0  0.0  0.0  1.0
+```
+
+We can also add a row $b$ by
+```julia-repl
+julia> b = 2 .* ones(5)
+5-element Vector{Float64}:
+ 2.0
+ 2.0
+ 2.0
+ 2.0
+ 2.0
+
+julia> C = [B; b']
+3×5 Matrix{Float64}:
+ 0.0  0.0  0.0  0.0  1.0
+ 0.0  0.0  0.0  0.0  1.0
+ 2.0  2.0  2.0  2.0  2.0
+```
+
+\exercise{
+  TODO
+}
+
 To find the entire list of operations that can be performed and a lot more on arrays in Julia visit the [docs](https://docs.julialang.org/en/v1/base/arrays/#lib-arrays).
 
 # Linear Algebra
