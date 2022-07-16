@@ -188,7 +188,7 @@ To check the change of $\psi$ after a single time step around the center of the 
  ```julia-repl
 julia> midIndex = Int(floor(nx / 2));
 
-julia> ψ_new[midIndex-1:midIndex + 1, :]
+julia> ψ_new[(midIndex - 1):(midIndex + 1), :]
 ```
 
 }
