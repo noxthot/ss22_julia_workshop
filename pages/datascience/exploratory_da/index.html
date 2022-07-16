@@ -198,11 +198,15 @@ df_survey[!, :EuroCompYearly] = <span class="hljs-number">0.96</span> * df_surve
 <p></div></p>
 <h2 id="case_studies"><a href="#case_studies" class="header-anchor">Case Studies</a></h2>
 <p>Continuing with the same data set, let us conduct some case studies in the upcoming exercise.</p>
-<button type="button" class="collapsible" style="background-color:#b5ddff"> Exercise </button><div class="collapsiblecontent">  1. What is the number of Austrian, German and Swiss survey participants. </p>
+<button type="button" class="collapsible" style="background-color:#b5ddff"> Exercise </button><div class="collapsiblecontent"> <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext> </mtext></mrow><annotation encoding="application/x-tex">~</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0em;"></span><span class="mspace nobreak"> </span></span></span></span></p>
+<ol>
+<li><p>What is the number of Austrian, German and Swiss survey participants. </p>
 <ol>
 <li><p>Use <code>groupby</code>, <code>combine</code> and <code>nrow</code>.</p>
 </li>
 <li><p>Use <a href="https://juliastats.org/StatsBase.jl/stable/counts/#StatsBase.countmap"><code>countmap</code></a> of the <a href="https://juliastats.org/StatsBase.jl/stable/"><code>StatsBase.jl</code></a> package.</p>
+</li>
+</ol>
 </li>
 <li><p>How does the median salary compare between full-time employments and independent contractors in Austria. Hint: <code>Statistics.jl</code> provides a <code>median</code> function.</p>
 </li>
@@ -221,7 +225,7 @@ df_survey[!, :EuroCompYearly] = <span class="hljs-number">0.96</span> * df_surve
    1 │ Austria        437
    2 │ Germany       3095
    3 │ Switzerland    529</code></pre>
-<ol>
+<ol start="2">
 <li></li>
 </ol>
 <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-keyword">using</span> Statistics
@@ -234,7 +238,7 @@ df_survey[!, :EuroCompYearly] = <span class="hljs-number">0.96</span> * df_surve
    2 │ Employed full-time                               54481.0
    3 │ Employed part-time                               31282.6
    4 │ missing                                          31127.0</code></pre>
-<ol>
+<ol start="3">
 <li></li>
 </ol>
 <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> transform!(df_survey, :DevType =&gt; ByRow(x -&gt; !ismissing(x) &amp;&amp; occursin(x, <span class="hljs-string">&quot;Data Scientist&quot;</span>)) =&gt; :isdatascientist)
@@ -245,7 +249,7 @@ df_survey[!, :EuroCompYearly] = <span class="hljs-number">0.96</span> * df_surve
 ─────┼────────────────────────────────────────
    1 │           false                64028.2
    2 │            true                78451.2</code></pre>
-<ol>
+<ol start="4">
 <li></li>
 </ol>
 <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> combine(groupby(df_survey, [:Country, :isdatascientist]), nrow =&gt; :count)
@@ -275,9 +279,9 @@ df_survey[!, :EuroCompYearly] = <span class="hljs-number">0.96</span> * df_surve
   &quot;Austria&quot;     =&gt; 437
 
 <span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@df</span> df_survey bar(countmap(:Country), legend=<span class="hljs-literal">false</span>)</span></code></pre>
-<div id="fdpgcx" style=""></div>
+<div id="fdpbqt" style=""></div>
 <script>
-graphDiv = document.getElementById("fdpgcx");
+graphDiv = document.getElementById("fdpbqt");
 plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_explorative_da_country.json');
 </script>
 
@@ -285,9 +289,9 @@ plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datas
 <p>Boxplots are a nice tool to visualize some distributional characteristics &#40;locality, spread, skewness&#41; of a given data sample. Dividing the data set into different groups allows an easy comparison.</p>
 <p>In the following plot we compare the salary of different employment states:</p>
 <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@df</span> df_survey boxplot(:Employment, :EuroCompYearly, xrotation=<span class="hljs-number">30</span>, size=(<span class="hljs-number">500</span>, <span class="hljs-number">900</span>), legend=<span class="hljs-literal">false</span>)</span></code></pre>
-<div id="fdpwbl" style=""></div>
+<div id="fdpbaz" style=""></div>
 <script>
-graphDiv = document.getElementById("fdpwbl");
+graphDiv = document.getElementById("fdpbaz");
 plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_explorative_da_salary_1.json');
 </script>
 
@@ -306,9 +310,9 @@ plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datas
 <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@df</span> df_survey boxplot(:Employment, :EuroCompYearly, xrotation=<span class="hljs-number">30</span>, size=(<span class="hljs-number">500</span>, <span class="hljs-number">900</span>), legend=<span class="hljs-literal">false</span>)
 </span>
 <span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@df</span> df_survey dotplot!(:Employment, :EuroCompYearly, legend=<span class="hljs-literal">false</span>)</span></code></pre>
-<div id="fdpmmn" style=""></div>
+<div id="fdpgia" style=""></div>
 <script>
-graphDiv = document.getElementById("fdpmmn");
+graphDiv = document.getElementById("fdpgia");
 plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_explorative_da_salary_2.json');
 </script>
 
