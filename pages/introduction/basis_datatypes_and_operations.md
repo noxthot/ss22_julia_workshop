@@ -1,9 +1,9 @@
-@def title = "Basic Datatypes and Basic Operations"
+@def title = "Basic Data Types and Basic Operations"
 @def hascode = true
 
 @def tags = ["introduction"]
 
-# Basic Datatypes and Basic Operations
+# Basic Data Types and Basic Operations
 
 ## Variables
 
@@ -25,7 +25,7 @@ julia> greekText = "Στυπιδ Ρ"
 "Στυπιδ Ρ"
 ```
 
-## Datatypes
+## Data types
 
 Julia supports basic data types like Integers, Floating-Point Numbers, Strings and [many more](https://docs.julialang.org/en/v1/manual/types/). The most generic type is called `Any` and thus every type is a subtype of `Any`. Types are built in a hierarchical manner and can be visualized as a type graph (examples for partial type graphs are given in [Wikibooks - Introducing Julia](https://en.wikibooks.org/wiki/Introducing_Julia/Types)).
 
@@ -247,7 +247,7 @@ true
 
 ### Structs and Dictionaries
 
-Moreover, Julia allows you to define your own datatypes via `struct`. As an example, let us define a point
+Moreover, Julia allows you to define your own data types via `struct`. As an example, let us define a point
 ```julia-repl
 julia> struct PointObject
           x::Float64
@@ -263,7 +263,7 @@ julia> p.x
 julia> p.y
 2.0
 ```
-Now we have created our own datatype `PointObject`, which stores an $x$ and a $y$ coordinate. Note that creating a point by `p = PointObject(1.0, 2.0)` directly fixes the coordinates. If you wish to change these after construction, you will observe that Julia forbids you to do so. To allow modifying values, we can use the `mutable` command when defining the struct, which gives
+Now we have created our own data type `PointObject`, which stores an $x$ and a $y$ coordinate. Note that creating a point by `p = PointObject(1.0, 2.0)` directly fixes the coordinates. If you wish to change these after construction, you will observe that Julia forbids you to do so. To allow modifying values, we can use the `mutable` command when defining the struct, which gives
 ```julia-repl
 julia> mutable struct PointMutable
           x::Float64
