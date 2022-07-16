@@ -304,7 +304,7 @@ struct Point{T}
     y::T
 end
 ```
-    where `T` must be a real number as input. When the input is an object of type Point, the function returns $\sin(\cos(\Vert x \Vert))$, where $\Vert x \Vert = \sqrt{x^2 + y^2}$ is the Euclidean norm.
+    where `T` must be a real number as input. When the input is an object of type `Point`, the function returns $\sin(\cos(\Vert x \Vert))$, where $\Vert x \Vert = \sqrt{x^2 + y^2}$ is the Euclidean norm.
 \solution{
 ```julia
 struct Point{T<:Real}
@@ -346,7 +346,7 @@ Stacktrace:
 }
 
 ## Constructors
-Note from the previous exercise, that it might be convenient if every object of type Point computes and stores the norm. Of course this can be done by defining
+Note from the previous exercise, that it might be convenient if every object of type `Point` computes and stores the norm. Of course this can be done by defining
 ```julia
 struct PointFull{T<:Real}
     x::T
