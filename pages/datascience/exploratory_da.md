@@ -176,6 +176,14 @@ julia> combine(groupby(df_survey, :Country), nrow => :count)
    1 │ Austria        437
    2 │ Germany       3095
    3 │ Switzerland    529
+
+julia> using StatsBase
+
+julia> countmap(df_survey.Country)
+Dict{String, Int64} with 3 entries:
+  "Switzerland" => 529
+  "Germany"     => 3095
+  "Austria"     => 437
 ```
 
 2. 
