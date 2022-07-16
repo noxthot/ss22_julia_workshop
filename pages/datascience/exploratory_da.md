@@ -155,7 +155,7 @@ df_survey[!, :EuroCompYearly] = 0.96 * df_survey[!, :ConvertedCompYearly]
 Continuing with the same data set, let us conduct some case studies in the upcoming exercise.
 
 \exercise{
-1. What is the number of austrian, german and swiss survey participants. 
+1. What is the number of Austrian, German and Swiss survey participants. 
   1. Use `groupby`, `combine` and `nrow`.
   1. Use [`countmap`](https://juliastats.org/StatsBase.jl/stable/counts/#StatsBase.countmap) of the [`StatsBase.jl`](https://juliastats.org/StatsBase.jl/stable/) package.
 1. How does the median salary compare between full-time employments and independent contractors in Austria. Hint: `Statistics.jl` provides a `median` function.
