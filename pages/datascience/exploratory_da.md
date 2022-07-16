@@ -155,9 +155,10 @@ df_survey[!, :EuroCompYearly] = 0.96 * df_survey[!, :ConvertedCompYearly]
 Continuing with the same data set, let us conduct some case studies in the upcoming exercise.
 
 \exercise{
+$~$
 1. What is the number of Austrian, German and Swiss survey participants. 
-  1. Use `groupby`, `combine` and `nrow`.
-  1. Use [`countmap`](https://juliastats.org/StatsBase.jl/stable/counts/#StatsBase.countmap) of the [`StatsBase.jl`](https://juliastats.org/StatsBase.jl/stable/) package.
+    1. Use `groupby`, `combine` and `nrow`.
+    1. Use [`countmap`](https://juliastats.org/StatsBase.jl/stable/counts/#StatsBase.countmap) of the [`StatsBase.jl`](https://juliastats.org/StatsBase.jl/stable/) package.
 1. How does the median salary compare between full-time employments and independent contractors in Austria. Hint: `Statistics.jl` provides a `median` function.
 1. How does the median salary of data scientists compare to non data scientists in the DACH region. Hint: Have a look at `occursin` and `transform`.
 1. How many data scientists per country are left in our data set?
@@ -177,7 +178,7 @@ julia> combine(groupby(df_survey, :Country), nrow => :count)
    3 │ Switzerland    529
 ```
 
-1. 
+2. 
 ```julia-repl
 julia> using Statistics
 julia> combine(groupby(filter(x -> x.Country == "Austria", df_survey), :Employment), :EuroCompYearly  => median)
@@ -191,7 +192,7 @@ julia> combine(groupby(filter(x -> x.Country == "Austria", df_survey), :Employme
    4 │ missing                                          31127.0
 ```
 
-1. 
+3. 
 ```julia-repl
 julia> transform!(df_survey, :DevType => ByRow(x -> !ismissing(x) && occursin(x, "Data Scientist")) => :isdatascientist)
 julia> combine(groupby(df_survey, :isdatascientist), :EuroCompYearly => median)
@@ -203,7 +204,7 @@ julia> combine(groupby(df_survey, :isdatascientist), :EuroCompYearly => median)
    2 │            true                78451.2
 ```
 
-1. 
+4. 
 ```julia-repl
 julia> combine(groupby(df_survey, [:Country, :isdatascientist]), nrow => :count)
 4×3 DataFrame
