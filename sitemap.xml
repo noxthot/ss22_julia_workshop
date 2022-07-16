@@ -8,6 +8,18 @@
     <priority>0.5</priority>
 </url>
 <url>
+    <loc>https://noxthot.github.io/ss22_julia_workshop/pages/datascience/supervised_learning/index.html</loc>
+    <lastmod>2022-07-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
+    <loc>https://noxthot.github.io/ss22_julia_workshop/pages/datascience/datasets/index.html</loc>
+    <lastmod>2022-07-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
     <loc>https://noxthot.github.io/ss22_julia_workshop/pages/introduction/functions/index.html</loc>
     <lastmod>2022-07-16</lastmod>
     <changefreq>monthly</changefreq>
