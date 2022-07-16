@@ -70,7 +70,7 @@
         <li class="menu-list-item "><a href="/ss22_julia_workshop/" class="menu-list-link ">Start</a>
         <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/" class="menu-list-link ">Introduction</a>
           <ul class="menu-list-child-list ">
-            <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/basis_datatypes_and_operations" class="menu-list-link ">Basic Datatypes and Operations</a>
+            <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/basis_datatypes_and_operations" class="menu-list-link ">Basic Data Types and Operations</a>
             <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/package_manager" class="menu-list-link ">Package Manager</a>
             <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/matrix_vectors" class="menu-list-link ">Matrix and Vector Operations</a>
             <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/conditional_evaluations" class="menu-list-link ">Conditional evaluations</a>
@@ -287,9 +287,9 @@ df_survey[!, :EuroCompYearly] = <span class="hljs-number">0.96</span> * df_surve
   &quot;Austria&quot;     =&gt; 437
 
 <span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@df</span> df_survey bar(countmap(:Country), legend=<span class="hljs-literal">false</span>)</span></code></pre>
-<div id="fdpauk" style=""></div>
+<div id="fdpror" style=""></div>
 <script>
-graphDiv = document.getElementById("fdpauk");
+graphDiv = document.getElementById("fdpror");
 plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_explorative_da_country.json');
 </script>
 
@@ -297,9 +297,9 @@ plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datas
 <p>Boxplots are a nice tool to visualize some distributional characteristics &#40;locality, spread, skewness&#41; of a given data sample. Dividing the data set into different groups allows an easy comparison.</p>
 <p>In the following plot we compare the salary of different employment states:</p>
 <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@df</span> df_survey boxplot(:Employment, :EuroCompYearly, xrotation=<span class="hljs-number">30</span>, size=(<span class="hljs-number">500</span>, <span class="hljs-number">900</span>), legend=<span class="hljs-literal">false</span>)</span></code></pre>
-<div id="fdpmlw" style=""></div>
+<div id="fdpfdu" style=""></div>
 <script>
-graphDiv = document.getElementById("fdpmlw");
+graphDiv = document.getElementById("fdpfdu");
 plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_explorative_da_salary_1.json');
 </script>
 
@@ -318,9 +318,9 @@ plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datas
 <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@df</span> df_survey boxplot(:Employment, :EuroCompYearly, xrotation=<span class="hljs-number">30</span>, size=(<span class="hljs-number">500</span>, <span class="hljs-number">900</span>), legend=<span class="hljs-literal">false</span>)
 </span>
 <span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@df</span> df_survey dotplot!(:Employment, :EuroCompYearly, legend=<span class="hljs-literal">false</span>)</span></code></pre>
-<div id="fdpnik" style=""></div>
+<div id="fdpxim" style=""></div>
 <script>
-graphDiv = document.getElementById("fdpnik");
+graphDiv = document.getElementById("fdpxim");
 plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_explorative_da_salary_2.json');
 </script>
 

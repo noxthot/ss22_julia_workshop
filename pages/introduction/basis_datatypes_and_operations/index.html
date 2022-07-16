@@ -52,7 +52,7 @@
   }
 </style>
 
-   <title>Basic Datatypes and Basic Operations</title>  
+   <title>Basic Data Types and Basic Operations</title>  
 </head>
 <body>                      <!-- closed in foot.html -->
 <div class="page-wrap">   <!-- closed in foot.html -->
@@ -70,7 +70,7 @@
         <li class="menu-list-item "><a href="/ss22_julia_workshop/" class="menu-list-link ">Start</a>
         <li class="menu-list-item active"><a href="/ss22_julia_workshop/pages/introduction/" class="menu-list-link active">Introduction</a>
           <ul class="menu-list-child-list ">
-            <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/basis_datatypes_and_operations" class="menu-list-link active">Basic Datatypes and Operations</a>
+            <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/basis_datatypes_and_operations" class="menu-list-link active">Basic Data Types and Operations</a>
             <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/package_manager" class="menu-list-link ">Package Manager</a>
             <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/matrix_vectors" class="menu-list-link ">Matrix and Vector Operations</a>
             <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/conditional_evaluations" class="menu-list-link ">Conditional evaluations</a>
@@ -112,7 +112,7 @@
 
 
 <!-- Content appended here (in class franklin-content) -->
-<div class="franklin-content"><h1 id="basic_datatypes_and_basic_operations"><a href="#basic_datatypes_and_basic_operations" class="header-anchor">Basic Datatypes and Basic Operations</a></h1>
+<div class="franklin-content"><h1 id="basic_data_types_and_basic_operations"><a href="#basic_data_types_and_basic_operations" class="header-anchor">Basic Data Types and Basic Operations</a></h1>
 <h2 id="variables"><a href="#variables" class="header-anchor">Variables</a></h2>
 <p>A variable is a name that is bound to a value and is used to store a value for later use. See the following examples:</p>
 <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> x = <span class="hljs-number">5</span>
@@ -129,7 +129,7 @@
 
 <span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> greekText = <span class="hljs-string">&quot;Στυπιδ Ρ&quot;</span>
 </span>&quot;Στυπιδ Ρ&quot;</code></pre>
-<h2 id="datatypes"><a href="#datatypes" class="header-anchor">Datatypes</a></h2>
+<h2 id="data_types"><a href="#data_types" class="header-anchor">Data types</a></h2>
 <p>Julia supports basic data types like Integers, Floating-Point Numbers, Strings and <a href="https://docs.julialang.org/en/v1/manual/types/">many more</a>. The most generic type is called <code>Any</code> and thus every type is a subtype of <code>Any</code>. Types are built in a hierarchical manner and can be visualized as a type graph &#40;examples for partial type graphs are given in <a href="https://en.wikibooks.org/wiki/Introducing_Julia/Types">Wikibooks - Introducing Julia</a>&#41;.</p>
 <p>Although Julia&#39;s type system is dynamic, it also allows to explicitly set a specific type for certain values and thus also gains advantages of static type systems.</p>
 <p>In the following we will briefly look into some basic data types and the operations defined on them. </p>
@@ -319,7 +319,7 @@ Stacktrace:
 <span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> occursin(<span class="hljs-string">&quot;alan&quot;</span>, mystring)
 </span>true</code></pre>
 <h3 id="structs_and_dictionaries"><a href="#structs_and_dictionaries" class="header-anchor">Structs and Dictionaries</a></h3>
-<p>Moreover, Julia allows you to define your own datatypes via <code>struct</code>. As an example, let us define a point</p>
+<p>Moreover, Julia allows you to define your own data types via <code>struct</code>. As an example, let us define a point</p>
 <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-keyword">struct</span> PointObject
           x::<span class="hljs-built_in">Float64</span>
           y::<span class="hljs-built_in">Float64</span>
@@ -333,7 +333,7 @@ Stacktrace:
 
 <span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> p.y
 </span>2.0</code></pre>
-<p>Now we have created our own datatype <code>PointObject</code>, which stores an <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">x</span></span></span></span> and a <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi></mrow><annotation encoding="application/x-tex">y</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span></span></span></span> coordinate. Note that creating a point by <code>p &#61; PointObject&#40;1.0, 2.0&#41;</code> directly fixes the coordinates. If you wish to change these after construction, you will observe that Julia forbids you to do so. To allow modifying values, we can use the <code>mutable</code> command when defining the struct, which gives</p>
+<p>Now we have created our own data type <code>PointObject</code>, which stores an <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">x</span></span></span></span> and a <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi></mrow><annotation encoding="application/x-tex">y</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span></span></span></span> coordinate. Note that creating a point by <code>p &#61; PointObject&#40;1.0, 2.0&#41;</code> directly fixes the coordinates. If you wish to change these after construction, you will observe that Julia forbids you to do so. To allow modifying values, we can use the <code>mutable</code> command when defining the struct, which gives</p>
 <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-keyword">mutable struct</span> PointMutable
           x::<span class="hljs-built_in">Float64</span>
           y::<span class="hljs-built_in">Float64</span>
@@ -358,7 +358,7 @@ Stacktrace:
 
 <span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> pInt = Point{<span class="hljs-built_in">Int</span>}(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>)
 </span>Point{Int64}(1, 2)</code></pre>
-<p>Note that using <code>&#123;T&#125;</code> behind the struct name lets us use <code>T</code> as a new type that can be defined when creating an object of type Point. You can also have two different types in one object. To account for such situations, we can define</p>
+<p>Note that using <code>&#123;T&#125;</code> behind the struct name lets us use <code>T</code> as a new type that can be defined when creating an object of type <code>Point</code>. You can also have two different types in one object. To account for such situations, we can define</p>
 <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-keyword">struct</span> Point1{T, R}
           x::T
           y::R
