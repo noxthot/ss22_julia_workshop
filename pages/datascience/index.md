@@ -11,7 +11,8 @@ In recent years Data Science became one of the very hot topics as can also be se
 Data science is an interdisciplinary field that uses various techniques and algorithms from statistics, mathematical modeling, pattern recognition, machine learning and many more to gain insights from structured and unstructured data.
 
 Of course we can only tackle very specific topics of this huge ecosystem within this workshop. We will briefly talk about the following topics:
-- Dataframes
+- Loading and saving tabular data
 - Exploratory data analysis
+- Data sets
 - Unsupervised learning
 - Supervised learning
