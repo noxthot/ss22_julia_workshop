@@ -5,7 +5,7 @@
 
 # How to measure performance in Julia
 
-For that, we recall the loops example from the introduction to [loops](../../introduction/loops.html) and include the simple `@time` macro.
+For that, we recall the vector summation example from the introduction to [function](../../introduction/functions) and include the simple `@time` macro.
 ```julia:./code/performance.jl
 function mysum(a)
     result = zero(eltype(a))
@@ -23,13 +23,13 @@ a = rand(100_000)
 ```
 \show{./code/performance.jl}
 
-The downside with the `@time` macro is, that it really just measures the execution time of what is given to it. This means if the function is not already compiled this might include compiling or if the CPU is busy with something else it is often not accurate. 
+The downside with the `@time` macro is, that it really just measures the execution time of what is given to it. This means, if the function is not already compiled this might include compiling or if the CPU is busy with something else it is often not accurate. 
 
-Therefore, if you are serious about measuring  performance you should stick to the [`BenchmarkTools`](https://juliaci.github.io/BenchmarkTools.jl/stable/). It comes with a couple of macros that you should test out:
+Therefore, if we are serious about measuring performance we should stick to the [`BenchmarkTools`](https://juliaci.github.io/BenchmarkTools.jl/stable/). It comes with a couple of macros that we should test out:
 
 \exercise{
-In order to use the BenchmarkTools you need to include it with `using BenchmarkTools`, as any other package. 
-Benchmark your `mysum` function with the following macros:
+In order to use the BenchmarkTools we need to include it with `using BenchmarkTools`, as any other package. 
+Benchmark our `mysum` function with the following macros:
 1. `@benchmark`
 1. `@btime` 
 1. Look at the detailed output of your benchmark with `dump(t)`, where `t` is the output result of a `@benchmark` run.
@@ -57,7 +57,7 @@ and the often used sanity check, that actually also shows you the output of your
 }
 
 @@important
-Note that for the benchmarking we often use the `$` literal for variables to tell the Julia interpreter to use interpolation. 
+Note that for benchmarking we often use the `$` literal for variables to tell the Julia interpreter to use interpolation. 
 This will make sure that the variable is not allocated inside the function and the measurement is more accurate, or more likely what we actually want to know. 
 @@ 
 
