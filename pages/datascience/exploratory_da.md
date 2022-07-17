@@ -46,10 +46,12 @@ julia> show(describe(df_survey), allrows=true, allcols=true)
    9 │ ConvertedCompYearly  1.18426e5  1                         56211.0  45241312                              36595  Union{Missing, Int64}
 ```
 
-Since most columns are `String` types, there is not that much to see but we still get a helpful impression about the number of missing fields. In the last section we stated that we are interested to do a little study in terms of income, so missing values there are not really feasible. Let us remove these rows in an exercise.
+Since most columns are `String` types, there is not that much to see, but we still get a helpful impression about the number of missing fields. In the last section, we stated that we are interested to do a little study in terms of income, so missing values there are not really feasible. Let us remove these rows in an exercise.
 
 \exercise{
-    Look at the manual of `dropmissing` and use that function to drop every row that is lacking an entry in `ConvertedCompYearly`. Hint: To not having to reload the initial data set whenever you did a mistake it might be a good idea to create a backup first: `backup_df = copy(df_survey)`. So later you can always bring it back by calling `df_survey = copy(backup_df)`.
+    Look at the manual of `dropmissing` and use that function to drop every row that is lacking an entry in `ConvertedCompYearly`. 
+
+    Hint: To not having to reload the initial data set whenever you make a mistake, it might be a good idea to create a backup first: `backup_df = copy(df_survey)`. So later you can always bring it back by calling `df_survey = copy(backup_df)`.
 }
 
 After the previous exercise you should have $46844$ rows in your data set.
@@ -76,6 +78,7 @@ Let us create some plots to gain deeper insights. We have already seen the use o
 Creating a boxplot is fairly simple using the `@df` macro:
 ```julia
 using StatsPlots
+
 @df df_survey boxplot(:ConvertedCompYearly)
 ```
 
@@ -104,7 +107,8 @@ Removing outliers is a very controversial topic. Usually it is always good pract
 
 \exercise{
     Filter `df_survey` for entries where `ConvertedCompYear` exceeds 1Mio and have a look at the remaining data rows. 
-    Hints: Check the manual of `filter`. When you are running your code in the Julia REPL within VS Code you will find a dataframe viewer in your Julia extension's workspace. Otherwise it might also make sense to quickly write the dataframe to a CSV and have a look in one of the usual spreadsheet programs.
+    
+    Hints: Check the manual of `filter`. When you are running your code in the Julia REPL within VS Code you will find a dataframe viewer in your Julia extension's workspace. Alternatively, it might also make sense to quickly write the dataframe to a CSV and have a look in one of the usual spreadsheet programs.
 }
 
 Apparently, most of the top earners declared to be software developers. Let us filter the data set such that we only have entries $< 1$Mio from now on.
@@ -119,7 +123,7 @@ Now you should have $46237$ entries. Next, we only want to look at the DACH regi
     Filter (and store) `df_survey` for `Country` being `Austria`, `Germany` or `Switzerland`.
 }
 
-Now we are down to $4212$ entries. Have a look at the column `Gender`. Besides `Man` and `Woman` there are lot more categories, but unfortunately with very little sample sizes. Thus adding these to further visualizations would lead to misleading conclusions. It would require additional engineering to address these little sample sizes and therefore this is out of scope of this workshop.
+Now we are down to $4212$ entries. Have a look at the column `Gender`. Besides `Man` and `Woman` there are a lot more categories, but unfortunately with very little sample sizes. Thus, adding these to further visualizations would lead to misleading conclusions. It would require additional engineering to address these little sample sizes and therefore this is out of scope of this workshop.
 
 So instead, let us also add a filter in this column.
 
