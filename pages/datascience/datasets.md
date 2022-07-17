@@ -9,14 +9,14 @@ Let us assume that we took several pictures with our camera. Typically, these ph
 Simply speaking, a *data set* is a collection of data (and of course not restricted to images), *labeled data* is a data set that augments each data point with some meaningful tag(s) and in *unlabeled data* this tag is missing.
 
 ## Supervised and unsupervised learning
-In unsupervised learning we basically try to find patterns within unlabeled data while in supervised learning we try to map an input (features) to an output (labels) and thus require labeled data. Supervised learning boils down to prediction tasks like classifcation or regression.
+In unsupervised learning we basically try to find patterns within unlabeled data while in supervised learning we try to map an input (features) to an output (labels) and thus require labeled data. Supervised learning boils down to prediction tasks like classification or regression.
 
 
 ## MNIST data set
-To demonstrate some applications of unsupervised and supervised machine learning algorithms we will have a look at the famous MNIST data set. This data set contains of 70.000 images of handwritten digits and additionally a label that tells the digit which is displayed in the invidiual images. In this section the labels are not consumed by the algorithms, but we will use them to illustrate some results.
+To demonstrate some applications of unsupervised and supervised machine learning algorithms we will have a look at the famous MNIST data set. This data set contains of 70.000 images of handwritten digits and additionally a label that tells the digit which is displayed in the individual images. In this section the labels are not consumed by the algorithms, but we will use them to illustrate some results.
 
 The data set looks like this:
-\figenvsource{MNIST data set.}{/assets/pages/datascience/MnistExamples.png}{}{Original source: https://en.wikipedia.org/wiki/MNIST_database#/media/File:MnistExamples.png}
+\figenvsource{MNIST data set.}{/assets/pages/datascience/MnistExamples.png}{}{https://en.wikipedia.org/wiki/MNIST_database#/media/File:MnistExamples.png}
 
 But let us dive into this data set by ourselves. Fortunately, there is a package [`MLDatasets.jl`](https://github.com/JuliaML/MLDatasets.jl) that makes it easy to load this data set (and also many others) into Julia. When you are loading the data set for the first time, you might need to confirm the download within the prompt.
 ```julia-repl
@@ -79,7 +79,7 @@ julia> convert2image(df_test, 1:nrImgs)
 ```
 }
 
-Most learning algorithms require the data to be in tabular form, but the `features` are currently given as a three-dimensional array. So our next goal is to reshape the training and testdata from an `28×28×NR_IMAGES` array to a `784×NR_IMAGES` array.
+Most learning algorithms require the data to be in tabular form, but the `features` are currently given as a three-dimensional array. So our next goal is to reshape the training and test data from an `28×28×NR_IMAGES` array to a `784×NR_IMAGES` array.
 
 \exercise{Use `reshape()` to flatten the images within `df_train.features` and `df_test.features`. Store the reshaped array in the variables `X_train` and `X_test`.}
 
@@ -131,4 +131,4 @@ julia> X_test = reshape(df_test.features, (28 * 28, :))
 $~$
 }
 
-When using different algorithms, we always have to keep in mind in which format and shape our data is stored. Different algorithms have different requirements. Sometimes observations have to be stored rowwise (each observation in a separate row), sometimes they have to be stored columnwise. Some algorithms require a `Matrix` and others a `DataFrame`.
+When using different algorithms, we always have to keep in mind in which format and shape our data is stored. Different algorithms have different requirements. Sometimes observations have to be stored row wise (each observation in a separate row), sometimes they have to be stored column wise. Some algorithms require a `Matrix` and others a `DataFrame`.
