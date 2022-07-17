@@ -5,7 +5,7 @@
 
 # Loading data into dataframes
 
-Data science mostly requires to work with tabular data. With [`DataFrames.jl`](https://dataframes.juliadata.org/stable/) Julia provides a set of tools for reading, exploring and manipulating tabular data. When you are already familiar with `pandas` (Python) or `dplyr` (R) you will be quickly able to get started with data wrangling using `DataFrames.jl`, since design and functionality are quite similar. Before we actually work with a given data set, we need to understand how to read and store it.
+Data science mostly requires to work with tabular data. With [`DataFrames.jl`](https://dataframes.juliadata.org/stable/), Julia provides a set of tools for loading, exploring, and manipulating tabular data. When you are already familiar with `pandas` (Python) or `dplyr` (R) you will be quickly able to get started with data wrangling using `DataFrames.jl`, since design and functionality are quite similar. Before we actually work with a given data set, we need to understand how to read and store it.
 
 First of all, you need to add and load the package:
 ```julia-repl
@@ -35,7 +35,7 @@ julia> DataFrame(
    3 │ Switzerland     8637000  Europe
 ```
 
-Note that the continent was given as scalar "Europe" and broadcasted to fill every row of the created `DataFrame`.
+Note that the continent was given as scalar "Europe" and it is broadcasted to fill every row of the created `DataFrame`.
 
 In case you want to initialize a `DataFrame` with names that are not valid Julia identifiers (e.g. containing spaces) you can also use the following form:
 ```julia-repl
@@ -236,12 +236,12 @@ Union{Missing, Int64}
  ```
 
 Let us split up the call `collect(zip(names(df_survey), eltype.(eachcol(df_survey))))` and explain each part:
-- the function `eachcol()` creates a vector-like object that allows iterating over each dataframe column
-- by using `eltype.()` we apply `eltype()` to each column. 
-- this returns a vector of column types but unfortunately we can not see the according column names
-- to also get the names we use `names()`
-- `zip` ties together the $n$-th column name with the $n$-th column type, but this function also returns an iterator which can not be printed immediately
-- finally `collect()` returns an array of all items within that iterator
+- the function `eachcol()` creates a vector-like object that allows iterating over each dataframe column,
+- by using `eltype.()` we apply `eltype()` to each column, 
+- this returns a vector of column types but unfortunately we can not see the according column names,
+- to also get the names we use `names()`,
+- `zip` ties together the $n$-th column name with the $n$-th column type, but this function also returns an iterator which can not be printed immediately,
+- finally `collect()` returns an array of all items within that iterator.
 
 \exercise{
  When having a look at the output it might seem like `Age`, `YearsCode` and `OrgSize` probably should also be of a numeric type. By applying `unique()` to each of these columns we will receive an array containing the unique elements within these columns. This helps us to explore the content and decide whether the columns' need to be converted to another data type.}
