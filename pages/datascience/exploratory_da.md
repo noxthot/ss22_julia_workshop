@@ -9,9 +9,9 @@
 
 ## Introduction
 
-In most data science projects *exploratory data analysis* (EDA) is an essential first step. The primary aim is to analyse a given data set to summarize its main characteristics. Therefore, EDA often uses data visualization methods and statistical methods.
+In most data science projects *exploratory data analysis* (EDA) is an essential first step. The primary aim is to analyze a given data set to summarize its main characteristics. Therefore, EDA often uses data visualization methods and statistical methods.
 
-In this section we will continue to work with the Stack Overflow survey data set as shown in the previous section [Loading data](loading_data). To summarize, the necessary steps to start with this section can be found in the code snippet below:
+In this section, we will continue to work with the Stack Overflow survey data set as shown in the previous section [Loading data](loading_data). To summarize, the necessary steps to start with this section can be found in the code snippet below:
 ```julia
 using CSV, DataFrames
 
@@ -19,7 +19,7 @@ selcols = ["Age", "Country", "ConvertedCompYearly", "DevType", "Employment", "Et
 df_survey = CSV.read("survey_results_public.csv", DataFrame; missingstring="NA", select=selcols)
 ```
 
-Alternatively you can also load the arrow-file which we created in the previous section:
+Alternatively, we can also load the arrow-file which we created in the previous section:
 ```julia
 using Arrow, DataFrames
 
@@ -226,11 +226,11 @@ julia> combine(groupby(df_survey, [:Country, :isdatascientist]), nrow => :count)
 ```
 }
 
-## Data Visualisation
+## Data Visualization
 
 In this workshop we have already used `Plots.jl` and `StatsPlots.jl` a couple of times to visualize functions and data. It may come to a surprise that `Plots.jl` and `StatsPlots.jl` are actually no plotting packages. They are rather plotting metapackages which provide an interface over many different plotting libraries. The specific plotting library that is actually being used to create the plots is referred to as the [*backend*](https://docs.juliaplots.org/stable/tutorial/#plotting-backends) and it is easy to switch and therefore to use different plotting libraries. So far we always used the default backend `GR` which is fast, but lacks interactivity. Depending on the requirements you might like to try `PlotlyJS` for interactivity or `PyPlot` because you like the functionality of Matplotlib (known from Python). To get a good overview, have a look at the [`Plots.jl` documentation](https://docs.juliaplots.org/stable/backends/#backends).
 
-In the last section we used methods from `DataFrames.jl` and `Statistics.jl` to do some case studies. Now we will supplement the studies with visualisations.
+In the last section we used methods from `DataFrames.jl` and `Statistics.jl` to do some case studies. Now we will supplement the studies with visualizations.
 
 ### Barplot: Show survey participants by country
 In a previous exercise we already used `countmap` to get a dictionary which summarizes the number of participants per country. Fortunately, `StatsPlots` is able to visualize this dictionary immediately. We will also switch the backend to `plotlyjs`, so we are able to interact with the graph and get more detailed information about the height of the bars by moving our mouse cursor over the top of the bars and looking at the hover label.
@@ -283,7 +283,7 @@ julia> @df df_survey dotplot!(:Employment, :EuroCompYearly, legend=false)
 
 Combining the information of the two plots we obviously have too little data to judge about the empty and *I prefer not to say* category. Also it appears that the average salaries of freelancers are a lot higher than the salaries of employees. Also the 25% quantile of freelancers is comparable to the median salary of full-time employees.
 
-\exercise{The dataframe has a couple of interesting columns (see `names(df_survey)`). Have a look at the [`StatsPlots.jl` documentation](https://github.com/JuliaPlots/StatsPlots.jl), get creative and generate some nice visualisations.}
+\exercise{The dataframe has a couple of interesting columns (see `names(df_survey)`). Have a look at the [`StatsPlots.jl` documentation](https://github.com/JuliaPlots/StatsPlots.jl), get creative and generate some nice visualizations.}
 
 Of course there are many different plot types you can choose from. Have a look at the [`Plots.jl` gallery](https://docs.juliaplots.org/stable/gallery/plotlyjs/) to get an overview. With [`DataVoyager.jl`](https://github.com/queryverse/DataVoyager.jl) there is also a nice package that allows to interactively explore your data by loading a given data frame into the Voyager data exploration tool:
 ```julia-repl
