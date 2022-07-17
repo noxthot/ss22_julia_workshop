@@ -93,16 +93,16 @@ julia> w'
 
   \solution{
     ```julia-repl
-    julia> x = collect(range(0.01, 1.0, 100));
+julia> x = collect(range(0.01, 1.0, 100));
 
-    julia> y = ones(100) + x;
-    
-    julia> z = 100 * (x + y);
+julia> y = ones(100) + x;
 
-    julia> typeof(z)
-    Vector{Float64} (alias for Array{Float64, 1})
+julia> z = 100 * (x + y);
 
-    julia> u = collect(Int64, range(102, 300, 199))';
+julia> typeof(z)
+Vector{Float64} (alias for Array{Float64, 1})
+
+julia> u = collect(Int64, range(102, 300, 199))';
     ```
   }
 }
@@ -240,7 +240,67 @@ julia> C = [B; b']
 ```
 
 \exercise{
-  TODO
+  A Hankel Matrix is a Matrix of the form
+  $$
+    H = \begin{pmatrix}
+    a & b & c & d & e\\
+    b & c & d & e & f\\
+    c & d & e & f & g\\
+    d & e & f & g & h\\
+    e & f & g & h & i\\
+    \end{pmatrix}.
+  $$
+  Use the concatenation commands to construct the Hankel matrix
+  $$
+    H = \begin{pmatrix}
+    1 & 2 & 3 & 4 & 5\\
+    2 & 3 & 4 & 5 & 6\\
+    3 & 4 & 5 & 6 & 7\\
+    4 & 5 & 6 & 7 & 8\\
+    5 & 6 & 7 & 8 & 9\\
+    \end{pmatrix}.
+  $$
+  Make sure $H$ is of type `Matrix{Int64}`. Print out and check if squaring every entry in $H$ will again be a Hankel matrix. How about $H^2$?
+  \solution{
+    ```julia-repl
+julia> v = collect(Int64, range(1, 9, 9))
+9-element Vector{Int64}:
+ 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+
+julia> H = [v[1:5] v[2:6] v[3:7] v[4:8] v[5:9]]
+5×5 Matrix{Int64}:
+ 1  2  3  4  5
+ 2  3  4  5  6
+ 3  4  5  6  7
+ 4  5  6  7  8
+ 5  6  7  8  9
+
+julia> H.^2
+5×5 Matrix{Int64}:
+  1   4   9  16  25
+  4   9  16  25  36
+  9  16  25  36  49
+ 16  25  36  49  64
+ 25  36  49  64  81
+
+julia> H^2
+5×5 Matrix{Int64}:
+  55   70   85  100  115
+  70   90  110  130  150
+  85  110  135  160  185
+ 100  130  160  190  220
+ 115  150  185  220  255
+
+    ```
+  }
 }
 
 To find the entire list of operations that can be performed and a lot more on arrays in Julia visit the [docs](https://docs.julialang.org/en/v1/base/arrays/#lib-arrays).
