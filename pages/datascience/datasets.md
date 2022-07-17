@@ -43,7 +43,7 @@ Apparently, `mnist_data` comes with some meta information and when having a look
 
 We are mainly interested in `features` where we find the $28 \times 28$ images of handwritten digits and at `targets` where we find the according labels. The `split` tells at which part of the data set we are looking. Especially for supervised learning we need a way to test our model with previously unseen data. So usually - in the context of supervised learning - data sets are split into two parts: a *training data set* which is used for training or fitting a model and a *test data set* which is used to evaluate the quality of the model. For some algorithms, we often introduce a third data split: a *validation data set* which is used to evaluate a model while tuning hyper parameters or to stop training before running into overfitting. But for this course, we will stick to training and test data set. The manual also states that `MNIST()` is setting `split` to `:train` by default.
 
-\exercise{Also load the test data set from MNIST into Julia. How many trainings images and how many test images do we have in our data set?}
+\exercise{Also load the test data set from MNIST into Julia. How many trainings images and how many test images do we have in our data set?
 
 \solution{
 ```julia-repl
@@ -63,8 +63,9 @@ dataset MNIST:
   targets     =>    10000-element Vector{Int64}
 ```
 }
+}
 
-\exercise{`MLDatasets.jl` also comes with a function `convert2image()` which can be used to visualize specific images of the data set. Read the man page of `convert2image` and use it to look at the first couple of images from the training and test data set. What are the corresponding labels?}
+\exercise{`MLDatasets.jl` also comes with a function `convert2image()` which can be used to visualize specific images of the data set. Read the man page of `convert2image` and use it to look at the first couple of images from the training and test data set. What are the corresponding labels?
 
 \solution{
 ```
@@ -78,10 +79,11 @@ julia> convert2image(df_train, 1:nrImgs)
 julia> convert2image(df_test, 1:nrImgs)
 ```
 }
+}
 
 Most learning algorithms require the data to be in tabular form, but the `features` are currently given as a three-dimensional array. So our next goal is to reshape the training and test data from an `28×28×NR_IMAGES` array to a `784×NR_IMAGES` array.
 
-\exercise{Use `reshape()` to flatten the images within `df_train.features` and `df_test.features`. Store the reshaped array in the variables `X_train` and `X_test`.}
+\exercise{Use `reshape()` to flatten the images within `df_train.features` and `df_test.features`. Store the reshaped array in the variables `X_train` and `X_test`.
 
 \solution{
 ```
@@ -129,6 +131,7 @@ julia> X_test = reshape(df_test.features, (28 * 28, :))
  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0     0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0
 ```
 $~$
+}
 }
 
 When using different algorithms, we always have to keep in mind in which format and shape our data is stored. Different algorithms have different requirements. Sometimes observations have to be stored row wise (each observation in a separate row), sometimes they have to be stored column wise. Some algorithms require a `Matrix` and others a `DataFrame`.
