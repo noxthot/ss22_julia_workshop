@@ -355,7 +355,7 @@ julia> @btime estimate_pi(in_unit_circle_gpu, N);
 ```
 
 We are already faster than the standard Julia implementation but this is not what we were hoping for. 
-The used GPU is actually quite powerfull and  if we have a look at the [NVIDIA System Management Interface](https://developer.nvidia.com/nvidia-system-management-interface#:~:text=The%20NVIDIA%20System%20Management%20Interface,monitoring%20of%20NVIDIA%20GPU%20devices.) (`nvidia-smi`) on the terminal we see that GPU is not utilized fully.
+The used GPU is actually quite powerful and  if we have a look at the [NVIDIA System Management Interface](https://developer.nvidia.com/nvidia-system-management-interface#:~:text=The%20NVIDIA%20System%20Management%20Interface,monitoring%20of%20NVIDIA%20GPU%20devices.) (`nvidia-smi`) on the terminal we see that GPU is not utilized fully.
 ```bash
 +-----------------------------------------------------------------------------+
 | NVIDIA-SMI 510.73.05    Driver Version: 510.73.05    CUDA Version: 11.6     |
@@ -430,14 +430,14 @@ julia> @btime estimate_pi(in_unit_circle_gpu2, N);
   81.436 ms (156 allocations: 8.16 KiB)
 ```
 Now each thread on the GPU is doing exactly one computation (and therefore the loop inside the kernel is not needed and for performance reasons removed).
-This is still not the most efficient way to use the GPU and in addition it is rather wastefull on memory. 
+This is still not the most efficient way to use the GPU and in addition it is rather wasteful on memory. 
 
 ### Multiple operations per thread
 
 So let us optimize the computation a bit further.
 Each of the threads should do `n` iterations. This means we need to define the number of blocks as 
 $$
- \operatorname{nblocks} = \frac{N}{\operatorname{nthreads} \cdot n}.
+ n_{blocks} = \frac{N}{n_{threads} n}.
 $$
 The kernel is a combination of the two previous kernels:
 ```julia
@@ -476,7 +476,7 @@ julia> @btime estimate_pi(in_unit_circle_gpu2, N);
   45.194 ms (155 allocations: 8.14 KiB)
 ```
 One thing we have to keep in mind, is that we have defined `M` of type `Int8` to save space and boost performance. 
-If `n` become larger than $2^7$ it might happen that the result is too large and can no longer be stored in an 8-Bit integer (as a result an overflow would occure). 
+If `n` become larger than $2^7$ it might happen that the result is too large and can no longer be stored in an 8-Bit integer (as a result an overflow would occur). 
 
 ### Additional notes
 
