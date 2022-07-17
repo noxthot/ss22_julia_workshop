@@ -115,15 +115,15 @@
 
 <!-- Content appended here (in class franklin-content) -->
 <div class="franklin-content"><h1 id="exploratory_data_analysis"><a href="#exploratory_data_analysis" class="header-anchor">Exploratory Data Analysis</a></h1>
-<div class="franklin-toc"><ol><li><a href="#introduction">Introduction</a></li><li><a href="#data_wrangling">Data Wrangling</a></li><li><a href="#case_studies">Case Studies</a></li><li><a href="#data_visualisation">Data Visualisation</a><ol><li><a href="#barplot_show_survey_participants_by_country">Barplot: Show survey participants by country</a></li><li><a href="#boxplot_salary_in_comparison_to_employment_status">Boxplot: Salary in comparison to employment status</a></li></ol></li></ol></div>
+<div class="franklin-toc"><ol><li><a href="#introduction">Introduction</a></li><li><a href="#data_wrangling">Data Wrangling</a></li><li><a href="#case_studies">Case Studies</a></li><li><a href="#data_visualization">Data Visualization</a><ol><li><a href="#barplot_show_survey_participants_by_country">Barplot: Show survey participants by country</a></li><li><a href="#boxplot_salary_in_comparison_to_employment_status">Boxplot: Salary in comparison to employment status</a></li></ol></li></ol></div>
 <h2 id="introduction"><a href="#introduction" class="header-anchor">Introduction</a></h2>
-<p>In most data science projects <em>exploratory data analysis</em> &#40;EDA&#41; is an essential first step. The primary aim is to analyse a given data set to summarize its main characteristics. Therefore, EDA often uses data visualization methods and statistical methods.</p>
-<p>In this section we will continue to work with the Stack Overflow survey data set as shown in the previous section <a href="loading_data">Loading data</a>. To summarize, the necessary steps to start with this section can be found in the code snippet below:</p>
+<p>In most data science projects <em>exploratory data analysis</em> &#40;EDA&#41; is an essential first step. The primary aim is to analyze a given data set to summarize its main characteristics. Therefore, EDA often uses data visualization methods and statistical methods.</p>
+<p>In this section, we will continue to work with the Stack Overflow survey data set as shown in the previous section <a href="loading_data">Loading data</a>. To summarize, the necessary steps to start with this section can be found in the code snippet below:</p>
 <pre><code class="julia hljs"><span class="hljs-keyword">using</span> CSV, DataFrames
 
 selcols = [<span class="hljs-string">&quot;Age&quot;</span>, <span class="hljs-string">&quot;Country&quot;</span>, <span class="hljs-string">&quot;ConvertedCompYearly&quot;</span>, <span class="hljs-string">&quot;DevType&quot;</span>, <span class="hljs-string">&quot;Employment&quot;</span>, <span class="hljs-string">&quot;Ethnicity&quot;</span>, <span class="hljs-string">&quot;Gender&quot;</span>, <span class="hljs-string">&quot;OrgSize&quot;</span>, <span class="hljs-string">&quot;YearsCode&quot;</span>]
 df_survey = CSV.read(<span class="hljs-string">&quot;survey_results_public.csv&quot;</span>, DataFrame; missingstring=<span class="hljs-string">&quot;NA&quot;</span>, select=selcols)</code></pre>
-<p>Alternatively you can also load the arrow-file which we created in the previous section:</p>
+<p>Alternatively, we can also load the arrow-file which we created in the previous section:</p>
 <pre><code class="julia hljs"><span class="hljs-keyword">using</span> Arrow, DataFrames
 
 df_survey = DataFrame(Arrow.Table(<span class="hljs-string">&quot;survey.arrow&quot;</span>))</code></pre>
@@ -143,8 +143,9 @@ df_survey = DataFrame(Arrow.Table(<span class="hljs-string">&quot;survey.arrow&q
    7 │ Gender                          Man                                Woman;Or, in your own words:           1153  Union{Missing, String}
    8 │ Ethnicity                       Biracial                           White or of European descent;Sou…      3975  Union{Missing, String}
    9 │ ConvertedCompYearly  1.18426e5  1                         56211.0  45241312                              36595  Union{Missing, Int64}</code></pre>
-<p>Since most columns are <code>String</code> types, there is not that much to see but we still get a helpful impression about the number of missing fields. In the last section we stated that we are interested to do a little study in terms of income, so missing values there are not really feasible. Let us remove these rows in an exercise.</p>
-<button type="button" class="collapsible" style="background-color:#b5ddff"> Exercise </button><div class="collapsiblecontent">  Look at the manual of <code>dropmissing</code> and use that function to drop every row that is lacking an entry in <code>ConvertedCompYearly</code>. Hint: To not having to reload the initial data set whenever you did a mistake it might be a good idea to create a backup first: <code>backup_df &#61; copy&#40;df_survey&#41;</code>. So later you can always bring it back by calling <code>df_survey &#61; copy&#40;backup_df&#41;</code>. </div>
+<p>Since most columns are <code>String</code> types, there is not that much to see, but we still get a helpful impression about the number of missing fields. In the last section, we stated that we are interested to do a little study in terms of income, so missing values there are not really feasible. Let us remove these rows in an exercise.</p>
+<button type="button" class="collapsible" style="background-color:#b5ddff"> Exercise </button><div class="collapsiblecontent">  Look at the manual of <code>dropmissing</code> and use that function to drop every row that is lacking an entry in <code>ConvertedCompYearly</code>. </p>
+<p>Hint: To not having to reload the initial data set whenever you make a mistake, it might be a good idea to create a backup first: <code>backup_df &#61; copy&#40;df_survey&#41;</code>. So later you can always bring it back by calling <code>df_survey &#61; copy&#40;backup_df&#41;</code>. </div>
 <p>After the previous exercise you should have <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>46844</mn></mrow><annotation encoding="application/x-tex">46844</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">46844</span></span></span></span> rows in your data set.</p>
 <p>Let us try to get an overview over the yearly compensation. Again we can use <code>describe&#40;&#41;</code>, just on that column, to get a more detailed summary statistics:</p>
 <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> describe(df_survey.ConvertedCompYearly)
@@ -162,6 +163,7 @@ Type:           Int64</code></pre>
 <p>Let us create some plots to gain deeper insights. We have already seen the use of <code>Plots.jl</code> before. In this section, we will switch to <code>StatsPlots.jl</code> &#40;which is a drop-in replacement for <code>Plots.jl</code>&#41; since on one hand it supports easy plotting of dataframes and on the other hand also offers additional statistical recipes.</p>
 <p>Creating a boxplot is fairly simple using the <code>@df</code> macro:</p>
 <pre><code class="julia hljs"><span class="hljs-keyword">using</span> StatsPlots
+
 <span class="hljs-meta">@df</span> df_survey boxplot(:ConvertedCompYearly)</code></pre>
 <img src="/ss22_julia_workshop/assets/pages/datascience/exploratory_da_boxplot.png" alt="Boxplot">
 <p>Apparently a couple of outliers totally screw our visualization. Fortunately, there is an <a href="https://github.com/JuliaPlots/StatsPlots.jl/blob/db1a9e2f58ff9fb4beb3a0f7d133fcc8fd72b812/src/boxplot.jl#L14">undocumented function argument</a> that allows us to get rid of the outliers within the visualization:</p>
@@ -173,12 +175,13 @@ Type:           Int64</code></pre>
 <img src="/ss22_julia_workshop/assets/pages/datascience/exploratory_da_cdf.png" alt="Cumulative distribution function plot">
 <p>The plot tells us &#40;just like the quartiles already indicated&#41; that most of the survey participates earn a lot less than 10Mio. Dollars. </p>
 <p>Removing outliers is a very controversial topic. Usually it is always good practice to try to understand the source of outliers and to consult a domain expert to decide whether or not to remove them. In this workshop we want to show the pitfalls when working with real data, but we also want to pragmatically clean the data to practice some data wrangling. So let us assume that it is very unusual for a software developer to earn more than 1Mio per year but to be sure, let us also check the entries where <code>ConvertedCompYear</code> exceeds 1Mio. We leave this as an exercise.</p>
-<button type="button" class="collapsible" style="background-color:#b5ddff"> Exercise </button><div class="collapsiblecontent">  Filter <code>df_survey</code> for entries where <code>ConvertedCompYear</code> exceeds 1Mio and have a look at the remaining data rows.      Hints: Check the manual of <code>filter</code>. When you are running your code in the Julia REPL within VS Code you will find a dataframe viewer in your Julia extension&#39;s workspace. Otherwise it might also make sense to quickly write the dataframe to a CSV and have a look in one of the usual spreadsheet programs. </div>
+<button type="button" class="collapsible" style="background-color:#b5ddff"> Exercise </button><div class="collapsiblecontent">  Filter <code>df_survey</code> for entries where <code>ConvertedCompYear</code> exceeds 1Mio and have a look at the remaining data rows. </p>
+<p>Hints: Check the manual of <code>filter</code>. When you are running your code in the Julia REPL within VS Code you will find a dataframe viewer in your Julia extension&#39;s workspace. Alternatively, it might also make sense to quickly write the dataframe to a CSV and have a look in one of the usual spreadsheet programs. </div>
 <p>Apparently, most of the top earners declared to be software developers. Let us filter the data set such that we only have entries <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>&lt;</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">&lt; 1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5782em;vertical-align:-0.0391em;"></span><span class="mrel">&lt;</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span>Mio from now on.</p>
 <button type="button" class="collapsible" style="background-color:#b5ddff"> Exercise </button><div class="collapsiblecontent">  Filter &#40;and store&#41; <code>df_survey</code> for entries where <code>ConvertedCompYear</code> is equal or less than 1Mio. </div>
 <p>Now you should have <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>46237</mn></mrow><annotation encoding="application/x-tex">46237</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">46237</span></span></span></span> entries. Next, we only want to look at the DACH region.</p>
 <button type="button" class="collapsible" style="background-color:#b5ddff"> Exercise </button><div class="collapsiblecontent">  Filter &#40;and store&#41; <code>df_survey</code> for <code>Country</code> being <code>Austria</code>, <code>Germany</code> or <code>Switzerland</code>. </div>
-<p>Now we are down to <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>4212</mn></mrow><annotation encoding="application/x-tex">4212</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">4212</span></span></span></span> entries. Have a look at the column <code>Gender</code>. Besides <code>Man</code> and <code>Woman</code> there are lot more categories, but unfortunately with very little sample sizes. Thus adding these to further visualizations would lead to misleading conclusions. It would require additional engineering to address these little sample sizes and therefore this is out of scope of this workshop.</p>
+<p>Now we are down to <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>4212</mn></mrow><annotation encoding="application/x-tex">4212</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">4212</span></span></span></span> entries. Have a look at the column <code>Gender</code>. Besides <code>Man</code> and <code>Woman</code> there are a lot more categories, but unfortunately with very little sample sizes. Thus, adding these to further visualizations would lead to misleading conclusions. It would require additional engineering to address these little sample sizes and therefore this is out of scope of this workshop.</p>
 <p>So instead, let us also add a filter in this column.</p>
 <button type="button" class="collapsible" style="background-color:#b5ddff"> Exercise </button><div class="collapsiblecontent">  Filter &#40;and store&#41; <code>df_survey</code> for <code>Gender</code> being <code>Man</code> or <code>Woman</code>. </div>
 <p>You should now see <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>4061</mn></mrow><annotation encoding="application/x-tex">4061</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">4061</span></span></span></span> entries. In a final step, let us convert the compensation from dollars into euros and store this information in a column named <code>EuroCompYearly</code>. As of July 1st, 2022, one Dollar corresponds to <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.96</mn></mrow><annotation encoding="application/x-tex">0.96</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0.96</span></span></span></span> Euros:</p>
@@ -272,9 +275,9 @@ df_survey[!, :EuroCompYearly] = <span class="hljs-number">0.96</span> * df_surve
    3 │ Germany                 true      7
    4 │ Switzerland            false    529</code></pre>
 <p></div>
-<h2 id="data_visualisation"><a href="#data_visualisation" class="header-anchor">Data Visualisation</a></h2>
+<h2 id="data_visualization"><a href="#data_visualization" class="header-anchor">Data Visualization</a></h2>
 <p>In this workshop we have already used <code>Plots.jl</code> and <code>StatsPlots.jl</code> a couple of times to visualize functions and data. It may come to a surprise that <code>Plots.jl</code> and <code>StatsPlots.jl</code> are actually no plotting packages. They are rather plotting metapackages which provide an interface over many different plotting libraries. The specific plotting library that is actually being used to create the plots is referred to as the <a href="https://docs.juliaplots.org/stable/tutorial/#plotting-backends"><em>backend</em></a> and it is easy to switch and therefore to use different plotting libraries. So far we always used the default backend <code>GR</code> which is fast, but lacks interactivity. Depending on the requirements you might like to try <code>PlotlyJS</code> for interactivity or <code>PyPlot</code> because you like the functionality of Matplotlib &#40;known from Python&#41;. To get a good overview, have a look at the <a href="https://docs.juliaplots.org/stable/backends/#backends"><code>Plots.jl</code> documentation</a>.</p>
-<p>In the last section we used methods from <code>DataFrames.jl</code> and <code>Statistics.jl</code> to do some case studies. Now we will supplement the studies with visualisations.</p>
+<p>In the last section we used methods from <code>DataFrames.jl</code> and <code>Statistics.jl</code> to do some case studies. Now we will supplement the studies with visualizations.</p>
 <h3 id="barplot_show_survey_participants_by_country"><a href="#barplot_show_survey_participants_by_country" class="header-anchor">Barplot: Show survey participants by country</a></h3>
 <p>In a previous exercise we already used <code>countmap</code> to get a dictionary which summarizes the number of participants per country. Fortunately, <code>StatsPlots</code> is able to visualize this dictionary immediately. We will also switch the backend to <code>plotlyjs</code>, so we are able to interact with the graph and get more detailed information about the height of the bars by moving our mouse cursor over the top of the bars and looking at the hover label.</p>
 <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-keyword">using</span> StatsBase
@@ -289,9 +292,9 @@ df_survey[!, :EuroCompYearly] = <span class="hljs-number">0.96</span> * df_surve
   &quot;Austria&quot;     =&gt; 437
 
 <span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@df</span> df_survey bar(countmap(:Country), legend=<span class="hljs-literal">false</span>)</span></code></pre>
-<div id="fdpyoe" style=""></div>
+<div id="fdpbmk" style=""></div>
 <script>
-graphDiv = document.getElementById("fdpyoe");
+graphDiv = document.getElementById("fdpbmk");
 plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_explorative_da_country.json');
 </script>
 
@@ -299,9 +302,9 @@ plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datas
 <p>Boxplots are a nice tool to visualize some distributional characteristics &#40;locality, spread, skewness&#41; of a given data sample. Dividing the data set into different groups allows an easy comparison.</p>
 <p>In the following plot we compare the salary of different employment states:</p>
 <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@df</span> df_survey boxplot(:Employment, :EuroCompYearly, xrotation=<span class="hljs-number">30</span>, size=(<span class="hljs-number">500</span>, <span class="hljs-number">900</span>), legend=<span class="hljs-literal">false</span>)</span></code></pre>
-<div id="fdpgaz" style=""></div>
+<div id="fdpqfo" style=""></div>
 <script>
-graphDiv = document.getElementById("fdpgaz");
+graphDiv = document.getElementById("fdpqfo");
 plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_explorative_da_salary_1.json');
 </script>
 
@@ -320,14 +323,14 @@ plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datas
 <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@df</span> df_survey boxplot(:Employment, :EuroCompYearly, xrotation=<span class="hljs-number">30</span>, size=(<span class="hljs-number">500</span>, <span class="hljs-number">900</span>), legend=<span class="hljs-literal">false</span>)
 </span>
 <span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@df</span> df_survey dotplot!(:Employment, :EuroCompYearly, legend=<span class="hljs-literal">false</span>)</span></code></pre>
-<div id="fdptjf" style=""></div>
+<div id="fdprnn" style=""></div>
 <script>
-graphDiv = document.getElementById("fdptjf");
+graphDiv = document.getElementById("fdprnn");
 plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_explorative_da_salary_2.json');
 </script>
 
 <p>Combining the information of the two plots we obviously have too little data to judge about the empty and <em>I prefer not to say</em> category. Also it appears that the average salaries of freelancers are a lot higher than the salaries of employees. Also the 25&#37; quantile of freelancers is comparable to the median salary of full-time employees.</p>
-<button type="button" class="collapsible" style="background-color:#b5ddff"> Exercise </button><div class="collapsiblecontent">  The dataframe has a couple of interesting columns &#40;see <code>names&#40;df_survey&#41;</code>&#41;. Have a look at the <a href="https://github.com/JuliaPlots/StatsPlots.jl"><code>StatsPlots.jl</code> documentation</a>, get creative and generate some nice visualisations. </div>
+<button type="button" class="collapsible" style="background-color:#b5ddff"> Exercise </button><div class="collapsiblecontent">  The dataframe has a couple of interesting columns &#40;see <code>names&#40;df_survey&#41;</code>&#41;. Have a look at the <a href="https://github.com/JuliaPlots/StatsPlots.jl"><code>StatsPlots.jl</code> documentation</a>, get creative and generate some nice visualizations. </div>
 <p>Of course there are many different plot types you can choose from. Have a look at the <a href="https://docs.juliaplots.org/stable/gallery/plotlyjs/"><code>Plots.jl</code> gallery</a> to get an overview. With <a href="https://github.com/queryverse/DataVoyager.jl"><code>DataVoyager.jl</code></a> there is also a nice package that allows to interactively explore your data by loading a given data frame into the Voyager data exploration tool:</p>
 <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-keyword">using</span> DataVoyager
 </span>
@@ -335,7 +338,7 @@ plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datas
 <p>Here is a screenshot that shows this tool in action: <img src="/ss22_julia_workshop/assets/pages/datascience/datavoyager.png" alt="Data Voyager"></p>
 <button type="button" class="collapsible" style="background-color:#b5ddff"> Exercise </button><div class="collapsiblecontent">  Explore our dataframe with <code>DataVoyager.jl</code>. </div>
 <div class="page-foot">
-    <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> Gregor Ehrensperger, Peter Kandolf, Jonas Kusch. Last modified: July 16, 2022.
+    <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> Gregor Ehrensperger, Peter Kandolf, Jonas Kusch. Last modified: July 17, 2022.
     Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
 </div>
 </div><!-- CONTENT ENDS HERE -->
