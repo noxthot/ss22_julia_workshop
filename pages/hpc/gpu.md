@@ -9,13 +9,13 @@
 
 Graphic Processing Units, or GPUs for short, were originally designed to manipulate images in a frame buffer.
 Their inherent parallelism makes them more efficient for some tasks than CPUs. 
-Basically everything that is related to SIMD operations but not limited to them.  
+Basically,s everything that is related to SIMD operations but not limited to them.  
 Using GPUs for general purpose computing (GPGPU) became a thing in the 21st century. 
 NVIDIA was the first big vendor that started to support this kind of application for their GPUs and invested heavily in dedicated frameworks to aid general purpose computing and later also started to produce dedicated hardware for this purpose only. 
 Nowadays, GPUs are used for artificial intelligence, deep learning and a lot of HPC workloads - some still use them for gaming too.
 
 ## Introduction 
-In Julia GPUs are supported by the 
+In Julia, GPUs are supported by the 
 [JuliaGPU](https://juliagpu.org/) project. 
 They support the three big vendor frameworks: 
 - NVIDIA with [CUDA](https://docs.nvidia.com/cuda/) and [`CUDA.jl`](https://cuda.juliagpu.org/stable/)
@@ -26,7 +26,7 @@ Nevertheless, in good Julia practice, the team behind JuliaGPU also included an 
 
 \figenvsource{Compile strategy for JuliaGPU}{/assets/pages/hpc/GPUBackend.png}{}{https://www.youtube.com/watch?v=Hz9IMJuW5hU}
 
-Nevertheless, for the rest of the section we will focus on `CUDA.jl` as the card at hand is CUDA compatible. 
+Nevertheless, for the rest of the section, we will focus on `CUDA.jl` as the card at hand is CUDA compatible. 
 
 We install the package with `Pkg.add("CUDA"); using CUDA` and execute the test right away, to see if the GPU is working with Julia:
 ```julia-repl
@@ -382,15 +382,15 @@ It only provides a snapshot but we still see that the `Volatile GPU-Util` is low
 What we did in the above example was to use the maximal number of threads (`1024`) support by the used GPU and performed our operations with them.
 This way we only occupied one *streaming multiprocessor* (SM) but the GPU has several SMs - this is similar to how a CPU has multiple cores.
 
-### Multiple Streamin Multiprocessors
+### Multiple Streaming Multiprocessors
 
-To get the full performance we need to run our kernel not just with multiple threads, but also with multiple blocks. 
+To get the full performance, we need to run our kernel not just with multiple threads, but also with multiple blocks. 
 
 In this technical blog from NVIDIA [CUDA Refresher: The CUDA Programming Model](https://developer.nvidia.com/blog/cuda-refresher-cuda-programming-model/) we can read more about it. 
 The following figure illustrates it quite nicely: 
 \figenvsource{Kernel execution on GPU.}{/assets/pages/hpc/kernel-execution-on-gpu-1.png}{}{ https://developer.nvidia.com/blog/cuda-refresher-cuda-programming-model/}
 
-If you use blocks, the computation of your index in `M` becomes a bit more tricky to compute and you also need to have more storage for `M`.
+If we use blocks, the computation of our index in `M` becomes a bit more tricky to compute and we also need to have more storage for `M`.
 
 Similar as with the `threadIdx().x` we have a `blockIdx().x` and a `blockDim().x` to perform this computation. 
 
@@ -475,11 +475,11 @@ julia> get_accuracy(in_unit_circle_gpu2, N)
 julia> @btime estimate_pi(in_unit_circle_gpu2, N);
   45.194 ms (155 allocations: 8.14 KiB)
 ```
-One thing you have to keep in mind, is that we have defined `M` of type `Int8` to save space and boost performance. 
+One thing we have to keep in mind, is that we have defined `M` of type `Int8` to save space and boost performance. 
 If `n` become larger than $2^7$ it might happen that the result is too large and can no longer be stored in an 8-Bit integer (as a result an overflow would occure). 
 
 ### Additional notes
 
 Like with the rest of the topics in this section we skimmed the surface and did not make a deep dive (like memory access, profiling to find slow parts in the code, multi GPU programming, multithreaded/distributed computing with GPUs and so forth). 
 Have a look at the excellent introduction on [JuliaGPU](https://juliagpu.org/learn/) to see more about the topic and have a look at the YouTube Videos of Tim Besard for a start. 
-Here it was only possible to give you a sound idea on what is happening and how great and easy you can achieve all of it with Julia.
+Here it was only possible to give a sound idea on what is happening and how great and easy we can achieve all of it with Julia.
