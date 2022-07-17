@@ -10,7 +10,7 @@ The main idea of macros is to allow the generation of code in the final body of 
 At its basis, a macro is similar to a function, as it maps a tuple of arguments to a returned expression. 
 Therefore, in order to distinguish macros in the code, Julia reserves the `@` symbol as the first character for macro definitions. 
 Apart from that convention, there are two major differences between macros and functions.
-The macros:
+A macro:
 1. is compiled directly and not at the first call,
 1. is executed when the code is parsed.
 
