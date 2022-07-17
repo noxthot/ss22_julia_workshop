@@ -6,9 +6,9 @@
 # Unsupervised Learning
 The term *unsupervised learning* subsumes all kinds of algorithms that are used to gain insights from such an unlabeled data set.
 Typically these algorithms fall into three main categories:
-- **Association rules**, to discover relationships between different variables (e.g. for recommender systems *customers who bought X also bought Y*)
+- **Association rules**: to discover relationships between different variables (e.g. for recommender systems: *customers who bought X also bought Y*)
 - **Clustering**: for grouping data based on their similarities (e.g. grouping news articles about similar topics)
-- **Dimensionality reduction**, for transforming data from a high-dimensional to a low-dimensional space (e.g. used for denoising images)
+- **Dimensionality reduction**: for transforming data from a high-dimensional to a low-dimensional space (e.g. used for denoising images)
 
 In this section we will quickly glimpse into clustering with an algorithm called *K means*, and into dimensionality reduction by applying PCA (*Principal Component Analysis*) and UMAP (*Uniform Manifold Approximation and Projection*).
 
@@ -22,7 +22,7 @@ $$
 where ${\mu}_i$ denotes the mean of the set $S_i$.
 
 The naive algorithm works iteratively for a given $k$:
-1. Randomly initalize $k$ points $\mu_1, \dots, \mu_k$, we call those points *cluster centers*.
+1. Randomly initialize $k$ points $\mu_1, \dots, \mu_k$, we call those points *cluster centers*.
 1. Assign every point to the nearest cluster center $\mu_i$. These points define the sets $S_i$.
 1. Calculate the mean within each set $S_i$ and replace the previous cluster centers.
 1. Repeat until the cluster centers are stable (with some tolerance).
