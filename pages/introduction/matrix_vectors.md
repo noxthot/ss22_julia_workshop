@@ -86,6 +86,27 @@ julia> w'
  3
  ```
 
+\exercise{
+  1. Create a vector $x$ with entries $x_1 = 0.01$, $x_2 = 0.02$, $\ldots, x_{100} = 1.0$.
+  2. Use $x$ to set up a second vector $y$ with entries $y_1 = 1.01$, $y_2 = 1.02$, $\ldots, y_{100} = 2.0$.
+  3. Check the type of $z = 100 \cdot (x + y)$. Create an object of type `adjoint(::Vector{Int64})` that has the same values as $z$.
+
+  \solution{
+    ```julia-repl
+    julia> x = collect(range(0.01, 1.0, 100));
+
+    julia> y = ones(100) + x;
+    
+    julia> z = 100 * (x + y);
+
+    julia> typeof(z)
+    Vector{Float64} (alias for Array{Float64, 1})
+
+    julia> u = collect(Int64, range(102, 300, 199))';
+    ```
+  }
+}
+
 ## Matrices
  If we have vectors, the jump to matrices is not very far. Again, we have the command
 ```julia-repl
