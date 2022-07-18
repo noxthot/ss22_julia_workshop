@@ -4,7 +4,7 @@
 @def tags = ["Data Science", "data sets"]
 
 # Data sets
-Let us assume that we took several pictures with our camera. Typically, these photos are simply stored as image files without any further description about the content of the images. We can understand this collection of photos as a data set and since we have no further description of the individual images, we speak about an *unlabeled data set*. By augmenting the unlabeled data set with interesting information, we obtain a *labeled data set*. *Interesting* in this context depends on the goal we want to achieve, within our use case. For example, it could be interesting to know the content of the images, then we might label the images with descriptions like *beach*, *person*, *landscape*, *animal*, and so on. Or we would like to know whether the image was taken at day or night, so we label each image with this information, or possibly we are just interested in the number of persons in an image.
+Let us assume that we took several pictures with our camera. Typically, these photos are simply stored as image files without any further description about the content of the images. We can understand this collection of photos as a data set and since we have no further description of the individual images, we speak about an *unlabeled data set*. By augmenting the unlabeled data set with interesting information, we obtain a *labeled data set*. "Interesting" in this context depends on the goal we want to achieve within our use case. For example, it could be interesting to know the content of the images, then we might label the images with descriptions like *beach*, *person*, *landscape*, *animal*, and so on. Or we would like to know whether the image was taken at day or night, so we label each image with this information, or possibly we are just interested in the number of persons in an image.
 
 Simply speaking, a *data set* is a collection of data (and of course not restricted to images), *labeled data* is a data set that augments each data point with some meaningful tag(s) and in *unlabeled data* this tag is missing.
 
@@ -13,7 +13,7 @@ In unsupervised learning, we basically try to find patterns within unlabeled dat
 
 
 ## MNIST data set
-To demonstrate some applications of unsupervised and supervised machine learning algorithms we will have a look at the famous MNIST data set. This data set consists of 70.000 images of handwritten digits and additionally a label that tells the digit which is displayed in the individual images. In this section, the labels are not consumed by the algorithms, but we will use them to illustrate some results.
+To demonstrate some applications of unsupervised and supervised machine learning algorithms we will have a look at the famous MNIST data set. This data set consists of 70.000 images of handwritten digits and additionally a label that tells the digit which is displayed in the individual images.
 
 The data set looks like this:
 \figenvsource{MNIST data set.}{/assets/pages/datascience/MnistExamples.png}{}{https://en.wikipedia.org/wiki/MNIST_database#/media/File:MnistExamples.png}
@@ -83,49 +83,36 @@ julia> convert2image(df_test, 1:nrImgs)
 
 Most learning algorithms require the data to be in tabular form, but the `features` are currently given as a three-dimensional array. So our next goal is to reshape the training and test data from an `28×28×NR_IMAGES` array to a `784×NR_IMAGES` array.
 
-\exercise{Use `reshape()` to flatten the images within `df_train.features` and `df_test.features`. Store the reshaped array in the variables `X_train` and `X_test`.
+\exercise{Use `reshape()` to flatten the images within `df_train.features` and `df_test.features`. After that, transpose the resulting flattened table such that observations are stored in rows (instead of columns). In the end, store the reshaped array in the variables `X_train` and `X_test`.
 
 \solution{
-```
-julia> X_train = reshape(df_train.features, (28 * 28, :))
-784×60000 Matrix{Float32}:
+```julia-repl
+julia> X_train = reshape(df_train.features, (28 * 28, :))'
+60000×784 adjoint(::Matrix{Float32}) with eltype Float32:
  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  …  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0
  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0     0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0
  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0     0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0
  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0     0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0
  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0     0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0
  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  …  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0
- ⋮                        ⋮                        ⋮                        ⋮                        ⋮    ⋱  ⋮                        ⋮                        ⋮                        ⋮                   
- 0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0     0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0
+ ⋮                        ⋮                        ⋮                        ⋮                        ⋮    ⋱       ⋮                        ⋮                        ⋮                        ⋮              
  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  …  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0
+ 0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0     0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0
  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0     0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0
  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0     0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0
  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0     0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0
 
-julia> X_test = reshape(df_test.features, (28 * 28, :))
-ERROR: UndefVarError: df_test not defined
-Stacktrace:
- [1] top-level scope
-   @ REPL[11]:1
-
-julia> df_test = MNIST(:test)
-dataset MNIST:
-  metadata    =>    Dict{String, Any} with 3 entries
-  split       =>    :test
-  features    =>    28×28×10000 Array{Float32, 3}
-  targets     =>    10000-element Vector{Int64}
-
-julia> X_test = reshape(df_test.features, (28 * 28, :))
-784×10000 Matrix{Float32}:
+julia> X_test = reshape(df_test.features, (28 * 28, :))'
+10000×784 adjoint(::Matrix{Float32}) with eltype Float32:
  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  …  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0
  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0     0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0
  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0     0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0
  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0     0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0
  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0     0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0
  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  …  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0
- ⋮                        ⋮                        ⋮                        ⋮                        ⋮    ⋱  ⋮                        ⋮                        ⋮                        ⋮                   
- 0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0     0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0
+ ⋮                        ⋮                        ⋮                        ⋮                        ⋮    ⋱       ⋮                        ⋮                        ⋮                        ⋮              
  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  …  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0
+ 0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0     0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0
  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0     0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0
  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0     0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0
  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0     0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0
