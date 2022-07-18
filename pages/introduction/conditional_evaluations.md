@@ -13,7 +13,7 @@ end
 ```
 As an example, let us choose a number and check if this number is stored as a *Floating Point Number* (or float for short) or an *Integer*
 ```julia:./code/cd.jl
-number  = 2
+number = 2
 if number isa Integer
     println("This number is an integer")
 end
