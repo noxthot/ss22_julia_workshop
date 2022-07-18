@@ -29,7 +29,7 @@ else
 end
 ```
 \show{./code/cd.jl}
-Moreover, if we want to check whether the number is a float in case it is not an integer we can use the `ifelse` statement
+Moreover, if we want to check whether the number is a float in case it is not an integer we can use the `elseif` statement
 ```julia:./code/cd.jl
 number  = 2.0
 if number isa Integer
