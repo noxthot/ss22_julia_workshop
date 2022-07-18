@@ -8,7 +8,7 @@ struct Settings{T<:AbstractFloat}
   nx::Int # number of spatial cells
   nv::Int # number of velocity points
   nt::Int # number of time steps
-  dt::T # time step size
+  Δt::T # time step size
   dx::T # spatial grid cell size
   tEnd::T # end time of simulation
   a::T # start point of spatial domain
@@ -20,38 +20,40 @@ struct Settings{T<:AbstractFloat}
     a = -1.0;
     b = 1.0;
     dx = (b - a) / (nx - 1)
-    dt = dx
-    nt = Int(floor(tEnd / dt))
+    Δt = dx
+    nt = Int(floor(tEnd / Δt))
 
-    return new{T}(nx, nv, nt, dt, dx, tEnd, a, b, sigma2)
+    return new{T}(nx, nv, nt, Δt, dx, tEnd, a, b, sigma2)
   end
 end
 
 # definition of the initial condition
 function IC(obj::Settings, x::T) where T<:Real
-  floor = 1e-4
+  floor = T(1e-4)
   return max(floor, 1.0 / (sqrt(2 * pi * obj.sigma2)) * exp(-(x - 0.5 * (obj.b - obj.a) - obj.a)^2 / (2.0 * obj.sigma2)))
 end
 
-function runPlaneSource(obj::Settings)
+function runPlaneSource(obj::Settings{T}) where {T}
     nx = obj.nx
     nv = obj.nv
 
     # define velocity grid according to gauss quadrature
-    v, w = gausslegendre(nv)
+    v, w = convert.(Vector{T}, gausslegendre(nv))
     x = collect(range(obj.a, obj.b; length=nx))
 
+
     # setup initial condition
-    psi = zeros(nx, nv)
+    ψ = zeros(T, nx, nv)
 
     for j in 1:nx
-        psi[j, :] .= IC(obj, x[j])
+        ψ[j, :] .= IC(obj, x[j])
     end
 
     # create stencil matrices
     dx = obj.dx
-    DPlus = (1 / dx) * Tridiagonal(-ones(nx - 1), ones(nx), zeros(nx - 1))
-    DMinus = (1 / dx) * Tridiagonal(zeros(nx - 1), -ones(nx), ones(nx - 1))
+    DPlus = (1 / dx) * Tridiagonal(-ones(T, nx - 1), ones(T, nx), zeros(T, nx - 1))
+    DMinus = (1 / dx) * Tridiagonal(zeros(T, nx - 1), -ones(T, nx), ones(T, nx - 1))
+
 
     # create system matrices
     midMinus = Int(ceil(nv / 2))
@@ -59,34 +61,35 @@ function runPlaneSource(obj::Settings)
     VMinus = Diagonal([v[1:midMinus]; zeros(midPlus)])
     VPlus = Diagonal([zeros(midMinus); v[(midPlus + 1):end]])
 
+
     # create scattering matrix
-    G = ones(nv, nv) .* w - I
+    G = ones(T, nv, nv) .* w - I
 
     # advance in time
-    dt = obj.dt
+    Δt = obj.Δt
     nT = obj.nt
 
     for n in 1:nT
-        psiNew = psi + dt * (-DPlus * psi * VPlus - DMinus * psi * VMinus + psi * G)
-        psi .= psiNew
+        ψ_new = ψ + Δt * (-DPlus * ψ * VPlus - DMinus * ψ * VMinus + ψ * G)
+        ψ .= ψ_new
     end
 
-    # store phi for plotting
-    phi = zeros(nx)
+    # store Φ for plotting
+    Φ = zeros(T, nx)
 
     for j in 1:nx
-        phi[j] = sum(psi[j, :] .* w)
+        Φ[j] = sum(ψ[j, :] .* w)
     end
 
-    return x, phi
+    return x, Φ
 end
 
 # generate setup
 settings = Settings()
 
-# run code and store final phi
-x, phi = runPlaneSource(settings)
+# run code and store final Φ
+x, Φ = runPlaneSource(settings)
 
-# plot phi
-plot(x, phi, labels=L"\Phi")
+# plot Φ
+plot(x, Φ, labels=L"\Phi")
 xlabel!("x")

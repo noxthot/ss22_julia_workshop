@@ -121,7 +121,7 @@
 <pre><code class="julia hljs"><span class="hljs-keyword">function</span> runPlaneSource()
   ...
 
-  <span class="hljs-keyword">return</span> x, phi
+  <span class="hljs-keyword">return</span> x, Φ
 <span class="hljs-keyword">end</span></code></pre>
 <h2 id="input_arguments"><a href="#input_arguments" class="header-anchor">Input arguments</a></h2>
 <p>Then, write a new function for the initial condition and use it in your code. The new initial condition takes the form</p>
@@ -150,24 +150,24 @@ M834 80h400000v40h-400000z'/></svg></span></span></span><span class="vlist-s">�
 <span class="hljs-keyword">end</span></code></pre>
 <p>We then call this function to set up the initial condition via</p>
 <pre><code class="julia hljs"><span class="hljs-comment"># setup initial condition</span>
-psi = zeros(nx, nv)
+ψ = zeros(nx, nv)
 
 <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-number">1</span>:nx
   <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-number">1</span>:nv
-    psi[j, i] = IC(x[j])
+    ψ[j, i] = IC(x[j])
   <span class="hljs-keyword">end</span>
 <span class="hljs-keyword">end</span></code></pre>
 <p>If you want to check your element-wise operation skills, see if you can remove one of the for loops. This can either take the form</p>
-<pre><code class="julia hljs">psi = zeros(nx, nv)
+<pre><code class="julia hljs">ψ = zeros(nx, nv)
 
 <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-number">1</span>:nx
-    psi[j, :] .= IC(x[j])
+    ψ[j, :] .= IC(x[j])
 <span class="hljs-keyword">end</span></code></pre>
 <p>or</p>
-<pre><code class="julia hljs">psi = zeros(nx, nv)
+<pre><code class="julia hljs">ψ = zeros(nx, nv)
 
 <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-number">1</span>:nv
-  psi[:, i] .= IC.(x)
+  ψ[:, i] .= IC.(x)
 <span class="hljs-keyword">end</span></code></pre>
 <p></div>
 <p>Now, note that we have fixed <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>σ</mi></mrow><annotation encoding="application/x-tex">\sigma</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">σ</span></span></span></span> insice the <code>IC</code> function. Very often, you want to use <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>σ</mi><mo>=</mo><mn>0.0009</mn></mrow><annotation encoding="application/x-tex">\sigma = 0.0009</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">σ</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0.0009</span></span></span></span>, but sometimes you want to change this sigma to test your code. See if you can rewrite your <code>IC</code> function to include this option.</p>
@@ -198,10 +198,10 @@ psi = zeros(nx, nv)
     x = collect(range(<span class="hljs-number">0</span>, <span class="hljs-number">1</span>; length=nx))
 
     <span class="hljs-comment"># setup initial condition</span>
-    psi = zeros(nx, nv)
+    ψ = zeros(nx, nv)
 
     <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-number">1</span>:nx
-        psi[j, :] .= IC(x[j])
+        ψ[j, :] .= IC(x[j])
     <span class="hljs-keyword">end</span>
 
     <span class="hljs-comment"># create stencil matrices</span>
@@ -219,41 +219,41 @@ psi = zeros(nx, nv)
     G = ones(nv, nv) .* w - I
 
     <span class="hljs-comment"># advance in time</span>
-    dt = <span class="hljs-number">0.01</span>
+    Δt = <span class="hljs-number">0.01</span>
     nT = <span class="hljs-number">40</span>
 
     <span class="hljs-keyword">for</span> n <span class="hljs-keyword">in</span> <span class="hljs-number">1</span>:nT
-        psiNew = psi + dt * (-DPlus * psi * VPlus - DMinus * psi * VMinus + psi * G)
-        psi .= psiNew
+        ψ_new = ψ + Δt * (-DPlus * ψ * VPlus - DMinus * ψ * VMinus + ψ * G)
+        ψ .= ψ_new
     <span class="hljs-keyword">end</span>
 
     <span class="hljs-comment"># store phi for plotting</span>
-    phi = zeros(nx)
+    Φ = zeros(nx)
 
     <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-number">1</span>:nx
-        phi[j] = sum(psi[j, :] .* w)
+        Φ[j] = sum(ψ[j, :] .* w)
     <span class="hljs-keyword">end</span>
 
-    <span class="hljs-keyword">return</span> x, phi
+    <span class="hljs-keyword">return</span> x, Φ
 <span class="hljs-keyword">end</span>
 
-<span class="hljs-comment"># run code and store final phi</span>
-x, phi = runPlaneSource()
+<span class="hljs-comment"># run code and store final Φ</span>
+x, Φ = runPlaneSource()
 
-<span class="hljs-comment"># plot phi</span>
-plot(x, phi, labels=<span class="hljs-string">L&quot;\Phi&quot;</span>)
+<span class="hljs-comment"># plot Φ</span>
+plot(x, Φ, labels=<span class="hljs-string">L&quot;\Phi&quot;</span>)
 xlabel!(<span class="hljs-string">&quot;x&quot;</span>)</code></pre>
 <p></div>
 <p>You can now try out different numbers of velocities and spatial cells. See how the solution changes and think about what might be the reason for this.</p>
 <h2 id="structs"><a href="#structs" class="header-anchor">Structs</a></h2>
-<p>You might have observed that the solution crashes if you are choosing too many spatial cells. The reason for this is that the chosen <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><mi>t</mi></mrow><annotation encoding="application/x-tex">\Delta t</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord">Δ</span><span class="mord mathnormal">t</span></span></span></span> must fulfill <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><mi>t</mi><mo>≤</mo><mi mathvariant="normal">Δ</mi><mi>x</mi></mrow><annotation encoding="application/x-tex">\Delta t \leq \Delta x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8193em;vertical-align:-0.136em;"></span><span class="mord">Δ</span><span class="mord mathnormal">t</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≤</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord">Δ</span><span class="mord mathnormal">x</span></span></span></span>, otherwise the method is unstable. Also, you have maybe observed that a lot of parameters cannot be changed from outside the function call and you might want to add further parameters like the end time <code>tEnd</code>, the time step size <code>dt</code> or the variance of the initial condition <code>sigma2</code> to the input arguments of the function. To structure the input we can create a new object, which stores all these values. As you already know, this can either be a <code>struct</code> or a <code>dictionary</code>.</p>
+<p>You might have observed that the solution crashes if you are choosing too many spatial cells. The reason for this is that the chosen <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><mi>t</mi></mrow><annotation encoding="application/x-tex">\Delta t</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord">Δ</span><span class="mord mathnormal">t</span></span></span></span> must fulfill <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><mi>t</mi><mo>≤</mo><mi mathvariant="normal">Δ</mi><mi>x</mi></mrow><annotation encoding="application/x-tex">\Delta t \leq \Delta x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8193em;vertical-align:-0.136em;"></span><span class="mord">Δ</span><span class="mord mathnormal">t</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≤</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord">Δ</span><span class="mord mathnormal">x</span></span></span></span>, otherwise the method is unstable. Also, you have maybe observed that a lot of parameters cannot be changed from outside the function call and you might want to add further parameters like the end time <code>tEnd</code>, the time step size <code>Δt</code> or the variance of the initial condition <code>sigma2</code> to the input arguments of the function. To structure the input we can create a new object, which stores all these values. As you already know, this can either be a <code>struct</code> or a <code>dictionary</code>.</p>
 <p>Define a struct which stores all relevant information and use it as an input. Make sure that all floating point numbers are of type <code>AbstractFloat</code></p>
 <button type="button" class="collapsible" style="background-color:#fffca5"> Solution </button><div class="collapsiblecontent">  </p>
 <pre><code class="julia hljs"><span class="hljs-keyword">struct</span> Settings{T&lt;:<span class="hljs-built_in">AbstractFloat</span>}
   nx::<span class="hljs-built_in">Int</span> <span class="hljs-comment"># number of spatial cells</span>
   nv::<span class="hljs-built_in">Int</span> <span class="hljs-comment"># number of velocity points</span>
   nt::<span class="hljs-built_in">Int</span> <span class="hljs-comment"># number of time steps</span>
-  dt::T <span class="hljs-comment"># time step size</span>
+  Δt::T <span class="hljs-comment"># time step size</span>
   dx::T <span class="hljs-comment"># spatial grid cell size</span>
   tEnd::T <span class="hljs-comment"># end time of simulation</span>
   a::T <span class="hljs-comment"># start point of spatial domain</span>
@@ -265,10 +265,10 @@ xlabel!(<span class="hljs-string">&quot;x&quot;</span>)</code></pre>
     a = -<span class="hljs-number">1.0</span>;
     b = <span class="hljs-number">1.0</span>;
     dx = (b - a) / (nx - <span class="hljs-number">1</span>)
-    dt = dx
-    nt = <span class="hljs-built_in">Int</span>(floor(tEnd / dt))
+    Δt = dx
+    nt = <span class="hljs-built_in">Int</span>(floor(tEnd / Δt))
 
-    <span class="hljs-keyword">return</span> new{T}(nx, nv, nt, dt, dx, tEnd, a, b, sigma2)
+    <span class="hljs-keyword">return</span> new{T}(nx, nv, nt, Δt, dx, tEnd, a, b, sigma2)
   <span class="hljs-keyword">end</span>
 <span class="hljs-keyword">end</span></code></pre>
 <p></div>
@@ -283,7 +283,7 @@ xlabel!(<span class="hljs-string">&quot;x&quot;</span>)</code></pre>
   nx::<span class="hljs-built_in">Int</span> <span class="hljs-comment"># number of spatial cells</span>
   nv::<span class="hljs-built_in">Int</span> <span class="hljs-comment"># number of velocity points</span>
   nt::<span class="hljs-built_in">Int</span> <span class="hljs-comment"># number of time steps</span>
-  dt::T <span class="hljs-comment"># time step size</span>
+  Δt::T <span class="hljs-comment"># time step size</span>
   dx::T <span class="hljs-comment"># spatial grid cell size</span>
   tEnd::T <span class="hljs-comment"># end time of simulation</span>
   a::T <span class="hljs-comment"># start point of spatial domain</span>
@@ -295,38 +295,40 @@ xlabel!(<span class="hljs-string">&quot;x&quot;</span>)</code></pre>
     a = -<span class="hljs-number">1.0</span>;
     b = <span class="hljs-number">1.0</span>;
     dx = (b - a) / (nx - <span class="hljs-number">1</span>)
-    dt = dx
-    nt = <span class="hljs-built_in">Int</span>(floor(tEnd / dt))
+    Δt = dx
+    nt = <span class="hljs-built_in">Int</span>(floor(tEnd / Δt))
 
-    <span class="hljs-keyword">return</span> new{T}(nx, nv, nt, dt, dx, tEnd, a, b, sigma2)
+    <span class="hljs-keyword">return</span> new{T}(nx, nv, nt, Δt, dx, tEnd, a, b, sigma2)
   <span class="hljs-keyword">end</span>
 <span class="hljs-keyword">end</span>
 
 <span class="hljs-comment"># definition of the initial condition</span>
 <span class="hljs-keyword">function</span> IC(obj::Settings, x::T) <span class="hljs-keyword">where</span> T&lt;:<span class="hljs-built_in">Real</span>
-  floor = <span class="hljs-number">1e-4</span>
+  floor = T(<span class="hljs-number">1e-4</span>)
   <span class="hljs-keyword">return</span> max(floor, <span class="hljs-number">1.0</span> / (sqrt(<span class="hljs-number">2</span> * <span class="hljs-literal">pi</span> * obj.sigma2)) * exp(-(x - <span class="hljs-number">0.5</span> * (obj.b - obj.a) - obj.a)^<span class="hljs-number">2</span> / (<span class="hljs-number">2.0</span> * obj.sigma2)))
 <span class="hljs-keyword">end</span>
 
-<span class="hljs-keyword">function</span> runPlaneSource(obj::Settings)
+<span class="hljs-keyword">function</span> runPlaneSource(obj::Settings{T}) <span class="hljs-keyword">where</span> {T}
     nx = obj.nx
     nv = obj.nv
 
     <span class="hljs-comment"># define velocity grid according to gauss quadrature</span>
-    v, w = gausslegendre(nv)
+    v, w = convert.(<span class="hljs-built_in">Vector</span>{T}, gausslegendre(nv))
     x = collect(range(obj.a, obj.b; length=nx))
 
+
     <span class="hljs-comment"># setup initial condition</span>
-    psi = zeros(nx, nv)
+    ψ = zeros(T, nx, nv)
 
     <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-number">1</span>:nx
-        psi[j, :] .= IC(obj, x[j])
+        ψ[j, :] .= IC(obj, x[j])
     <span class="hljs-keyword">end</span>
 
     <span class="hljs-comment"># create stencil matrices</span>
     dx = obj.dx
-    DPlus = (<span class="hljs-number">1</span> / dx) * Tridiagonal(-ones(nx - <span class="hljs-number">1</span>), ones(nx), zeros(nx - <span class="hljs-number">1</span>))
-    DMinus = (<span class="hljs-number">1</span> / dx) * Tridiagonal(zeros(nx - <span class="hljs-number">1</span>), -ones(nx), ones(nx - <span class="hljs-number">1</span>))
+    DPlus = (<span class="hljs-number">1</span> / dx) * Tridiagonal(-ones(T, nx - <span class="hljs-number">1</span>), ones(T, nx), zeros(T, nx - <span class="hljs-number">1</span>))
+    DMinus = (<span class="hljs-number">1</span> / dx) * Tridiagonal(zeros(T, nx - <span class="hljs-number">1</span>), -ones(T, nx), ones(T, nx - <span class="hljs-number">1</span>))
+
 
     <span class="hljs-comment"># create system matrices</span>
     midMinus = <span class="hljs-built_in">Int</span>(ceil(nv / <span class="hljs-number">2</span>))
@@ -334,36 +336,37 @@ xlabel!(<span class="hljs-string">&quot;x&quot;</span>)</code></pre>
     VMinus = Diagonal([v[<span class="hljs-number">1</span>:midMinus]; zeros(midPlus)])
     VPlus = Diagonal([zeros(midMinus); v[(midPlus + <span class="hljs-number">1</span>):<span class="hljs-keyword">end</span>]])
 
+
     <span class="hljs-comment"># create scattering matrix</span>
-    G = ones(nv, nv) .* w - I
+    G = ones(T, nv, nv) .* w - I
 
     <span class="hljs-comment"># advance in time</span>
-    dt = obj.dt
+    Δt = obj.Δt
     nT = obj.nt
 
     <span class="hljs-keyword">for</span> n <span class="hljs-keyword">in</span> <span class="hljs-number">1</span>:nT
-        psiNew = psi + dt * (-DPlus * psi * VPlus - DMinus * psi * VMinus + psi * G)
-        psi .= psiNew
+        ψ_new = ψ + Δt * (-DPlus * ψ * VPlus - DMinus * ψ * VMinus + ψ * G)
+        ψ .= ψ_new
     <span class="hljs-keyword">end</span>
 
-    <span class="hljs-comment"># store phi for plotting</span>
-    phi = zeros(nx)
+    <span class="hljs-comment"># store Φ for plotting</span>
+    Φ = zeros(T, nx)
 
     <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-number">1</span>:nx
-        phi[j] = sum(psi[j, :] .* w)
+        Φ[j] = sum(ψ[j, :] .* w)
     <span class="hljs-keyword">end</span>
 
-    <span class="hljs-keyword">return</span> x, phi
+    <span class="hljs-keyword">return</span> x, Φ
 <span class="hljs-keyword">end</span>
 
 <span class="hljs-comment"># generate setup</span>
 settings = Settings()
 
-<span class="hljs-comment"># run code and store final phi</span>
-x, phi = runPlaneSource(settings)
+<span class="hljs-comment"># run code and store final Φ</span>
+x, Φ = runPlaneSource(settings)
 
-<span class="hljs-comment"># plot phi</span>
-plot(x, phi, labels=<span class="hljs-string">L&quot;\Phi&quot;</span>)
+<span class="hljs-comment"># plot Φ</span>
+plot(x, Φ, labels=<span class="hljs-string">L&quot;\Phi&quot;</span>)
 xlabel!(<span class="hljs-string">&quot;x&quot;</span>)</code></pre>
 <p></div>
 <div class="page-foot">
