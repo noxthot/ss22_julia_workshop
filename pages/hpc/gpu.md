@@ -319,7 +319,7 @@ function in_unit_circle_kernel!(n::Int64, M)
         end
     end
 
-    return
+    return nothing
 end
 ```
 This looks very similar to our function [`in_unit_circle_threaded3`](multithreading#actually_distribute_the_work). 
@@ -408,7 +408,7 @@ function in_unit_circle_kernel2!(M)
         @inbounds M[j] += 1
     end
 
-    return
+    return nothing
 end
 
 function in_unit_circle_gpu2(N::Int64)
@@ -450,7 +450,7 @@ function in_unit_circle_kernel3!(n::Int64, M)
         end
     end
 
-    return
+    return nothing
 end
 ```
 The calling function needs to compute the values as defined above: 
