@@ -20,7 +20,7 @@ In Julia, GPUs are supported by the
 They support the three big vendor frameworks: 
 - NVIDIA with [CUDA](https://docs.nvidia.com/cuda/) and [`CUDA.jl`](https://cuda.juliagpu.org/stable/)
 - AMD with [ROCm](https://rocmdocs.amd.com/en/latest/) and [`AMDGPU.jl`](https://github.com/JuliaGPU/AMDGPU.jl)
-- Intel with [oneAPI](https://www.intel.com/content/www/us/en/develop/documentation/oneapi-gpu-optimization-guide/top.html) and [`oneAPI`](https://github.com/JuliaGPU/oneAPI.jl)
+- Intel with [oneAPI](https://www.intel.com/content/www/us/en/develop/documentation/oneapi-gpu-optimization-guide/top.html) and [`oneAPI.jl`](https://github.com/JuliaGPU/oneAPI.jl)
 where `CUDA.jl` comes with the most features. 
 Nevertheless, in good Julia practice, the team behind JuliaGPU also included an abstraction layer, such that a lot of common functionality can be implemented without the need to specify a vendor and to do some generic GPU programming.
 
