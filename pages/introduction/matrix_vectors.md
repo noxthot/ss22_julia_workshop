@@ -366,7 +366,7 @@ we can use `T = Tridiagonal(a, b, c)`.
 The rest we need to know about vectors and matrices we will introduce along the way.
 
 \exercise{
-1. Create a sparse matrix $\mathbf{T}\in\mathbb{R}^{10 \times 10}$ of the form
+1. Create a sparse matrix $\mathbf{L}\in\mathbb{R}^{10 \times 10}$ of the form
 $$
 \mathbf{L} = \begin{pmatrix}
     -1 & 1 &   &      &   \\
