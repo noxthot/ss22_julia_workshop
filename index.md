@@ -7,6 +7,10 @@ Julia is a free and open source scientific programming language with a vast ecos
 
 In this workshop we are going to take a look at Julia by starting with the basics and working our way up to advanced topics like data science and multi processor programming.
 
+## Acknowledgment
+
+We want to give a huge shout-out to [Stephan Antholzer](https://www.uibk.ac.at/mathematik/personal/antholzer/) for advice and numerous suggestions that have helped us to improve the quality of the content in many places.
+
 ## Some general words on the organisation of this workshop
 
 For this workshop you do not need to be an Julia expert, not even a programming expert. We will introduce programming and Julia concepts along with examples. For this purpose you will find code blocks that you can copy if necessary (top right corner `copy`). Furthermore, if we think something is very important we will highlight it with a box:
