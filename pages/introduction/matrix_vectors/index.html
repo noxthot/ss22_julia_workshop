@@ -276,11 +276,16 @@
 <span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> v[<span class="hljs-number">2</span>] * A[<span class="hljs-number">1</span>, <span class="hljs-number">2</span>]
 </span>8</code></pre>
 <p>We can also use the <code>end</code> keyword and the colon <code>:</code> placeholder to access a range of elements:</p>
-<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> A[:,<span class="hljs-keyword">end</span>-<span class="hljs-number">2</span>]
+<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> A[:, <span class="hljs-keyword">end</span> - <span class="hljs-number">2</span>]
 </span>3-element Vector{Int64}:
  1
  2
- 3</code></pre>
+ 3
+
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> A[<span class="hljs-number">1</span>:<span class="hljs-number">2</span>, <span class="hljs-number">2</span>]
+</span>2-element Vector{Int64}:
+ 2
+ 5</code></pre>
 <h1 id="concatenation"><a href="#concatenation" class="header-anchor">Concatenation</a></h1>
 <p>We can also concatenate &#40;or slice together&#41; different matrices and vectors. I.e., if we have a matrix <code>A &#61; zeros&#40;2, 4&#41;</code> and a vector <code>a &#61; ones&#40;2&#41;</code> we can add <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi></mrow><annotation encoding="application/x-tex">a</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">a</span></span></span></span> as a column to <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi></mrow><annotation encoding="application/x-tex">A</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">A</span></span></span></span> by </p>
 <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> A = zeros(<span class="hljs-number">2</span>, <span class="hljs-number">4</span>)
