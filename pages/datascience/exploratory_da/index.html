@@ -292,9 +292,9 @@ df_survey[!, :EuroCompYearly] = <span class="hljs-number">0.96</span> * df_surve
   &quot;Austria&quot;     =&gt; 437
 
 <span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@df</span> df_survey bar(countmap(:Country), legend=<span class="hljs-literal">false</span>)</span></code></pre>
-<div id="fdpwgf" style=""></div>
+<div id="fdplfe" style=""></div>
 <script>
-graphDiv = document.getElementById("fdpwgf");
+graphDiv = document.getElementById("fdplfe");
 plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_explorative_da_country.json');
 </script>
 
@@ -302,9 +302,9 @@ plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datas
 <p>Boxplots are a nice tool to visualize some distributional characteristics &#40;locality, spread, skewness&#41; of a given data sample. Dividing the data set into different groups allows an easy comparison.</p>
 <p>In the following plot we compare the salary of different employment states:</p>
 <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@df</span> df_survey boxplot(:Employment, :EuroCompYearly, xrotation=<span class="hljs-number">30</span>, size=(<span class="hljs-number">500</span>, <span class="hljs-number">900</span>), legend=<span class="hljs-literal">false</span>)</span></code></pre>
-<div id="fdpsww" style=""></div>
+<div id="fdpgqk" style=""></div>
 <script>
-graphDiv = document.getElementById("fdpsww");
+graphDiv = document.getElementById("fdpgqk");
 plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_explorative_da_salary_1.json');
 </script>
 
@@ -323,9 +323,9 @@ plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datas
 <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@df</span> df_survey boxplot(:Employment, :EuroCompYearly, xrotation=<span class="hljs-number">30</span>, size=(<span class="hljs-number">500</span>, <span class="hljs-number">900</span>), legend=<span class="hljs-literal">false</span>)
 </span>
 <span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@df</span> df_survey dotplot!(:Employment, :EuroCompYearly, legend=<span class="hljs-literal">false</span>)</span></code></pre>
-<div id="fdpkfr" style=""></div>
+<div id="fdpzcv" style=""></div>
 <script>
-graphDiv = document.getElementById("fdpkfr");
+graphDiv = document.getElementById("fdpzcv");
 plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_explorative_da_salary_2.json');
 </script>
 
@@ -338,7 +338,7 @@ plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datas
 <p>Here is a screenshot that shows this tool in action: <img src="/ss22_julia_workshop/assets/pages/datascience/datavoyager.png" alt="Data Voyager"></p>
 <button type="button" class="collapsible" style="background-color:#b5ddff"> Exercise </button><div class="collapsiblecontent">  Explore our dataframe with <code>DataVoyager.jl</code>. </div>
 <div class="page-foot">
-    <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> Gregor Ehrensperger, Peter Kandolf, Jonas Kusch. Last modified: July 17, 2022.
+    <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> Gregor Ehrensperger, Peter Kandolf, Jonas Kusch. Last modified: July 18, 2022.
     Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
 </div>
 </div><!-- CONTENT ENDS HERE -->
