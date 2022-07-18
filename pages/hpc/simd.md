@@ -63,7 +63,7 @@ println("\nBuilt-in sum:")
 \show{./code/simd.jl}
 As we can see, we are slower, exactly how much slower depends on the architecture of your CPU but it is usually between 2 to 16 times. 
 
-In order to enable SIMD in a program (if it is not done by library calls anyway), we can use the `@simd` macro, this works if our loop over the indices or the elements, Julia is quite flexible there. 
+In order to enable SIMD in a program (if it is not done by library calls anyway), we can use the `@simd` macro, this works if we loop over the indices or the elements, Julia is quite flexible there. 
 ```julia:./code/simd.jl
 function mysimdsum(a)
     result = zero(eltype(a))
