@@ -115,6 +115,7 @@
 
 <!-- Content appended here (in class franklin-content) -->
 <div class="franklin-content"><h1 id="unsupervised_learning"><a href="#unsupervised_learning" class="header-anchor">Unsupervised Learning</a></h1>
+<div class="franklin-toc"><ol><li><a href="#clustering_k_means">Clustering &#40;K Means&#41;</a><ol><li><a href="#theory">Theory</a></li><li><a href="#application">Application</a><ol><li><a href="#mlj_introduction">MLJ introduction</a></li><li><a href="#mlj_application">MLJ application</a></li></ol></li></ol></li><li><a href="#dimensionality_reduction_principal_component_analysis">Dimensionality Reduction &#40;Principal Component Analysis&#41;</a></li></ol></div>
 <p>The term <em>unsupervised learning</em> subsumes all kinds of algorithms that are used to gain insights from such an unlabeled data set. Typically these algorithms fall into three main categories:</p>
 <ul>
 <li><p><strong>Association rules</strong>: to discover relationships between different variables &#40;e.g. for recommender systems: <em>customers who bought X also bought Y</em>&#41;</p>
@@ -126,7 +127,9 @@
 </ul>
 <p>In this section we will quickly glimpse into clustering with an algorithm called <em>K means</em>, and into dimensionality reduction by applying PCA &#40;<em>Principal Component Analysis</em>&#41; and UMAP &#40;<em>Uniform Manifold Approximation and Projection</em>&#41;.</p>
 <p>Let us imagine that we only have a folder with 10.000 images of various hand written digits without any label and we would like to sort them into ten buckets: One bucket where we only have images of 0s, one bucket where we only have images of 1s and so on. Technically speaking, we are expecting to see ten different digits &#40;<em>categories</em>&#41; and within each category, the similarity between the images is expected to be <em>high</em>. How are we able to tackle this problem? One possibility is to sort them by hand. A less time consuming approach could be to apply some unsupervised learning algorithms.</p>
+<p>Here we will work with MNIST&#39;s flattened test data set <code>X_test</code> which we prepared in the previous section. We could also use the training data set or merge both data sets, but <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>10.000</mn></mrow><annotation encoding="application/x-tex">10.000</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">10.000</span></span></span></span> samples are quite good already and we spare some computation time within the workshop. In practice we would go for the full data set of course.</p>
 <h2 id="clustering_k_means"><a href="#clustering_k_means" class="header-anchor">Clustering &#40;K Means&#41;</a></h2>
+<h3 id="theory"><a href="#theory" class="header-anchor">Theory</a></h3>
 <p>The K means algorithm is one of the most popular clustering methods. For a given set of <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">n</span></span></span></span> observations <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><msub><mtext mathvariant="bold">x</mtext><mn>1</mn></msub><mo>…</mo><msub><mtext mathvariant="bold">x</mtext><mi>n</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(\textbf{x}_1 \dots \textbf{x}_n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord"><span class="mord text"><span class="mord textbf">x</span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord text"><span class="mord textbf">x</span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span>, the algorithm strives to partition the observations into <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal" style="margin-right:0.03148em;">k</span></span></span></span> sets <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><msub><mi>S</mi><mn>1</mn></msub><mo separator="true">,</mo><mo>…</mo><mo separator="true">,</mo><msub><mi>S</mi><mi>k</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(S_1, \ldots, S_k)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0576em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.0576em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span>, such that the inner cluster variance is minimized. Formally the goal is to find </p>
 <span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mrow><mi mathvariant="normal">argmin</mi><mo>⁡</mo></mrow><mi>S</mi></msub><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>k</mi></munderover><munder><mo>∑</mo><mrow><mtext mathvariant="bold">x</mtext><mo>∈</mo><msub><mi>S</mi><mi>i</mi></msub></mrow></munder><mi mathvariant="normal">∥</mi><mtext mathvariant="bold">x</mtext><mo>−</mo><msub><mi>μ</mi><mi>i</mi></msub><msup><mi mathvariant="normal">∥</mi><mn>2</mn></msup><mo separator="true">,</mo></mrow><annotation encoding="application/x-tex">
 \operatorname{argmin}_S \sum_{i=1}^k \sum_{\textbf{x} \in S_i} \|\textbf{x} - \mu_i\|^2,
@@ -149,6 +152,123 @@
 <figcaption> K means convergence. Original source: <p style="font-size:11px"><a href=" https://commons.wikimedia.org/wiki/File:K-means_convergence.gif"> https://commons.wikimedia.org/wiki/File:K-means_convergence.gif</a></p></figcaption>
 </figure>
 </p>
+<h3 id="application"><a href="#application" class="header-anchor">Application</a></h3>
+<p>Keep in mind that each row of <code>X_test</code> corresponds to one image and consists of <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>784</mn></mrow><annotation encoding="application/x-tex">784</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">784</span></span></span></span> values. If we imagine a <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>784</mn></mrow><annotation encoding="application/x-tex">784</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">784</span></span></span></span>-dimensional space, we could map a handwritten digit to a single point in that space and when we do this for every image in the test data set, we will end up with <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>10.000</mn></mrow><annotation encoding="application/x-tex">10.000</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">10.000</span></span></span></span> points in a <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>784</mn></mrow><annotation encoding="application/x-tex">784</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">784</span></span></span></span>-dimensional space. Hopefully images containing the same digit will end up close to each other because in this case we could successfully find them with K means. Since we have ten digits, we expect to find ten clusters and of course we do not have to program that algorithm all by ourselves. </p>
+<h4 id="mlj_introduction"><a href="#mlj_introduction" class="header-anchor">MLJ introduction</a></h4>
+<p>Julia again offers a nice machine learning meta package called <a href="https://github.com/alan-turing-institute/MLJ.jl"><code>MlJ.jl</code></a> which provides a common interface to over 160 machine learning algorithms. The basic workflow for using an unsupervised model is given by the following steps:</p>
+<ol>
+<li><p>Loading the data</p>
+</li>
+<li><p>Loading the model</p>
+</li>
+<li><p>Instantiating the model</p>
+</li>
+<li><p>Transforming the data</p>
+</li>
+<li><p>Instantiating the machine &#40;this is how <code>MLJ.jl</code> calls the object that combines the model with data&#41;</p>
+</li>
+<li><p>Fitting the machine/model by running <code>fit&#40;&#41;</code> on the machine</p>
+</li>
+<li><p>optional: Transforming the data by applying the fitted model</p>
+</li>
+</ol>
+<h4 id="mlj_application"><a href="#mlj_application" class="header-anchor">MLJ application</a></h4>
+<p>The code for loading the data and model is straight-forward:</p>
+<pre><code class="julia hljs"><span class="hljs-keyword">using</span> DataFrames, MLDatasets, MLJ, ParallelKMeans
+
+<span class="hljs-comment"># Loading the data</span>
+df_test = MNIST(:test)
+X_test = reshape(df_test.features, (<span class="hljs-number">28</span> * <span class="hljs-number">28</span>, :))&#x27;
+
+<span class="hljs-comment"># Loading the model</span>
+KMEANS = <span class="hljs-meta">@load</span> KMeans pkg=ParallelKMeans</code></pre>
+<p><code>KMEANS</code> comes with several optional arguments. Unfortunately <code>MLJ</code> lacks documentation here:</p>
+<pre><code class="julia-repl hljs">help?&gt; KMEANS
+search: KMEANS kmeans kmeans_model mach_kmeans model_kmeans ParallelKMeans PKGMODE_MANIFEST
+
+  ParallelKMeans model constructed by the user.
+  See also the [package documentation](https://pydatablog.github.io/ParallelKMeans.jl/stable).</code></pre>
+<p>But simply initializing <code>KMEANS</code> with default arguments and having a look at the package&#39;s <a href="https://pydatablog.github.io/ParallelKMeans.jl/stable">website</a> gives some hints on how to parametrize the model:</p>
+<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> KMEANS()
+</span>KMeans(
+  algo = Hamerly(), 
+  k_init = &quot;k-means++&quot;, 
+  k = 3, 
+  tol = 1.0e-6, 
+  max_iters = 300, 
+  copy = true, 
+  threads = 1, 
+  rng = Random._GLOBAL_RNG(), 
+  weights = nothing, 
+  init = nothing)</code></pre>
+<p>Apparently <code>k</code> corresponds to the number of clusters, so we set this parameter to <code>10</code>:</p>
+<pre><code class="julia hljs"><span class="hljs-comment"># initialize the model</span>
+model_kmeans = KMEANS(k=<span class="hljs-number">10</span>)</code></pre>
+<p>For setting up the machine, we first need to know how to transform our data. MLJ states that in general two-dimensional data is expected to be <a href="https://alan-turing-institute.github.io/MLJ.jl/dev/getting_started/#Two-dimensional-data">tabular</a> and <a href="https://alan-turing-institute.github.io/MLJ.jl/dev/getting_started/#Observations-correspond-to-rows,-not-columns">observations correspond to rows, not columns</a>. Finally specific models need specific <a href="https://alan-turing-institute.github.io/MLJ.jl/dev/getting_started/#Inputs">scientific types</a> as input. The first condition is already fulfilled for <code>X_test</code>. The second condition is easily fixed by calling <code>X_test_transf &#61; MLJ.table&#40;X_test_transf&#41;</code> and for the last condition, we need to check whether <code>scitype&#40;X_test_transf&#41;</code> is of type <code>input_scitype&#40;model_kmeans&#41;</code>:</p>
+<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> X_test_transf = MLJ.table(X_test)  <span class="hljs-comment"># Transforming the data</span>
+</span>Tables.MatrixTable{LinearAlgebra.Adjoint{Float32, Matrix{Float32}}} with 10000 rows, 784 columns, and schema:
+ :x1    Float32
+ :x2    Float32
+ :x3    Float32
+ :x4    Float32
+ :x5    Float32
+ :x6    Float32
+ ⋮      
+ :x780  Float32
+ :x781  Float32
+ :x782  Float32
+ :x783  Float32
+ :x784  Float32
+
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> scitype(X_test_transf)
+</span>Table{AbstractVector{Continuous}}
+
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> input_scitype(model_kmeans)
+</span>Table{&lt;:AbstractVector{&lt;:Continuous}}
+
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> scitype(X_test_transf) &lt;: input_scitype(model_kmeans)
+</span>true</code></pre>
+<p>Now we are ready to instantiate the machine and fit the model&#39;s parameters. Transforming the data is not necessary in this case, because we are only interested in the clusters&#39; centers:</p>
+<pre><code class="julia hljs"><span class="hljs-comment"># Initializing the machine</span>
+mach_kmeans = machine(model_kmeans, X_test_transf)
+
+<span class="hljs-comment"># Fitting the model&#x27;s parameters</span>
+fit!(mach_kmeans)</code></pre>
+<p>After fitting the model, we hopefully found ten representive cluster centers. With <code>report&#40;mach_kmeans&#41;</code> we can have a look at the <em>training</em> &#40;fitting&#41; results. </p>
+<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> r_machkmeans = report(mach_kmeans)
+</span>(cluster_centers = [0.0 0.0 … 0.0 0.0; 0.0 0.0 … 0.0 0.0; … ; 0.0 0.0 … 0.0 0.0; 0.0 0.0 … 0.0 0.0],
+ iterations = 104,
+ totalcost = 389412.2314496818,
+ assignments = [1, 8, 6, 10, 2, 6, 1, 2, 2, 4  …  1, 9, 1, 10, 6, 5, 8, 4, 4, 3],
+ labels = CategoricalArrays.CategoricalValue{Int64, UInt32}[1, 2, 3, 4, 5, 6, 7, 8, 9, 10],)</code></pre>
+<p>Please note the format of the cluster centers. We have ten clusters given in ten columns. Each column has <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>28</mn><mo>×</mo><mn>28</mn></mrow><annotation encoding="application/x-tex">28 \times 28</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">28</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">28</span></span></span></span> entries corresponding to one point in the high dimensional space:</p>
+<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> r_machkmeans.cluster_centers
+</span>784×10 Matrix{Float64}:
+ 0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0
+ 0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0
+ 0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0
+ 0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0
+ 0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0
+ 0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0
+ ⋮                        ⋮                   
+ 0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0
+ 0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0
+ 0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0
+ 0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0
+ 0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0</code></pre>
+<p>Each of these points can be reshaped to its 2D representative and visualized. Here we provide the code to plot the <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi></mrow><annotation encoding="application/x-tex">i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6595em;"></span><span class="mord mathnormal">i</span></span></span></span>-th cluster providing <code>r_machkmeans</code>:</p>
+<pre><code class="julia hljs"><span class="hljs-keyword">using</span> StatsPlots; gr()
+
+<span class="hljs-keyword">function</span> plot_clustercenter(report, i)
+    cc = report.cluster_centers[:, i]  <span class="hljs-comment"># get one cluster</span>
+    cc_reshaped = reshape(cc, <span class="hljs-number">28</span>, <span class="hljs-number">28</span>)    <span class="hljs-comment"># reshape from flat to 2D</span>
+    StatsPlots.plot(convert(<span class="hljs-built_in">Matrix</span>{Gray}, cc_reshaped&#x27;)) <span class="hljs-comment"># Correctly rotate the image, transform to grey and show with StatsPlots</span>
+    
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">nothing</span>
+<span class="hljs-keyword">end</span></code></pre>
+<p>In our case the ten cluster centers look like this: <img src="/ss22_julia_workshop/assets/pages/datascience/unsupervised_clusters_kmeans.png" alt="Cluster centers - KMeans"></p>
+<p>We can clearly recognize the numbers <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0</span></span></span></span>, <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn></mrow><annotation encoding="application/x-tex">2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">2</span></span></span></span>, <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>3</mn></mrow><annotation encoding="application/x-tex">3</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">3</span></span></span></span>, <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>6</mn></mrow><annotation encoding="application/x-tex">6</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">6</span></span></span></span>, <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>8</mn></mrow><annotation encoding="application/x-tex">8</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">8</span></span></span></span>, <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>9</mn></mrow><annotation encoding="application/x-tex">9</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">9</span></span></span></span>, but obviously it is more difficile for numbers <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn></mrow><annotation encoding="application/x-tex">1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span>, <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>4</mn></mrow><annotation encoding="application/x-tex">4</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">4</span></span></span></span>, <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>5</mn></mrow><annotation encoding="application/x-tex">5</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">5</span></span></span></span>, <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>7</mn></mrow><annotation encoding="application/x-tex">7</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">7</span></span></span></span>. When looking closely, we see parts of the silhouettes too, but we are of course not completly happy with this fit. We might be able to grasp more of the underlying structure by increasing the number of clusters.</p>
+<button type="button" class="collapsible" style="background-color:#b5ddff"> Exercise </button><div class="collapsiblecontent">  Rerun this experiment with 20 clusters centers and evaluate the results. </div>
 <h2 id="dimensionality_reduction_principal_component_analysis"><a href="#dimensionality_reduction_principal_component_analysis" class="header-anchor">Dimensionality Reduction &#40;Principal Component Analysis&#41;</a></h2>
 <div class="page-foot">
     <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> Gregor Ehrensperger, Peter Kandolf, Jonas Kusch. Last modified: July 18, 2022.
