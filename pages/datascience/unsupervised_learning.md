@@ -4,6 +4,9 @@
 @def tags = ["Data Science", "unsupervised learning"]
 
 # Unsupervised Learning
+
+\toc
+
 The term *unsupervised learning* subsumes all kinds of algorithms that are used to gain insights from such an unlabeled data set.
 Typically these algorithms fall into three main categories:
 - **Association rules**: to discover relationships between different variables (e.g. for recommender systems: *customers who bought X also bought Y*)
