@@ -15,7 +15,7 @@ The previously presented example is similar to the (in the radiation transport c
 function runPlaneSource()
   ...
 
-  return x, phi
+  return x, Φ
 end
 ```
 
@@ -43,11 +43,11 @@ end
 We then call this function to set up the initial condition via
 ```julia
 # setup initial condition
-psi = zeros(nx, nv)
+ψ = zeros(nx, nv)
 
 for j in 1:nx
   for i in 1:nv
-    psi[j, i] = IC(x[j])
+    ψ[j, i] = IC(x[j])
   end
 end
 ```
@@ -55,20 +55,20 @@ end
 If you want to check your element-wise operation skills, see if you can remove one of the for loops. This can either take the form
 
 ```julia
-psi = zeros(nx, nv)
+ψ = zeros(nx, nv)
 
 for j in 1:nx
-    psi[j, :] .= IC(x[j])
+    ψ[j, :] .= IC(x[j])
 end
 ```
 
 or
 
 ```julia
-psi = zeros(nx, nv)
+ψ = zeros(nx, nv)
 
 for i in 1:nv
-  psi[:, i] .= IC.(x)
+  ψ[:, i] .= IC.(x)
 end
 ```
 }
@@ -112,10 +112,10 @@ function runPlaneSource(nv::Int=10, nx::Int=101)
     x = collect(range(0, 1; length=nx))
 
     # setup initial condition
-    psi = zeros(nx, nv)
+    ψ = zeros(nx, nv)
 
     for j in 1:nx
-        psi[j, :] .= IC(x[j])
+        ψ[j, :] .= IC(x[j])
     end
 
     # create stencil matrices
@@ -133,29 +133,29 @@ function runPlaneSource(nv::Int=10, nx::Int=101)
     G = ones(nv, nv) .* w - I
 
     # advance in time
-    dt = 0.01
+    Δt = 0.01
     nT = 40
 
     for n in 1:nT
-        psiNew = psi + dt * (-DPlus * psi * VPlus - DMinus * psi * VMinus + psi * G)
-        psi .= psiNew
+        ψ_new = ψ + Δt * (-DPlus * ψ * VPlus - DMinus * ψ * VMinus + ψ * G)
+        ψ .= ψ_new
     end
 
     # store phi for plotting
-    phi = zeros(nx)
+    Φ = zeros(nx)
 
     for j in 1:nx
-        phi[j] = sum(psi[j, :] .* w)
+        Φ[j] = sum(ψ[j, :] .* w)
     end
 
-    return x, phi
+    return x, Φ
 end
 
-# run code and store final phi
-x, phi = runPlaneSource()
+# run code and store final Φ
+x, Φ = runPlaneSource()
 
-# plot phi
-plot(x, phi, labels=L"\Phi")
+# plot Φ
+plot(x, Φ, labels=L"\Phi")
 xlabel!("x")
 ```
 
@@ -164,7 +164,7 @@ xlabel!("x")
 You can now try out different numbers of velocities and spatial cells. See how the solution changes and think about what might be the reason for this.
 
 ## Structs
-You might have observed that the solution crashes if you are choosing too many spatial cells. The reason for this is that the chosen $\Delta t$ must fulfill $\Delta t \leq \Delta x$, otherwise the method is unstable. Also, you have maybe observed that a lot of parameters cannot be changed from outside the function call and you might want to add further parameters like the end time `tEnd`, the time step size `dt` or the variance of the initial condition `sigma2` to the input arguments of the function. To structure the input we can create a new object, which stores all these values. As you already know, this can either be a `struct` or a `dictionary`.
+You might have observed that the solution crashes if you are choosing too many spatial cells. The reason for this is that the chosen $\Delta t$ must fulfill $\Delta t \leq \Delta x$, otherwise the method is unstable. Also, you have maybe observed that a lot of parameters cannot be changed from outside the function call and you might want to add further parameters like the end time `tEnd`, the time step size `Δt` or the variance of the initial condition `sigma2` to the input arguments of the function. To structure the input we can create a new object, which stores all these values. As you already know, this can either be a `struct` or a `dictionary`.
 
 Define a struct which stores all relevant information and use it as an input. Make sure that all floating point numbers are of type `AbstractFloat`
 
@@ -176,7 +176,7 @@ struct Settings{T<:AbstractFloat}
   nx::Int # number of spatial cells
   nv::Int # number of velocity points
   nt::Int # number of time steps
-  dt::T # time step size
+  Δt::T # time step size
   dx::T # spatial grid cell size
   tEnd::T # end time of simulation
   a::T # start point of spatial domain
@@ -188,10 +188,10 @@ struct Settings{T<:AbstractFloat}
     a = -1.0;
     b = 1.0;
     dx = (b - a) / (nx - 1)
-    dt = dx
-    nt = Int(floor(tEnd / dt))
+    Δt = dx
+    nt = Int(floor(tEnd / Δt))
 
-    return new{T}(nx, nv, nt, dt, dx, tEnd, a, b, sigma2)
+    return new{T}(nx, nv, nt, Δt, dx, tEnd, a, b, sigma2)
   end
 end
 ```
@@ -214,7 +214,7 @@ struct Settings{T<:AbstractFloat}
   nx::Int # number of spatial cells
   nv::Int # number of velocity points
   nt::Int # number of time steps
-  dt::T # time step size
+  Δt::T # time step size
   dx::T # spatial grid cell size
   tEnd::T # end time of simulation
   a::T # start point of spatial domain
@@ -226,38 +226,40 @@ struct Settings{T<:AbstractFloat}
     a = -1.0;
     b = 1.0;
     dx = (b - a) / (nx - 1)
-    dt = dx
-    nt = Int(floor(tEnd / dt))
+    Δt = dx
+    nt = Int(floor(tEnd / Δt))
 
-    return new{T}(nx, nv, nt, dt, dx, tEnd, a, b, sigma2)
+    return new{T}(nx, nv, nt, Δt, dx, tEnd, a, b, sigma2)
   end
 end
 
 # definition of the initial condition
 function IC(obj::Settings, x::T) where T<:Real
-  floor = 1e-4
+  floor = T(1e-4)
   return max(floor, 1.0 / (sqrt(2 * pi * obj.sigma2)) * exp(-(x - 0.5 * (obj.b - obj.a) - obj.a)^2 / (2.0 * obj.sigma2)))
 end
 
-function runPlaneSource(obj::Settings)
+function runPlaneSource(obj::Settings{T}) where {T}
     nx = obj.nx
     nv = obj.nv
 
     # define velocity grid according to gauss quadrature
-    v, w = gausslegendre(nv)
+    v, w = convert.(Vector{T}, gausslegendre(nv))
     x = collect(range(obj.a, obj.b; length=nx))
 
+
     # setup initial condition
-    psi = zeros(nx, nv)
+    ψ = zeros(T, nx, nv)
 
     for j in 1:nx
-        psi[j, :] .= IC(obj, x[j])
+        ψ[j, :] .= IC(obj, x[j])
     end
 
     # create stencil matrices
     dx = obj.dx
-    DPlus = (1 / dx) * Tridiagonal(-ones(nx - 1), ones(nx), zeros(nx - 1))
-    DMinus = (1 / dx) * Tridiagonal(zeros(nx - 1), -ones(nx), ones(nx - 1))
+    DPlus = (1 / dx) * Tridiagonal(-ones(T, nx - 1), ones(T, nx), zeros(T, nx - 1))
+    DMinus = (1 / dx) * Tridiagonal(zeros(T, nx - 1), -ones(T, nx), ones(T, nx - 1))
+
 
     # create system matrices
     midMinus = Int(ceil(nv / 2))
@@ -265,36 +267,37 @@ function runPlaneSource(obj::Settings)
     VMinus = Diagonal([v[1:midMinus]; zeros(midPlus)])
     VPlus = Diagonal([zeros(midMinus); v[(midPlus + 1):end]])
 
+
     # create scattering matrix
-    G = ones(nv, nv) .* w - I
+    G = ones(T, nv, nv) .* w - I
 
     # advance in time
-    dt = obj.dt
+    Δt = obj.Δt
     nT = obj.nt
 
     for n in 1:nT
-        psiNew = psi + dt * (-DPlus * psi * VPlus - DMinus * psi * VMinus + psi * G)
-        psi .= psiNew
+        ψ_new = ψ + Δt * (-DPlus * ψ * VPlus - DMinus * ψ * VMinus + ψ * G)
+        ψ .= ψ_new
     end
 
-    # store phi for plotting
-    phi = zeros(nx)
+    # store Φ for plotting
+    Φ = zeros(T, nx)
 
     for j in 1:nx
-        phi[j] = sum(psi[j, :] .* w)
+        Φ[j] = sum(ψ[j, :] .* w)
     end
 
-    return x, phi
+    return x, Φ
 end
 
 # generate setup
 settings = Settings()
 
-# run code and store final phi
-x, phi = runPlaneSource(settings)
+# run code and store final Φ
+x, Φ = runPlaneSource(settings)
 
-# plot phi
-plot(x, phi, labels=L"\Phi")
+# plot Φ
+plot(x, Φ, labels=L"\Phi")
 xlabel!("x")
 ```
 }
