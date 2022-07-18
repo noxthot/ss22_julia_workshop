@@ -104,7 +104,7 @@ julia> w' + v
 \exercise{
   1. Create a vector $x$ with entries $x_1 = 0.01$, $x_2 = 0.02$, $\ldots, x_{100} = 1.0$.
   2. Use $x$ to set up a second vector $y$ with entries $y_1 = 1.01$, $y_2 = 1.02$, $\ldots, y_{100} = 2.0$.
-  3. Check the type of $z = 100 \cdot (x + y)$. Create an object of type `adjoint(::Vector{Int64})` that has the same values as $z$.
+  3. Check the type of $z = 100 \cdot (x + y)$. Create an object of type `adjoint(::Vector{Int64})` that has the same values as $z$. You can ignore rounding errors in you vector $z$ if there are any.
 
   \solution{
     ```julia-repl
