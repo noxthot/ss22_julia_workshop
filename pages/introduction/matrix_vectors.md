@@ -64,6 +64,12 @@ julia> v // 2
  1//2
  1//1
  3//2
+
+julia> v + v
+3-element Vector{Rational{Int64}}:
+ 2
+ 4
+ 6
 ```
 @@important
 Note that the type of our vector changes with regards to the result of the operation. 
@@ -84,6 +90,15 @@ julia> w'
  1
  2
  3
+ ```
+
+ Despite `w'` and `v` having different types, you can add or substract them, i.e., 
+ ```julia-repl
+julia> w' + v
+3×1 Matrix{Int64}:
+ 2
+ 4
+ 6
  ```
 
 \exercise{
