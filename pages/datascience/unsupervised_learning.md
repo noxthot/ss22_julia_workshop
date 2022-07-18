@@ -179,3 +179,22 @@ We can clearly recognize the numbers $0$, $2$, $3$, $6$, $8$, $9$, but obviously
 \exercise{Rerun this experiment with 20 clusters centers and evaluate the results.}
 
 ## Dimensionality Reduction (Principal Component Analysis)
+### Theory
+Simply speaking, the *principal component analysis* (PCA) is a technique used for reducing the dimensionality of data while preserving as much of the information that is contained in the original data. PCA does so by projecting the data points onto a lower-dimensional subspace while trying to keep the variance among the data set.
+
+Technically speaking, the *principal components* are the eigenvectors of the data's covariance matrix.
+
+The dimension of the original data is then reduced to $n$ by projecting the data using the first $n$ eigenvectors. Please note that the resulting projected data are essentially linear combinations of the original data which capture most of the variance in the original data.
+
+An illustration is shown here:
+\figenvsource{Principal Component Analysis}{/assets/pages/datascience/GaussianScatterPCA.png}{}{https://de.wikipedia.org/wiki/Hauptkomponentenanalyse#/media/Datei:GaussianScatterPCA.svg}
+
+@@important
+Since PCA is sensitive to the scaling of variables, input data is usually standardized prior application of the algorithm.
+@@
+
+### Application
+Since we decided to use `MLJ.jl` as a meta package, it is easy to scale the data and also apply the PCA.
+
+
+\exercise{UMAP}
