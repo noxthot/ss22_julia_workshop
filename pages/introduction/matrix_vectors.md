@@ -211,7 +211,7 @@ julia> v[2] * A[1, 2]
 
 We can also use the `end` keyword and the colon `:` placeholder to access a range of elements:
 ```julia-repl
-julia> A[:,end-2]
+julia> A[:, (end - 2)]
 3-element Vector{Int64}:
  1
  2
