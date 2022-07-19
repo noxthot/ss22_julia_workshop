@@ -163,6 +163,7 @@ function sincos1!(x)
     println("Address input: ", pointer_from_objref(x))
     x .= sin.(cos.(x))
     println("Address output: ", pointer_from_objref(x))
+
     return x
 end
 ```
@@ -172,6 +173,7 @@ function sincos2(x)
     println("Address input: ", pointer_from_objref(x))
     x = sin.(cos.(x))
     println("Address output: ", pointer_from_objref(x))
+
     return x
 end
 ```
@@ -205,6 +207,7 @@ One might have observed that since we did not specify any data types, we were ab
 ```julia
 function sincos1!(x::Array{Float64, 1})
     x .= sin.(cos.(x))
+
     return x
 end
 ```
@@ -212,11 +215,13 @@ In the same way, we can define functions that have the same name but which perfo
 ```julia
 function sincos(x::Array{Float64, 1})
     println("My input is a vector.")
+
     return sin.(cos.(x))
 end
 
 function sincos(x::Array{Float64, 2})
     println("My input is a matrix.")
+
     return vec(sin.(cos.(x)))
 end
 ```
@@ -247,8 +252,7 @@ My input is a vector.
 As always, we can use the dot operation `.` to evaluate an array of inputs element-wise. Define the scalar function
 ```julia
 function sincos(x::Float64)
-    return sin(cos(x))
-    
+    return sin(cos(x))    
 end
 ```
 and run
