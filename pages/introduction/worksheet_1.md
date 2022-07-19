@@ -146,10 +146,10 @@ Lastly, the so called scattering matrix $\mathbf{G}$ is given as
 
 $$
 \mathbf{G} = \begin{pmatrix}
-    w_1 & w_2 &  \cdots  & w_{\operatorname{nv}}  \\
-    w_1  & w_2 & \cdots   & w_{\operatorname{nv}}   \\
+    w_1 & w_1 &  \cdots  & w_1  \\
+    w_2  & w_2 & \cdots   & w_2   \\
     \vdots  &   \vdots      &           &  \vdots  \\
-    w_1  &   w_2      &   \cdots & w_{\operatorname{nv}}
+    w_{\operatorname{nv}}  &   w_{\operatorname{nv}}      &   \cdots & w_{\operatorname{nv}}
   \end{pmatrix} - 
   \begin{pmatrix}
     1 &  &  &      &   \\
