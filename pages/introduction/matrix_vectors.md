@@ -337,7 +337,7 @@ To find the entire list of operations that can be performed and a lot more on ar
 
 # Linear Algebra
 
-As soon as we include the [`LinearAlgebra`](https://docs.julialang.org/en/v1/stdlib/LinearAlgebra/) or the [`SparseLinearAlgebra`](https://docs.julialang.org/en/v1/stdlib/SuiteSparse/) package we have a lot more operations available, both are part of the Julia Standard Library.
+As soon as we include the [`LinearAlgebra`](https://docs.julialang.org/en/v1/stdlib/LinearAlgebra/) we have a lot more operations available, both are part of the Julia Standard Library.
 ```julia-repl
 julia> using LinearAlgebra
 julia> tr(A)
