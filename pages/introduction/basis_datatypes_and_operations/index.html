@@ -358,7 +358,7 @@ Stacktrace:
 <span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> pFloat = Point{<span class="hljs-built_in">Float64</span>}(<span class="hljs-number">1.0</span>, <span class="hljs-number">2.0</span>)
 </span>Point{Float64}(1.0, 2.0)
 
-<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> pInt = Point{<span class="hljs-built_in">Int</span>}(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>)
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> pInt = Point{<span class="hljs-built_in">Int64</span>}(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>)
 </span>Point{Int64}(1, 2)</code></pre>
 <p>Note that using <code>&#123;T&#125;</code> behind the struct name lets us use <code>T</code> as a new type that can be defined when creating an object of type <code>Point</code>. You can also have two different types in one object. To account for such situations, we can define</p>
 <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-keyword">struct</span> Point1{T, R}
