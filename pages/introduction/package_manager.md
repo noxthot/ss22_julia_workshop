@@ -45,8 +45,8 @@ julia --project=. main.jl
 \exercise{
     Let us practice the learned concepts a little bit.
 1. Create a new project called `SummerSchool`. To setup the project, create a new folder and navigate to it using the REPL. 
-2. Make sure you can use the `Plots` package in the new project environment.
-3. Check if you can use this package. You can for example plot the connection between two points $(1,1)$ and $(2,3)$ by `plot([1; 2],[2; 3])`.
+2. Make sure you can use the `Plots` package in the new project environment by loading it with `using Plots`.
+3. Now you can for example plot the connection between two points $(1,1)$ and $(2,3)$ by `plot([1; 2], [2; 3])`.
 4. Check if the `Plots` package is available in the standard environment.
 5. Install the latest version of the `LinearAlgebra` package in the standard environment and version $1.5$ in your project environment.
 
