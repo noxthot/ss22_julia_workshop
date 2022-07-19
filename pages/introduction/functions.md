@@ -55,7 +55,7 @@ julia> res[1]
 Let us practice this syntax by revisiting loops:
 
 \exercise{
-For a vector $V\in\mathrm{R}^n$ with elements $v$ compute the sum of all the elements in the following fashion
+For a vector $V\in\mathrm{R}^n$ with elements $v_1, \ldots, v_n$ compute the sum of all the elements in the following fashion
     
 1. Sum over the elements per index:
     $$s_1 = \sum_{i=1}^n v_i$$
