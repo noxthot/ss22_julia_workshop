@@ -304,6 +304,8 @@ But still we have to keep in mind that we lost a lot of information when transfo
 1. Also, our data is stored in row wise fashion (each observation is one row). `UMAP` expects a column-major matrix, so we need to transpose the matrix.
 1. Have a look at the manual of `umap`, apply the function on the transposed matrix and reduce the dimension to $2$. Note that this computation might needs a couple of minutes.
 1. Store the result in `X_test_umap_mat` and visualize the result with `StatsPlots.scatter(X_test_umap_mat[1, :], X_test_umap_mat[2, :], group=y_test, alpha=0.3, palette=:seaborn_bright)`.
+1. Reuse the code for previous scatter plot but replace the coloring by the results of the K means clustering algorithm `r_kmachmeans.assignments`.
+1. Compare the two scatter plots (note that the K means results found ten clusters but the naming of the clusters is arbitrary).
 
 \solution{
 ```julia
@@ -312,9 +314,15 @@ using UMAP
 X_test_umap_mat = umap(Matrix(X_test_scaled)', 2)
 
 StatsPlots.scatter(X_test_umap_mat[1, :], X_test_umap_mat[2, :], group=y_test, alpha=0.3, palette=:seaborn_bright)
+
+StatsPlots.scatter(X_test_umap_mat[1, :], X_test_umap_mat[2, :], group=r_kmachmeans.assignments, alpha=0.3, palette=:seaborn_bright)
 ```
 
+Coloured by real labels:
 \figalt{UMAP with colors}{/assets/pages/datascience/plot_umap_color.json}
+
+Coloured by K means assigments:
+\figalt{UMAP with colors}{/assets/pages/datascience/plot_umap_colored_by_cluster.json}
 }
 }
 
