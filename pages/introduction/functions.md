@@ -99,6 +99,7 @@ Julia functions do not copy the input but directly operate on the input data. Th
 ```julia
 function sincos!(x)
     x .= sin.(cos.(x))
+
     return x
 end
 ```
@@ -120,6 +121,7 @@ Consider two implementations
 ```julia
 function sincos1!(x)
     x .= sin.(cos.(x))
+
     return x
 end
 ```
@@ -127,6 +129,7 @@ and
 ```julia
 function sincos2!(x)
     x = sin.(cos.(x))
+
     return x
 end
 ```
@@ -322,6 +325,7 @@ end
 
 function sincos(x::Point{T}) where T<:Real
     norm = sqrt(x.x^2 + x.y^2)
+    
     return sin(cos(norm))
 end
 ```
