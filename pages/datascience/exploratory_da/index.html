@@ -201,7 +201,7 @@ Type:           Int64</code></pre>
 <p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext> </mtext></mrow><annotation encoding="application/x-tex">~</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0em;"></span><span class="mspace nobreak"> </span></span></span></span> </div> </div>
 <p>You should now see <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>4061</mn></mrow><annotation encoding="application/x-tex">4061</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">4061</span></span></span></span> entries. In a final step, let us convert the compensation from dollars into euros and store this information in a column named <code>EuroCompYearly</code>. As of July 1st, 2022, one Dollar corresponds to <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.96</mn></mrow><annotation encoding="application/x-tex">0.96</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0.96</span></span></span></span> Euros:</p>
 <pre><code class="julia hljs">df_survey[!, :EuroCompYearly] = <span class="hljs-number">0.96</span> * df_survey[!, :ConvertedCompYearly]</code></pre>
-<p>Here you find the solution for all manipulating tasks in this section. <div class="solution"> Solution </div><div class="solutioncollapsible">  </p>
+<p>Here you find the solution for all manipulating tasks in this section. <button type="button" class="collapsible" style="background-color:#fffca5"> Solution </button><div class="collapsiblecontent">  </p>
 <pre><code class="julia hljs"><span class="hljs-keyword">using</span> CSV, DataFrames
 
 selcols = [<span class="hljs-string">&quot;Age&quot;</span>, <span class="hljs-string">&quot;Country&quot;</span>, <span class="hljs-string">&quot;ConvertedCompYearly&quot;</span>, <span class="hljs-string">&quot;DevType&quot;</span>, <span class="hljs-string">&quot;Employment&quot;</span>, <span class="hljs-string">&quot;Ethnicity&quot;</span>, <span class="hljs-string">&quot;Gender&quot;</span>, <span class="hljs-string">&quot;OrgSize&quot;</span>, <span class="hljs-string">&quot;YearsCode&quot;</span>]
@@ -306,9 +306,9 @@ df_survey[!, :EuroCompYearly] = <span class="hljs-number">0.96</span> * df_surve
   &quot;Austria&quot;     =&gt; 437
 
 <span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@df</span> df_survey bar(countmap(:Country), legend=<span class="hljs-literal">false</span>)</span></code></pre>
-<div id="fdpxdq" style=""></div>
+<div id="fdpgeg" style=""></div>
 <script>
-graphDiv = document.getElementById("fdpxdq");
+graphDiv = document.getElementById("fdpgeg");
 plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_explorative_da_country.json');
 </script>
 
@@ -316,9 +316,9 @@ plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datas
 <p>Boxplots are a nice tool to visualize some distributional characteristics &#40;locality, spread, skewness&#41; of a given data sample. Dividing the data set into different groups allows an easy comparison.</p>
 <p>In the following plot we compare the salary of different employment states:</p>
 <pre><code class="julia hljs"><span class="hljs-meta">@df</span> df_survey boxplot(:Employment, :EuroCompYearly, xrotation=<span class="hljs-number">30</span>, size=(<span class="hljs-number">500</span>, <span class="hljs-number">900</span>), legend=<span class="hljs-literal">false</span>)</code></pre>
-<div id="fdpmjx" style=""></div>
+<div id="fdpnbm" style=""></div>
 <script>
-graphDiv = document.getElementById("fdpmjx");
+graphDiv = document.getElementById("fdpnbm");
 plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_explorative_da_salary_1.json');
 </script>
 
@@ -336,9 +336,9 @@ plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datas
 <p>Since visualizations usually condense information up to some extend, it is always a good idea to look at the data from different perspectives. Adding e.g. a dots plot &#40;where every sample is visualized by a dot&#41; shows that two of the groups have only very little sample sizes.</p>
 <pre><code class="julia hljs"><span class="hljs-meta">@df</span> df_survey boxplot(:Employment, :EuroCompYearly, xrotation=<span class="hljs-number">30</span>, size=(<span class="hljs-number">500</span>, <span class="hljs-number">900</span>), legend=<span class="hljs-literal">false</span>)
 <span class="hljs-meta">@df</span> df_survey dotplot!(:Employment, :EuroCompYearly, legend=<span class="hljs-literal">false</span>)</code></pre>
-<div id="fdpetr" style=""></div>
+<div id="fdpynd" style=""></div>
 <script>
-graphDiv = document.getElementById("fdpetr");
+graphDiv = document.getElementById("fdpynd");
 plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_explorative_da_salary_2.json');
 </script>
 
