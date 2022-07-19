@@ -53,12 +53,12 @@ Since most columns are `String` types, there is not that much to see, but we sti
 
     Hint: To not having to reload the initial data set whenever you make a mistake, it might be a good idea to create a backup first: `backup_df = copy(df_survey)`. So later you can always bring it back by calling `df_survey = copy(backup_df)`.
 
-    \solution{
+\solution{
 ```julia
 dropmissing!(df_survey, :ConvertedCompYearly)
 ```
 $~$
-    }
+}
 }
 
 After the previous exercise you should have $46844$ rows in your data set.
@@ -117,12 +117,12 @@ Removing outliers is a very controversial topic. Usually it is always good pract
     
     Hints: Check the manual of `filter`. When you are running your code in the Julia REPL within VS Code you will find a dataframe viewer in your Julia extension's workspace. Alternatively, it might also make sense to quickly write the dataframe to a CSV and have a look in one of the common spreadsheet programs.
 
-    \solution{
+\solution{
 ```julia
 df_topearners = filter(x -> x.ConvertedCompYearly > 1e6, df_survey)
 ```
 $~$
-    }
+}
 }
 
 Apparently, most of the top earners declared to be software developers. Let us filter the data set such that we only have entries $< 1$Mio from now on.
@@ -130,12 +130,12 @@ Apparently, most of the top earners declared to be software developers. Let us f
 \exercise{
     Filter (and store) `df_survey` for entries where `ConvertedCompYear` is equal or less than 1Mio.
 
-    \solution{
+\solution{
 ```julia
 filter!(x -> x.ConvertedCompYearly <= 1e6, df_survey)
 ```
 $~$
-    }
+}
 }
 
 Now you should have $46237$ entries. Next, we only want to look at the DACH region.
@@ -143,12 +143,12 @@ Now you should have $46237$ entries. Next, we only want to look at the DACH regi
 \exercise{
     Filter (and store) `df_survey` for `Country` being `Austria`, `Germany` or `Switzerland`.
 
-    \solution{
+\solution{
 ```julia
 filter!(x -> x.Country in ["Austria", "Germany", "Switzerland"], df_survey)
 ```
 $~$
-    }
+}
 }
 
 Now we are down to $4212$ entries. Have a look at the column `Gender`. Besides `Man` and `Woman` there are a lot more categories, but unfortunately with very little sample sizes. Thus, adding these to further visualizations would lead to misleading conclusions. It would require additional engineering to address these little sample sizes and therefore this is out of scope of this workshop.
@@ -158,12 +158,12 @@ So instead, let us also add a filter in this column.
 \exercise{
     Filter (and store) `df_survey` for `Gender` being `Man` or `Woman`.
 
-    \solution{
+\solution{
 ```julia
 filter!(x -> !ismissing(x.Gender) && (x.Gender in ["Man", "Woman"]), df_survey)
 ```
 $~$
-    }
+}
 }
 
 You should now see $4061$ entries. In a final step, let us convert the compensation from dollars into euros and store this information in a column named `EuroCompYearly`. As of July 1st, 2022, one Dollar corresponds to $0.96$ Euros:
