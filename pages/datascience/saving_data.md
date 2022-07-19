@@ -14,9 +14,9 @@ using Arrow
 Arrow.write("survey.arrow", df_survey)
 ```
 
-Loading the file again is slightly more complicated since we need to transform the loaded Arrow Table back into a DataFrame:
+Loading the file again is slightly more complicated since `Arrow.Table` is immutable by default. Thus we first need to convert it into a named tuple of vectors which then can be transformed into a mutable dataframe.
 ```julia
 using Arrow, DataFrames
 
-df_survey = DataFrame(Arrow.Table("survey.arrow"))
+df_survey = DataFrame(Arrow.columntable(Arrow.Table("survey.arrow")))
 ```
