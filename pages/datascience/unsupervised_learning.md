@@ -255,7 +255,7 @@ mach_pca = machine(pca, X_test_scaled)
 fit!(mach_pca)
 ```
 
-We did not give a target dimension to `PCA()` so by default it is using as many dimensions as there are needed to preserve 99% of the variance of the original data (in our case we need 486 components). Before we look at the principal components, we are interested to check how the number of principal components relate to the explained variance ratios for our data sample. `MLJ` offers two useful functions for inspecting "training results": `fitted_params` returns the learned parameters and `report` returns the report for a machine that has been `fit`. This is a named tuple in both cases and, if possible, human-readable. To access the explained variance ratios per principal component, we need to access the `principalvars` (a list of values) and divide by the total explained variance `tvar`. Both values are accessible in the report:
+We did not give a target dimension to `PCA()` so by default it is using as many dimensions as there are needed to preserve 99% of the variance of the original data (in our case we need 486 components). Before we look at the principal components, we are interested to check how the number of principal components relate to the explained variance ratios for our data sample. Therefore, we need to access the `principalvars` (a list of values) and divide by the total explained variance `tvar`. Both values are accessible in the report:
 ```julia
 r_pca = report(mach_pca)
 
@@ -271,7 +271,7 @@ StatsPlots.plot(cumsum(explained_variance_ratios, dims=1))
 
 \figalt{Explained variance}{/assets/pages/datascience/plot_pca_explained_variance.json}
 
-We observe that we only explain around 10% of the variance with two dimensions and we need roughly 115 dimension to explain 80% of the variance. With other words: our projection loses a lot of information, but we still give it a try and visualize the transformed data. Keep in mind that we are projecting 784 dimensions into a two-dimensional space.
+We observe that we only explain around 10% of the variance with two dimensions and we need roughly 115 dimensions to explain 80% of the variance. With other words: our projection loses a lot of information, but we still give it a try and visualize the transformed data. Keep in mind that we are projecting 784 dimensions into a two-dimensional space.
 
 ```julia
 X_test_pca = MLJ.transform(mach_pca, X_test_scaled)
