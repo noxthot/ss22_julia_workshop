@@ -59,7 +59,7 @@ julia> macro m(x)
        end
 @m (macro with 1 method)
 
-julia> macro m(x,y)
+julia> macro m(x, y)
            println("Two arguments")
        end
 @m (macro with 2 methods)
