@@ -289,7 +289,7 @@ julia> struct Point{T}
 julia> pFloat = Point{Float64}(1.0, 2.0)
 Point{Float64}(1.0, 2.0)
 
-julia> pInt = Point{Int}(1, 2)
+julia> pInt = Point{Int64}(1, 2)
 Point{Int64}(1, 2)
 ```
 Note that using `{T}` behind the struct name lets us use `T` as a new type that can be defined when creating an object of type `Point`. You can also have two different types in one object. To account for such situations, we can define
