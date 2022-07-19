@@ -14,7 +14,7 @@ There are several ways to write and run Julia code:
 We can start it by typing `julia` (or the full path to the executable) on the command line. The REPL itself comes with four distinct modes that can be very useful to know:
 - **Julia mode**: This is the default mode when we start Julia. The prompt starts with `julia>`. Here we may type Julia expressions which get evaluated when pressing enter. The resulting output will be presented immediately after evaluation.
 \example{```julia-repl
-julia> 1+1
+julia> 1 + 1
 2
 
 julia> 
