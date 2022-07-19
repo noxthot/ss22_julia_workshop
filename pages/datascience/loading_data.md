@@ -81,7 +81,7 @@ Also note that the data types of the columns are printed below the column name.
 
 To get things more exciting, let us take a look at real data. [Stack Overflow](https://www.stackoverflow.com) provides [annual developer surveys](https://insights.stackoverflow.com/survey/). We will have a look at the latest available data set from [2021](https://info.stackoverflowsolutions.com/rs/719-EMH-566/images/stack-overflow-developer-survey-2021.zip). Please download this file and extract it into your workspace. Note that besides the actual data there is also a file which describes the contents of the dataset.
 
-The filename is `survey_results_public.csv` and the extension indicates that the file format is a [comma-separated values](https://en.wikipedia.org/wiki/Comma-separated_values) file. Thus, we need a package that is able to handle CSV-files. Luckily there is [CSV.jl](https://csv.juliadata.org/stable/) which makes it easy to load a file into a `DataFrame`. All we need to do is add and load `CSV` and read the data by using `DataFrame` as sink (second argument). Sink? How do we even know that such a thing exists? It is always good to consult the manual first:
+The filename is `survey_results_public.csv` and the extension indicates that the file format is a [comma-separated values](https://en.wikipedia.org/wiki/Comma-separated_values) file. Thus, we need a package that is able to handle CSV-files. Luckily there is [CSV.jl](https://csv.juliadata.org/stable/) which makes it easy to load a file into a `DataFrame`. All we need to do is adding and loading `CSV`. Then we can read the data by using `DataFrame` as `sink` (second argument). `sink`? How do we even know that such a thing exists? It is always good to consult the manual first:
 ```julia-repl
 pkg> add CSV
 [..]
@@ -181,8 +181,7 @@ julia> show(names(df_survey))
 
 Let us assume that we are conducting a little study on the income of different developer roles and therefore we are only interested in the columns: `["Age", "Country", "ConvertedCompYearly", "DevType", "Employment", "Ethnicity", "Gender", "OrgSize", "YearsCode"]`. Unfortunately, `ConvertedCompYearly` is not further described within the dataset schema but it is reasonably fair to assume that this reflects the annual income in dollars. Selecting various columns works with the `df_survey[!, cols]` notation:
 ```julia-repl
-julia> selcols = ["Age", "Country", "ConvertedCompYearly", "DevType", "Employment", "Ethnicity", "Gender", "OrgSize", "YearsCode"]
-[...]
+julia> selcols = ["Age", "Country", "ConvertedCompYearly", "DevType", "Employment", "Ethnicity", "Gender", "OrgSize", "YearsCode"];
 
 julia> df_survey[!, selcols]
 83439×9 DataFrame
@@ -197,7 +196,7 @@ julia> df_survey[!, selcols]
                                                                                                                        5 columns and 83435 rows omitted
 ```
 
-Do we notice that something odd happened? `ConvertedCompYearly` apparently is stored as a `String15` (meaning a `String` with fixed length of 15 letters) column. Taking a closer look at the data and/or CSV file, this is due to `NA` being used as text in the CSV file. We obviously want this column to be of type `Integer` (to be more precise of type `Union{Integer, Missing}`) and the `NA`s should be `missing` instead. If we would have known about this earlier, we could have corrected this right at the start when reading the dataframe. This also counts for various other problems that often occur with this file format. Non-standard separation letter, different symbols for writing decimal numbers to just name two. Reading the manual of `CSV.read` tells us how we should read the data correctly and we can tell the function that we only want to read specific columns:
+Do we notice that something odd happened? `ConvertedCompYearly` apparently is stored as a `String15` (meaning a `String` with fixed length of 15 letters) column. Taking a closer look at the data and/or CSV file, this is due to `NA` being used as text in the CSV file. We obviously want this column to be of type `Integer` (to be more precise of type `Union{Integer, Missing}`) and the `NA`s should be `missing` instead. If we would have known about this earlier, we could have corrected this right at the start when reading the dataframe. This also counts for various other problems that often occur with this file format. Non-standard separation character, different symbols for writing decimal numbers to just name two. Reading the manual of `CSV.read` tells us how we should read the data correctly and we can tell the function that we only want to read specific columns:
 ```julia-repl
 julia> df_survey = CSV.read("survey_results_public.csv", DataFrame; missingstring="NA", select=selcols)
 83439×9 DataFrame
@@ -243,5 +242,28 @@ Let us split up the call `collect(zip(names(df_survey), eltype.(eachcol(df_surve
 - `zip` ties together the $n$-th column name with the $n$-th column type, but this function also returns an iterator which can not be printed immediately,
 - finally `collect()` returns an array of all items within that iterator.
 
-\exercise{
- When having a look at the output it might seem like `Age`, `YearsCode` and `OrgSize` probably should also be of a numeric type. By applying `unique()` to each of these columns we will receive an array containing the unique elements within these columns. This helps us to explore the content and decide whether the columns' need to be converted to another data type.}
+\exercise{When having a look at the output it might seem like `Age`, `YearsCode` and `OrgSize` probably should also be of a numeric type. By applying `unique()` to each of these columns we will receive an array containing the unique elements within these columns. This helps us to explore the content and decide whether the columns' need to be converted to another data type. Check if the type of the columns is correct.
+\solution{
+```julia-repl
+julia> show(unique(df_survey.Age))
+Union{Missing, String31}["25-34 years old", "18-24 years old", "35-44 years old", "Prefer not to say", "45-54 years old", "Under 18 years old", "65 years or older", "55-64 years old", missing]
+
+julia> show(unique(df_survey.YearsCode))
+Union{Missing, String31}[missing, "7", "17", "3", "4", "6", "16", "12", "15", "10", "40", "9", "26", "14", "39", "20", "8", "19", "5", "Less than 1 year", "22", "2", "1", "34", "21", "13", "25", "24", "30", "31", "18", "38", "More than 50 years", "27", "41", "42", "35", "23", "28", "11", "37", "44", "43", "36", "33", "45", "29", "50", "46", "32", "47", "49", "48"]
+
+julia> show(unique(df_survey.OrgSize))
+Union{Missing, String}["20 to 99 employees", missing, "100 to 499 employees", "Just me - I am a freelancer, sole proprietor, etc.", "10,000 or more employees", "10 to 19 employees", "1,000 to 4,999 employees", "500 to 999 employees", "5,000 to 9,999 employees", "2 to 9 employees", "I don’t know"]
+```
+$~$
+}}
+
+\solution{
+  Here is the complete and final code for this sheet:
+```julia
+using CSV, DataFrames
+
+selcols = ["Age", "Country", "ConvertedCompYearly", "DevType", "Employment", "Ethnicity", "Gender", "OrgSize", "YearsCode"]
+df_survey = CSV.read("survey_results_public.csv", DataFrame; missingstring="NA", select=selcols)
+```
+$~$
+}
