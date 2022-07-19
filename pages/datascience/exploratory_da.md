@@ -172,7 +172,7 @@ df_survey[!, :EuroCompYearly] = 0.96 * df_survey[!, :ConvertedCompYearly]
 ```
 
 Here you find the solution for all manipulating tasks in this section.
-\solution{
+\collapssol{
 ```julia
 using CSV, DataFrames
 
