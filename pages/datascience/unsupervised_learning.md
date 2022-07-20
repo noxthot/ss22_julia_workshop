@@ -142,7 +142,7 @@ mach_kmeans = machine(model_kmeans, X_test_tab)
 fit!(mach_kmeans)
 ```
 
-After fitting the model, we hopefully found ten representive cluster centers. With `report(mach_kmeans)` we can have a look at the *training* (fitting) results. 
+After fitting the model, we hopefully found ten representative cluster centers. With `report(mach_kmeans)` we can have a look at the *training* (fitting) results. 
 ```julia-repl
 julia> r_machkmeans = report(mach_kmeans)
 (cluster_centers = [0.0 0.0 … 0.0 0.0; 0.0 0.0 … 0.0 0.0; … ; 0.0 0.0 … 0.0 0.0; 0.0 0.0 … 0.0 0.0],
@@ -184,6 +184,7 @@ end
 ```
 
 In our case the ten cluster centers look like this:
+
 \figalt{Cluster centers - KMeans}{/assets/pages/datascience/unsupervised_clusters_kmeans.png}
 
 We can clearly recognize the numbers $0$, $2$, $3$, $6$, $8$, $9$, but obviously it is more difficile for numbers $1$, $4$, $5$, $7$. When looking closely, we see parts of the silhouettes too, but we are of course not completely happy with this fit. We might be able to grasp more of the underlying structure by increasing the number of clusters.
@@ -199,6 +200,7 @@ Technically speaking, the *principal components* are the eigenvectors of the dat
 The dimension of the original data is then reduced to $n$ by projecting the data using the first $n$ eigenvectors. Please note that the resulting projected data are essentially linear combinations of the original data which capture most of the variance in the original data.
 
 An illustration is shown here:
+
 \figenvsource{Principal Component Analysis}{/assets/pages/datascience/GaussianScatterPCA.png}{}{https://de.wikipedia.org/wiki/Hauptkomponentenanalyse#/media/Datei:GaussianScatterPCA.svg}
 
 @@important
@@ -319,6 +321,7 @@ StatsPlots.scatter(X_test_umap_mat[1, :], X_test_umap_mat[2, :], group=r_kmachme
 ```
 
 Coloured by real labels:
+
 \figalt{UMAP with colors}{/assets/pages/datascience/plot_umap_color.json}
 
 Coloured by K means assigments:
@@ -327,4 +330,4 @@ Coloured by K means assigments:
 }
 
 ## Outlook
-Sometimes it might help to combine dimensionality reduction with a clustering algorithm. The previous exercise demonstrates that UMAP manages to seperate the data quite nicely even when going down to two dimensions. We could for example first reduce the dimension of the original data set to ten and then apply a clustering algorithm on this lower dimensional data.
+Sometimes it might help to combine dimensionality reduction with a clustering algorithm. The previous exercise demonstrates that UMAP manages to separate the data quite nicely even when going down to two dimensions. We could for example first reduce the dimension of the original data set to ten and then apply a clustering algorithm on this lower dimensional data.
