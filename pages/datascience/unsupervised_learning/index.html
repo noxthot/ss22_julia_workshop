@@ -289,7 +289,7 @@ fit!(mach_kmeans)</code></pre>
 
 <div class="important">Since PCA is sensitive to the scaling of variables, input data is usually standardized prior application of the algorithm.</div>
 <h3 id="application__2"><a href="#application__2" class="header-anchor">Application</a></h3>
-<p>Since we decided to use <code>MLJ.jl</code> as a meta package, it is easy to scale the data and also apply the PCA. For scaling the data we will use the <code>Standardizer&#40;&#41;</code> which is part of MLJs <a href="https://alan-turing-institute.github.io/MLJ.jl/v0.2/built_in_transformers/">built-in transformers</a>.</p>
+<p>Since we decided to use <code>MLJ.jl</code> as a meta package, it would be easy to scale the data and also apply the PCA. For scaling the data we could use the <code>Standardizer&#40;&#41;</code> which is part of MLJs <a href="https://alan-turing-institute.github.io/MLJ.jl/v0.2/built_in_transformers/">built-in transformers</a>.</p>
 <p>In case you have a fresh REPL, you can start off with this code:</p>
 <button type="button" class="collapsible" style="background-color:#fffca5"> Solution </button><div class="collapsiblecontent">  </p>
 <pre><code class="julia hljs"><span class="hljs-keyword">using</span> DataFrames, MLDatasets, MLJ
@@ -301,7 +301,7 @@ X_test_tab = MLJ.table(X_test)
 
 y_test = df_test.targets</code></pre>
 <p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext> </mtext></mrow><annotation encoding="application/x-tex">~</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0em;"></span><span class="mspace nobreak"> </span></span></span></span> </div>
-<p>In our case standardizing the data leads to various problems:</p>
+<p>But in our case standardizing the data leads to various problems:</p>
 <ul>
 <li><p>Some pixels are always <code>0</code>.</p>
 </li>
@@ -325,7 +325,7 @@ X_test_scaled = MLJ.transform(mach_standardizer, X_test_tab)
 <span class="hljs-comment"># WARNING - THIS IS HACKY: X_test_scaled unfortunately contains NaNs. We replace them by 0. Therefor we first need to convert it to a data frame.</span>
 X_test_scaled = DataFrame(X_test_scaled)
 X_test_scaled .= ifelse.(isnan.(X_test_scaled), <span class="hljs-number">0</span>, X_test_scaled)</code></pre>
-<p></div>
+<p>But one could think of just standardizing over all the columns simultaneously. </div>
 <p>We are now ready for applying the principal component analysis in the same fashion:</p>
 <pre><code class="julia hljs"><span class="hljs-keyword">using</span> MLJMultivariateStatsInterface
 
@@ -343,9 +343,9 @@ explained_variance_ratios = r_pca.principalvars / r_pca.tvar</code></pre>
 <pre><code class="julia hljs"><span class="hljs-keyword">using</span> StatsPlots; plotlyjs()
 
 StatsPlots.plot(cumsum(explained_variance_ratios, dims=<span class="hljs-number">1</span>))</code></pre>
-<div id="fdpbtd" style=""></div>
+<div id="fdpyht" style=""></div>
 <script>
-graphDiv = document.getElementById("fdpbtd");
+graphDiv = document.getElementById("fdpyht");
 plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_pca_explained_variance.json');
 </script>
 
@@ -354,18 +354,18 @@ plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datas
 
 <span class="hljs-meta">@df</span> X_test_pca StatsPlots.scatter(:x1, :x2, alpha=<span class="hljs-number">0.5</span>)</code></pre>
 <p><code>:x1</code> and <code>:x2</code> are the names of the first two columns &#40;principal components&#41; in <code>X_test_pca</code> and <code>alpha</code> is added for transparency such that we get an idea about the density of the data points.</p>
-<div id="fdpafx" style=""></div>
+<div id="fdpqnx" style=""></div>
 <script>
-graphDiv = document.getElementById("fdpafx");
+graphDiv = document.getElementById("fdpqnx");
 plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_pca_nocolor.json');
 </script>
 
 <p>This might not seem to be very helpful at first, but in this case we actually have labeled data available and to demonstrate the power of PCA, we will use that labels to add ten colors to this plot. Each digit will get its own color in this plot:</p>
 <pre><code class="julia hljs"><span class="hljs-meta">@df</span> X_test_pca StatsPlots.scatter(:x1, :x2, group=y_test, alpha=<span class="hljs-number">0.5</span>, palette=:seaborn_bright)</code></pre>
 <p><code>y_test</code> contains our labels, <code>group</code> tells <code>StatsPlots</code> to use that labels for coloring and the <code>palette</code> is set to a <a href="https://docs.juliaplots.org/latest/generated/colorschemes/">colormap</a> which distinguishes nicely between ten groups.</p>
-<div id="fdpcdp" style=""></div>
+<div id="fdppuz" style=""></div>
 <script>
-graphDiv = document.getElementById("fdpcdp");
+graphDiv = document.getElementById("fdppuz");
 plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_pca_color.json');
 </script>
 
@@ -396,15 +396,15 @@ StatsPlots.scatter(X_test_umap_mat[<span class="hljs-number">1</span>, :], X_tes
 
 StatsPlots.scatter(X_test_umap_mat[<span class="hljs-number">1</span>, :], X_test_umap_mat[<span class="hljs-number">2</span>, :], group=r_machkmeans.assignments, alpha=<span class="hljs-number">0.3</span>, palette=:seaborn_bright)</code></pre>
 <p>Coloured by real labels:</p>
-<div id="fdpubg" style=""></div>
+<div id="fdpvhy" style=""></div>
 <script>
-graphDiv = document.getElementById("fdpubg");
+graphDiv = document.getElementById("fdpvhy");
 plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_umap_color.json');
 </script>
 
-<p>Coloured by K means assigments: <div id="fdpnqc" style=""></div>
+<p>Coloured by K means assigments: <div id="fdpxrs" style=""></div>
 <script>
-graphDiv = document.getElementById("fdpnqc");
+graphDiv = document.getElementById("fdpxrs");
 plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_umap_colored_by_cluster.json');
 </script>
  </div> </div>

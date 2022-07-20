@@ -20,31 +20,57 @@ using DataFrames, MLDatasets, MLJ, MultivariateStats, MLJMultivariateStatsInterf
 # ╔═╡ 4a00b210-c9ef-46be-85b9-e49bf97b9631
 using PlotlyJS, StatsPlots; plotlyjs()
 
+# ╔═╡ 1d03eaa6-8125-4543-8bc2-0cb237d32c8c
+md"""
+## Load and prepare the data
+"""
+
 # ╔═╡ 07059fd3-10c8-44e1-bde3-4da1d8438cc5
-# Loading the data
 begin
 	df_test = MNIST(:test)
 	X_test = reshape(df_test.features, (28 * 28, :))'
 	y_test = df_test.targets
 end;
 
+# ╔═╡ 6a03c0d9-5abc-4887-a6cc-0884c244eb35
+md"""
+# K Means
+"""
+
+# ╔═╡ 8a9bdeef-99f4-491e-8532-afe2966ab7ee
+md"""
+## Load the model
+"""
+
 # ╔═╡ b489d5d4-802b-42e0-bd2a-0ef26ea2a0a6
 KMEANS = @load KMeans pkg=ParallelKMeans
 
-# ╔═╡ b2aba1a5-b453-493c-908e-7da2d31dcf2e
-KMEANS()
+# ╔═╡ 6e33c1d7-2499-4692-ad9b-d5132bd1431b
+md"""
+## Instantiate the model
+"""
 
 # ╔═╡ 3e56e94e-ab42-442c-8867-7eba19ef31ae
-NR_CLUSTERS = 10
+NR_CLUSTERS = 20
 
 # ╔═╡ fb77a4e4-8fde-4f55-9f98-da9086472b6c
 model_kmeans = KMEANS(k=NR_CLUSTERS)
+
+# ╔═╡ 63765db4-eff1-4a07-bd27-d308c078affe
+md"""
+## Transform the data
+"""
 
 # ╔═╡ 0c8f7561-5263-46b9-8b69-9962c0bfff67
 X_test_tab = MLJ.table(X_test)
 
 # ╔═╡ 15294c7a-e3c2-407a-a767-41492d992d69
 scitype(X_test_tab) <: input_scitype(model_kmeans)
+
+# ╔═╡ 71efa28e-d219-4af6-b898-cc0748287cb0
+md"""
+## Initialize machine and fit model
+"""
 
 # ╔═╡ f85dddca-50ab-42e3-b830-3140948f4037
 begin
@@ -54,6 +80,11 @@ begin
 	# Fitting the model's parameters
 	fit!(mach_kmeans)
 end
+
+# ╔═╡ e9cbbeb5-e809-4227-8f79-cdf17d13e48d
+md"""
+## Visualize the cluster centers
+"""
 
 # ╔═╡ 774f0504-f43d-458f-b0a3-91e2911c894a
 r_machkmeans = report(mach_kmeans)
@@ -84,6 +115,8 @@ md"""
 # ╔═╡ b88b12c9-a70c-46db-82ff-1e15255fef01
 # ╠═╡ disabled = true
 #=╠═╡
+# Code for standardizing; do not use it, since it makes things worse for this data set
+
 begin
 	# Instantiating the model
 	standardizer_model = Standardizer()
@@ -104,20 +137,40 @@ begin
 end
   ╠═╡ =#
 
+# ╔═╡ 076097d1-b77a-403d-a538-a43cfcb03250
+md"""
+## Load and instantiate model
+"""
+
 # ╔═╡ 0982df25-201c-4bfc-a406-cf8943caced8
 begin
 	PCA = @load PCA pkg=MultivariateStats
 	pca = PCA()
 end
 
+# ╔═╡ 0a573f1f-ef50-4137-be6d-9ff1e5242fba
+md"""
+## Confirm correct sci types
+"""
+
 # ╔═╡ 077e29d9-222b-4af6-93a3-d10c68e28971
 scitype(X_test_tab) <: input_scitype(pca)
+
+# ╔═╡ a218db04-1aef-464c-b332-2012a2335830
+md"""
+## Load and fit the machine
+"""
 
 # ╔═╡ d3ae10d1-dbc6-4471-a2c5-de29fff793ca
 begin	
 	mach_pca = machine(pca, X_test_tab)
 	fit!(mach_pca)
 end
+
+# ╔═╡ cad2281c-f431-4924-ba28-16768c4c10b4
+md"""
+## Cumulative explainced variance plot
+"""
 
 # ╔═╡ 5d14fd44-0ed3-4442-a58a-c8ef70d2c855
 begin
@@ -128,11 +181,26 @@ end
 # ╔═╡ 95bcdd20-5728-44ba-9b01-68e775952315
 StatsPlots.plot(cumsum(explained_variance_ratios, dims=1))
 
+# ╔═╡ acfb846d-8156-44a3-b94d-5023a9c8283c
+md"""
+## Plotting the projection on two principal components
+"""
+
+# ╔═╡ 08244e23-1ef4-4e5c-ba12-8d316cea275b
+md"""
+### Without colouring
+"""
+
 # ╔═╡ ae46e190-5a6e-477e-8991-3e7e3d2ad323
 X_test_pca = MLJ.transform(mach_pca, X_test_tab)
 
 # ╔═╡ a5662c47-1e94-4b5a-86e0-4182ad9d63cd
 @df X_test_pca StatsPlots.scatter(:x1, :x2, alpha=0.5)
+
+# ╔═╡ 50295af4-a504-49ac-91bc-44427d1a6a8c
+md"""
+### Colored by real label
+"""
 
 # ╔═╡ 84070e5b-2100-4fc7-859f-216e63d7876b
 @df X_test_pca StatsPlots.scatter(:x1, :x2, group=y_test, alpha=0.5, palette=:seaborn_bright)
@@ -140,6 +208,11 @@ X_test_pca = MLJ.transform(mach_pca, X_test_tab)
 # ╔═╡ c973e1e9-f148-4766-9437-878b3c76f548
 md"""
 # UMAP
+"""
+
+# ╔═╡ 7dbf6d50-2b86-4034-aec5-9220b7874cc3
+md"""
+## Fit and apply model
 """
 
 # ╔═╡ a6848fba-412d-4763-8cad-17ffdfb0338f
@@ -1993,14 +2066,20 @@ version = "0.9.1+5"
 # ╔═╡ Cell order:
 # ╠═a28ad39c-07e4-11ed-3631-6fd58ff99d11
 # ╠═4a00b210-c9ef-46be-85b9-e49bf97b9631
+# ╟─1d03eaa6-8125-4543-8bc2-0cb237d32c8c
 # ╠═07059fd3-10c8-44e1-bde3-4da1d8438cc5
+# ╟─6a03c0d9-5abc-4887-a6cc-0884c244eb35
+# ╟─8a9bdeef-99f4-491e-8532-afe2966ab7ee
 # ╠═b489d5d4-802b-42e0-bd2a-0ef26ea2a0a6
-# ╠═b2aba1a5-b453-493c-908e-7da2d31dcf2e
+# ╟─6e33c1d7-2499-4692-ad9b-d5132bd1431b
 # ╠═3e56e94e-ab42-442c-8867-7eba19ef31ae
 # ╠═fb77a4e4-8fde-4f55-9f98-da9086472b6c
+# ╟─63765db4-eff1-4a07-bd27-d308c078affe
 # ╠═0c8f7561-5263-46b9-8b69-9962c0bfff67
 # ╠═15294c7a-e3c2-407a-a767-41492d992d69
+# ╟─71efa28e-d219-4af6-b898-cc0748287cb0
 # ╠═f85dddca-50ab-42e3-b830-3140948f4037
+# ╟─e9cbbeb5-e809-4227-8f79-cdf17d13e48d
 # ╠═774f0504-f43d-458f-b0a3-91e2911c894a
 # ╠═760d8557-cb94-4c95-a2aa-8bf5c01186f7
 # ╠═6a163095-c686-49c4-9288-a6a987ca3138
@@ -2008,19 +2087,27 @@ version = "0.9.1+5"
 # ╠═ad479655-9281-446c-b8b4-8c73f7655987
 # ╟─e9fa43e0-2cbd-475c-904f-6b1c709c79c8
 # ╠═b88b12c9-a70c-46db-82ff-1e15255fef01
+# ╟─076097d1-b77a-403d-a538-a43cfcb03250
 # ╠═0982df25-201c-4bfc-a406-cf8943caced8
+# ╟─0a573f1f-ef50-4137-be6d-9ff1e5242fba
 # ╠═077e29d9-222b-4af6-93a3-d10c68e28971
+# ╟─a218db04-1aef-464c-b332-2012a2335830
 # ╠═d3ae10d1-dbc6-4471-a2c5-de29fff793ca
+# ╟─cad2281c-f431-4924-ba28-16768c4c10b4
 # ╠═5d14fd44-0ed3-4442-a58a-c8ef70d2c855
 # ╠═95bcdd20-5728-44ba-9b01-68e775952315
+# ╟─acfb846d-8156-44a3-b94d-5023a9c8283c
+# ╟─08244e23-1ef4-4e5c-ba12-8d316cea275b
 # ╠═ae46e190-5a6e-477e-8991-3e7e3d2ad323
 # ╠═a5662c47-1e94-4b5a-86e0-4182ad9d63cd
+# ╟─50295af4-a504-49ac-91bc-44427d1a6a8c
 # ╠═84070e5b-2100-4fc7-859f-216e63d7876b
-# ╠═c973e1e9-f148-4766-9437-878b3c76f548
+# ╟─c973e1e9-f148-4766-9437-878b3c76f548
+# ╟─7dbf6d50-2b86-4034-aec5-9220b7874cc3
 # ╠═a6848fba-412d-4763-8cad-17ffdfb0338f
-# ╠═0dc3b39e-2ca2-4c1c-b434-119187946f5a
+# ╟─0dc3b39e-2ca2-4c1c-b434-119187946f5a
 # ╠═4321aeb7-2b24-45a7-a1a3-4c6bc7e73a58
-# ╠═e56f74de-8034-43e5-b7d4-e0f30722d24a
+# ╟─e56f74de-8034-43e5-b7d4-e0f30722d24a
 # ╠═34e9c579-c252-4bdd-80d9-8b26120298e2
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
