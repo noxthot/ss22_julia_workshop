@@ -45,6 +45,7 @@ julia> u = collect(range(0, 1, 3))
  0.5
  1.0
 ```
+Note, [`range`](https://docs.julialang.org/en/v1/base/math/#Base.range) returns a specialized array that optimizes storage, therefore we have to use `collect` to get a standard array. 
 We can now do operations on a vector in the usual fashion:
 ```julia-repl
 julia> v * 2
