@@ -334,9 +334,9 @@ explained_variance_ratios = r_pca.principalvars / r_pca.tvar</code></pre>
 <pre><code class="julia hljs"><span class="hljs-keyword">using</span> StatsPlots; plotlyjs()
 
 StatsPlots.plot(cumsum(explained_variance_ratios, dims=<span class="hljs-number">1</span>))</code></pre>
-<div id="fdpkxn" style=""></div>
+<div id="fdpzuk" style=""></div>
 <script>
-graphDiv = document.getElementById("fdpkxn");
+graphDiv = document.getElementById("fdpzuk");
 plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_pca_explained_variance.json');
 </script>
 
@@ -345,18 +345,18 @@ plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datas
 
 <span class="hljs-meta">@df</span> X_test_pca StatsPlots.scatter(:x1, :x2, alpha=<span class="hljs-number">0.5</span>)</code></pre>
 <p><code>:x1</code> and <code>:x2</code> are the names of the first two columns &#40;principal components&#41; in <code>X_test_pca</code> and <code>alpha</code> is added for transparency such that we get an idea about the density of the data points.</p>
-<div id="fdpwrw" style=""></div>
+<div id="fdpzeh" style=""></div>
 <script>
-graphDiv = document.getElementById("fdpwrw");
+graphDiv = document.getElementById("fdpzeh");
 plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_pca_nocolor.json');
 </script>
 
 <p>This might not seem to be very helpful at first, but in this case we actually have labeled data available and to demonstrate the power of PCA, we will use that labels to add ten colors to this plot. Each digit will get its own color in this plot:</p>
 <pre><code class="julia hljs"><span class="hljs-meta">@df</span> X_test_pca StatsPlots.scatter(:x1, :x2, group=y_test, alpha=<span class="hljs-number">0.5</span>, palette=:seaborn_bright)</code></pre>
 <p><code>y_test</code> contains our labels, <code>group</code> tells <code>StatsPlots</code> to use that labels for coloring and the <code>palette</code> is set to a <a href="https://docs.juliaplots.org/latest/generated/colorschemes/">colormap</a> which distinguishes nicely between ten groups.</p>
-<div id="fdpkho" style=""></div>
+<div id="fdpvzf" style=""></div>
 <script>
-graphDiv = document.getElementById("fdpkho");
+graphDiv = document.getElementById("fdpvzf");
 plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_pca_color.json');
 </script>
 
@@ -386,22 +386,22 @@ X_test_umap_mat = umap(<span class="hljs-built_in">Matrix</span>(X_test_scaled)&
 StatsPlots.scatter(X_test_umap_mat[<span class="hljs-number">1</span>, :], X_test_umap_mat[<span class="hljs-number">2</span>, :], group=y_test, alpha=<span class="hljs-number">0.3</span>, palette=:seaborn_bright)
 
 StatsPlots.scatter(X_test_umap_mat[<span class="hljs-number">1</span>, :], X_test_umap_mat[<span class="hljs-number">2</span>, :], group=r_kmachmeans.assignments, alpha=<span class="hljs-number">0.3</span>, palette=:seaborn_bright)</code></pre>
-<p>Coloured by real labels: <div id="fdpugb" style=""></div>
+<p>Coloured by real labels: <div id="fdprnw" style=""></div>
 <script>
-graphDiv = document.getElementById("fdpugb");
+graphDiv = document.getElementById("fdprnw");
 plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_umap_color.json');
 </script>
 </p>
-<p>Coloured by K means assigments: <div id="fdphpz" style=""></div>
+<p>Coloured by K means assigments: <div id="fdphda" style=""></div>
 <script>
-graphDiv = document.getElementById("fdphpz");
+graphDiv = document.getElementById("fdphda");
 plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_umap_colored_by_cluster.json');
 </script>
  </div> </div>
 <h2 id="outlook"><a href="#outlook" class="header-anchor">Outlook</a></h2>
 <p>Sometimes it might help to combine dimensionality reduction with a clustering algorithm. The previous exercise demonstrates that UMAP manages to seperate the data quite nicely even when going down to two dimensions. We could for example first reduce the dimension of the original data set to ten and then apply a clustering algorithm on this lower dimensional data.</p>
 <div class="page-foot">
-    <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> Gregor Ehrensperger, Peter Kandolf, Jonas Kusch. Last modified: July 19, 2022.
+    <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> Gregor Ehrensperger, Peter Kandolf, Jonas Kusch. Last modified: July 20, 2022.
     Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
 </div>
 </div><!-- CONTENT ENDS HERE -->
