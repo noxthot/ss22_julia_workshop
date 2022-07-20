@@ -318,7 +318,7 @@ X_test_umap_mat = umap(Matrix(X_test_scaled)', 2)
 
 StatsPlots.scatter(X_test_umap_mat[1, :], X_test_umap_mat[2, :], group=y_test, alpha=0.3, palette=:seaborn_bright)
 
-StatsPlots.scatter(X_test_umap_mat[1, :], X_test_umap_mat[2, :], group=r_kmachmeans.assignments, alpha=0.3, palette=:seaborn_bright)
+StatsPlots.scatter(X_test_umap_mat[1, :], X_test_umap_mat[2, :], group=r_machkmeans.assignments, alpha=0.3, palette=:seaborn_bright)
 ```
 
 Coloured by real labels:
