@@ -109,7 +109,9 @@ println("\nSimple mysimdsum2 = ", mysimdsum2(a))
 \show{./code/simd.jl}
 We can see a massive speed up (that will depend on the CPU architecture you are running your code on). What is interesting is, that the results of the three function calls are not the same. 
 
-This is do to the fact that the numerics involved are a bit tricky. In short, when adding floating point numbers you loose accuracy when adding a large number to a small number. This is exactly what is happening for our first example as we add all the numbers in one long sequence. 
+This is due to the fact that the numerics involved are a bit tricky. 
+In short, when adding floating point numbers you lose accuracy when adding a large number to a small number. 
+This is exactly what is happening for our first example as we add all the numbers in one long sequence. 
 
 The built-in `sum` function as well as the `@simd` macro allow Julia to change the order of the operations. In this specific case, it boils down to computing the result for the even and odd entries separately and therefore gaining a bit of accuracy.
 
