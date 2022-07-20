@@ -65,7 +65,7 @@ After the previous exercise you should have $46844$ rows in your data set.
 
 Let us try to get an overview over the yearly compensation. Again we can use `describe()`, just on that column, to get a more detailed summary statistics:
 ```julia-repl
-julia> describe(df_survey.ConvertedCompYearly)
+julia> describe(df_survey, cols=:ConvertedCompYearly)
 Summary Stats:
 Length:         46844
 Missing Count:  0
