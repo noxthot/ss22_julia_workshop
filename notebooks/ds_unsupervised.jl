@@ -82,6 +82,8 @@ md"""
 """
 
 # ╔═╡ b88b12c9-a70c-46db-82ff-1e15255fef01
+# ╠═╡ disabled = true
+#=╠═╡
 begin
 	# Instantiating the model
 	standardizer_model = Standardizer()
@@ -100,13 +102,20 @@ begin
 	X_test_scaled = DataFrame(X_test_scaled)
 	X_test_scaled .= ifelse.(isnan.(X_test_scaled), 0, X_test_scaled)
 end
+  ╠═╡ =#
 
 # ╔═╡ 0982df25-201c-4bfc-a406-cf8943caced8
 begin
 	PCA = @load PCA pkg=MultivariateStats
 	pca = PCA()
-	
-	mach_pca = machine(pca, X_test_scaled)
+end
+
+# ╔═╡ 077e29d9-222b-4af6-93a3-d10c68e28971
+scitype(X_test_tab) <: input_scitype(pca)
+
+# ╔═╡ d3ae10d1-dbc6-4471-a2c5-de29fff793ca
+begin	
+	mach_pca = machine(pca, X_test_tab)
 	fit!(mach_pca)
 end
 
@@ -120,7 +129,7 @@ end
 StatsPlots.plot(cumsum(explained_variance_ratios, dims=1))
 
 # ╔═╡ ae46e190-5a6e-477e-8991-3e7e3d2ad323
-X_test_pca = MLJ.transform(mach_pca, X_test_scaled)
+X_test_pca = MLJ.transform(mach_pca, X_test_tab)
 
 # ╔═╡ a5662c47-1e94-4b5a-86e0-4182ad9d63cd
 @df X_test_pca StatsPlots.scatter(:x1, :x2, alpha=0.5)
@@ -134,7 +143,7 @@ md"""
 """
 
 # ╔═╡ a6848fba-412d-4763-8cad-17ffdfb0338f
-X_test_umap_mat = umap(Matrix(X_test_scaled)', 2)
+X_test_umap_mat = umap(X_test', 2)
 
 # ╔═╡ 0dc3b39e-2ca2-4c1c-b434-119187946f5a
 md"""
@@ -2000,6 +2009,8 @@ version = "0.9.1+5"
 # ╟─e9fa43e0-2cbd-475c-904f-6b1c709c79c8
 # ╠═b88b12c9-a70c-46db-82ff-1e15255fef01
 # ╠═0982df25-201c-4bfc-a406-cf8943caced8
+# ╠═077e29d9-222b-4af6-93a3-d10c68e28971
+# ╠═d3ae10d1-dbc6-4471-a2c5-de29fff793ca
 # ╠═5d14fd44-0ed3-4442-a58a-c8ef70d2c855
 # ╠═95bcdd20-5728-44ba-9b01-68e775952315
 # ╠═ae46e190-5a6e-477e-8991-3e7e3d2ad323
