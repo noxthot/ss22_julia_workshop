@@ -172,6 +172,7 @@ df_survey[!, :EuroCompYearly] = 0.96 * df_survey[!, :ConvertedCompYearly]
 ```
 
 Here you find the solution for all manipulating tasks in this section.
+
 \collapssol{
 ```julia
 using CSV, DataFrames
@@ -187,6 +188,7 @@ filter!(x -> !ismissing(x.Gender) && (x.Gender in ["Man", "Woman"]), df_survey)
 
 df_survey[!, :EuroCompYearly] = 0.96 * df_survey[!, :ConvertedCompYearly]
 ```
+$~$
 }
 
 ## Case Studies
