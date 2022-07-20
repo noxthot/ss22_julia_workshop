@@ -14,6 +14,7 @@ end
 As an example, let us choose a number and check if this number is stored as a *Floating Point Number* (or float for short) or an *Integer*
 ```julia:./code/cd.jl
 number = 2
+
 if number isa Integer
     println("This number is an integer")
 end
@@ -22,6 +23,7 @@ end
 Now if this number is not an integer, we would like to print out this information. This can be done with the `else` statement
 ```julia:./code/cd.jl
 number  = 2.0
+
 if number isa Integer
     println("This number is an integer")
 else
@@ -32,6 +34,7 @@ end
 Moreover, if we want to check whether the number is a float in case it is not an integer we can use the `elseif` statement
 ```julia:./code/cd.jl
 number  = 2.0
+
 if number isa Integer
     println("This number is an integer")
 elseif number isa AbstractFloat
@@ -44,11 +47,13 @@ end
 Note that in comparison to other programming languages, `if` blocks can define new variables which can be used outside of these blocks.
 ```julia:./code/cd.jl
 number  = 2.0
+
 if number isa Integer
     info = "This number is an integer"
 else
     info = "This number is not an integer"
 end
+
 println(info)
 ```
 \show{./code/cd.jl}
