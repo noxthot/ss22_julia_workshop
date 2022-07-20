@@ -10,6 +10,11 @@ using Arrow, CSV, DataFrames, PlotlyJS, StatsBase, StatsPlots, Statistics
 # ╔═╡ df99cc37-73c4-4934-9a02-964130610900
 plotlyjs()
 
+# ╔═╡ c21abdfa-1a9d-4bee-862d-3a67dfc9dbb1
+md"""
+# Introduction
+"""
+
 # ╔═╡ eb1032f2-49d1-4d99-9f6e-9adf51fd63c6
 DataFrame()
 
@@ -40,6 +45,16 @@ DataFrame(mydict)
 # ╔═╡ b415bf0b-ddaa-44c8-920b-d061c44fb0b5
 pwd()
 
+# ╔═╡ 3fbf75d9-a69b-4d7d-bafe-58e1f6bc3711
+md"""
+# Working with real data
+"""
+
+# ╔═╡ bf0b1348-d2c5-4bd0-acac-42ae95763e6d
+md"""
+## First try to load the data
+"""
+
 # ╔═╡ 376eca85-2d9a-4bc4-964f-6f282c8fc44c
 df_survey = CSV.read(joinpath("..", "survey_results_public.csv"), DataFrame)
 
@@ -52,20 +67,40 @@ selcols = ["Age", "Country", "ConvertedCompYearly", "DevType", "Employment", "Et
 # ╔═╡ e7eead5e-27cb-4507-9bb6-72c636aa4829
 df_survey[!, selcols]
 
+# ╔═╡ 785784a8-b697-4560-abb6-97f8c2acc804
+md"""
+## Loading the data correctly
+"""
+
 # ╔═╡ 73a95010-0e4d-4471-a684-9fd2c82f3c3d
 df_survey_corr = CSV.read(joinpath("..", "survey_results_public.csv"), DataFrame; missingstring="NA", select=selcols)
+
+# ╔═╡ f00b2223-8e12-40ae-964c-53f181ab85c6
+md"""
+Checking whether it makes sense that `YearsCode` is of type String
+"""
 
 # ╔═╡ bb22edc4-72e9-4fe7-834e-8a0412e570a0
 unique(df_survey_corr.YearsCode)
 
+# ╔═╡ ceaf27a4-dce2-4bd7-9e21-454c05f4dc5b
+md"""
+## Demonstration of writing to and reading from an arrow file
+"""
+
 # ╔═╡ e2ccf24a-67b7-49cb-81cc-5c0d67ccb39b
-Arrow.write("survey.arrow", df_survey_corr)
+Arrow.write(joinpath("..", "survey.arrow"), df_survey_corr)
 
 # ╔═╡ 26f15db0-8bc6-46c1-93da-9c5230d14937
-DataFrame(Arrow.columntable(Arrow.Table("survey.arrow")))
+DataFrame(Arrow.columntable(Arrow.Table(joinpath("..", "survey.arrow"))))
 
 # ╔═╡ 5cfd8a92-b9ca-420b-91af-33b14fdf666b
 describe(df_survey_corr)
+
+# ╔═╡ afd5642a-3197-4f10-acf6-abdb7b58ff64
+md"""
+## Data transformations
+"""
 
 # ╔═╡ 1c41ac0e-c5f9-4c3a-8d45-e0837c2831ce
 begin
@@ -83,6 +118,11 @@ end;
 # ╔═╡ cf5d38e2-e870-4dd1-b8bf-f019558de8a4
 df_survey_transf
 
+# ╔═╡ 644b80f7-77a0-4c29-8744-8c4b4a8b20e1
+md"""
+## First Visualizations
+"""
+
 # ╔═╡ 418e6c81-8cd3-4284-b814-e839a143c599
 describe(df_survey_transf, cols=:ConvertedCompYearly)
 
@@ -92,8 +132,15 @@ describe(df_survey_transf, cols=:ConvertedCompYearly)
 # ╔═╡ eed090c9-eaf2-421f-9706-d6f3f83aec81
 StatsPlots.plot(sort(df_survey_transf.ConvertedCompYearly), (1:nrow(df_survey_transf)) ./ nrow(df_survey_transf))
 
-# ╔═╡ 36f34386-8f53-448d-ab96-4da38b55c16e
-filter(x -> x.ConvertedCompYearly > 1e6, df_survey_transf)
+# ╔═╡ f0fe4138-0dec-45e7-8eba-8d22e3fb0d56
+md"""
+## Case studies
+"""
+
+# ╔═╡ eabf2258-8c8b-4325-8e28-7a52c7dd0c9a
+md"""
+### Solved by data frame operations
+"""
 
 # ╔═╡ 7f46dc30-f3e2-489f-bdf7-73103e333d02
 combine(groupby(df_survey_transf, :Country), nrow => :count)
@@ -110,8 +157,10 @@ combine(groupby(df_survey_transf, :isdatascientist), :EuroCompYearly => median)
 # ╔═╡ c2d46319-c28a-4178-a2de-6f22244bd650
 combine(groupby(df_survey_transf, [:Country, :isdatascientist]), nrow => :count)
 
-# ╔═╡ c93af3bd-ddb9-4390-b467-5364cb17663a
-countmap(df_survey_transf.Country)
+# ╔═╡ 5d494db6-5e4e-4b95-9cb3-2adfdc1bde50
+md"""
+### Solved by visualizations
+"""
 
 # ╔═╡ ffc3ca96-f789-4e3e-8a34-004dbd5218f6
 @df df_survey_transf StatsPlots.bar(countmap(:Country), legend=false)
@@ -1511,33 +1560,42 @@ version = "0.9.1+5"
 # ╔═╡ Cell order:
 # ╠═9c6d9602-07e4-11ed-00a6-bbdc7e63f6c6
 # ╠═df99cc37-73c4-4934-9a02-964130610900
+# ╟─c21abdfa-1a9d-4bee-862d-3a67dfc9dbb1
 # ╠═eb1032f2-49d1-4d99-9f6e-9adf51fd63c6
 # ╠═618fc033-4841-4a11-85f3-2059faaf1775
 # ╠═8461f411-39ea-4f81-80a9-8fb9d0ad39b3
 # ╠═cd7b80b6-fc60-4852-a75c-47093e1778ff
 # ╠═99070004-fd4f-4d0f-af1c-6076ab12db93
 # ╠═b415bf0b-ddaa-44c8-920b-d061c44fb0b5
+# ╟─3fbf75d9-a69b-4d7d-bafe-58e1f6bc3711
+# ╟─bf0b1348-d2c5-4bd0-acac-42ae95763e6d
 # ╠═376eca85-2d9a-4bc4-964f-6f282c8fc44c
 # ╠═58df7bd4-89c6-489a-91b4-2d683025997a
 # ╠═e0e283a4-e3e7-467c-b695-95921f5076eb
 # ╠═e7eead5e-27cb-4507-9bb6-72c636aa4829
+# ╟─785784a8-b697-4560-abb6-97f8c2acc804
 # ╠═73a95010-0e4d-4471-a684-9fd2c82f3c3d
+# ╟─f00b2223-8e12-40ae-964c-53f181ab85c6
 # ╠═bb22edc4-72e9-4fe7-834e-8a0412e570a0
+# ╠═ceaf27a4-dce2-4bd7-9e21-454c05f4dc5b
 # ╠═e2ccf24a-67b7-49cb-81cc-5c0d67ccb39b
 # ╠═26f15db0-8bc6-46c1-93da-9c5230d14937
 # ╠═5cfd8a92-b9ca-420b-91af-33b14fdf666b
+# ╟─afd5642a-3197-4f10-acf6-abdb7b58ff64
 # ╠═1c41ac0e-c5f9-4c3a-8d45-e0837c2831ce
 # ╠═cf5d38e2-e870-4dd1-b8bf-f019558de8a4
+# ╟─644b80f7-77a0-4c29-8744-8c4b4a8b20e1
 # ╠═418e6c81-8cd3-4284-b814-e839a143c599
 # ╠═4c051d53-1a69-4548-8327-6db0b021a05f
 # ╠═eed090c9-eaf2-421f-9706-d6f3f83aec81
-# ╠═36f34386-8f53-448d-ab96-4da38b55c16e
+# ╟─f0fe4138-0dec-45e7-8eba-8d22e3fb0d56
+# ╟─eabf2258-8c8b-4325-8e28-7a52c7dd0c9a
 # ╠═7f46dc30-f3e2-489f-bdf7-73103e333d02
 # ╠═ac5feebd-7885-4a0a-b463-89ce2064d31e
 # ╠═bac40578-366d-4a1e-b674-e4aa4036ceed
 # ╠═897d9e7d-eb2b-4e4a-9c12-e44545a5dd48
 # ╠═c2d46319-c28a-4178-a2de-6f22244bd650
-# ╠═c93af3bd-ddb9-4390-b467-5364cb17663a
+# ╟─5d494db6-5e4e-4b95-9cb3-2adfdc1bde50
 # ╠═ffc3ca96-f789-4e3e-8a34-004dbd5218f6
 # ╠═7664f335-50d4-4a10-bf65-6c4e30086fac
 # ╠═9ed82f5d-7ece-42b2-a115-c9a7f7810f4c
