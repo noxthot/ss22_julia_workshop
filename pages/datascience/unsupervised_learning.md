@@ -226,7 +226,14 @@ y_test = df_test.targets
 $~$
 }
 
-To standardize the data we need to do the following (the data `X_test` was already loaded before):
+In our case standardizing the data leads to various problems:
+- Some pixels are always `0`.
+- The variance in a few pixels is very low.
+
+And since we are working with "clean" image data, we want to keep every pixel on the same scale, so for convenience reasons we skip the standardizing here.
+
+\example{
+For the sake of completeness we demonstrate how the built-in `Standardizer` of `MLJ` can be applied. But unfortunately it scales each of the $784$ columns separately which we definately do not want in our case. 
 ```julia
 # Instantiating the model
 standardizer_model = Standardizer()
@@ -244,15 +251,16 @@ X_test_scaled = MLJ.transform(mach_standardizer, X_test_tab)
 X_test_scaled = DataFrame(X_test_scaled)
 X_test_scaled .= ifelse.(isnan.(X_test_scaled), 0, X_test_scaled)
 ```
+}
 
-Once we have the standardized data we are ready for applying the principal component analysis in the same fashion:
+We are now ready for applying the principal component analysis in the same fashion:
 ```julia
 using MLJMultivariateStatsInterface
 
 PCA = @load PCA pkg=MultivariateStats
 pca = PCA()
 
-mach_pca = machine(pca, X_test_scaled)
+mach_pca = machine(pca, X_test_tab)
 fit!(mach_pca)
 ```
 
@@ -277,7 +285,7 @@ StatsPlots.plot(cumsum(explained_variance_ratios, dims=1))
 We observe that we only explain around 10% of the variance with two dimensions and we need roughly 115 dimensions to explain 80% of the variance. With other words: our projection loses a lot of information, but we still give it a try and visualize the transformed data. Keep in mind that we are projecting 784 dimensions into a two-dimensional space.
 
 ```julia
-X_test_pca = MLJ.transform(mach_pca, X_test_scaled)
+X_test_pca = MLJ.transform(mach_pca, X_test_tab)
 
 @df X_test_pca StatsPlots.scatter(:x1, :x2, alpha=0.5)
 ```
@@ -303,8 +311,8 @@ But still we have to keep in mind that we lost a lot of information when transfo
 
 \exercise{In this exercise we will use a different dimensionality reduction method called *Uniform Manifold Approximation and Projection* (UMAP). Down to its core and very simply speaking, UMAP constructs a high dimensional graph representation of the data set and then tries to fit a low-dimensional graph to be structurally as similar as possible. To get a better understanding, there is also a nice [webpage with interactive explanations](https://pair-code.github.io/understanding-umap/). Unfortunately, this method is also not included in `MLJ.jl`, so we need to load [`UMAP.jl`](https://github.com/dillondaudert/UMAP.jl) directly. Follow this steps to get a nice dimensionality reduction with `UMAP.jl`:
 1. Add and use `UMAP.jl`
-1. `X_test_scaled` is of type `DataFrame` which is not supported by `UMAP.jl`. Convert the dataframe into a `Matrix`.
-1. Also, our data is stored in row wise fashion (each observation is one row). `UMAP.jl` expects a column-major matrix, so we need to transpose the matrix.
+1. `UMAP` expects a `Matrix` as input. Luckily we already have that: `X_test`.
+1. But `X_test` is stored in row wise fashion (each observation is one row). `UMAP.jl` expects a column-major matrix, so we need to transpose the matrix.
 1. Have a look at the manual of `umap`, apply the function on the transposed matrix and reduce the dimension to $2$. Note that this computation might needs a couple of minutes.
 1. Store the result in `X_test_umap_mat` and visualize the result with `StatsPlots.scatter(X_test_umap_mat[1, :], X_test_umap_mat[2, :], group=y_test, alpha=0.3, palette=:seaborn_bright)`.
 1. Reuse the code for previous scatter plot but replace the coloring by the results of the K means clustering algorithm `r_kmachmeans.assignments`.
@@ -314,7 +322,7 @@ But still we have to keep in mind that we lost a lot of information when transfo
 ```julia
 using UMAP
 
-X_test_umap_mat = umap(Matrix(X_test_scaled)', 2)
+X_test_umap_mat = umap(Matrix(X_test)', 2)
 
 StatsPlots.scatter(X_test_umap_mat[1, :], X_test_umap_mat[2, :], group=y_test, alpha=0.3, palette=:seaborn_bright)
 
