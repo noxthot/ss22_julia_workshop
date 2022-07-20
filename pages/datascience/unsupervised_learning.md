@@ -208,7 +208,7 @@ Since PCA is sensitive to the scaling of variables, input data is usually standa
 @@
 
 ### Application
-Since we decided to use `MLJ.jl` as a meta package, it is easy to scale the data and also apply the PCA. For scaling the data we will use the `Standardizer()` which is part of MLJs [built-in transformers](https://alan-turing-institute.github.io/MLJ.jl/v0.2/built_in_transformers/).
+Since we decided to use `MLJ.jl` as a meta package, it would be easy to scale the data and also apply the PCA. For scaling the data we could use the `Standardizer()` which is part of MLJs [built-in transformers](https://alan-turing-institute.github.io/MLJ.jl/v0.2/built_in_transformers/).
 
 In case you have a fresh REPL, you can start off with this code:
 
@@ -226,7 +226,7 @@ y_test = df_test.targets
 $~$
 }
 
-In our case standardizing the data leads to various problems:
+But in our case standardizing the data leads to various problems:
 - Some pixels are always `0`.
 - The variance in a few pixels is very low.
 
@@ -251,6 +251,8 @@ X_test_scaled = MLJ.transform(mach_standardizer, X_test_tab)
 X_test_scaled = DataFrame(X_test_scaled)
 X_test_scaled .= ifelse.(isnan.(X_test_scaled), 0, X_test_scaled)
 ```
+
+But one could think of just standardizing over all the columns simultaneously.
 }
 
 We are now ready for applying the principal component analysis in the same fashion:
