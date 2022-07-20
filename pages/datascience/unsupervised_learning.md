@@ -177,9 +177,7 @@ using StatsPlots; gr()
 function plot_clustercenter(report, i)
     cc = report.cluster_centers[:, i]  # get one cluster
     cc_reshaped = reshape(cc, 28, 28)    # reshape from flat to 2D
-    StatsPlots.plot(convert(Matrix{Gray}, cc_reshaped')) # Correctly rotate the image, transform to grey and show with StatsPlots
-    
-    return nothing
+    return StatsPlots.plot(convert(Matrix{Gray}, cc_reshaped')) # Correctly rotate the image, transform to grey and show with StatsPlots
 end
 ```
 
