@@ -325,6 +325,7 @@ pca = PCA()
 
 mach_pca = machine(pca, X_test_scaled)
 fit!(mach_pca)</code></pre>
+<p>In case you get an exception <code>MethodError: no method matching size&#40;::MultivariateStats.PCA&#123;Float64&#125;, ::Int64&#41;</code> when running this code, be sure to add / update <code>MultivariateStats</code> to at least <code>0.9.1</code>. There unfortunately seems to be a bug in <code>0.9.0</code>.</p>
 <p>We did not give a target dimension to <code>PCA&#40;&#41;</code> so by default it is using as many dimensions as there are needed to preserve 99&#37; of the variance of the original data &#40;in our case we need 486 components&#41;. Before we look at the principal components, we are interested to check how the number of principal components relate to the explained variance ratios for our data sample. Therefore, we need to access the <code>principalvars</code> &#40;a list of values&#41; and divide by the total explained variance <code>tvar</code>. Both values are accessible in the report:</p>
 <pre><code class="julia hljs">r_pca = report(mach_pca)
 
@@ -333,9 +334,9 @@ explained_variance_ratios = r_pca.principalvars / r_pca.tvar</code></pre>
 <pre><code class="julia hljs"><span class="hljs-keyword">using</span> StatsPlots; plotlyjs()
 
 StatsPlots.plot(cumsum(explained_variance_ratios, dims=<span class="hljs-number">1</span>))</code></pre>
-<div id="fdpgol" style=""></div>
+<div id="fdpcqf" style=""></div>
 <script>
-graphDiv = document.getElementById("fdpgol");
+graphDiv = document.getElementById("fdpcqf");
 plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_pca_explained_variance.json');
 </script>
 
@@ -344,18 +345,18 @@ plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datas
 
 <span class="hljs-meta">@df</span> X_test_pca StatsPlots.scatter(:x1, :x2, alpha=<span class="hljs-number">0.5</span>)</code></pre>
 <p><code>:x1</code> and <code>:x2</code> are the names of the first two columns &#40;principal components&#41; in <code>X_test_pca</code> and <code>alpha</code> is added for transparency such that we get an idea about the density of the data points.</p>
-<div id="fdpako" style=""></div>
+<div id="fdpixk" style=""></div>
 <script>
-graphDiv = document.getElementById("fdpako");
+graphDiv = document.getElementById("fdpixk");
 plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_pca_nocolor.json');
 </script>
 
 <p>This might not seem to be very helpful at first, but in this case we actually have labeled data available and to demonstrate the power of PCA, we will use that labels to add ten colors to this plot. Each digit will get its own color in this plot:</p>
 <pre><code class="julia hljs"><span class="hljs-meta">@df</span> X_test_pca StatsPlots.scatter(:x1, :x2, group=y_test, alpha=<span class="hljs-number">0.5</span>, palette=:seaborn_bright)</code></pre>
 <p><code>y_test</code> contains our labels, <code>group</code> tells <code>StatsPlots</code> to use that labels for coloring and the <code>palette</code> is set to a <a href="https://docs.juliaplots.org/latest/generated/colorschemes/">colormap</a> which distinguishes nicely between ten groups.</p>
-<div id="fdpwgq" style=""></div>
+<div id="fdpybv" style=""></div>
 <script>
-graphDiv = document.getElementById("fdpwgq");
+graphDiv = document.getElementById("fdpybv");
 plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_pca_color.json');
 </script>
 
@@ -384,17 +385,17 @@ X_test_umap_mat = umap(<span class="hljs-built_in">Matrix</span>(X_test_scaled)&
 
 StatsPlots.scatter(X_test_umap_mat[<span class="hljs-number">1</span>, :], X_test_umap_mat[<span class="hljs-number">2</span>, :], group=y_test, alpha=<span class="hljs-number">0.3</span>, palette=:seaborn_bright)
 
-StatsPlots.scatter(X_test_umap_mat[<span class="hljs-number">1</span>, :], X_test_umap_mat[<span class="hljs-number">2</span>, :], group=r_kmachmeans.assignments, alpha=<span class="hljs-number">0.3</span>, palette=:seaborn_bright)</code></pre>
+StatsPlots.scatter(X_test_umap_mat[<span class="hljs-number">1</span>, :], X_test_umap_mat[<span class="hljs-number">2</span>, :], group=r_machkmeans.assignments, alpha=<span class="hljs-number">0.3</span>, palette=:seaborn_bright)</code></pre>
 <p>Coloured by real labels:</p>
-<div id="fdpdpf" style=""></div>
+<div id="fdplbc" style=""></div>
 <script>
-graphDiv = document.getElementById("fdpdpf");
+graphDiv = document.getElementById("fdplbc");
 plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_umap_color.json');
 </script>
 
-<p>Coloured by K means assigments: <div id="fdpywk" style=""></div>
+<p>Coloured by K means assigments: <div id="fdpvil" style=""></div>
 <script>
-graphDiv = document.getElementById("fdpywk");
+graphDiv = document.getElementById("fdpvil");
 plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_umap_colored_by_cluster.json');
 </script>
  </div> </div>
