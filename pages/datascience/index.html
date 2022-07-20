@@ -114,7 +114,8 @@
 
 <!-- Content appended here (in class franklin-content) -->
 <div class="franklin-content"><h1 id="data_science"><a href="#data_science" class="header-anchor">Data Science</a></h1>
-<p>In recent years Data Science became one of the very hot topics as can be seen in <a href="https://trends.google.de/trends/explore?date&#61;all&amp;q&#61;data&#37;20science">Google Trends</a>: <img src="/ss22_julia_workshop/assets/pages/datascience/datascience_googletrend.png" alt="radiation therapy"></p>
+<p>In recent years Data Science became one of the very hot topics as can be seen in <a href="https://trends.google.de/trends/explore?date&#61;all&amp;q&#61;data&#37;20science">Google Trends</a>:</p>
+<img src="/ss22_julia_workshop/assets/pages/datascience/datascience_googletrend.png" alt="radiation therapy">
 <p>Data science is an interdisciplinary field that uses various techniques and algorithms from statistics, mathematical modeling, pattern recognition, machine learning, and many more to gain insights from structured and unstructured data.</p>
 <p>Of course we can only tackle very specific topics of this huge ecosystem within this workshop. We will briefly talk about the following topics:</p>
 <ul>
@@ -222,7 +223,7 @@
   }
 </script>
 
-<script>
+<!--<script>
   var coll = document.getElementsByClassName("solutioncollapsible");
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
@@ -231,5 +232,22 @@
     for (i = 0; i < coll.length; i++) {
       coll[i].style.display = "block";
     }
+  }
+</script>
+-->
+<script>
+  var coll = document.getElementsByClassName("solution");
+  var i;
+
+  for (i = 0; i < coll.length; i++) {
+    coll[i].addEventListener("click", function() {
+      this.classList.toggle("active");
+      var content = this.nextElementSibling;
+      if (content.style.display === "block") {
+        content.style.display = "none";
+      } else {
+        content.style.display = "block";
+      }
+    });
   }
 </script>
