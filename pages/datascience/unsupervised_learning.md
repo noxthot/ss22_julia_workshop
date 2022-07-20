@@ -256,6 +256,8 @@ mach_pca = machine(pca, X_test_scaled)
 fit!(mach_pca)
 ```
 
+In case you get an exception `MethodError: no method matching size(::MultivariateStats.PCA{Float64}, ::Int64)` when running this code, be sure to add / update `MultivariateStats` to at least `0.9.1`. There unfortunately seems to be a bug in `0.9.0`.
+
 We did not give a target dimension to `PCA()` so by default it is using as many dimensions as there are needed to preserve 99% of the variance of the original data (in our case we need 486 components). Before we look at the principal components, we are interested to check how the number of principal components relate to the explained variance ratios for our data sample. Therefore, we need to access the `principalvars` (a list of values) and divide by the total explained variance `tvar`. Both values are accessible in the report:
 ```julia
 r_pca = report(mach_pca)
