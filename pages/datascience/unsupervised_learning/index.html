@@ -241,7 +241,7 @@ mach_kmeans = machine(model_kmeans, X_test_tab)
 
 <span class="hljs-comment"># Fitting the model&#x27;s parameters</span>
 fit!(mach_kmeans)</code></pre>
-<p>After fitting the model, we hopefully found ten representive cluster centers. With <code>report&#40;mach_kmeans&#41;</code> we can have a look at the <em>training</em> &#40;fitting&#41; results. </p>
+<p>After fitting the model, we hopefully found ten representative cluster centers. With <code>report&#40;mach_kmeans&#41;</code> we can have a look at the <em>training</em> &#40;fitting&#41; results. </p>
 <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> r_machkmeans = report(mach_kmeans)
 </span>(cluster_centers = [0.0 0.0 … 0.0 0.0; 0.0 0.0 … 0.0 0.0; … ; 0.0 0.0 … 0.0 0.0; 0.0 0.0 … 0.0 0.0],
  iterations = 104,
@@ -273,7 +273,8 @@ fit!(mach_kmeans)</code></pre>
     
     <span class="hljs-keyword">return</span> <span class="hljs-literal">nothing</span>
 <span class="hljs-keyword">end</span></code></pre>
-<p>In our case the ten cluster centers look like this: <img src="/ss22_julia_workshop/assets/pages/datascience/unsupervised_clusters_kmeans.png" alt="Cluster centers - KMeans"></p>
+<p>In our case the ten cluster centers look like this:</p>
+<img src="/ss22_julia_workshop/assets/pages/datascience/unsupervised_clusters_kmeans.png" alt="Cluster centers - KMeans">
 <p>We can clearly recognize the numbers <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0</span></span></span></span>, <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn></mrow><annotation encoding="application/x-tex">2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">2</span></span></span></span>, <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>3</mn></mrow><annotation encoding="application/x-tex">3</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">3</span></span></span></span>, <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>6</mn></mrow><annotation encoding="application/x-tex">6</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">6</span></span></span></span>, <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>8</mn></mrow><annotation encoding="application/x-tex">8</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">8</span></span></span></span>, <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>9</mn></mrow><annotation encoding="application/x-tex">9</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">9</span></span></span></span>, but obviously it is more difficile for numbers <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn></mrow><annotation encoding="application/x-tex">1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span>, <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>4</mn></mrow><annotation encoding="application/x-tex">4</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">4</span></span></span></span>, <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>5</mn></mrow><annotation encoding="application/x-tex">5</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">5</span></span></span></span>, <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>7</mn></mrow><annotation encoding="application/x-tex">7</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">7</span></span></span></span>. When looking closely, we see parts of the silhouettes too, but we are of course not completely happy with this fit. We might be able to grasp more of the underlying structure by increasing the number of clusters.</p>
 <button type="button" class="collapsible" style="background-color:#b5ddff"> Exercise </button><div class="collapsiblecontent">  Rerun this experiment with 20 clusters centers and evaluate the results. </div>
 <h2 id="dimensionality_reduction_principal_component_analysis"><a href="#dimensionality_reduction_principal_component_analysis" class="header-anchor">Dimensionality Reduction &#40;Principal Component Analysis&#41;</a></h2>
@@ -281,12 +282,13 @@ fit!(mach_kmeans)</code></pre>
 <p>Simply speaking, the <em>principal component analysis</em> &#40;PCA&#41; is a technique used for reducing the dimensionality of data while preserving as much of the information that is contained in the original data. PCA does so by projecting the data points onto a lower-dimensional subspace while trying to keep the variance among the data set.</p>
 <p>Technically speaking, the <em>principal components</em> are the eigenvectors of the data&#39;s covariance matrix.</p>
 <p>The dimension of the original data is then reduced to <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">n</span></span></span></span> by projecting the data using the first <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">n</span></span></span></span> eigenvectors. Please note that the resulting projected data are essentially linear combinations of the original data which capture most of the variance in the original data.</p>
-<p>An illustration is shown here: 
+<p>An illustration is shown here:</p>
+
 <figure style="text-align:center;">
 <img src="/ss22_julia_workshop/assets/pages/datascience/GaussianScatterPCA.png" style="padding:0; " alt=" Principal Component Analysis"/>
 <figcaption> Principal Component Analysis Original source: <p style="font-size:11px"><a href=" https://de.wikipedia.org/wiki/Hauptkomponentenanalyse#/media/Datei:GaussianScatterPCA.svg"> https://de.wikipedia.org/wiki/Hauptkomponentenanalyse#/media/Datei:GaussianScatterPCA.svg</a></p></figcaption>
 </figure>
-</p>
+
 <div class="important">Since PCA is sensitive to the scaling of variables, input data is usually standardized prior application of the algorithm.</div>
 <h3 id="application__2"><a href="#application__2" class="header-anchor">Application</a></h3>
 <p>Since we decided to use <code>MLJ.jl</code> as a meta package, it is easy to scale the data and also apply the PCA. For scaling the data we will use the <code>Standardizer&#40;&#41;</code> which is part of MLJs <a href="https://alan-turing-institute.github.io/MLJ.jl/v0.2/built_in_transformers/">built-in transformers</a>.</p>
@@ -334,9 +336,9 @@ explained_variance_ratios = r_pca.principalvars / r_pca.tvar</code></pre>
 <pre><code class="julia hljs"><span class="hljs-keyword">using</span> StatsPlots; plotlyjs()
 
 StatsPlots.plot(cumsum(explained_variance_ratios, dims=<span class="hljs-number">1</span>))</code></pre>
-<div id="fdphoj" style=""></div>
+<div id="fdpxet" style=""></div>
 <script>
-graphDiv = document.getElementById("fdphoj");
+graphDiv = document.getElementById("fdpxet");
 plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_pca_explained_variance.json');
 </script>
 
@@ -345,18 +347,18 @@ plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datas
 
 <span class="hljs-meta">@df</span> X_test_pca StatsPlots.scatter(:x1, :x2, alpha=<span class="hljs-number">0.5</span>)</code></pre>
 <p><code>:x1</code> and <code>:x2</code> are the names of the first two columns &#40;principal components&#41; in <code>X_test_pca</code> and <code>alpha</code> is added for transparency such that we get an idea about the density of the data points.</p>
-<div id="fdppnc" style=""></div>
+<div id="fdpgma" style=""></div>
 <script>
-graphDiv = document.getElementById("fdppnc");
+graphDiv = document.getElementById("fdpgma");
 plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_pca_nocolor.json');
 </script>
 
 <p>This might not seem to be very helpful at first, but in this case we actually have labeled data available and to demonstrate the power of PCA, we will use that labels to add ten colors to this plot. Each digit will get its own color in this plot:</p>
 <pre><code class="julia hljs"><span class="hljs-meta">@df</span> X_test_pca StatsPlots.scatter(:x1, :x2, group=y_test, alpha=<span class="hljs-number">0.5</span>, palette=:seaborn_bright)</code></pre>
 <p><code>y_test</code> contains our labels, <code>group</code> tells <code>StatsPlots</code> to use that labels for coloring and the <code>palette</code> is set to a <a href="https://docs.juliaplots.org/latest/generated/colorschemes/">colormap</a> which distinguishes nicely between ten groups.</p>
-<div id="fdpiol" style=""></div>
+<div id="fdpxrh" style=""></div>
 <script>
-graphDiv = document.getElementById("fdpiol");
+graphDiv = document.getElementById("fdpxrh");
 plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_pca_color.json');
 </script>
 
@@ -386,20 +388,21 @@ X_test_umap_mat = umap(<span class="hljs-built_in">Matrix</span>(X_test_scaled)&
 StatsPlots.scatter(X_test_umap_mat[<span class="hljs-number">1</span>, :], X_test_umap_mat[<span class="hljs-number">2</span>, :], group=y_test, alpha=<span class="hljs-number">0.3</span>, palette=:seaborn_bright)
 
 StatsPlots.scatter(X_test_umap_mat[<span class="hljs-number">1</span>, :], X_test_umap_mat[<span class="hljs-number">2</span>, :], group=r_kmachmeans.assignments, alpha=<span class="hljs-number">0.3</span>, palette=:seaborn_bright)</code></pre>
-<p>Coloured by real labels: <div id="fdpxwd" style=""></div>
+<p>Coloured by real labels:</p>
+<div id="fdpetn" style=""></div>
 <script>
-graphDiv = document.getElementById("fdpxwd");
+graphDiv = document.getElementById("fdpetn");
 plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_umap_color.json');
 </script>
-</p>
-<p>Coloured by K means assigments: <div id="fdptzu" style=""></div>
+
+<p>Coloured by K means assigments: <div id="fdpwab" style=""></div>
 <script>
-graphDiv = document.getElementById("fdptzu");
+graphDiv = document.getElementById("fdpwab");
 plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_umap_colored_by_cluster.json');
 </script>
  </div> </div>
 <h2 id="outlook"><a href="#outlook" class="header-anchor">Outlook</a></h2>
-<p>Sometimes it might help to combine dimensionality reduction with a clustering algorithm. The previous exercise demonstrates that UMAP manages to seperate the data quite nicely even when going down to two dimensions. We could for example first reduce the dimension of the original data set to ten and then apply a clustering algorithm on this lower dimensional data.</p>
+<p>Sometimes it might help to combine dimensionality reduction with a clustering algorithm. The previous exercise demonstrates that UMAP manages to separate the data quite nicely even when going down to two dimensions. We could for example first reduce the dimension of the original data set to ten and then apply a clustering algorithm on this lower dimensional data.</p>
 <div class="page-foot">
     <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> Gregor Ehrensperger, Peter Kandolf, Jonas Kusch. Last modified: July 20, 2022.
     Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
