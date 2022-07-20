@@ -467,7 +467,7 @@ xlabel!(<span class="hljs-string">&quot;x&quot;</span>)</code></pre>
   }
 </script>
 
-<!--<script>
+<script>
   var coll = document.getElementsByClassName("solutioncollapsible");
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
@@ -476,22 +476,5 @@ xlabel!(<span class="hljs-string">&quot;x&quot;</span>)</code></pre>
     for (i = 0; i < coll.length; i++) {
       coll[i].style.display = "block";
     }
-  }
-</script>
--->
-<script>
-  var coll = document.getElementsByClassName("solution");
-  var i;
-
-  for (i = 0; i < coll.length; i++) {
-    coll[i].addEventListener("click", function() {
-      this.classList.toggle("active");
-      var content = this.nextElementSibling;
-      if (content.style.display === "block") {
-        content.style.display = "none";
-      } else {
-        content.style.display = "block";
-      }
-    });
   }
 </script>
