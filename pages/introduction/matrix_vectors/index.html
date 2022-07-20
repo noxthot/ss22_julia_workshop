@@ -147,7 +147,7 @@
  0.0
  0.5
  1.0</code></pre>
-<p>We can now do operations on a vector in the usual fashion:</p>
+<p>Note, <a href="https://docs.julialang.org/en/v1/base/math/#Base.range"><code>range</code></a> returns a specialized array that optimizes storage, therefore we have to use <code>collect</code> to get a standard array.  We can now do operations on a vector in the usual fashion:</p>
 <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> v * <span class="hljs-number">2</span>
 </span>3-element Vector{Int64}:
  2
