@@ -30,7 +30,11 @@ That is about all we wanted to let you know, so let us get into it.
 ## Setup
 
 @@important
-We ask you to install Julia, VSCode and the Julia plug-in for VSCode **before** the workshop so we can get right into the lecture. If you have difficulties please let us know and we update the content on this page. 
+We ask you to install Julia, VSCode and the Julia extension for VSCode **before** the workshop so we can get right into the lecture. If you have difficulties please let us know and we update the content on this page. 
+@@
+
+@@important
+This workshop was prepared with Julia v1.7.3.
 @@
 
 Follow the setup in this section to install everything that is required to get started.
