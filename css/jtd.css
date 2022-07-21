@@ -259,9 +259,14 @@ SIDE BAR
 
 .menu-list-child-list .menu-list-item:hover {
   background-color: #cfe4ff;
-  color: white;
   border-bottom-left-radius: 0.5rem;
   border-top-left-radius: 0.5rem;
+}
+
+.menu-list-child-list .menu-list-item .active:hover {
+  background-color: parent;
+  border-radius: 0rem;
+  border-radius: 0rem;
 }
 
 .menu-list-link {
