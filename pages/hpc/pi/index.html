@@ -156,7 +156,7 @@
 </li>
 </ol>
 <p>Help: The function <code>rand&#40;&#41;</code> will give you a uniformly scattered point in the interval <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">[</mo><mn>0</mn><mo separator="true">,</mo><mn>1</mn><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">[0,1]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord">0</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">1</span><span class="mclose">]</span></span></span></span>. <div class="solution"> Solution </div><div class="solutioncollapsible">  </p>
-<pre><code class="julia hljs"><span class="hljs-keyword">function</span> in_unit_circle(N::<span class="hljs-built_in">Int64</span>)
+<pre><code class="julia hljs"><span class="hljs-keyword">function</span> in_unit_circle(N::<span class="hljs-built_in">Integer</span>)
     M = <span class="hljs-number">0</span>
     
     <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-number">1</span>:N
@@ -168,11 +168,11 @@
     <span class="hljs-keyword">return</span> M
 <span class="hljs-keyword">end</span>
 
-<span class="hljs-keyword">function</span> estimate_pi(f::<span class="hljs-built_in">Function</span>, N::<span class="hljs-built_in">Int64</span>)
+<span class="hljs-keyword">function</span> estimate_pi(f::<span class="hljs-built_in">Function</span>, N::<span class="hljs-built_in">Integer</span>)
     <span class="hljs-keyword">return</span> <span class="hljs-number">4</span> * f(N) / N
 <span class="hljs-keyword">end</span>
 
-<span class="hljs-keyword">function</span> get_accuracy(f::<span class="hljs-built_in">Function</span>, N::<span class="hljs-built_in">Int64</span>)
+<span class="hljs-keyword">function</span> get_accuracy(f::<span class="hljs-built_in">Function</span>, N::<span class="hljs-built_in">Integer</span>)
     <span class="hljs-keyword">return</span> abs(
         estimate_pi(f, N) - <span class="hljs-literal">pi</span>
         )
@@ -180,7 +180,7 @@
 
 N = <span class="hljs-number">2</span>^<span class="hljs-number">30</span>
 get_accuracy(in_unit_circle, N)</code></pre>
-<p><pre><code class="plaintext hljs">6.769423420038834e-5</code></pre> </div> </div>
+<p><pre><code class="plaintext hljs">3.4255259713233954e-6</code></pre> </div> </div>
 <div class="page-foot">
     <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> - <a href="https://ehrensperger.dev/">Gregor Ehrensperger</a>, <a href="https://lfuonline.uibk.ac.at/public/people.vcard?id=59131">Peter Kandolf</a>, <a href="https://lfuonline.uibk.ac.at/public/people.vcard?id=415344">Jonas Kusch</a>. Last modified: July 21, 2022.
     Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.

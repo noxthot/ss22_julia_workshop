@@ -1,5 +1,5 @@
 # This file was generated, do not modify it. # hide
-function in_unit_circle(N::Int64)
+function in_unit_circle(N::Integer)
     M = 0
     
     for i in 1:N
@@ -11,11 +11,11 @@ function in_unit_circle(N::Int64)
     return M
 end
 
-function estimate_pi(f::Function, N::Int64)
+function estimate_pi(f::Function, N::Integer)
     return 4 * f(N) / N
 end
 
-function get_accuracy(f::Function, N::Int64)
+function get_accuracy(f::Function, N::Integer)
     return abs(
         estimate_pi(f, N) - pi
         )
