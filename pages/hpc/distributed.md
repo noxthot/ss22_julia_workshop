@@ -93,7 +93,7 @@ function in_unit_circle_task(N::Int64)
     len, rem = divrem(N, n)
     t = Vector{Task}(undef, n)
     
-    @sync for i in 1:4
+    @sync for i in 1:N
         t[i] = @async in_unit_circle(len)
     end
     

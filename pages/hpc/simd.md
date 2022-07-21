@@ -5,7 +5,7 @@
 
 # Single-Instruction multiple data
 
-Before we are going to specifically parallelize code we talk about an inbuilt mechanism called Single-instruction, multiple data or [SIMD](https://docs.julialang.org/en/v1/base/simd-types/) for short. The main idea is that, CPUs (or basically any ALU core) can perform the same operation on multiple inputs in a single clock cycle. This was already used for BLAS and LAPACK packages, with the so called *unrolling*.
+Before we are going to specifically parallelize code we talk about an inbuilt mechanism called Single-instruction, multiple data or [SIMD](https://docs.julialang.org/en/v1/base/simd-types/) for short. The main idea is that, *central processing units* (CPUs) or basically any *arithmetic logic unit* (ALU) can perform the same operation on multiple inputs in a single clock cycle. This was already used for BLAS and LAPACK packages, with the so called *unrolling*.
 
 Let us consider the following example
 \begin{align*}
@@ -125,7 +125,7 @@ printstyled("\n------Separator-------\n\n"; color = :red)
 ```
 \show{./code/simd.jl}
 
-The [LLVM](https://llvm.org/) Project is the compiler toolchain technology that Julia uses for its *Just in Time* (JIT) compilation. Basically, it translates the Julia code into a machine language close to Assembler (but quite readable, if you get used to it) and this is compiled when needed. We could see JIT doing its magic in the beginning of the [Benchmark](#how-to-measure-performance-in-julia) section, as the function `mysum` was compiled on its first run. Note: in general packages get precompiled before they are used to gain performance.
+The [LLVM](https://llvm.org/) project is the compiler toolchain technology that Julia uses for its *Just in Time* (JIT) compilation. Basically, it translates the Julia code into a machine language close to Assembler (but quite readable, if you get used to it) and this is compiled when needed. We could see JIT doing its magic in the beginning of the [Benchmark](#how-to-measure-performance-in-julia) section, as the function `mysum` was compiled on its first run. Note: in general packages get precompiled before they are used to gain performance.
 
 # Multiple dispatch
 While on the subject of performance and the JIT compilation it is time to recall the *multiple dispatch* capabilities of Julia. 
