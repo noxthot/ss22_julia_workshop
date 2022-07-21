@@ -334,3 +334,6 @@ Here is a screenshot that shows this tool in action:
 \figalt{Data Voyager}{/assets/pages/datascience/datavoyager.png}
 
 \exercise{Explore our dataframe with `DataVoyager.jl`.}
+
+## Pluto Notebook
+\collapssol{[Click here](/notebooks/html/ds_exploratory_da.jl) to download the complementary Pluto notebook.}

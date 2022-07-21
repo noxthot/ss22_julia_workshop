@@ -342,3 +342,6 @@ Coloured by K means assigments:
 
 ## Outlook
 Sometimes, it might help to combine dimensionality reduction with a clustering algorithm. The previous exercise demonstrates that UMAP manages to separate the data quite nicely, even when going down to two dimensions. Alternatively, we could, for example, first reduce the dimension of the original data set to ten and then apply a clustering algorithm on this lower dimensional data.
+
+## Pluto Notebook
+\collapssol{[Click here](/notebooks/html/ds_unsupervised.jl) to download the complementary Pluto notebook.}
