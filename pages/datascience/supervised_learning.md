@@ -5,4 +5,6 @@
 
 # Supervised learning
 
-tbc
+
+## Pluto Notebook
+\collapssol{[Click here](/notebooks/html/ds_supervised.jl) to download the complementary Pluto notebook.}
