@@ -135,14 +135,14 @@ Well that is underwhelming. The result is wrong and it is slower. So what happen
 
 As we could see, in the above example from the docs, the loop is automatically split up per index for the threads available. This means each of the threads is performing the same loop and as the context and memory is shared also access the same storage. This is problematic for our variable `M`. This means each thread reads and writes in the same variable but this also means the result is not correct. It might override the results of other threads or they all read at the same time but only one result will be written in the end. In short the counter is totally wrong. We call this [race condition](https://en.wikipedia.org/wiki/Race_condition).
 
-To solve this issue Julia supports [atomic](https://docs.julialang.org/en/v1/manual/multi-threading/#Atomic-Operations) values. This allows us to access a variable in a thread-safe way and avoid race conditions. All primitive types can be wrapped with `M = Atomic{Int}(0)` and can only be accessed in a thread safe way. In order to do the atomic add we use the function `atomic_add!(M, 1)` and we can access the value with `M[]`.
+To solve this issue Julia supports [atomic](https://docs.julialang.org/en/v1/manual/multi-threading/#Atomic-Operations) values. This allows us to access a variable in a thread-safe way and avoid race conditions. All primitive types can be wrapped with `M = Atomic{Int64}(0)` and can only be accessed in a thread safe way. In order to do the atomic add we use the function `atomic_add!(M, 1)` and we can access the value with `M[]`.
 
 \exercise{
 Define a new function `in_unit_circle_threaded2` with the `@threads` macro, an atomic `M` and test the result as well as the timing.
 \solution{
 ```julia
 function in_unit_circle_threaded2(N::Int64)
-    M = Atomic{Int}(0);
+    M = Atomic{Int64}(0);
     
     @threads for i in 1:N
         if (rand()^2 + rand()^2) < 1
