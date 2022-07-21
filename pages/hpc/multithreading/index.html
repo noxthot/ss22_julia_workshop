@@ -248,7 +248,7 @@
 <p>Without going into too much detail, <code>rand&#40;&#41;</code> is not thread safe. It does manipulate and read from some global state and that causes our slowdown. In fact, as the random numbers are not correctly distributed any more, the accuracy is also decaying. </p>
 <p>To avoid this we need to exchange the random number generator and make the call to <code>rand</code> thread safe. This solution is inspired by the section <em>Multithreading</em> of the <a href="https://juliaacademy.com/p/parallel-computing">Parallel Computing Class on JuliaAcademy.com</a> and slightly adapted for the setup we have. </p>
 <p>First step is to define a separate random number generator per thread:</p>
-<pre><code class="julia hljs"><span class="hljs-keyword">import</span> Random
+<pre><code class="julia hljs"><span class="hljs-keyword">using</span> Random
 
 <span class="hljs-keyword">const</span> ThreadRNG = <span class="hljs-built_in">Vector</span>{Random.MersenneTwister}(<span class="hljs-literal">undef</span>, nthreads())
 <span class="hljs-meta">@threads</span> <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-number">1</span>:nthreads()
@@ -260,7 +260,7 @@ rand(rng)</code></pre>
 <p>in each thread. </p>
 <p>Now for our final version of the code, the basic idea is to not have a threaded loop over the integer <code>N</code> but over the number of threads. In order for this to work we need to figure out how many iterations each thread needs to perform.  For that, we use <code>len, rem &#61; divrem&#40;N, nthreads&#40;&#41;&#41;</code> to divide up <code>N</code> into the quotient and remainder from the Euclidean division.  </p>
 <button type="button" class="collapsible" style="background-color:#b5ddff"> Exercise </button><div class="collapsiblecontent">  Define a new function <code>in_unit_circle_threaded4</code> with the <code>@threads</code> macro, <code>M</code> as array, the above code snippets and test the result as well as the timing. Extra points if you check if we do not loose any iterations due to the split. <div class="solution"> Solution </div><div class="solutioncollapsible">  </p>
-<pre><code class="julia hljs"><span class="hljs-keyword">import</span> Random
+<pre><code class="julia hljs"><span class="hljs-keyword">using</span> Random
 
 <span class="hljs-keyword">const</span> ThreadRNG = <span class="hljs-built_in">Vector</span>{Random.MersenneTwister}(<span class="hljs-literal">undef</span>, nthreads())
 <span class="hljs-meta">@threads</span> <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-number">1</span>:nthreads()
