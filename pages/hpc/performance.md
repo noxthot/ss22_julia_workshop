@@ -5,7 +5,7 @@
 
 # How to measure performance in Julia
 
-For that, we recall the vector summation example from the introduction to [function](../../introduction/functions) and include the simple `@time` macro.
+For that, we recall the vector summation example from the introduction to [function](../introduction/functions) and include the simple `@time` macro.
 ```julia:./code/performance.jl
 function mysum(a)
     result = zero(eltype(a))
