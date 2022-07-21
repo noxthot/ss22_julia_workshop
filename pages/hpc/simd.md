@@ -37,7 +37,7 @@ z_3\\
 z_4
 \end{pmatrix}
 \end{align*}
-or visualised as:
+or visualized as:
 \figenvsource{Single instruction single data vs. single instruction multiple data.}{/assets/pages/hpc/Single-Instruction-Single-Data-vs-Single-Instruction-Multiple-Data.ppm}{}{https://www.researchgate.net/figure/Single-Instruction-Single-Data-vs-Single-Instruction-Multiple-Data_fig6_45145832}
 
 Even if you do not see it right away, we can modify our sum over a vector, and learn how Julia is including the SIMD concept and why it is most of the time better to call library functions than programming them on your own. As we already know how to do benchmarking, let us try to figure out if our sum function is doing a good job.
