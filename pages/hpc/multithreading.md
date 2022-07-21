@@ -206,7 +206,7 @@ To avoid this we need to exchange the random number generator and make the call 
 
 First step is to define a separate random number generator per thread:
 ```julia
-import Random
+using Random
 
 const ThreadRNG = Vector{Random.MersenneTwister}(undef, nthreads())
 @threads for i in 1:nthreads()
@@ -228,7 +228,7 @@ Define a new function `in_unit_circle_threaded4` with the `@threads` macro, `M` 
 Extra points if you check if we do not loose any iterations due to the split.
 \solution{
 ```julia
-import Random
+using Random
 
 const ThreadRNG = Vector{Random.MersenneTwister}(undef, nthreads())
 @threads for i in 1:nthreads()
