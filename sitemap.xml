@@ -134,6 +134,12 @@
     <priority>0.5</priority>
 </url>
 <url>
+    <loc>https://noxthot.github.io/ss22_julia_workshop/pages/introduction/pluto/index.html</loc>
+    <lastmod>2022-07-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
     <loc>https://noxthot.github.io/ss22_julia_workshop/pages/hpc/pi/index.html</loc>
     <lastmod>2022-07-21</lastmod>
     <changefreq>monthly</changefreq>

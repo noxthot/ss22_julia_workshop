@@ -79,6 +79,7 @@
             <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/macros" class="menu-list-link ">Macros</a>
             <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/worksheet_1" class="menu-list-link ">Worksheet 1</a>
             <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/worksheet_2" class="menu-list-link ">Worksheet 2</a>
+            <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/pluto" class="menu-list-link ">Pluto Notebook</a>
           </ul>
         <li class="menu-list-item active"><a href="/ss22_julia_workshop/pages/datascience/" class="menu-list-link active">Data Science</a>
           <ul class="menu-list-child-list ">
@@ -343,9 +344,9 @@ explained_variance_ratios = r_pca.principalvars / r_pca.tvar</code></pre>
 <pre><code class="julia hljs"><span class="hljs-keyword">using</span> StatsPlots; plotlyjs()
 
 StatsPlots.plot(cumsum(explained_variance_ratios, dims=<span class="hljs-number">1</span>))</code></pre>
-<div id="fdpdoi" style=""></div>
+<div id="fdpibh" style=""></div>
 <script>
-graphDiv = document.getElementById("fdpdoi");
+graphDiv = document.getElementById("fdpibh");
 plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_pca_explained_variance.json');
 </script>
 
@@ -354,18 +355,18 @@ plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datas
 
 <span class="hljs-meta">@df</span> X_test_pca StatsPlots.scatter(:x1, :x2, alpha=<span class="hljs-number">0.5</span>)</code></pre>
 <p><code>:x1</code> and <code>:x2</code> are the names of the first two columns &#40;principal components&#41; in <code>X_test_pca</code> and <code>alpha</code> is added for transparency such that we get an idea about the density of the data points.</p>
-<div id="fdpfkb" style=""></div>
+<div id="fdpswe" style=""></div>
 <script>
-graphDiv = document.getElementById("fdpfkb");
+graphDiv = document.getElementById("fdpswe");
 plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_pca_nocolor.json');
 </script>
 
 <p>This might not seem to be very helpful at first, but in this case we actually have labeled data available and to demonstrate the power of PCA, we will use that labels to add ten colors to this plot. Each digit will get its own color in this plot:</p>
 <pre><code class="julia hljs"><span class="hljs-meta">@df</span> X_test_pca StatsPlots.scatter(:x1, :x2, group=y_test, alpha=<span class="hljs-number">0.5</span>, palette=:seaborn_bright)</code></pre>
 <p><code>y_test</code> contains our labels, <code>group</code> tells <code>StatsPlots</code> to use that labels for coloring and the <code>palette</code> is set to a <a href="https://docs.juliaplots.org/latest/generated/colorschemes/">colormap</a> which distinguishes nicely between ten groups.</p>
-<div id="fdpuhy" style=""></div>
+<div id="fdpeqc" style=""></div>
 <script>
-graphDiv = document.getElementById("fdpuhy");
+graphDiv = document.getElementById("fdpeqc");
 plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_pca_color.json');
 </script>
 
@@ -396,15 +397,15 @@ StatsPlots.scatter(X_test_umap_mat[<span class="hljs-number">1</span>, :], X_tes
 
 StatsPlots.scatter(X_test_umap_mat[<span class="hljs-number">1</span>, :], X_test_umap_mat[<span class="hljs-number">2</span>, :], group=r_machkmeans.assignments, alpha=<span class="hljs-number">0.3</span>, palette=:seaborn_bright)</code></pre>
 <p>Coloured by real labels:</p>
-<div id="fdprdl" style=""></div>
+<div id="fdpllq" style=""></div>
 <script>
-graphDiv = document.getElementById("fdprdl");
+graphDiv = document.getElementById("fdpllq");
 plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_umap_color.json');
 </script>
 
-<p>Coloured by K means assigments: <div id="fdpiwl" style=""></div>
+<p>Coloured by K means assigments: <div id="fdpmpq" style=""></div>
 <script>
-graphDiv = document.getElementById("fdpiwl");
+graphDiv = document.getElementById("fdpmpq");
 plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_umap_colored_by_cluster.json');
 </script>
  </div> </div>

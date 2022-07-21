@@ -3,8 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-   <link rel="stylesheet" href="/ss22_julia_workshop/libs/katex/katex.min.css">
-     
+  
    <link rel="stylesheet" href="/ss22_julia_workshop/libs/highlight/github.min.css">
    
     <script src="/ss22_julia_workshop/libs/clipboard.min.js"></script>
@@ -52,7 +51,7 @@
   }
 </style>
 
-   <title>Package Manager</title>  
+   <title>Pluto</title>  
 </head>
 <body>                      <!-- closed in foot.html -->
 <div class="page-wrap">   <!-- closed in foot.html -->
@@ -71,7 +70,7 @@
         <li class="menu-list-item active"><a href="/ss22_julia_workshop/pages/introduction/" class="menu-list-link active">Introduction</a>
           <ul class="menu-list-child-list ">
             <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/basis_datatypes_and_operations" class="menu-list-link ">Basic Data Types and Operations</a>
-            <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/package_manager" class="menu-list-link active">Package Manager</a>
+            <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/package_manager" class="menu-list-link ">Package Manager</a>
             <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/matrix_vectors" class="menu-list-link ">Matrix and Vector Operations</a>
             <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/conditional_evaluations" class="menu-list-link ">Conditional evaluations</a>
             <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/loops" class="menu-list-link ">Loops</a>
@@ -79,7 +78,7 @@
             <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/macros" class="menu-list-link ">Macros</a>
             <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/worksheet_1" class="menu-list-link ">Worksheet 1</a>
             <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/worksheet_2" class="menu-list-link ">Worksheet 2</a>
-            <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/pluto" class="menu-list-link ">Pluto Notebook</a>
+            <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/introduction/pluto" class="menu-list-link active">Pluto Notebook</a>
           </ul>
         <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/datascience/" class="menu-list-link ">Data Science</a>
           <ul class="menu-list-child-list ">
@@ -115,68 +114,19 @@
 
 
 <!-- Content appended here (in class franklin-content) -->
-<div class="franklin-content"><h1 id="package_manager"><a href="#package_manager" class="header-anchor">Package manager</a></h1>
-<p>We have already seen the Julia <a href="https://docs.julialang.org/en/v1/stdlib/Pkg/">package manager</a>. In the following, we will discuss this feature in more detail. We already know how to open the package manager: Simply press <code>&#93;</code>. Now, in order to, for example, add the <a href="https://juliaapproximation.github.io/FastGaussQuadrature.jl/stable/">FastGaussQuadrature</a> package type </p>
-<pre><code class="julia-repl hljs"><span class=hljs-metap>(@v1.7) pkg&gt;</span> add FastGaussQuadrature</code></pre>
-<p>From now on, every time we open Julia, we can type</p>
-<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-keyword">using</span> FastGaussQuadrature</span></code></pre>
-<p>which in this case adds functionalities to numerically compute integrals to our session. Note that the specific details of this package are not important at this point and we will revisit this package in our work sheets. In case we wish to remove this package again we can open the package manager and type</p>
-<pre><code class="julia-repl hljs"><span class=hljs-metap>(@v1.7) pkg&gt;</span> rm FastGaussQuadrature</code></pre>
-<p>If we now want to install a specific version of a package we can add <code>@&lt;versionnumber&gt;</code> behind the package name. As an example, to install <code>FastGaussQuadrature</code> at version <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.4.8</mn></mrow><annotation encoding="application/x-tex">0.4.8</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0.4.8</span></span></span></span> we type</p>
-<pre><code class="julia-repl hljs"><span class=hljs-metap>(@v1.7) pkg&gt;</span> add FastGaussQuadrature@0.4.8</code></pre>
-<p>Moreover, we can update all packages that we have added by typing</p>
-<pre><code class="julia-repl hljs"><span class=hljs-metap>(@v1.7) pkg&gt;</span> update</code></pre>
-<p>or just a specific package &#40;for example FastGaussQuadrature&#41; by typing</p>
-<pre><code class="julia-repl hljs"><span class=hljs-metap>(@v1.7) pkg&gt;</span> update FastGaussQuadrature</code></pre>
-<p>To get a list of all installed packages we can type</p>
-<pre><code class="julia-repl hljs"><span class=hljs-metap>(@v1.7) pkg&gt;</span> status</code></pre>
-<p>It is good practice to add packages only for certain projects to prevent conflicting packages, see <a href="https://en.wikipedia.org/wiki/Dependency_hell">dependency hell</a>. This can be done by creating a new package environment. Here we create an environment called <code>example</code>:</p>
-<pre><code class="julia-repl hljs"><span class=hljs-metap>(@v1.7) pkg&gt;</span> activate example</code></pre>
-<p>If we check this new environment with the <code>status</code> command we will see that we have a clean package environment. We can return to the default environment by typing <code>activate</code>. We type <code>activate .</code>, if we want to create an environment that is identified with the project folder we are currently working in. Whenever someone uses this project folder, this person can enter the same environment by typing <code>activate .</code> and install all needed packages with the used versions by typing <code>instantiate</code>. If we do not want to start the REPL we can still include the environment by simply typing</p>
-<pre><code class="shell hljs">julia --project=. main.jl</code></pre>
-<button type="button" class="collapsible" style="background-color:#b5ddff"> Exercise </button><div class="collapsiblecontent">  Let us practice the learned concepts a little bit.</p>
-<ol>
-<li><p>Create a new project called <code>SummerSchool</code>. To setup the project, create a new folder and navigate to it using the REPL. </p>
-</li>
-<li><p>Make sure you can use the <code>Plots</code> package in the new project environment by loading it with <code>using Plots</code>.</p>
-</li>
-<li><p>Now you can for example plot the connection between two points <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mn>1</mn><mo separator="true">,</mo><mn>1</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(1,1)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">1</span><span class="mclose">)</span></span></span></span> and <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mn>2</mn><mo separator="true">,</mo><mn>3</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(2,3)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">2</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">3</span><span class="mclose">)</span></span></span></span> by <code>plot&#40;&#91;1; 2&#93;, &#91;2; 3&#93;&#41;</code>.</p>
-</li>
-<li><p>Check if the <code>Plots</code> package is available in the standard environment.</p>
-</li>
-<li><p>Install the latest version of the <code>LinearAlgebra</code> package in the standard environment and version <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1.5</mn></mrow><annotation encoding="application/x-tex">1.5</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1.5</span></span></span></span> in your project environment.</p>
-</li>
-</ol>
-<p><div class="solution"> Solution </div><div class="solutioncollapsible">  </p>
-<pre><code class="julia-repl hljs"><span class=hljs-metas>shell&gt;</span> mkdir SummerSchool
+<div class="franklin-content"><h1 id="pluto_notebook"><a href="#pluto_notebook" class="header-anchor">Pluto Notebook</a></h1>
+<p>With <a href="https://github.com/fonsp/Pluto.jl"><code>Pluto.jl</code></a> Julia provides notebooks that are simple, lightweight and reactive. The notebooks can be shared easily since they also keep track of the used packages and their versions. By using <a href="https://github.com/JuliaPluto/PlutoUI.jl"><code>PlutoUI.jl</code></a> one can add UI elements like sliders, textfields and so on. It also has markdown support and it is possible to create a nice looking HTML export.</p>
+<p>To get started, simply add <code>Pluto</code> and start the Pluto server with:</p>
+<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-keyword">using</span> Pluto
+</span>Pluto.run()
 
-<span class=hljs-metas>shell&gt;</span> cd SummerSchool
-/home/jonas/Projects/SummerSchool
-
-<span class=hljs-metap>(@v1.7) pkg&gt;</span> activate .
-  Activating new project at `~/Projects/SummerSchool`
-
-<span class=hljs-metap>(SummerSchool) pkg&gt;</span> add Plots
-
-<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-keyword">using</span> Plots
-</span>
-<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> plot([<span class="hljs-number">1</span>; <span class="hljs-number">2</span>],[<span class="hljs-number">2</span>; <span class="hljs-number">3</span>])
-</span>
-<span class=hljs-metap>(SummerSchool) pkg&gt;</span> activate
-  Activating project at `~/.julia/environments/v1.7`
-
-<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-keyword">using</span> Plots
-</span> │ Package Plots not found, but a package named Plots is available from a registry. 
- │ Install package?
- │   <span class=hljs-metap>(@v1.7) pkg&gt;</span> add Plots 
- └ (y/n) [y]: 
-
-<span class=hljs-metap>(@v1.7) pkg&gt;</span> add Plots
-
-<span class=hljs-metap>(@v1.7) pkg&gt;</span> activate .
-
-<span class=hljs-metap>(SummerSchool) pkg&gt;</span> add Plots@1.30.1</code></pre>
-<p></div> </div>
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> Pluto.run()
+</span>[ Info: Loading...
+┌ Info: 
+└ Opening http://localhost:1234/?secret=J6cPXwBB in your default browser... ~ have fun!</code></pre>
+<p>In the end, Pluto should automatically get opened in your default browser.</p>
+<h2 id="pluto_demo"><a href="#pluto_demo" class="header-anchor">Pluto demo</a></h2>
+<p>Check our <a href="/ss22_julia_workshop/notebooks/html/pluto_example.jl">sample notebook</a> and please note that UI elements are only working when the code is run within Pluto. On the top right you will find instructions on how to run the code on your machine.</p>
 <div class="page-foot">
     <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> - <a href="https://ehrensperger.dev/">Gregor Ehrensperger</a>, <a href="https://lfuonline.uibk.ac.at/public/people.vcard?id=59131">Peter Kandolf</a>, <a href="https://lfuonline.uibk.ac.at/public/people.vcard?id=415344">Jonas Kusch</a>. Last modified: July 21, 2022.
     Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
@@ -185,11 +135,6 @@
     </div> <!-- end of class main-content -->
     </div> <!-- end of class main-content-wrap -->
     </div> <!-- end of class page-wrap-->
-    
-      
-
-
-
     
     
       
