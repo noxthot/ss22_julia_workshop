@@ -48,7 +48,7 @@ julia --project=. main.jl
 2. Make sure you can use the `Plots` package in the new project environment by loading it with `using Plots`.
 3. Now you can for example plot the connection between two points $(1,1)$ and $(2,3)$ by `plot([1; 2], [2; 3])`.
 4. Check if the `Plots` package is available in the standard environment.
-5. Install the latest version of the `LinearAlgebra` package in the standard environment and version $1.5$ in your project environment.
+5. Install the latest version of the `MultivariateStats` package in the standard environment and version `0.8.0` in your project environment.
 
 \solution{
 ```julia-repl
@@ -75,11 +75,11 @@ julia> using Plots
  │   (@v1.7) pkg> add Plots 
  └ (y/n) [y]: 
 
-(@v1.7) pkg> add Plots
+(@v1.7) pkg> add MultivariateStats
 
 (@v1.7) pkg> activate .
 
-(SummerSchool) pkg> add Plots@1.30.1
+(SummerSchool) pkg> add MultivariateStats@0.8.0
 ```
 }
 }
