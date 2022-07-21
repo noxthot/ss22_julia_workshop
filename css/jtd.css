@@ -157,14 +157,13 @@ hr {
 
 SIDE BAR
 
-============================================================
 ************************************************************/
 
 .side-bar {
   z-index: 100;
   display: flex;
   flex-wrap: wrap;
-  background-color: #f5f6fa;
+  background-color: #cfe4ff;
 }
 
 .side-bar .header {
@@ -182,7 +181,7 @@ SIDE BAR
   align-items: center;
   padding-top: 0.75rem;
   padding-bottom: 0.75rem;
-  color: #27262b;
+  color: #01166c;
   font-size: 18px !important;
   line-height: 1.15em;
 }
@@ -201,8 +200,8 @@ SIDE BAR
   text-align: right;
   padding-right: 2rem;
   border: 0;
-  width: calc(100% - 220px);
-  background-color: white;
+  width: 100%;
+  background-color: #bad8ff;
 }
 
 .side-bar .menu {
@@ -218,13 +217,14 @@ SIDE BAR
   list-style: none;
 }
 
-.menu-list-child-list {
-  padding-left: 0.75rem;
-  list-style: none;
+.menu-list .active {
+  background-color: #bad8ff;
+  border-radius: 1rem;
 }
 
-.menu-list-child-list .menu-list-link {
-  color: #5c5962;
+.menu-list-child-list {
+  padding-left: 0.5rem;
+  list-style: none;
 }
 
 .menu-list-child-list .menu-list-item {
@@ -235,7 +235,7 @@ SIDE BAR
   position: absolute;
   margin-top: 0.3em;
   margin-left: -0.8em;
-  color: rgba(92, 89, 98, 0.3);
+  color: rgba(98, 89, 96, 0.3);
   content: "- ";
 }
 
@@ -246,6 +246,7 @@ SIDE BAR
 .menu-list-item {
   font-size: 14px !important;
   margin: 0;
+  padding-left: 1em;
 }
 
 .menu-list-item .menu-list-child-list {
@@ -256,15 +257,25 @@ SIDE BAR
   display: block;
 }
 
+.menu-list-child-list .menu-list-item:hover {
+  background-color: #cfe4ff;
+  color: white;
+  border-bottom-left-radius: 0.5rem;
+  border-top-left-radius: 0.5rem;
+}
+
 .menu-list-link {
   display: block;
   padding-top: 0.25rem;
   padding-bottom: 0.25rem;
+  font-weight: 500;
+  text-decoration: none;
+  color: #003274
 }
 
 .menu-list-link.active {
   font-weight: 600;
-  color: #27262b;
+  color: #001d43;
   text-decoration: none;
 }
 
@@ -309,7 +320,7 @@ input[type=checkbox]:checked ~ #side-menu { display: block; }
 /* side bar adjustments for narrow mode (bar on top) */
 @media (min-width: 31.25rem) {
   .side-bar .header .title {
-    font-size: 24px !important;
+    font-size: 36px !important;
   }
 
   .menu-list-item {
@@ -347,7 +358,7 @@ input[type=checkbox]:checked ~ #side-menu { display: block; }
   }
 
   .side-bar .menu {
-    width: 135px;
+    width: 180px;
     padding-right: 2rem;
     padding-left: 2rem;
     padding-top: 3rem;
@@ -414,6 +425,7 @@ MAIN CONTENT
 
   /* padding-bottom:1rem; */
   background-color: #f5f6fa;
+  color: #000c3c;
   height: 60px;
   line-height: 60px;
 }
