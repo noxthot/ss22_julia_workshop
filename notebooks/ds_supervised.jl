@@ -60,8 +60,8 @@ begin
 	X_train_tab = MLJ.table(X_train)
 	X_test_tab = MLJ.table(X_test)
 
-	y_train_cat = coerce(y_train, OrderedFactor)
-	y_test_cat = coerce(y_test, OrderedFactor)
+	y_train_cat = categorical(y_train)
+	y_test_cat = categorical(y_test)
 end
 
 # ╔═╡ bc5a300b-8d9a-4acf-ad29-736aa883ad91
@@ -106,7 +106,13 @@ md"""
 """
 
 # ╔═╡ d19da03f-079b-4075-9882-40ddb24406b0
-KnetMetrics.confusion_matrix(pred_vector, y_test)
+conf_mat = KnetMetrics.confusion_matrix(pred_vector, y_test)
+
+# ╔═╡ 2cb415fb-f059-4858-96cb-d4ea16a4b3a7
+visualize(conf_mat)
+
+# ╔═╡ 4e795915-c5e9-4158-b6e1-23390f94e10b
+MLJ.accuracy(pred_vector, y_test)
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
@@ -1709,7 +1715,7 @@ version = "0.9.1+5"
 # ╠═bf8b4f12-0343-4c3c-9278-c35e1ffa8d7d
 # ╟─bbc3a6fb-45c4-44a6-a258-298c94fe9f91
 # ╠═ec6ca18d-8cd8-44e0-a1a8-bb83e518f0a9
-# ╠═27975918-e745-4308-a078-57fefa29b8a2
+# ╟─27975918-e745-4308-a078-57fefa29b8a2
 # ╠═5360639a-801e-4923-8c78-3bf8b338f789
 # ╟─69c70d81-63c8-4b5b-a918-5ce09d563541
 # ╠═c3484bcf-5d09-415a-89d0-eab6d85d9c6d
@@ -1720,11 +1726,13 @@ version = "0.9.1+5"
 # ╠═3da78569-17a5-4fbd-bb3a-82996e54478e
 # ╟─068b2061-098f-4679-9256-d88cd054eb8d
 # ╠═2278f2a0-7ecb-445a-8c5b-353ee5276669
-# ╠═e1bdb7b7-69d6-4e58-af12-661853630b77
+# ╟─e1bdb7b7-69d6-4e58-af12-661853630b77
 # ╠═16383136-5a53-43c8-a48b-8380c7ea4d34
-# ╠═b8842e32-b21e-4179-8ce4-eda12d70ea5a
+# ╟─b8842e32-b21e-4179-8ce4-eda12d70ea5a
 # ╠═e9e27ebb-a717-4613-9fa1-4ef21bb98b56
-# ╠═5cd7f0e6-2c62-4f6e-a7f3-8a85fbfcf942
+# ╟─5cd7f0e6-2c62-4f6e-a7f3-8a85fbfcf942
 # ╠═d19da03f-079b-4075-9882-40ddb24406b0
+# ╠═2cb415fb-f059-4858-96cb-d4ea16a4b3a7
+# ╠═4e795915-c5e9-4158-b6e1-23390f94e10b
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002

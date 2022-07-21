@@ -1038,6 +1038,12 @@ git-tree-sha1 = "591e8dc09ad18386189610acafb970032c519707"
 uuid = "5ab0869b-81aa-558d-bb23-cbf5423bbe9b"
 version = "0.6.3"
 
+[[deps.KnetMetrics]]
+deps = ["LinearAlgebra", "Plots", "Statistics"]
+git-tree-sha1 = "a9ff930cc83deaed6b9440a92388e76240163e64"
+uuid = "33081891-0f5e-47f5-81c7-76d5d1fed490"
+version = "0.1.0"
+
 [[deps.LAME_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
 git-tree-sha1 = "f6250b16881adf048549549fba48b1161acdac8c"
