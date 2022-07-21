@@ -115,7 +115,7 @@
 
 <!-- Content appended here (in class franklin-content) -->
 <div class="franklin-content"><h1 id="unsupervised_learning"><a href="#unsupervised_learning" class="header-anchor">Unsupervised Learning</a></h1>
-<div class="franklin-toc"><ol><li><a href="#clustering_k_means">Clustering &#40;K Means&#41;</a><ol><li><a href="#theory">Theory</a></li><li><a href="#application">Application</a><ol><li><a href="#mlj_introduction">MLJ introduction</a></li><li><a href="#mlj_application">MLJ application</a></li></ol></li></ol></li><li><a href="#dimensionality_reduction_principal_component_analysis">Dimensionality Reduction &#40;Principal Component Analysis&#41;</a><ol><li><a href="#theory__2">Theory</a></li><li><a href="#application__2">Application</a></li></ol></li><li><a href="#outlook">Outlook</a></li></ol></div>
+<div class="franklin-toc"><ol><li><a href="#clustering_k_means">Clustering &#40;K Means&#41;</a><ol><li><a href="#theory">Theory</a></li><li><a href="#application">Application</a><ol><li><a href="#mlj_introduction">MLJ introduction</a></li><li><a href="#mlj_application">MLJ application</a></li></ol></li></ol></li><li><a href="#dimensionality_reduction_principal_component_analysis">Dimensionality Reduction &#40;Principal Component Analysis&#41;</a><ol><li><a href="#theory__2">Theory</a></li><li><a href="#application__2">Application</a></li></ol></li><li><a href="#outlook">Outlook</a></li><li><a href="#pluto_notebook">Pluto Notebook</a></li></ol></div>
 <p>The term <em>unsupervised learning</em> subsumes all kinds of algorithms that are used to gain insights from such an unlabeled data set. Typically these algorithms fall into three main categories:</p>
 <ul>
 <li><p><strong>Association rules</strong>: to discover relationships between different variables &#40;e.g. for recommender systems: <em>customers who bought X also bought Y</em>&#41;</p>
@@ -343,9 +343,9 @@ explained_variance_ratios = r_pca.principalvars / r_pca.tvar</code></pre>
 <pre><code class="julia hljs"><span class="hljs-keyword">using</span> StatsPlots; plotlyjs()
 
 StatsPlots.plot(cumsum(explained_variance_ratios, dims=<span class="hljs-number">1</span>))</code></pre>
-<div id="fdpzwn" style=""></div>
+<div id="fdpgiu" style=""></div>
 <script>
-graphDiv = document.getElementById("fdpzwn");
+graphDiv = document.getElementById("fdpgiu");
 plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_pca_explained_variance.json');
 </script>
 
@@ -354,18 +354,18 @@ plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datas
 
 <span class="hljs-meta">@df</span> X_test_pca StatsPlots.scatter(:x1, :x2, alpha=<span class="hljs-number">0.5</span>)</code></pre>
 <p><code>:x1</code> and <code>:x2</code> are the names of the first two columns &#40;principal components&#41; in <code>X_test_pca</code> and <code>alpha</code> is added for transparency such that we get an idea about the density of the data points.</p>
-<div id="fdpvzk" style=""></div>
+<div id="fdpfkq" style=""></div>
 <script>
-graphDiv = document.getElementById("fdpvzk");
+graphDiv = document.getElementById("fdpfkq");
 plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_pca_nocolor.json');
 </script>
 
 <p>This might not seem to be very helpful at first, but in this case we actually have labeled data available and to demonstrate the power of PCA, we will use that labels to add ten colors to this plot. Each digit will get its own color in this plot:</p>
 <pre><code class="julia hljs"><span class="hljs-meta">@df</span> X_test_pca StatsPlots.scatter(:x1, :x2, group=y_test, alpha=<span class="hljs-number">0.5</span>, palette=:seaborn_bright)</code></pre>
 <p><code>y_test</code> contains our labels, <code>group</code> tells <code>StatsPlots</code> to use that labels for coloring and the <code>palette</code> is set to a <a href="https://docs.juliaplots.org/latest/generated/colorschemes/">colormap</a> which distinguishes nicely between ten groups.</p>
-<div id="fdpsvg" style=""></div>
+<div id="fdprou" style=""></div>
 <script>
-graphDiv = document.getElementById("fdpsvg");
+graphDiv = document.getElementById("fdprou");
 plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_pca_color.json');
 </script>
 
@@ -396,20 +396,22 @@ StatsPlots.scatter(X_test_umap_mat[<span class="hljs-number">1</span>, :], X_tes
 
 StatsPlots.scatter(X_test_umap_mat[<span class="hljs-number">1</span>, :], X_test_umap_mat[<span class="hljs-number">2</span>, :], group=r_machkmeans.assignments, alpha=<span class="hljs-number">0.3</span>, palette=:seaborn_bright)</code></pre>
 <p>Coloured by real labels:</p>
-<div id="fdpthc" style=""></div>
+<div id="fdpjrj" style=""></div>
 <script>
-graphDiv = document.getElementById("fdpthc");
+graphDiv = document.getElementById("fdpjrj");
 plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_umap_color.json');
 </script>
 
-<p>Coloured by K means assigments: <div id="fdpale" style=""></div>
+<p>Coloured by K means assigments: <div id="fdpynt" style=""></div>
 <script>
-graphDiv = document.getElementById("fdpale");
+graphDiv = document.getElementById("fdpynt");
 plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_umap_colored_by_cluster.json');
 </script>
  </div> </div>
 <h2 id="outlook"><a href="#outlook" class="header-anchor">Outlook</a></h2>
 <p>Sometimes, it might help to combine dimensionality reduction with a clustering algorithm. The previous exercise demonstrates that UMAP manages to separate the data quite nicely, even when going down to two dimensions. Alternatively, we could, for example, first reduce the dimension of the original data set to ten and then apply a clustering algorithm on this lower dimensional data.</p>
+<h2 id="pluto_notebook"><a href="#pluto_notebook" class="header-anchor">Pluto Notebook</a></h2>
+<button type="button" class="collapsible" style="background-color:#fffca5"> Solution </button><div class="collapsiblecontent">  <a href="/ss22_julia_workshop/notebooks/html/ds_unsupervised.jl">Click here</a> to download the complementary Pluto notebook. </div>
 <div class="page-foot">
     <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> - <a href="https://ehrensperger.dev/">Gregor Ehrensperger</a>, <a href="https://lfuonline.uibk.ac.at/public/people.vcard?id=59131">Peter Kandolf</a>, <a href="https://lfuonline.uibk.ac.at/public/people.vcard?id=415344">Jonas Kusch</a>. Last modified: July 21, 2022.
     Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
