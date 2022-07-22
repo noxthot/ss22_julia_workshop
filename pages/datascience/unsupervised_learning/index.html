@@ -344,9 +344,9 @@ explained_variance_ratios = r_pca.principalvars / r_pca.tvar</code></pre>
 <pre><code class="julia hljs"><span class="hljs-keyword">using</span> StatsPlots; plotlyjs()
 
 StatsPlots.plot(cumsum(explained_variance_ratios, dims=<span class="hljs-number">1</span>))</code></pre>
-<div id="fdpglj" style=""></div>
+<div id="fdpzlj" style=""></div>
 <script>
-graphDiv = document.getElementById("fdpglj");
+graphDiv = document.getElementById("fdpzlj");
 plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_pca_explained_variance.json');
 </script>
 
@@ -355,29 +355,29 @@ plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datas
 
 <span class="hljs-meta">@df</span> X_test_pca StatsPlots.scatter(:x1, :x2, alpha=<span class="hljs-number">0.5</span>)</code></pre>
 <p><code>:x1</code> and <code>:x2</code> are the names of the first two columns &#40;principal components&#41; in <code>X_test_pca</code> and <code>alpha</code> is added for transparency such that we get an idea about the density of the data points.</p>
-<div id="fdpumk" style=""></div>
+<div id="fdpipk" style=""></div>
 <script>
-graphDiv = document.getElementById("fdpumk");
+graphDiv = document.getElementById("fdpipk");
 plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_pca_nocolor.json');
 </script>
 
 <p>This might not seem to be very helpful at first, but in this case we actually have labeled data available and to demonstrate the power of PCA, we will use that labels to add ten colors to this plot. Each digit will get its own color in this plot:</p>
 <pre><code class="julia hljs"><span class="hljs-meta">@df</span> X_test_pca StatsPlots.scatter(:x1, :x2, group=y_test, alpha=<span class="hljs-number">0.5</span>, palette=:seaborn_bright)</code></pre>
 <p><code>y_test</code> contains our labels, <code>group</code> tells <code>StatsPlots</code> to use that labels for coloring and the <code>palette</code> is set to a <a href="https://docs.juliaplots.org/latest/generated/colorschemes/">colormap</a> which distinguishes nicely between ten groups.</p>
-<div id="fdpupt" style=""></div>
+<div id="fdpzpv" style=""></div>
 <script>
-graphDiv = document.getElementById("fdpupt");
+graphDiv = document.getElementById("fdpzpv");
 plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_pca_color.json');
 </script>
 
 <p>By clicking on the different labels, you are able to hide and show them.  We recommend to have a look at pairs of colours. We see for example that there is quite some overlapping in <code>1</code>s and <code>7</code>s but hardly any overlap in <code>1</code>s and <code>0</code>s. So we expect learning algorithms to be easily able to discriminate between <code>1</code>s and <code>0</code>s while probably having a harder time distinguishing between <code>1</code> and <code>7</code>.  But still we have to keep in mind that we lost a lot of information when transforming to two dimensions, so probably we find a better method for our data set.</p>
-<button type="button" class="collapsible" style="background-color:#b5ddff"> Exercise </button><div class="collapsiblecontent">  In this exercise we will use a different dimensionality reduction method called <em>Uniform Manifold Approximation and Projection</em> &#40;UMAP&#41;. Down to its core and very simply speaking, UMAP constructs a high dimensional graph representation of the data set and then tries to fit a low-dimensional graph to be structurally as similar as possible. To get a better understanding, there is also a nice <a href="https://pair-code.github.io/understanding-umap/">webpage with interactive explanations</a>. Unfortunately, this method is also not included in <code>MLJ.jl</code>, so we need to load <a href="https://github.com/dillondaudert/UMAP.jl"><code>UMAP.jl</code></a> directly. Follow this steps to get a nice dimensionality reduction with <code>UMAP.jl</code>:</p>
+<button type="button" class="collapsible" style="background-color:#b5ddff"> Exercise </button><div class="collapsiblecontent">  In this exercise we will use a different dimensionality reduction method called <em>Uniform Manifold Approximation and Projection</em> &#40;UMAP&#41;. Down to its core and very simply speaking, UMAP constructs a high dimensional graph representation of the data set and then tries to fit a low-dimensional graph to be structurally as similar as possible. To get a better understanding, there is also a nice <a href="https://pair-code.github.io/understanding-umap/">webpage with interactive explanations</a>. Unfortunately, this method is not included in <code>MLJ.jl</code>, so we need to load <a href="https://github.com/dillondaudert/UMAP.jl"><code>UMAP.jl</code></a> directly. Follow this steps to get a nice dimensionality reduction with UMAP:</p>
 <ol>
 <li><p>Add and use <code>UMAP.jl</code></p>
 </li>
-<li><p><code>UMAP</code> expects a <code>Matrix</code> as input. Luckily we already have that: <code>X_test</code>.</p>
+<li><p><code>umap&#40;&#41;</code> expects a <code>Matrix</code> as input. Luckily we already have that: <code>X_test</code>.</p>
 </li>
-<li><p>But <code>X_test</code> is stored in row wise fashion &#40;each observation is one row&#41;. <code>UMAP.jl</code> expects a column-major matrix, so we need to transpose the matrix.</p>
+<li><p>But <code>X_test</code> is stored in row wise fashion &#40;each observation is one row&#41;. <code>umap&#40;&#41;</code> expects a column-major matrix, so we need to transpose the matrix.</p>
 </li>
 <li><p>Have a look at the manual of <code>umap</code>, apply the function on the transposed matrix and reduce the dimension to <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn></mrow><annotation encoding="application/x-tex">2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">2</span></span></span></span>. Note that this computation might needs a couple of minutes.</p>
 </li>
@@ -397,15 +397,15 @@ StatsPlots.scatter(X_test_umap_mat[<span class="hljs-number">1</span>, :], X_tes
 
 StatsPlots.scatter(X_test_umap_mat[<span class="hljs-number">1</span>, :], X_test_umap_mat[<span class="hljs-number">2</span>, :], group=r_machkmeans.assignments, alpha=<span class="hljs-number">0.3</span>, palette=:seaborn_bright)</code></pre>
 <p>Coloured by real labels:</p>
-<div id="fdpghs" style=""></div>
+<div id="fdpdhe" style=""></div>
 <script>
-graphDiv = document.getElementById("fdpghs");
+graphDiv = document.getElementById("fdpdhe");
 plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_umap_color.json');
 </script>
 
-<p>Coloured by K means assigments: <div id="fdpycu" style=""></div>
+<p>Coloured by K means assigments: <div id="fdpgfy" style=""></div>
 <script>
-graphDiv = document.getElementById("fdpycu");
+graphDiv = document.getElementById("fdpgfy");
 plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_umap_colored_by_cluster.json');
 </script>
  </div> </div>
