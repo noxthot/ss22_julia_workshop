@@ -344,9 +344,9 @@ explained_variance_ratios = r_pca.principalvars / r_pca.tvar</code></pre>
 <pre><code class="julia hljs"><span class="hljs-keyword">using</span> StatsPlots; plotlyjs()
 
 StatsPlots.plot(cumsum(explained_variance_ratios, dims=<span class="hljs-number">1</span>))</code></pre>
-<div id="fdpkjt" style=""></div>
+<div id="fdphie" style=""></div>
 <script>
-graphDiv = document.getElementById("fdpkjt");
+graphDiv = document.getElementById("fdphie");
 plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_pca_explained_variance.json');
 </script>
 
@@ -355,18 +355,18 @@ plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datas
 
 <span class="hljs-meta">@df</span> X_test_pca StatsPlots.scatter(:x1, :x2, alpha=<span class="hljs-number">0.5</span>)</code></pre>
 <p><code>:x1</code> and <code>:x2</code> are the names of the first two columns &#40;principal components&#41; in <code>X_test_pca</code> and <code>alpha</code> is added for transparency such that we get an idea about the density of the data points.</p>
-<div id="fdpjeu" style=""></div>
+<div id="fdptht" style=""></div>
 <script>
-graphDiv = document.getElementById("fdpjeu");
+graphDiv = document.getElementById("fdptht");
 plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_pca_nocolor.json');
 </script>
 
 <p>This might not seem to be very helpful at first, but in this case we actually have labeled data available and to demonstrate the power of PCA, we will use that labels to add ten colors to this plot. Each digit will get its own color in this plot:</p>
 <pre><code class="julia hljs"><span class="hljs-meta">@df</span> X_test_pca StatsPlots.scatter(:x1, :x2, group=y_test, alpha=<span class="hljs-number">0.5</span>, palette=:seaborn_bright)</code></pre>
 <p><code>y_test</code> contains our labels, <code>group</code> tells <code>StatsPlots</code> to use that labels for coloring and the <code>palette</code> is set to a <a href="https://docs.juliaplots.org/latest/generated/colorschemes/">colormap</a> which distinguishes nicely between ten groups.</p>
-<div id="fdpqoo" style=""></div>
+<div id="fdptjw" style=""></div>
 <script>
-graphDiv = document.getElementById("fdpqoo");
+graphDiv = document.getElementById("fdptjw");
 plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_pca_color.json');
 </script>
 
@@ -397,15 +397,15 @@ StatsPlots.scatter(X_test_umap_mat[<span class="hljs-number">1</span>, :], X_tes
 
 StatsPlots.scatter(X_test_umap_mat[<span class="hljs-number">1</span>, :], X_test_umap_mat[<span class="hljs-number">2</span>, :], group=r_machkmeans.assignments, alpha=<span class="hljs-number">0.3</span>, palette=:seaborn_bright)</code></pre>
 <p>Coloured by real labels:</p>
-<div id="fdppwr" style=""></div>
+<div id="fdphmr" style=""></div>
 <script>
-graphDiv = document.getElementById("fdppwr");
+graphDiv = document.getElementById("fdphmr");
 plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_umap_color.json');
 </script>
 
-<p>Coloured by K means assigments: <div id="fdpqwu" style=""></div>
+<p>Coloured by K means assigments: <div id="fdpypo" style=""></div>
 <script>
-graphDiv = document.getElementById("fdpqwu");
+graphDiv = document.getElementById("fdpypo");
 plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_umap_colored_by_cluster.json');
 </script>
  </div> </div>
