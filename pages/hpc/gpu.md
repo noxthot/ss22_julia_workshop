@@ -437,7 +437,7 @@ This is still not the most efficient way to use the GPU and in addition it is ra
 So let us optimize the computation a bit further.
 Each of the threads should do `n` iterations. This means we need to define the number of blocks as 
 $$
- n_{blocks} = \frac{N}{n_{threads} n}.
+ n_{\operatorname{blocks}} = \frac{N}{n_{\operatorname{threads}} n}.
 $$
 The kernel is a combination of the two previous kernels:
 ```julia
