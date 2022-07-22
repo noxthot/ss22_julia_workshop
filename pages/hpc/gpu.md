@@ -9,7 +9,7 @@
 
 Graphic Processing Units, or GPUs for short, were originally designed to manipulate images in a frame buffer.
 Their inherent parallelism makes them more efficient for some tasks than CPUs. 
-Basically,s everything that is related to SIMD operations but not limited to them.  
+Basically, everything that is related to SIMD operations but not limited to them.  
 Using GPUs for general purpose computing (GPGPU) became a thing in the 21st century. 
 NVIDIA was the first big vendor that started to support this kind of application for their GPUs and invested heavily in dedicated frameworks to aid general purpose computing and later also started to produce dedicated hardware for this purpose only. 
 Nowadays, GPUs are used for artificial intelligence, deep learning and a lot of HPC workloads - some still use them for gaming too.
