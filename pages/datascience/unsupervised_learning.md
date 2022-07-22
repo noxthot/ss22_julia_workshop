@@ -61,7 +61,7 @@ Julia offers a nice machine learning meta package called [`MLJ.jl`](https://gith
 1. Transforming the data
 1. Instantiating the machine (this is how `MLJ.jl` calls the object that combines the model with data)
 1. Fitting the machine/model by running `fit()` on the machine
-1. Optional: Transforming the data by applying the fitted model
+1. Optionally: Transforming the data by applying the fitted model
 
 #### MLJ application
 The code for loading the data and model is straight-forward:
