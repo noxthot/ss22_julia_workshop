@@ -210,15 +210,6 @@ function in_unit_circle_distributed1(N::Int64)
 
     return M
 end
-
-# more compact for with the ternary operator
-function in_unit_circle_distributed1_1(N::Int64)
-    M = @distributed (+) for i in 1:N
-        (rand()^2 + rand()^2) < 1 ? 1 : 0
-    end
-
-    return M
-end
 ```
 and we test it
 ```julia-repl
