@@ -55,17 +55,17 @@ x = 1
 \solution{
 ```julia-repl
 julia> macro m(x)
-           println("One arguments")
+           return :( println("One arguments") )
        end
 @m (macro with 1 method)
 
 julia> macro m(x, y)
-           println("Two arguments")
+           return :( println("Two arguments") )
        end
 @m (macro with 2 methods)
 
 julia> macro m(::Int)
-           println("An Integer")
+           return :( println("An Integer") )
        end
 @m (macro with 3 methods)
 
