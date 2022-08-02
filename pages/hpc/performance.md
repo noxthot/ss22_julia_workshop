@@ -7,21 +7,25 @@
 
 For that, we recall the vector summation example from the introduction to [function](../introduction/functions) and include the simple `@time` macro.
 ```julia:./code/performance.jl
-function mysum(a)
-    result = zero(eltype(a))
+function mysum(V)
+    s = zero(eltype(V))
 
-    for i in eachindex(a)
-        @inbounds result += a[i]
+    for i in eachindex(V)
+        @inbounds s += V[i]
     end
 
-    return result
+    return s
 end
 
-a = rand(100_000)
-@time mysum(a)
-@time mysum(a)
+V = rand(100_000)
+@time mysum(V)
+@time mysum(V)
 ```
 \show{./code/performance.jl}
+
+@@important
+In order to optimize the loop call we use the [`@inbounds`](https://docs.julialang.org/en/v1/devdocs/boundscheck/) macro to eliminate inbound checks - does the index exist - for the array access.
+@@
 
 The downside with the `@time` macro is, that it really just measures the execution time of what is given to it. This means, if the function is not already compiled this might include compiling or if the CPU is busy with something else it is often not accurate. 
 
@@ -39,18 +43,18 @@ To measure the performance of the above code we do the following:
 ```julia:./code/performance.jl
 using BenchmarkTools
 
-@benchmark mysum($a)
+@benchmark mysum($V)
 ```
 \show{./code/performance.jl}
 the full details with 
 ```julia:./code/performance.jl
-t = @benchmark mysum($a)
+t = @benchmark mysum($V)
 dump(t)
 ```
 \show{./code/performance.jl}
 and the often used sanity check, that actually also shows you the output of your code.
 ```julia:./code/performance.jl
-@btime mysum($a)
+@btime mysum($V)
 ```
 \show{./code/performance.jl}
 }
@@ -66,7 +70,7 @@ We can also use the [`Profiler`](https://docs.julialang.org/en/v1/manual/profile
 using Profile
 
 Profile.clear()
-@profile for _ in 1:100_000; mysum(a); end
+@profile for _ in 1:100_000; mysum(V); end
 Profile.print(maxdepth=15)
 ```
 ```bash
@@ -86,9 +90,9 @@ Overhead ╎ [+additional indent] Count File:Line; Function
     ╎    ╎    ╎ 8281  @Base/boot.jl:373; eval
     ╎    ╎    ╎  8281  .../package_linux64/build/usr/share/julia/stdlib/v1.7/Profile/src/Profile.jl:28; top-level scope
    1╎    ╎    ╎   8281  REPL[18]:1; macro expansion
-    ╎    ╎    ╎    1     REPL[7]:3; mysum(a::Vector{Float64})
+    ╎    ╎    ╎    1     REPL[7]:3; mysum(V::Vector{Float64})
     ╎    ╎    ╎     1     @Base/abstractarray.jl:279; eachindex
-    ╎    ╎    ╎    8279  REPL[7]:4; mysum(a::Vector{Float64})
+    ╎    ╎    ╎    8279  REPL[7]:4; mysum(V::Vector{Float64})
     ╎    ╎    ╎     8279  @Base/range.jl:837; iterate
 Total snapshots: 16562
 ```
