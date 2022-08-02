@@ -152,17 +152,17 @@
 <span class="hljs-meta">@m</span> x</code></pre>
 <p><div class="solution"> Solution </div><div class="solutioncollapsible">  </p>
 <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-keyword">macro</span> m(x)
-           println(<span class="hljs-string">&quot;One arguments&quot;</span>)
+           <span class="hljs-keyword">return</span> :( println(<span class="hljs-string">&quot;One arguments&quot;</span>) )
        <span class="hljs-keyword">end</span>
 </span>@m (macro with 1 method)
 
 <span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-keyword">macro</span> m(x, y)
-           println(<span class="hljs-string">&quot;Two arguments&quot;</span>)
+           <span class="hljs-keyword">return</span> :( println(<span class="hljs-string">&quot;Two arguments&quot;</span>) )
        <span class="hljs-keyword">end</span>
 </span>@m (macro with 2 methods)
 
 <span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-keyword">macro</span> m(::<span class="hljs-built_in">Int</span>)
-           println(<span class="hljs-string">&quot;An Integer&quot;</span>)
+           <span class="hljs-keyword">return</span> :( println(<span class="hljs-string">&quot;An Integer&quot;</span>) )
        <span class="hljs-keyword">end</span>
 </span>@m (macro with 3 methods)
 
