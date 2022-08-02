@@ -399,11 +399,15 @@ Similar as with the `threadIdx().x` we have a `blockIdx().x` and a `blockDim().x
 Julia starts with indexing by `1`. On the GPU this can become a bit confusing as CUDA in general does not. 
 In this case we need to correct the `blockIdx()` by `1`.
 @@
+@@important
+As highlighted in the [blog](https://juliagpu.org/post/2022-01-28-cuda_3.5_3.8/#preserving_array_indices), `CUDA.jl` introduced optimized index types for CUDA to make sure that no storage is wasted. 
+Therefore, we use `0x1` instead of `1` in the kernels in this section, where needed.
+@@
 
 So we end up with the following code:
 ```julia
 function in_unit_circle_kernel2!(M)
-    j = (blockIdx().x - 1) * blockDim().x + threadIdx().x
+    j = (blockIdx().x - 0x1) * blockDim().x + threadIdx().x
 
     if (rand()^2 + rand()^2) < 1
         @inbounds M[j] += 1
@@ -443,7 +447,7 @@ $$
 The kernel is a combination of the two previous kernels:
 ```julia
 function in_unit_circle_kernel3!(n::Int64, M)
-    j = (blockIdx().x - 1) * blockDim().x + threadIdx().x
+    j = (blockIdx().x - 0x1) * blockDim().x + threadIdx().x
 
     for _ in 1:n
         if (rand()^2 + rand()^2) < 1
