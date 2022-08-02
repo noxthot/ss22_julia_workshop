@@ -2,5 +2,5 @@
 using Profile
 
 Profile.clear()
-@profile for _ in 1:100_000; mysum(a); end
+@profile for _ in 1:100_000; mysum(V); end
 Profile.print(maxdepth=15)
