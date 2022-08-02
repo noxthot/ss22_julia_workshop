@@ -127,6 +127,8 @@
 </li>
 <li><p>Intel with <a href="https://www.intel.com/content/www/us/en/develop/documentation/oneapi-gpu-optimization-guide/top.html">oneAPI</a> and <a href="https://github.com/JuliaGPU/oneAPI.jl"><code>oneAPI.jl</code></a></p>
 </li>
+<li><p>Apple with Apple&#39;s M1 GPUs <a href="https://developer.apple.com/metal/">Metal</a> and <a href="https://github.com/JuliaGPU/Metal.jl"><code>Metal.jl</code></a> &#40;requires at least Julia 1.8&#41;</p>
+</li>
 </ul>
 <p>where <code>CUDA.jl</code> comes with the most features.  Nevertheless, in good Julia practice, the team behind JuliaGPU also included an abstraction layer, such that a lot of common functionality can be implemented without the need to specify a vendor and to do some generic GPU programming.</p>
 
@@ -525,7 +527,7 @@ Stacktrace:
 <h3 id="additional_notes"><a href="#additional_notes" class="header-anchor">Additional notes</a></h3>
 <p>Like with the rest of the topics in this section we skimmed the surface and did not make a deep dive &#40;like memory access, profiling to find slow parts in the code, multi GPU programming, multithreaded/distributed computing with GPUs and so forth&#41;.  Have a look at the excellent introduction on <a href="https://juliagpu.org/learn/">JuliaGPU</a> to see more about the topic and have a look at the YouTube Videos of Tim Besard for a start.  Here it was only possible to give a sound idea on what is happening and how great and easy we can achieve all of it with Julia.</p>
 <div class="page-foot">
-    <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> - <a href="https://ehrensperger.dev/">Gregor Ehrensperger</a>, <a href="https://lfuonline.uibk.ac.at/public/people.vcard?id=59131">Peter Kandolf</a>, <a href="https://lfuonline.uibk.ac.at/public/people.vcard?id=415344">Jonas Kusch</a>. Last modified: July 25, 2022.
+    <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> - <a href="https://ehrensperger.dev/">Gregor Ehrensperger</a>, <a href="https://lfuonline.uibk.ac.at/public/people.vcard?id=59131">Peter Kandolf</a>, <a href="https://lfuonline.uibk.ac.at/public/people.vcard?id=415344">Jonas Kusch</a>. Last modified: August 02, 2022.
     Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
 </div>
 </div><!-- CONTENT ENDS HERE -->
