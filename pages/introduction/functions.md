@@ -110,6 +110,18 @@ julia> (x -> x^2 + 1)(3)
 10
 ```
 
+This is not a good application for an anonymous function but there are applications where they are indeed quite helpful. Throughout this workshop we will occasionally use anonymous functions as function arguments. Let us take a look at the function `map(f, c)` that allows to transform a collection (e.g. a vector) `c` by applying function `f` to every element. The following example applies $x \mapsto x^2 + 1$ to every element of the vector `[1, 2, 3, 4, 5]`:
+```julia-repl
+julia> map(x -> x^2 + 1, [1, 2, 3, 4, 5])
+5-element Vector{Int64}:
+  2
+  5
+ 10
+ 17
+ 26
+```
+
+
 ## Call by reference
 Julia functions do not copy the input but directly operate on the input data. This means that changing values of the input in the function body will also change this data for the function caller. Whenever we define a function which will modify the input, we should indicate this with a `!` behind the function name:
 ```julia
