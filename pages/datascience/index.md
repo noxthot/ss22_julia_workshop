@@ -12,8 +12,8 @@ In recent years Data Science became one of the very hot topics as can be seen in
 Data science is an interdisciplinary field that uses various techniques and algorithms from statistics, mathematical modeling, pattern recognition, machine learning, and many more to gain insights from structured and unstructured data.
 
 Of course we can only tackle very specific topics of this huge ecosystem within this workshop. We will briefly talk about the following topics:
-- [Loading](loading_data) and [saving](saving_data) tabular data
-- [Exploratory data analysis](exploratory_da)
-- [Data sets](datasets)
-- [Unsupervised learning](unsupervised_learning)
-- [Supervised learning](supervised_learning)
+- [Loading](loading_data/) and [saving](saving_data/) tabular data
+- [Exploratory data analysis](exploratory_da/)
+- [Data sets](datasets/)
+- [Unsupervised learning](unsupervised_learning/)
+- [Supervised learning](supervised_learning/)
