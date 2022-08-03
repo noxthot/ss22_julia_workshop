@@ -5,6 +5,9 @@
 
 # Functions
 
+\toc
+
+
 ## Syntax
 To improve the structure and ensure reusability of pieces of our program we can use the `function` command. We have already used functions when, for example, calling `typeof(input)`. Other examples of functions that can be found on any common calculators are `sin(x)` or `exp(x)`. The syntax to define our own functions is the following:
 ```julia
