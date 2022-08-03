@@ -104,13 +104,13 @@ julia> x -> x^2 + 1
 #1 (generic function with 1 method)
 ```
 
-Unfortunately this function can not be accessed again, since we do not have a name/variable which could be accessed. But we can apply a value right away and e.g. evaluate this anonymous function for $x = 3$:
+Unfortunately, this function can not be accessed again, since we do not have a name/variable which could be accessed. But we can apply a value right away and e.g. evaluate this anonymous function for $x = 3$:
 ```julia-repl
 julia> (x -> x^2 + 1)(3)
 10
 ```
 
-This is not a good application for an anonymous function but there are applications where they are indeed quite helpful. Throughout this workshop we will occasionally use anonymous functions as function arguments. Let us take a look at the function `map(f, c)` that allows to transform a collection (e.g. a vector) `c` by applying function `f` to every element. The following example applies $x \mapsto x^2 + 1$ to every element of the vector `[1, 2, 3, 4, 5]`:
+This is not a good application for an anonymous function but there are applications where they are indeed quite helpful. Throughout this workshop, we will occasionally use anonymous functions as function arguments. Let us take a look at the function [`map(f, c)`](https://docs.julialang.org/en/v1/base/collections/#Base.map) that allows us to transform a collection (e.g. a vector) `c` by applying function `f` to every element. The following example applies $x \mapsto x^2 + 1$ to every element of the vector `[1, 2, 3, 4, 5]`:
 ```julia-repl
 julia> map(x -> x^2 + 1, [1, 2, 3, 4, 5])
 5-element Vector{Int64}:
