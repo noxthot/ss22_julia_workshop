@@ -51,7 +51,7 @@ md"""
 """
 
 # ╔═╡ 3e56e94e-ab42-442c-8867-7eba19ef31ae
-NR_CLUSTERS = 20
+NR_CLUSTERS = 10
 
 # ╔═╡ fb77a4e4-8fde-4f55-9f98-da9086472b6c
 model_kmeans = KMEANS(k=NR_CLUSTERS)
