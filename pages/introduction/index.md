@@ -20,7 +20,7 @@ julia> 1 + 1
 julia> 
 ```
 }
-- **Package mode**: We can switch to this mode by typing `]` and the prompt will change to `(@v1.7) pkg>` (the version number will depend on the installation). Here we can directly interact with the [package manager](./package_manager) and add or update packages. To get a complete list of possibilities type `?`
+- **Package mode**: We can switch to this mode by typing `]` and the prompt will change to `(@v1.7) pkg>` (the version number will depend on the installation). Here we can directly interact with the [package manager](./package_manager/) and add or update packages. To get a complete list of possibilities type `?`
 \example{```julia-repl
 (@v1.7) pkg> ?
   Welcome to the Pkg REPL-mode. To return to the julia> prompt, either press backspace when the input line is empty or press Ctrl+C.
@@ -124,7 +124,7 @@ shell>
 **You exit all of the (non) Julia modes by pressing Backspace.**
 
 ### Visual Studio Code 
-See [Main introduction](../../index.html#julia_and_vscode)
+See [Main introduction](../../#julia_and_vscode)
 
 ### Other Interactive Development Environments 
 A lot of other IDEs or text editors like Jupyter, Sublime Text, Nano, vim and many more can also be used in connection with Julia. Some integrate the evaluation inside the editor for others we will have to do this in the command line. Note, that we can always run Julia code from command line by typing `julia myProgram.jl`

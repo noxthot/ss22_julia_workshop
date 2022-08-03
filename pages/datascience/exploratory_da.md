@@ -11,7 +11,7 @@
 
 In most data science projects *exploratory data analysis* (EDA) is an essential first step. The primary aim is to analyze a given data set to summarize its main characteristics. Therefore, EDA often uses data visualization and statistical methods.
 
-In this section, we will continue to work with the Stack Overflow survey data set as shown in the previous section [Loading data](loading_data). To summarize, the necessary steps to start with this section can be found in the code snippet below:
+In this section, we will continue to work with the Stack Overflow survey data set as shown in the previous section [Loading data](../loading_data/). To summarize, the necessary steps to start with this section can be found in the code snippet below:
 ```julia
 using CSV, DataFrames
 
@@ -336,4 +336,4 @@ Here is a screenshot that shows this tool in action:
 \exercise{Explore our dataframe with `DataVoyager.jl`.}
 
 ## Pluto Notebook
-\collapssol{[Click here](/notebooks/html/ds_exploratory_da.jl) to download the complementary Pluto notebook.}
+\collapssol{[Click here](/notebooks/html/ds_exploratory_da.jl/) to download the complementary Pluto notebook.}

@@ -92,7 +92,7 @@ Let us try to apply this concept to our $\pi$ example.
 The obvious first impulse is to just write a `@threads` in front of the loop in our `in_unit_circle` routine, well lets follow this impulse.
 
 @@important
-We assume the functions and variables from the [Not the most efficient way of computing $\pi$](./pi) section are defined and we write some new in addition.
+We assume the functions and variables from the [Not the most efficient way of computing $\pi$](../pi/) section are defined and we write some new in addition.
 @@
 
 For reference, the results in this section are computed with 4 threads and the original code has the following performance

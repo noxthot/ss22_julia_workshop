@@ -124,4 +124,4 @@ $~$
 When using different algorithms, we always have to keep in mind in which format and shape our data is stored. Different algorithms have different requirements. Sometimes observations have to be stored row wise (each observation in a separate row), sometimes they have to be stored column wise. Some algorithms require a `Matrix` and others a `DataFrame`.
 
 ## Pluto Notebook
-\collapssol{[Click here](/notebooks/html/ds_dataset.jl) to download the complementary Pluto notebook.}
+\collapssol{[Click here](/notebooks/html/ds_dataset.jl/) to download the complementary Pluto notebook.}

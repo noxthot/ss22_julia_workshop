@@ -14,9 +14,9 @@ Julia has an excellent section dedicated to general [performance tips](https://d
 
 This part covers the following sections:
 
-1. [Measuring performance](performance)
-1. [Singe Instruction Multiple Data](simd)
-1. [$\pi$ example](pi)
-1. [Multithreading](multithreading)
-1. [Distributed computing](distributed)
-1. [GPU computing](gpu)
+1. [Measuring performance](performance/)
+1. [Singe Instruction Multiple Data](simd/)
+1. [$\pi$ example](pi/)
+1. [Multithreading](multithreading/)
+1. [Distributed computing](distributed/)
+1. [GPU computing](gpu/)

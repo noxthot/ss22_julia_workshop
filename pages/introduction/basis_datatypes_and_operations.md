@@ -96,7 +96,7 @@ Rational{Int64}
 You may ask yourself: Why is this important when Julia is dynamically typed and thus not requires types to be explicitly set? Among others, there are three primary purposes for using types: 
 - improve human readability
 - catch programmer errors
-- for making use of a concept called [multiple dispatch](functions#multiple_dispatch) (which we will talk about later in this workshop). 
+- for making use of a concept called [multiple dispatch](../functions/#multiple_dispatch) (which we will talk about later in this workshop). 
 It may also get important when high precision, memory constraints or fast computation is required.
 
 So far, we did not speak about basic mathematical operations, which are of course defined for all primitive numeric types. 

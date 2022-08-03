@@ -107,4 +107,4 @@ So our KNN reached an accuracy of 96.7% which is really amazing already. In case
 \exercise{How is changing `K` affecting the prediction accuracy?}
 
 ## Pluto Notebook
-\collapssol{[Click here](/notebooks/html/ds_supervised.jl) to download the complementary Pluto notebook.}
+\collapssol{[Click here](/notebooks/html/ds_supervised.jl/) to download the complementary Pluto notebook.}

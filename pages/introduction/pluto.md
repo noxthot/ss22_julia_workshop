@@ -21,4 +21,4 @@ julia> Pluto.run()
 In the end, Pluto should automatically get opened in your default browser.
 
 ## Pluto demo
-Check our [sample notebook](/notebooks/html/pluto_example.jl) and please note that UI elements are only working when the code is run within Pluto. On the top right you will find instructions on how to run the code on your machine.
+Check our [sample notebook](/notebooks/html/pluto_example.jl/) and please note that UI elements are only working when the code is run within Pluto. On the top right you will find instructions on how to run the code on your machine.
