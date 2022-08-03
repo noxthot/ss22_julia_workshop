@@ -97,6 +97,19 @@ isapprox(mysum1(V),  mysum2(V); atol=1e-10, rtol=1e-10)
 }
 
 
+## Anonymous functions
+Functions can also be created anonymously, that is, without giving a name. We call these functions [*anonymous functions*](https://docs.julialang.org/en/v1/manual/functions/#man-anonymous-functions) and they are especially feasible when we want to use a function as an argument. The following snippet creates an anonymous function that takes one argument `x` and returns $x^2 + 1$:
+```julia-repl
+julia> x -> x^2 + 1
+#1 (generic function with 1 method)
+```
+
+Unfortunately this function can not be accessed again, since we do not have a name/variable which could be accessed. But we can apply a value right away and e.g. evaluate this anonymous function for $x = 3$:
+```julia-repl
+julia> (x -> x^2 + 1)(3)
+10
+```
+
 ## Call by reference
 Julia functions do not copy the input but directly operate on the input data. This means that changing values of the input in the function body will also change this data for the function caller. Whenever we define a function which will modify the input, we should indicate this with a `!` behind the function name:
 ```julia
