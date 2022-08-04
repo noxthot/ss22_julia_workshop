@@ -76,7 +76,7 @@ X_test = reshape(df_test.features, (28 * 28, :))'
 KMEANS = @load KMeans pkg=ParallelKMeans
 ```
 
-`KMEANS` comes with several optional arguments. Unfortunately, `MLJ` lacks documentation here:
+`KMEANS` comes with several optional arguments. Unfortunately, `MLJ.jl` lacks documentation here:
 ```julia-repl
 help?> KMEANS
 search: KMEANS kmeans kmeans_model mach_kmeans model_kmeans ParallelKMeans PKGMODE_MANIFEST
@@ -187,7 +187,7 @@ In our case the ten cluster centers look like this:
 
 \figalt{Cluster centers - KMeans}{/assets/pages/datascience/unsupervised_clusters_kmeans.png}
 
-We can clearly recognize the numbers $0$, $2$, $3$, $6$, $8$, $9$, but obviously it is more difficile for numbers $1$, $4$, $5$, $7$. When looking closely, we see parts of the silhouettes too, but we are of course not completely happy with this fit. We might be able to grasp more of the underlying structure by increasing the number of clusters.
+We can clearly recognize the numbers $0$, $2$, $3$, $6$, $8$, $9$, but obviously it is more difficult for numbers $1$, $4$, $5$, $7$. When looking closely, we see parts of the silhouettes too, but we are of course not completely happy with this fit. We might be able to grasp more of the underlying structure by increasing the number of clusters.
 
 \exercise{Rerun this experiment with 20 clusters centers and evaluate the results.}
 
@@ -233,7 +233,7 @@ But in our case standardizing the data leads to various problems:
 And since we are working with "clean" image data, we want to keep every pixel on the same scale, so for convenience reasons we skip the standardizing here.
 
 \example{
-For the sake of completeness we demonstrate how the built-in `Standardizer` of `MLJ` can be applied. But unfortunately it scales each of the $784$ columns separately which we definately do not want in our case. 
+For the sake of completeness we demonstrate how the built-in `Standardizer` of `MLJ` can be applied. But unfortunately, it scales each of the $784$ columns separately which we definitely do not want in our case. 
 ```julia
 # Instantiating the model
 standardizer_model = Standardizer()
@@ -307,7 +307,7 @@ This might not seem to be very helpful at first, but in this case we actually ha
 \figalt{PCA with colors}{/assets/pages/datascience/plot_pca_color.json}
 
 By clicking on the different labels, you are able to hide and show them. 
-We recommend to have a look at pairs of colours. We see for example that there is quite some overlapping in `1`s and `7`s but hardly any overlap in `1`s and `0`s.
+We recommend to have a look at pairs of colors. We see for example that there is quite some overlapping in `1`s and `7`s but hardly any overlap in `1`s and `0`s.
 So we expect learning algorithms to be easily able to discriminate between `1`s and `0`s while probably having a harder time distinguishing between `1` and `7`. 
 But still we have to keep in mind that we lost a lot of information when transforming to two dimensions, so probably we find a better method for our data set.
 
@@ -331,11 +331,11 @@ StatsPlots.scatter(X_test_umap_mat[1, :], X_test_umap_mat[2, :], group=y_test, a
 StatsPlots.scatter(X_test_umap_mat[1, :], X_test_umap_mat[2, :], group=r_machkmeans.assignments, alpha=0.3, palette=:seaborn_bright)
 ```
 
-Coloured by real labels:
+Colored by real labels:
 
 \figalt{UMAP with colors}{/assets/pages/datascience/plot_umap_color.json}
 
-Coloured by K means assigments:
+Colored by K means assignments:
 \figalt{UMAP with colors}{/assets/pages/datascience/plot_umap_colored_by_cluster.json}
 }
 }
