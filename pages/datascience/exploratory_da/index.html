@@ -292,10 +292,10 @@ df_survey[!, :EuroCompYearly] = <span class="hljs-number">0.96</span> * df_surve
    4 │ Switzerland            false    529</code></pre>
 <p></div>
 <h2 id="data_visualization"><a href="#data_visualization" class="header-anchor">Data Visualization</a></h2>
-<p>In this workshop we have already used <code>Plots.jl</code> and <code>StatsPlots.jl</code> a couple of times to visualize functions and data. It may come to a surprise that <code>Plots.jl</code> and <code>StatsPlots.jl</code> are actually no plotting packages. They are rather plotting metapackages which provide an interface over many different plotting libraries. The specific plotting library that is actually being used to create the plots is referred to as the <a href="https://docs.juliaplots.org/stable/tutorial/#plotting-backends"><em>backend</em></a> and it is easy to switch and therefore to use different plotting libraries. So far we always used the default backend <code>GR</code> which is fast, but lacks interactivity. Depending on the requirements you might like to try <code>PlotlyJS</code> for interactivity or <code>PyPlot</code> because you like the functionality of Matplotlib &#40;known from Python&#41;. To get a good overview, have a look at the <a href="https://docs.juliaplots.org/stable/backends/#backends"><code>Plots.jl</code> documentation</a>.</p>
+<p>In this workshop we have already used <code>Plots.jl</code> and <code>StatsPlots.jl</code> a couple of times to visualize functions and data. It may come to a surprise that <code>Plots.jl</code> and <code>StatsPlots.jl</code> are actually no plotting packages. They are rather plotting metapackages which provide an interface over many different plotting libraries. The specific plotting library that is actually being used to create the plots is referred to as the <a href="https://docs.juliaplots.org/stable/tutorial/#plotting-backends"><em>backend</em></a> and it is easy to switch and therefore to use different plotting libraries. So far we always used the default backend <code>GR</code> which is fast, but lacks interactivity. Depending on the requirements you might like to try <code>PlotlyJS.jl</code> for interactivity or <code>PyPlot.jl</code> because you like the functionality of Matplotlib &#40;known from Python&#41;. To get a good overview, have a look at the <a href="https://docs.juliaplots.org/stable/backends/#backends"><code>Plots.jl</code> documentation</a>.</p>
 <p>In the last section we used methods from <code>DataFrames.jl</code> and <code>Statistics.jl</code> to do some case studies. Now we will supplement the studies with visualizations.</p>
 <h3 id="barplot_show_survey_participants_by_country"><a href="#barplot_show_survey_participants_by_country" class="header-anchor">Barplot: Show survey participants by country</a></h3>
-<p>In a previous exercise we already used <code>countmap</code> to get a dictionary which summarizes the number of participants per country. Fortunately, <code>StatsPlots</code> is able to visualize this dictionary immediately. We will also switch the backend to <code>plotlyjs</code>, so we are able to interact with the graph and get more detailed information about the height of the bars by moving our mouse cursor over the top of the bars and looking at the hover label.</p>
+<p>In a previous exercise we already used <code>countmap</code> to get a dictionary which summarizes the number of participants per country. Fortunately, <code>StatsPlots.jl</code> is able to visualize this dictionary immediately. We will also switch the backend to <code>plotlyjs</code>, so we are able to interact with the graph and get more detailed information about the height of the bars by moving our mouse cursor over the top of the bars and looking at the hover label.</p>
 <pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-keyword">using</span> StatsBase
 </span>
 <span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-keyword">using</span> StatsPlots; plotlyjs()
@@ -308,9 +308,9 @@ df_survey[!, :EuroCompYearly] = <span class="hljs-number">0.96</span> * df_surve
   &quot;Austria&quot;     =&gt; 437
 
 <span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> <span class="hljs-meta">@df</span> df_survey bar(countmap(:Country), legend=<span class="hljs-literal">false</span>)</span></code></pre>
-<div id="fdpxsh" style=""></div>
+<div id="fdpynx" style=""></div>
 <script>
-graphDiv = document.getElementById("fdpxsh");
+graphDiv = document.getElementById("fdpynx");
 plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_explorative_da_country.json');
 </script>
 
@@ -318,9 +318,9 @@ plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datas
 <p>Boxplots are a nice tool to visualize some distributional characteristics &#40;locality, spread, skewness&#41; of a given data sample. Dividing the data set into different groups allows an easy comparison.</p>
 <p>In the following plot we compare the salary of different employment states:</p>
 <pre><code class="julia hljs"><span class="hljs-meta">@df</span> df_survey boxplot(:Employment, :EuroCompYearly, xrotation=<span class="hljs-number">30</span>, size=(<span class="hljs-number">500</span>, <span class="hljs-number">900</span>), legend=<span class="hljs-literal">false</span>)</code></pre>
-<div id="fdpzpu" style=""></div>
+<div id="fdpnxw" style=""></div>
 <script>
-graphDiv = document.getElementById("fdpzpu");
+graphDiv = document.getElementById("fdpnxw");
 plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_explorative_da_salary_1.json');
 </script>
 
@@ -338,9 +338,9 @@ plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datas
 <p>Since visualizations usually condense information up to some extend, it is always a good idea to look at the data from different perspectives. Adding e.g. a dots plot &#40;where every sample is visualized by a dot&#41; shows that two of the groups have only very little sample sizes.</p>
 <pre><code class="julia hljs"><span class="hljs-meta">@df</span> df_survey boxplot(:Employment, :EuroCompYearly, xrotation=<span class="hljs-number">30</span>, size=(<span class="hljs-number">500</span>, <span class="hljs-number">900</span>), legend=<span class="hljs-literal">false</span>)
 <span class="hljs-meta">@df</span> df_survey dotplot!(:Employment, :EuroCompYearly, legend=<span class="hljs-literal">false</span>)</code></pre>
-<div id="fdpdvx" style=""></div>
+<div id="fdpcnc" style=""></div>
 <script>
-graphDiv = document.getElementById("fdpdvx");
+graphDiv = document.getElementById("fdpcnc");
 plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_explorative_da_salary_2.json');
 </script>
 
