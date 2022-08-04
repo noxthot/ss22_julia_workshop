@@ -190,7 +190,7 @@ X_test = reshape(df_test.features, (<span class="hljs-number">28</span> * <span 
 
 <span class="hljs-comment"># Loading the model</span>
 KMEANS = <span class="hljs-meta">@load</span> KMeans pkg=ParallelKMeans</code></pre>
-<p><code>KMEANS</code> comes with several optional arguments. Unfortunately, <code>MLJ</code> lacks documentation here:</p>
+<p><code>KMEANS</code> comes with several optional arguments. Unfortunately, <code>MLJ.jl</code> lacks documentation here:</p>
 <pre><code class="julia-repl hljs">help?&gt; KMEANS
 search: KMEANS kmeans kmeans_model mach_kmeans model_kmeans ParallelKMeans PKGMODE_MANIFEST
 
@@ -274,7 +274,7 @@ fit!(mach_kmeans)</code></pre>
 <span class="hljs-keyword">end</span></code></pre>
 <p>In our case the ten cluster centers look like this:</p>
 <img src="/ss22_julia_workshop/assets/pages/datascience/unsupervised_clusters_kmeans.png" alt="Cluster centers - KMeans">
-<p>We can clearly recognize the numbers <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0</span></span></span></span>, <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn></mrow><annotation encoding="application/x-tex">2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">2</span></span></span></span>, <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>3</mn></mrow><annotation encoding="application/x-tex">3</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">3</span></span></span></span>, <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>6</mn></mrow><annotation encoding="application/x-tex">6</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">6</span></span></span></span>, <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>8</mn></mrow><annotation encoding="application/x-tex">8</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">8</span></span></span></span>, <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>9</mn></mrow><annotation encoding="application/x-tex">9</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">9</span></span></span></span>, but obviously it is more difficile for numbers <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn></mrow><annotation encoding="application/x-tex">1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span>, <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>4</mn></mrow><annotation encoding="application/x-tex">4</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">4</span></span></span></span>, <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>5</mn></mrow><annotation encoding="application/x-tex">5</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">5</span></span></span></span>, <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>7</mn></mrow><annotation encoding="application/x-tex">7</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">7</span></span></span></span>. When looking closely, we see parts of the silhouettes too, but we are of course not completely happy with this fit. We might be able to grasp more of the underlying structure by increasing the number of clusters.</p>
+<p>We can clearly recognize the numbers <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn></mrow><annotation encoding="application/x-tex">0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0</span></span></span></span>, <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn></mrow><annotation encoding="application/x-tex">2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">2</span></span></span></span>, <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>3</mn></mrow><annotation encoding="application/x-tex">3</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">3</span></span></span></span>, <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>6</mn></mrow><annotation encoding="application/x-tex">6</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">6</span></span></span></span>, <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>8</mn></mrow><annotation encoding="application/x-tex">8</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">8</span></span></span></span>, <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>9</mn></mrow><annotation encoding="application/x-tex">9</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">9</span></span></span></span>, but obviously it is more difficult for numbers <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn></mrow><annotation encoding="application/x-tex">1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span>, <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>4</mn></mrow><annotation encoding="application/x-tex">4</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">4</span></span></span></span>, <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>5</mn></mrow><annotation encoding="application/x-tex">5</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">5</span></span></span></span>, <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>7</mn></mrow><annotation encoding="application/x-tex">7</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">7</span></span></span></span>. When looking closely, we see parts of the silhouettes too, but we are of course not completely happy with this fit. We might be able to grasp more of the underlying structure by increasing the number of clusters.</p>
 <button type="button" class="collapsible" style="background-color:#b5ddff"> Exercise </button><div class="collapsiblecontent">  Rerun this experiment with 20 clusters centers and evaluate the results. </div>
 <h2 id="dimensionality_reduction_principal_component_analysis"><a href="#dimensionality_reduction_principal_component_analysis" class="header-anchor">Dimensionality Reduction &#40;Principal Component Analysis&#41;</a></h2>
 <h3 id="theory__2"><a href="#theory__2" class="header-anchor">Theory</a></h3>
@@ -310,7 +310,7 @@ y_test = df_test.targets</code></pre>
 </li>
 </ul>
 <p>And since we are working with &quot;clean&quot; image data, we want to keep every pixel on the same scale, so for convenience reasons we skip the standardizing here.</p>
-<button type="button" class="collapsible" style="background-color:#caffa5"> Example </button><div class="collapsiblecontent">  For the sake of completeness we demonstrate how the built-in <code>Standardizer</code> of <code>MLJ</code> can be applied. But unfortunately it scales each of the <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>784</mn></mrow><annotation encoding="application/x-tex">784</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">784</span></span></span></span> columns separately which we definately do not want in our case. </p>
+<button type="button" class="collapsible" style="background-color:#caffa5"> Example </button><div class="collapsiblecontent">  For the sake of completeness we demonstrate how the built-in <code>Standardizer</code> of <code>MLJ</code> can be applied. But unfortunately, it scales each of the <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>784</mn></mrow><annotation encoding="application/x-tex">784</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">784</span></span></span></span> columns separately which we definitely do not want in our case. </p>
 <pre><code class="julia hljs"><span class="hljs-comment"># Instantiating the model</span>
 standardizer_model = Standardizer()
 
@@ -344,9 +344,9 @@ explained_variance_ratios = r_pca.principalvars / r_pca.tvar</code></pre>
 <pre><code class="julia hljs"><span class="hljs-keyword">using</span> StatsPlots; plotlyjs()
 
 StatsPlots.plot(cumsum(explained_variance_ratios, dims=<span class="hljs-number">1</span>))</code></pre>
-<div id="fdpzrz" style=""></div>
+<div id="fdpxcp" style=""></div>
 <script>
-graphDiv = document.getElementById("fdpzrz");
+graphDiv = document.getElementById("fdpxcp");
 plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_pca_explained_variance.json');
 </script>
 
@@ -355,22 +355,22 @@ plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datas
 
 <span class="hljs-meta">@df</span> X_test_pca StatsPlots.scatter(:x1, :x2, alpha=<span class="hljs-number">0.5</span>)</code></pre>
 <p><code>:x1</code> and <code>:x2</code> are the names of the first two columns &#40;principal components&#41; in <code>X_test_pca</code> and <code>alpha</code> is added for transparency such that we get an idea about the density of the data points.</p>
-<div id="fdpfpm" style=""></div>
+<div id="fdpojl" style=""></div>
 <script>
-graphDiv = document.getElementById("fdpfpm");
+graphDiv = document.getElementById("fdpojl");
 plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_pca_nocolor.json');
 </script>
 
 <p>This might not seem to be very helpful at first, but in this case we actually have labeled data available and to demonstrate the power of PCA, we will use that labels to add ten colors to this plot. Each digit will get its own color in this plot:</p>
 <pre><code class="julia hljs"><span class="hljs-meta">@df</span> X_test_pca StatsPlots.scatter(:x1, :x2, group=y_test, alpha=<span class="hljs-number">0.5</span>, palette=:seaborn_bright)</code></pre>
 <p><code>y_test</code> contains our labels, <code>group</code> tells <code>StatsPlots</code> to use that labels for coloring and the <code>palette</code> is set to a <a href="https://docs.juliaplots.org/latest/generated/colorschemes/">colormap</a> which distinguishes nicely between ten groups.</p>
-<div id="fdpfxx" style=""></div>
+<div id="fdpdek" style=""></div>
 <script>
-graphDiv = document.getElementById("fdpfxx");
+graphDiv = document.getElementById("fdpdek");
 plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_pca_color.json');
 </script>
 
-<p>By clicking on the different labels, you are able to hide and show them.  We recommend to have a look at pairs of colours. We see for example that there is quite some overlapping in <code>1</code>s and <code>7</code>s but hardly any overlap in <code>1</code>s and <code>0</code>s. So we expect learning algorithms to be easily able to discriminate between <code>1</code>s and <code>0</code>s while probably having a harder time distinguishing between <code>1</code> and <code>7</code>.  But still we have to keep in mind that we lost a lot of information when transforming to two dimensions, so probably we find a better method for our data set.</p>
+<p>By clicking on the different labels, you are able to hide and show them.  We recommend to have a look at pairs of colors. We see for example that there is quite some overlapping in <code>1</code>s and <code>7</code>s but hardly any overlap in <code>1</code>s and <code>0</code>s. So we expect learning algorithms to be easily able to discriminate between <code>1</code>s and <code>0</code>s while probably having a harder time distinguishing between <code>1</code> and <code>7</code>.  But still we have to keep in mind that we lost a lot of information when transforming to two dimensions, so probably we find a better method for our data set.</p>
 <button type="button" class="collapsible" style="background-color:#b5ddff"> Exercise </button><div class="collapsiblecontent">  In this exercise we will use a different dimensionality reduction method called <em>Uniform Manifold Approximation and Projection</em> &#40;UMAP&#41;. Down to its core and very simply speaking, UMAP constructs a high dimensional graph representation of the data set and then tries to fit a low-dimensional graph to be structurally as similar as possible. To get a better understanding, there is also a nice <a href="https://pair-code.github.io/understanding-umap/">webpage with interactive explanations</a>. Unfortunately, this method is not included in <code>MLJ.jl</code>, so we need to load <a href="https://github.com/dillondaudert/UMAP.jl"><code>UMAP.jl</code></a> directly. Follow this steps to get a nice dimensionality reduction with UMAP:</p>
 <ol>
 <li><p>Add and use <code>UMAP.jl</code></p>
@@ -396,16 +396,16 @@ X_test_umap_mat = umap(<span class="hljs-built_in">Matrix</span>(X_test)&#x27;, 
 StatsPlots.scatter(X_test_umap_mat[<span class="hljs-number">1</span>, :], X_test_umap_mat[<span class="hljs-number">2</span>, :], group=y_test, alpha=<span class="hljs-number">0.3</span>, palette=:seaborn_bright)
 
 StatsPlots.scatter(X_test_umap_mat[<span class="hljs-number">1</span>, :], X_test_umap_mat[<span class="hljs-number">2</span>, :], group=r_machkmeans.assignments, alpha=<span class="hljs-number">0.3</span>, palette=:seaborn_bright)</code></pre>
-<p>Coloured by real labels:</p>
-<div id="fdpuut" style=""></div>
+<p>Colored by real labels:</p>
+<div id="fdpgcy" style=""></div>
 <script>
-graphDiv = document.getElementById("fdpuut");
+graphDiv = document.getElementById("fdpgcy");
 plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_umap_color.json');
 </script>
 
-<p>Coloured by K means assigments: <div id="fdprab" style=""></div>
+<p>Colored by K means assignments: <div id="fdpqtm" style=""></div>
 <script>
-graphDiv = document.getElementById("fdprab");
+graphDiv = document.getElementById("fdpqtm");
 plotlyPromise = PlotlyJS_json(graphDiv, '/ss22_julia_workshop/assets/pages/datascience/plot_umap_colored_by_cluster.json');
 </script>
  </div> </div>
