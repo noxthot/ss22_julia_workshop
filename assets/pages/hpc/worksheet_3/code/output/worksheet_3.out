@@ -1,0 +1,3 @@
+ArgumentError: Package CUDA not found in current path:
+- Run `import Pkg; Pkg.add("CUDA")` to install the CUDA package.
+
