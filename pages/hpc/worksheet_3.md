@@ -28,33 +28,33 @@ Now, make sure that all arrays that you use in the main time loop are of type `C
 
 To illustrate how to change to the GPU, let us look writing the initial condition. Try to run the two implementations
 ```julia
-    T = Float32
-    nx = 100
-    nv = 100
-    x = collect(range(obj.a, obj.b; length=nx))
+T = Float32
+nx = 100
+nv = 100
+x = collect(range(obj.a, obj.b; length=nx))
 
-    # setup initial condition
-    ψ = zeros(T, nx, nv)
+# setup initial condition
+ψ = zeros(T, nx, nv)
 
-    for j in 1:nx
-        ψ[j, :] .= IC(obj, x[j])
-    end
+for j in 1:nx
+    ψ[j, :] .= IC(obj, x[j])
+end
 ```
 as well as
 ```julia
-    T = Float32
-    nx = 100
-    nv = 100
-    x = collect(range(obj.a, obj.b; length=nx))
+T = Float32
+nx = 100
+nv = 100
+x = collect(range(obj.a, obj.b; length=nx))
 
-    # setup initial condition
-    ψ = zeros(T, nx, nv)
+# setup initial condition
+ψ = zeros(T, nx, nv)
 
-    for j in 1:nx
-        ψ[j, :] .= IC(obj, x[j])
-    end
+for j in 1:nx
+    ψ[j, :] .= IC(obj, x[j])
+end
 
-    ψ = CuArray(ψ)
+ψ = CuArray(ψ)
 ```
 Which one is faster and why? Use these observations to ensure your main time loops uses GPU arrays. Once you are confident your implementation should work, run it on you GPU. And since you expect to be super fast now, why not use $5000$ spatial points and $1000$ velocity points? See how much the solution changes.
 
