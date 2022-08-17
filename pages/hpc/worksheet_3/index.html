@@ -130,30 +130,30 @@ settings = Settings(nx,nv,sigma2)</code></pre>
 <p>Now, make sure that all arrays that you use in the main time loop are of type <code>CuArray</code>. Note that it might be beneficial to not directly perform all operations of your code on your GPU. Whenever you access indices, it might make more sense to work on the CPU. You can transform your data arrays to type <code>CuArray</code> once everything is set up.</p>
 <p>To illustrate how to change to the GPU, let us look writing the initial condition. Try to run the two implementations</p>
 <pre><code class="julia hljs">T = <span class="hljs-built_in">Float32</span>
-    nx = <span class="hljs-number">100</span>
-    nv = <span class="hljs-number">100</span>
-    x = collect(range(obj.a, obj.b; length=nx))
+nx = <span class="hljs-number">100</span>
+nv = <span class="hljs-number">100</span>
+x = collect(range(obj.a, obj.b; length=nx))
 
-    <span class="hljs-comment"># setup initial condition</span>
-    ψ = zeros(T, nx, nv)
+<span class="hljs-comment"># setup initial condition</span>
+ψ = zeros(T, nx, nv)
 
-    <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-number">1</span>:nx
-        ψ[j, :] .= IC(obj, x[j])
-    <span class="hljs-keyword">end</span></code></pre>
+<span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-number">1</span>:nx
+    ψ[j, :] .= IC(obj, x[j])
+<span class="hljs-keyword">end</span></code></pre>
 <p>as well as</p>
 <pre><code class="julia hljs">T = <span class="hljs-built_in">Float32</span>
-    nx = <span class="hljs-number">100</span>
-    nv = <span class="hljs-number">100</span>
-    x = collect(range(obj.a, obj.b; length=nx))
+nx = <span class="hljs-number">100</span>
+nv = <span class="hljs-number">100</span>
+x = collect(range(obj.a, obj.b; length=nx))
 
-    <span class="hljs-comment"># setup initial condition</span>
-    ψ = zeros(T, nx, nv)
+<span class="hljs-comment"># setup initial condition</span>
+ψ = zeros(T, nx, nv)
 
-    <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-number">1</span>:nx
-        ψ[j, :] .= IC(obj, x[j])
-    <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-number">1</span>:nx
+    ψ[j, :] .= IC(obj, x[j])
+<span class="hljs-keyword">end</span>
 
-    ψ = CuArray(ψ)</code></pre>
+ψ = CuArray(ψ)</code></pre>
 <p>Which one is faster and why? Use these observations to ensure your main time loops uses GPU arrays. Once you are confident your implementation should work, run it on you GPU. And since you expect to be super fast now, why not use <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>5000</mn></mrow><annotation encoding="application/x-tex">5000</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">5000</span></span></span></span> spatial points and <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1000</mn></mrow><annotation encoding="application/x-tex">1000</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1000</span></span></span></span> velocity points? See how much the solution changes.</p>
 <button type="button" class="collapsible" style="background-color:#fffca5"> Solution </button><div class="collapsiblecontent">  One possible GPU implementation looks the following. Note that we abandon sparse matrices. To use sparse matrices on the GPU, we can employ the <code>CuSparseMatrixCSC</code> in the <code>CuSparse</code> package.</p>
 <pre><code class="julia hljs"><span class="hljs-keyword">using</span> FastGaussQuadrature
