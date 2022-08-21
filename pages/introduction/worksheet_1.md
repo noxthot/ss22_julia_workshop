@@ -104,9 +104,9 @@ $$
       &  -1       & 1         &     &     \\
       &         &    \ddots       &     1      &    \\
       &         &           &      -1     & 1
-  \end{pmatrix}\;.
+  \end{pmatrix}\;,
 $$
-Set up these two matrices in your code.
+where $\Delta x = \frac{1}{n_x - 1}$. Set up these two matrices in your code.
 
 \collapssol{
 To setup tridiagonal matrices you need to load the `LinearAlgebra` package:
