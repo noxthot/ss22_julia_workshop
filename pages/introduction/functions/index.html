@@ -117,7 +117,7 @@
 
 <!-- Content appended here (in class franklin-content) -->
 <div class="franklin-content"><h1 id="functions"><a href="#functions" class="header-anchor">Functions</a></h1>
-<div class="franklin-toc"><ol><li><a href="#syntax">Syntax</a></li><li><a href="#anonymous_functions">Anonymous functions</a></li><li><a href="#call_by_reference">Call by reference</a></li><li><a href="#multiple_dispatch">Multiple dispatch</a></li><li><a href="#element-wise_operations_and_input_specifications">Element-wise operations and input specifications</a></li><li><a href="#parametric_types_for_functions">Parametric types for functions</a></li><li><a href="#constructors">Constructors</a></li></ol></div>
+<div class="franklin-toc"><ol><li><a href="#syntax">Syntax</a></li><li><a href="#anonymous_functions">Anonymous functions</a></li><li><a href="#element-wise_operations_and_input_specifications">Element-wise operations and input specifications</a></li><li><a href="#call_by_reference">Call by reference</a></li><li><a href="#multiple_dispatch">Multiple dispatch</a></li><li><a href="#parametric_types_for_functions">Parametric types for functions</a></li><li><a href="#constructors">Constructors</a></li></ol></div>
 <h2 id="syntax"><a href="#syntax" class="header-anchor">Syntax</a></h2>
 <p>To improve the structure and ensure reusability of pieces of our program we can use the <code>function</code> command. We have already used functions when, for example, calling <code>typeof&#40;input&#41;</code>. Other examples of functions that can be found on any common calculators are <code>sin&#40;x&#41;</code> or <code>exp&#40;x&#41;</code>. The syntax to define our own functions is the following:</p>
 <pre><code class="julia hljs"><span class="hljs-keyword">function</span> foo(input)
@@ -214,6 +214,29 @@ isapprox(mysum1(V),  mysum2(V); atol=<span class="hljs-number">1e-10</span>, rto
  10
  17
  26</code></pre>
+<h2 id="element-wise_operations_and_input_specifications"><a href="#element-wise_operations_and_input_specifications" class="header-anchor">Element-wise operations and input specifications</a></h2>
+<p>As always, we can use the dot operation <code>.</code> to evaluate an array of inputs element-wise. Define the scalar function</p>
+<pre><code class="julia hljs"><span class="hljs-keyword">function</span> sincos(x::<span class="hljs-built_in">Float64</span>)
+    <span class="hljs-keyword">return</span> sin(cos(x))    
+<span class="hljs-keyword">end</span></code></pre>
+<p>and run</p>
+<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> x = ones(<span class="hljs-number">2</span>, <span class="hljs-number">3</span>);
+</span>
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> sincos.(x)
+</span>2×3 Matrix{Float64}:
+ 0.514395  0.514395  0.514395
+ 0.514395  0.514395  0.514395</code></pre>
+<p>Moreover, we can assign values to inputs in the function definition. If the caller does not specify the input, these values will be used instead.</p>
+<pre><code class="julia hljs"><span class="hljs-keyword">function</span> sincos(x::<span class="hljs-built_in">Float64</span>=(<span class="hljs-number">0.5</span> * <span class="hljs-literal">pi</span>))
+    <span class="hljs-keyword">return</span> sin.(cos.(x))
+<span class="hljs-keyword">end</span></code></pre>
+<p>We can now call this function via</p>
+<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> sincos()
+</span>6.123233995736766e-17
+
+<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> sincos(<span class="hljs-number">0.0</span>)
+</span>0.8414709848078965</code></pre>
+<p>Note that the dot operation can also be used for built-in functions like <code>sin</code> or <code>cos</code>.</p>
 <h2 id="call_by_reference"><a href="#call_by_reference" class="header-anchor">Call by reference</a></h2>
 <p>Julia functions do not copy the input but directly operate on the input data. This means that changing values of the input in the function body will also change this data for the function caller. Whenever we define a function which will modify the input, we should indicate this with a <code>&#33;</code> behind the function name:</p>
 <pre><code class="julia hljs"><span class="hljs-keyword">function</span> sincos!(x)
@@ -351,28 +374,6 @@ Address output: Ptr{Nothing} @0x00007f33266e2310</code></pre>
  0.5143952585235492
  0.5143952585235492
  0.5143952585235492</code></pre>
-<h2 id="element-wise_operations_and_input_specifications"><a href="#element-wise_operations_and_input_specifications" class="header-anchor">Element-wise operations and input specifications</a></h2>
-<p>As always, we can use the dot operation <code>.</code> to evaluate an array of inputs element-wise. Define the scalar function</p>
-<pre><code class="julia hljs"><span class="hljs-keyword">function</span> sincos(x::<span class="hljs-built_in">Float64</span>)
-    <span class="hljs-keyword">return</span> sin(cos(x))    
-<span class="hljs-keyword">end</span></code></pre>
-<p>and run</p>
-<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> x = ones(<span class="hljs-number">2</span>, <span class="hljs-number">3</span>);
-</span>
-<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> sincos.(x)
-</span>2×3 Matrix{Float64}:
- 0.514395  0.514395  0.514395
- 0.514395  0.514395  0.514395</code></pre>
-<p>Moreover, we can assign values to inputs in the function definition. If the caller does not specify the input, these values will be used instead.</p>
-<pre><code class="julia hljs"><span class="hljs-keyword">function</span> sincos(x::<span class="hljs-built_in">Float64</span>=(<span class="hljs-number">0.5</span> * <span class="hljs-literal">pi</span>))
-    <span class="hljs-keyword">return</span> sin.(cos.(x))
-<span class="hljs-keyword">end</span></code></pre>
-<p>We can now call this function via</p>
-<pre><code class="julia-repl hljs"><span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> sincos()
-</span>6.123233995736766e-17
-
-<span class="hljs-meta prompt_">julia&gt;</span><span class="language-julia"> sincos(<span class="hljs-number">0.0</span>)
-</span>0.8414709848078965</code></pre>
 <h2 id="parametric_types_for_functions"><a href="#parametric_types_for_functions" class="header-anchor">Parametric types for functions</a></h2>
 <p>Notice that it is very restrictive to tell our method to only accept inputs of type <code>Float64</code>. It makes perfect sense to evaluate our function at <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">x = 1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span>, where <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">x</span></span></span></span> can be an integer. In fact, it is considered to be good practice if we make function inputs as general as possible. Just as for <em>structs</em>, we can use parametric types to make the input more general. If we want the input to be a real number &#40;i.e., a subtype of <code>Real</code>&#41;, we can write this as </p>
 <pre><code class="julia hljs"><span class="hljs-keyword">function</span> sincos(x::T) <span class="hljs-keyword">where</span> T&lt;:<span class="hljs-built_in">Real</span>
