@@ -98,7 +98,7 @@
             <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/hpc/multithreading/" class="menu-list-link ">Multithreading</a>
             <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/hpc/distributed/" class="menu-list-link ">Distributed computing</a>
             <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/hpc/gpu/" class="menu-list-link ">GPU computing</a>
-            <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/hpc/worksheet_3/" class="menu-list-link ">Worksheet 3</a>
+            <li class="menu-list-item "><a href="/ss22_julia_workshop/pages/hpc/worksheet_3/" class="menu-list-link active">Worksheet 3</a>
           </ul>
       </ul>
     </div>
@@ -127,8 +127,8 @@ nv = <span class="hljs-number">10</span>
 sigma2 = <span class="hljs-built_in">Float32</span>(<span class="hljs-number">0.0009</span>)
 settings = Settings(nx,nv,sigma2)</code></pre>
 <p></div>
-<p>Now, make sure that all arrays that you use in the main time loop are of type <code>CuArray</code>. Note that it might be beneficial to not directly perform all operations of your code on your GPU. Whenever you access indices, it might make more sense to work on the CPU. You can transform your data arrays to type <code>CuArray</code> once everything is set up.</p>
-<p>To illustrate how to change to the GPU, let us look writing the initial condition. Try to run the two implementations</p>
+<p>Now, make sure that all arrays that you use in the main time loop are of type <code>CuArray</code>. Note that it might be beneficial to not directly perform all operations of your code on your GPU. Whenever you access indices, it might make more sense to work on the CPU. You can cast your data arrays to type <code>CuArray</code> once everything is set up.</p>
+<p>To illustrate how to move the computation to the GPU, let us look writing the initial condition. Try to run the two implementations</p>
 <pre><code class="julia hljs">T = <span class="hljs-built_in">Float32</span>
 nx = <span class="hljs-number">100</span>
 nv = <span class="hljs-number">100</span>
@@ -154,8 +154,8 @@ x = collect(range(obj.a, obj.b; length=nx))
 <span class="hljs-keyword">end</span>
 
 ψ = CuArray(ψ)</code></pre>
-<p>Which one is faster and why? Use these observations to ensure your main time loops uses GPU arrays. Once you are confident your implementation should work, run it on you GPU. And since you expect to be super fast now, why not use <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>5000</mn></mrow><annotation encoding="application/x-tex">5000</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">5000</span></span></span></span> spatial points and <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1000</mn></mrow><annotation encoding="application/x-tex">1000</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1000</span></span></span></span> velocity points? See how much the solution changes.</p>
-<button type="button" class="collapsible" style="background-color:#fffca5"> Solution </button><div class="collapsiblecontent">  One possible GPU implementation looks the following. Note that we abandon sparse matrices. To use sparse matrices on the GPU, we can employ the <code>CuSparseMatrixCSC</code> in the <code>CuSparse</code> package.</p>
+<p>Which one is faster and why? Use these observations to ensure your main time loop uses GPU arrays. Once you are confident your implementation should work, run it on the GPU. And since you expect to be super fast now, why not use <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>5000</mn></mrow><annotation encoding="application/x-tex">5000</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">5000</span></span></span></span> spatial points and <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1000</mn></mrow><annotation encoding="application/x-tex">1000</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1000</span></span></span></span> velocity points? See how much the solution changes.</p>
+<button type="button" class="collapsible" style="background-color:#fffca5"> Solution </button><div class="collapsiblecontent">  One possible GPU implementation looks like the following. Note that we abandon sparse matrices. To use sparse matrices on the GPU, we can employ the <code>CuSparseMatrixCSC</code> in the <code>CuSparse</code> package.</p>
 <pre><code class="julia hljs"><span class="hljs-keyword">using</span> FastGaussQuadrature
 <span class="hljs-keyword">using</span> LaTeXStrings
 <span class="hljs-keyword">using</span> LinearAlgebra
@@ -175,8 +175,8 @@ x = collect(range(obj.a, obj.b; length=nx))
 
   <span class="hljs-keyword">function</span> Settings(nx::<span class="hljs-built_in">Int</span>=<span class="hljs-number">101</span>, nv::<span class="hljs-built_in">Int</span>=<span class="hljs-number">10</span>, sigma2::T=<span class="hljs-number">0.0009</span>) <span class="hljs-keyword">where</span> {T&lt;:<span class="hljs-built_in">AbstractFloat</span>}
     tEnd = <span class="hljs-number">0.4</span>
-    a = -<span class="hljs-number">1.0</span>;
-    b = <span class="hljs-number">1.0</span>;
+    a = -<span class="hljs-number">1.0</span>
+    b = <span class="hljs-number">1.0</span>
     Δx = (b - a) / (nx - <span class="hljs-number">1</span>)
     Δt = Δx
     nt = <span class="hljs-built_in">Int</span>(floor(tEnd / Δt))
@@ -213,16 +213,14 @@ x = collect(range(obj.a, obj.b; length=nx))
     D⁺ = CuArray((<span class="hljs-number">1</span> / Δx) * Tridiagonal(-ones(T, nx - <span class="hljs-number">1</span>), ones(T, nx), zeros(T, nx - <span class="hljs-number">1</span>)))
     D⁻ = CuArray((<span class="hljs-number">1</span> / Δx) * Tridiagonal(zeros(T, nx - <span class="hljs-number">1</span>), -ones(T, nx), ones(T, nx - <span class="hljs-number">1</span>)))
 
-
     <span class="hljs-comment"># create system matrices</span>
     midMinus = <span class="hljs-built_in">Int</span>(ceil(nv / <span class="hljs-number">2</span>))
     midPlus = <span class="hljs-built_in">Int</span>(floor(nv / <span class="hljs-number">2</span>))
     V⁻ = CuArray(Diagonal([v[<span class="hljs-number">1</span>:midMinus]; zeros(midPlus)]))
     V⁺ = CuArray(Diagonal([zeros(midMinus); v[(midPlus + <span class="hljs-number">1</span>):<span class="hljs-keyword">end</span>]]))
 
-
     <span class="hljs-comment"># create scattering matrix</span>
-    w = CuArray(w);
+    w = CuArray(w)
     G = CUDA.ones(T, nv, nv) .* w - I
 
     <span class="hljs-comment"># advance in time</span>
@@ -230,8 +228,7 @@ x = collect(range(obj.a, obj.b; length=nx))
     nT = obj.nt
 
     <span class="hljs-keyword">for</span> n <span class="hljs-keyword">in</span> <span class="hljs-number">1</span>:nT
-        ψ_new = ψ + Δt * (-D⁺ * ψ * V⁺ - D⁻ * ψ * V⁻ + ψ * G)
-        ψ .= ψ_new
+        ψ .= ψ + Δt * (-D⁺ * ψ * V⁺ - D⁻ * ψ * V⁻ + ψ * G)
     <span class="hljs-keyword">end</span>
 
     <span class="hljs-comment"># store Φ for plotting</span>
@@ -248,7 +245,7 @@ x = collect(range(obj.a, obj.b; length=nx))
 nx = <span class="hljs-number">1001</span>
 nv = <span class="hljs-number">1000</span>
 sigma2 = <span class="hljs-built_in">Float32</span>(<span class="hljs-number">0.0009</span>)
-settings = Settings(nx,nv,sigma2)
+settings = Settings(nx, nv, sigma2)
 
 <span class="hljs-comment"># run code and store final Φ</span>
 x, Φ = runPlaneSource(settings)
@@ -258,7 +255,7 @@ plot(x, Φ, labels=<span class="hljs-string">L&quot;\Phi&quot;</span>)
 xlabel!(<span class="hljs-string">&quot;x&quot;</span>)</code></pre>
 <p></div>
 <div class="page-foot">
-    <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> - <a href="https://ehrensperger.dev/">Gregor Ehrensperger</a>, <a href="https://lfuonline.uibk.ac.at/public/people.vcard?id=59131">Peter Kandolf</a>, <a href="https://lfuonline.uibk.ac.at/public/people.vcard?id=415344">Jonas Kusch</a>. Last modified: August 17, 2022.
+    <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> - <a href="https://ehrensperger.dev/">Gregor Ehrensperger</a>, <a href="https://lfuonline.uibk.ac.at/public/people.vcard?id=59131">Peter Kandolf</a>, <a href="https://lfuonline.uibk.ac.at/public/people.vcard?id=415344">Jonas Kusch</a>. Last modified: August 21, 2022.
     Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
 </div>
 </div><!-- CONTENT ENDS HERE -->

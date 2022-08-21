@@ -9,13 +9,13 @@ CodeInfo(
 2 ┄ %8  = @_3::Tuple{Int64, Int64}
 │         (i = Core.getfield(%8, 1))::Int64
 │   %10 = Core.getfield(%8, 2)::Int64
-│         $(Expr(:inbounds, true))::Any
+│         nothing::Core.Const(nothing)
 │   %12 = result::Float64
 │   %13 = Base.getindex(a, i)::Float64
 │   %14 = (%12 + %13)::Float64
 │         (result = %14)::Float64
 │         (val = %14)::Float64
-│         $(Expr(:inbounds, :pop))::Any
+│         nothing::Core.Const(nothing)
 │         val::Float64
 │         (@_3 = Base.iterate(%3, %10))::Union{Nothing, Tuple{Int64, Int64}}
 │   %20 = (@_3 === nothing)::Bool

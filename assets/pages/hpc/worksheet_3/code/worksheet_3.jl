@@ -18,8 +18,8 @@ struct Settings{T<:AbstractFloat}
 
   function Settings(nx::Int=101, nv::Int=10, sigma2::T=0.0009) where {T<:AbstractFloat}
     tEnd = 0.4
-    a = -1.0;
-    b = 1.0;
+    a = -1.0
+    b = 1.0
     Δx = (b - a) / (nx - 1)
     Δt = Δx
     nt = Int(floor(tEnd / Δt))
@@ -56,16 +56,14 @@ function runPlaneSource(obj::Settings{T}) where {T}
     D⁺ = CuArray((1 / Δx) * Tridiagonal(-ones(T, nx - 1), ones(T, nx), zeros(T, nx - 1)))
     D⁻ = CuArray((1 / Δx) * Tridiagonal(zeros(T, nx - 1), -ones(T, nx), ones(T, nx - 1)))
 
-
     # create system matrices
     midMinus = Int(ceil(nv / 2))
     midPlus = Int(floor(nv / 2))
     V⁻ = CuArray(Diagonal([v[1:midMinus]; zeros(midPlus)]))
     V⁺ = CuArray(Diagonal([zeros(midMinus); v[(midPlus + 1):end]]))
 
-
     # create scattering matrix
-    w = CuArray(w);
+    w = CuArray(w)
     G = CUDA.ones(T, nv, nv) .* w - I
 
     # advance in time
@@ -73,8 +71,7 @@ function runPlaneSource(obj::Settings{T}) where {T}
     nT = obj.nt
 
     for n in 1:nT
-        ψ_new = ψ + Δt * (-D⁺ * ψ * V⁺ - D⁻ * ψ * V⁻ + ψ * G)
-        ψ .= ψ_new
+        ψ .= ψ + Δt * (-D⁺ * ψ * V⁺ - D⁻ * ψ * V⁻ + ψ * G)
     end
 
     # store Φ for plotting
@@ -91,7 +88,7 @@ end
 nx = 1001
 nv = 1000
 sigma2 = Float32(0.0009)
-settings = Settings(nx,nv,sigma2)
+settings = Settings(nx, nv, sigma2)
 
 # run code and store final Φ
 x, Φ = runPlaneSource(settings)
