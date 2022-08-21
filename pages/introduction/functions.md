@@ -122,6 +122,39 @@ julia> map(x -> x^2 + 1, [1, 2, 3, 4, 5])
 ```
 
 
+## Element-wise operations and input specifications
+As always, we can use the dot operation `.` to evaluate an array of inputs element-wise. Define the scalar function
+```julia
+function sincos(x::Float64)
+    return sin(cos(x))    
+end
+```
+and run
+```julia-repl
+julia> x = ones(2, 3);
+
+julia> sincos.(x)
+2×3 Matrix{Float64}:
+ 0.514395  0.514395  0.514395
+ 0.514395  0.514395  0.514395
+```
+
+Moreover, we can assign values to inputs in the function definition. If the caller does not specify the input, these values will be used instead.
+```julia
+function sincos(x::Float64=(0.5 * pi))
+    return sin.(cos.(x))
+end
+```
+We can now call this function via
+```julia-repl
+julia> sincos()
+6.123233995736766e-17
+
+julia> sincos(0.0)
+0.8414709848078965
+```
+Note that the dot operation can also be used for built-in functions like `sin` or `cos`.
+
 ## Call by reference
 Julia functions do not copy the input but directly operate on the input data. This means that changing values of the input in the function body will also change this data for the function caller. Whenever we define a function which will modify the input, we should indicate this with a `!` behind the function name:
 ```julia
@@ -277,38 +310,6 @@ My input is a vector.
  0.5143952585235492
  0.5143952585235492
  0.5143952585235492
-```
-
-## Element-wise operations and input specifications
-As always, we can use the dot operation `.` to evaluate an array of inputs element-wise. Define the scalar function
-```julia
-function sincos(x::Float64)
-    return sin(cos(x))    
-end
-```
-and run
-```julia-repl
-julia> x = ones(2, 3);
-
-julia> sincos.(x)
-2×3 Matrix{Float64}:
- 0.514395  0.514395  0.514395
- 0.514395  0.514395  0.514395
-```
-
-Moreover, we can assign values to inputs in the function definition. If the caller does not specify the input, these values will be used instead.
-```julia
-function sincos(x::Float64=(0.5 * pi))
-    return sin.(cos.(x))
-end
-```
-We can now call this function via
-```julia-repl
-julia> sincos()
-6.123233995736766e-17
-
-julia> sincos(0.0)
-0.8414709848078965
 ```
 
 ## Parametric types for functions
