@@ -1,4 +1,4 @@
-@def title = "SS22 Julia Workshop"
+@def title = "SS22 Scientific Coding with Julia"
 @def tags = ["syntax", "code"]
 
 # Getting started with Julia
