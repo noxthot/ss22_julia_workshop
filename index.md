@@ -15,7 +15,7 @@ In this workshop we are going to take a look at Julia by starting with the basic
 
 We want to give a huge shout-out to [Stephan Antholzer](https://www.uibk.ac.at/mathematik/personal/antholzer/) for advice and numerous suggestions that have helped us to improve the quality of the content in many places.
 
-## Some general words on the organisation of this workshop
+## Some general words on the organization of this workshop
 
 For this workshop you do not need to be an Julia expert, not even a programming expert. We will introduce programming and Julia concepts along with examples. For this purpose you will find code blocks that you can copy if necessary (top right corner `copy`). Furthermore, if we think something is very important we will highlight it with a box:
 
@@ -27,7 +27,11 @@ We also have various environments with different color coding that usually are c
 - Examples are green
 \example{Examples are also quite nice because they make sure you have an idea what is happening.}
 - Exercises are blue
-\exercise{Exercises are here for you to work on, no worries not at home or in your off hours but with us in the workshop.}
+\exercise{Exercises are here for you to work on, no worries not at home or in your off hours but with us in the workshop.
+
+Some exercises will have *hidden* solutions.
+The can be accessed by adding `?solutions=true` to the URL of the page. 
+This way it is more likely that everybody tries to the exercises without first looking at the sample solution.}
 
 That is about all we wanted to let you know, so let us get into it.
 
