@@ -3,10 +3,7 @@
 
 # Preface
 
-This workshop was originally designed for the [DK CIM/DP DOCC Summer School 2022](https://www.uibk.ac.at/dk-cim/dokumente/folder_summerschool2022.pdf) as part of the [Doctoral College Computational Interdisciplinary Modelling (DK CIM)](https://www.uibk.ac.at/dk-cim/index.html.en).
-
-In order to access the *hidden* solutions within, you simply need to add `?solution=true` to the URL of the page (usually this will not stay when you switch pages). 
-This way the solutions are not visible right away and we are less tempted to just look them up and not try for ourself.
+This workshop was originally designed for the [DK CIM/DP DOCC Summer School 2022](https://www.uibk.ac.at/dk-cim/dokumente/folder_summerschool2022.pdf) as part of the [Doctoral College Computational Interdisciplinary Modelling (DK CIM)](https://www.uibk.ac.at/dk-cim/index.html.en) and intended for a roughly 12 hour workshop. 
 
 # Getting started with Julia
 
