@@ -3,7 +3,7 @@
 
 # Preface
 
-This workshop was originally designed for the [DK CIM/DP DOCC Summer School 2022](https://www.uibk.ac.at/dk-cim/dokumente/folder_summerschool2022.pdf) as part of the [Doctoral College Computational Interdisciplinary Modelling (DK CIM)](https://www.uibk.ac.at/dk-cim/index.html.en) and intended for a roughly 12 hour workshop. 
+This workshop was originally designed for the [DK CIM/DP DOCC Summer School 2022](https://www.uibk.ac.at/dk-cim/dokumente/folder_summerschool2022.pdf) as part of the [Doctoral College Computational Interdisciplinary Modelling (DK CIM)](https://www.uibk.ac.at/dk-cim/index.html.en) and intended for roughly 12 hour workshop. 
 
 # Getting started with Julia
 
