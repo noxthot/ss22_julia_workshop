@@ -29,8 +29,7 @@ We also have various environments with different color coding that usually are c
 - Exercises are blue
 \exercise{Exercises are here for you to work on, no worries not at home or in your off hours but with us in the workshop.
 
-Some exercises will have *hidden* solutions.
-The can be accessed by adding `?solution=true` to the URL of the page. 
+Some exercises will have *hidden* solutions which can be accessed by adding `?solution=true` to the URL of the page. 
 This way it is more likely that everybody tries to the exercises without first looking at the sample solution.}
 
 That is about all we wanted to let you know, so let us get into it.
