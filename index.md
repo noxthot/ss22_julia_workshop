@@ -17,7 +17,8 @@ In case you want to refer to this lecture material, use the following BibTex sni
     title = {SS22 Scientific Programming with Julia}, 
     publisher = {Universität Innsbruck},
     year = {2022},
-    copyright = {Creative Commons Attribution Share Alike 4.0 International}}
+    copyright = {Creative Commons Attribution Share Alike 4.0 International}
+}
 ```
 
 
