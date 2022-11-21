@@ -174,11 +174,11 @@ println(<span class="hljs-string">&quot;\nBuilt-in sum:&quot;</span>)
 <span class="hljs-meta">@btime</span> sum($a)</code></pre>
 <p><pre><code class="plaintext hljs">
 Simple sum:
-  160.399 μs (0 allocations: 0 bytes)
+  133.601 μs (0 allocations: 0 bytes)
 
 Built-in sum:
-  12.700 μs (0 allocations: 0 bytes)
-49797.6918940384</code></pre> As we can see, we are slower, exactly how much slower depends on the architecture of your CPU but it is usually between 2 to 16 times. </p>
+  12.200 μs (0 allocations: 0 bytes)
+50031.732895676934</code></pre> As we can see, we are slower, exactly how much slower depends on the architecture of your CPU but it is usually between 2 to 16 times. </p>
 <p>In order to enable SIMD in a program &#40;if it is not done by library calls anyway&#41;, we can use the <code>@simd</code> macro, this works if we loop over the indices or the elements, Julia is quite flexible there. </p>
 <pre><code class="julia hljs"><span class="hljs-keyword">function</span> mysimdsum(a)
     result = zero(eltype(a))
@@ -221,21 +221,21 @@ println(<span class="hljs-string">&quot;\nSimple mysum2 = &quot;</span>, mysum2(
 println(<span class="hljs-string">&quot;\nSimple mysimdsum2 = &quot;</span>, mysimdsum2(a))
 <span class="hljs-meta">@btime</span> mysimdsum2($a)</code></pre>
 <p><pre><code class="plaintext hljs">
-Simple mysum(a) = 49797.691894038166
-  160.399 μs (0 allocations: 0 bytes)
+Simple mysum(a) = 50031.7328956771
+  133.601 μs (0 allocations: 0 bytes)
 
-Built-in sum(a) = 49797.6918940384
-  12.700 μs (0 allocations: 0 bytes)
+Built-in sum(a) = 50031.732895676934
+  12.200 μs (0 allocations: 0 bytes)
 
-Simple mysimdsum = 49797.69189403839
-  10.100 μs (0 allocations: 0 bytes)
+Simple mysimdsum = 50031.73289567692
+  9.167 μs (0 allocations: 0 bytes)
 
-Simple mysum2 = 49797.691894038166
-  160.399 μs (0 allocations: 0 bytes)
+Simple mysum2 = 50031.7328956771
+  133.601 μs (0 allocations: 0 bytes)
 
-Simple mysimdsum2 = 49797.69189403839
-  10.099 μs (0 allocations: 0 bytes)
-49797.69189403839</code></pre> We can see a massive speed up &#40;that will depend on the CPU architecture you are running your code on&#41;. What is interesting is, that the results of the three function calls are not the same. </p>
+Simple mysimdsum2 = 50031.73289567692
+  9.167 μs (0 allocations: 0 bytes)
+50031.73289567692</code></pre> We can see a massive speed up &#40;that will depend on the CPU architecture you are running your code on&#41;. What is interesting is, that the results of the three function calls are not the same. </p>
 <p>This is due to the fact that the numerics involved are a bit tricky.  In short, when adding floating point numbers you lose accuracy when adding a large number to a small number.  This is exactly what is happening for our first example as we add all the numbers in one long sequence. </p>
 <p>The built-in <code>sum</code> function as well as the <code>@simd</code> macro allow Julia to change the order of the operations. In this specific case, it boils down to computing the result for the even and odd entries separately and therefore gaining a bit of accuracy.</p>
 <p>If you are not sure if something is vectorized, you can check out the LLVM code for the two versions and see the difference &#40;Hint: look out for something called <code>vector.ph</code>&#41;.</p>
@@ -245,7 +245,7 @@ Simple mysimdsum2 = 49797.69189403839
 printstyled(<span class="hljs-string">&quot;\n------Separator-------\n\n&quot;</span>; color = :red)
 <span class="hljs-meta">@code_llvm</span> mysimdsum(a)</code></pre>
 <pre><code class="plaintext hljs">;  @ none:2 within `mysum`
-define double @julia_mysum_7321({}* nonnull align 16 dereferenceable(40) %0) #0 {
+define double @julia_mysum_7380({}* nonnull align 16 dereferenceable(40) %0) #0 {
 top:
 ;  @ none:5 within `mysum`
 ; ┌ @ abstractarray.jl:285 within `eachindex`
@@ -300,7 +300,7 @@ L33:                                              ; preds = %L15, %top
 ------Separator-------
 
 ;  @ none:1 within `mysimdsum`
-define double @julia_mysimdsum_7330({}* nonnull align 16 dereferenceable(40) %0) #0 {
+define double @julia_mysimdsum_7389({}* nonnull align 16 dereferenceable(40) %0) #0 {
 top:
 ;  @ none:4 within `mysimdsum`
 ; ┌ @ simdloop.jl:69 within `macro expansion`
@@ -475,159 +475,159 @@ L31:                                              ; preds = %L14, %middle.block,
 [7] +(c::Union{Float16, Float32, Float64}, x::BigFloat) in Base.MPFR at mpfr.jl:414
 [8] +(x::Union{Dates.CompoundPeriod, Dates.Period}) in Dates at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/Dates/src/periods.jl:378
 [9] +(a::Union{ColorTypes.LMS, ColorTypes.XYZ}, b::Union{ColorTypes.LMS, ColorTypes.XYZ}) in Colors at /home/runner/.julia/packages/Colors/yDxFN/src/algorithms.jl:4
-[10] +(r1::StepRangeLen{T, R}, r2::StepRangeLen{T, R}) where {R&lt;:Base.TwicePrecision, T} in Base at twiceprecision.jl:644
-[11] +(r1::StepRangeLen{T, S}, r2::StepRangeLen{T, S}) where {T, S} in Base at range.jl:1446
-[12] +(a::StaticArraysCore.StaticArray{Tuple{N, M}, T, 2} where {N, M, T}, b::LinearAlgebra.UniformScaling) in StaticArrays at /home/runner/.julia/packages/StaticArrays/dcWsT/src/linalg.jl:29
-[13] +(a::StaticArraysCore.StaticArray) in StaticArrays at /home/runner/.julia/packages/StaticArrays/dcWsT/src/linalg.jl:7
-[14] +(a::StaticArraysCore.StaticArray, b::StaticArraysCore.StaticArray) in StaticArrays at /home/runner/.julia/packages/StaticArrays/dcWsT/src/linalg.jl:12
-[15] +(a::StaticArraysCore.StaticArray, b::AbstractArray) in StaticArrays at /home/runner/.julia/packages/StaticArrays/dcWsT/src/linalg.jl:14
-[16] +(a::AbstractArray, b::StaticArraysCore.StaticArray) in StaticArrays at /home/runner/.julia/packages/StaticArrays/dcWsT/src/linalg.jl:13
-[17] +(F::LinearAlgebra.Hessenberg, J::LinearAlgebra.UniformScaling) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/hessenberg.jl:641
-[18] +(A::LinearAlgebra.Symmetric, B::LinearAlgebra.Symmetric) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/symmetric.jl:469
-[19] +(A::LinearAlgebra.Symmetric, B::LinearAlgebra.SymTridiagonal) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/symmetric.jl:486
-[20] +(S::LinearAlgebra.Symmetric, D::LinearAlgebra.Diagonal) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/diagonal.jl:191
-[21] +(A::LinearAlgebra.Symmetric{&lt;:Any, &lt;:SparseArrays.AbstractSparseMatrix}, B::SparseArrays.AbstractSparseMatrix) in SparseArrays at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/SparseArrays/src/linalg.jl:15
-[22] +(A::LinearAlgebra.Symmetric, B::SparseArrays.AbstractSparseMatrix) in SparseArrays at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/SparseArrays/src/linalg.jl:18
-[23] +(A::LinearAlgebra.Symmetric{&lt;:Real, &lt;:SparseArrays.AbstractSparseMatrix}, B::LinearAlgebra.Hermitian{&lt;:Any, &lt;:SparseArrays.AbstractSparseMatrix}) in SparseArrays at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/SparseArrays/src/linalg.jl:25
-[24] +(A::LinearAlgebra.Symmetric{var&quot;#s884&quot;, S} where {var&quot;#s884&quot;&lt;:Real, S&lt;:(AbstractMatrix{&lt;:var&quot;#s884&quot;})}, B::LinearAlgebra.Hermitian) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/symmetric.jl:484
-[25] +(A::LinearAlgebra.Symmetric{&lt;:Any, &lt;:SparseArrays.AbstractSparseMatrix}, B::LinearAlgebra.Hermitian{&lt;:Any, &lt;:SparseArrays.AbstractSparseMatrix}) in SparseArrays at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/SparseArrays/src/linalg.jl:23
-[26] +(a::ChainRulesCore.Tangent{P}, b::ChainRulesCore.Tangent{P}) where P in ChainRulesCore at /home/runner/.julia/packages/ChainRulesCore/ctmSK/src/tangent_arithmetic.jl:129
-[27] +(a::ChainRulesCore.Tangent, b::ChainRulesCore.AbstractThunk) in ChainRulesCore at /home/runner/.julia/packages/ChainRulesCore/ctmSK/src/tangent_arithmetic.jl:123
-[28] +(a::ChainRulesCore.Tangent, ::ChainRulesCore.ZeroTangent) in ChainRulesCore at /home/runner/.julia/packages/ChainRulesCore/ctmSK/src/tangent_arithmetic.jl:100
-[29] +(a::ChainRulesCore.Tangent, ::ChainRulesCore.NoTangent) in ChainRulesCore at /home/runner/.julia/packages/ChainRulesCore/ctmSK/src/tangent_arithmetic.jl:60
-[30] +(::ChainRulesCore.Tangent, x::ChainRulesCore.NotImplemented) in ChainRulesCore at /home/runner/.julia/packages/ChainRulesCore/ctmSK/src/tangent_arithmetic.jl:25
-[31] +(a::ChainRulesCore.Tangent{P}, b::P) where P in ChainRulesCore at /home/runner/.julia/packages/ChainRulesCore/ctmSK/src/tangent_arithmetic.jl:146
-[32] +(x::T, y::Integer) where T&lt;:AbstractChar in Base at char.jl:237
-[33] +(A::SparseArrays.AbstractSparseMatrixCSC, B::SparseArrays.AbstractSparseMatrixCSC) in SparseArrays at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/SparseArrays/src/sparsematrix.jl:1829
-[34] +(A::SparseArrays.AbstractSparseMatrixCSC, B::Array) in SparseArrays at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/SparseArrays/src/sparsematrix.jl:1832
-[35] +(A::SparseArrays.AbstractSparseMatrixCSC, J::LinearAlgebra.UniformScaling) in SparseArrays at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/SparseArrays/src/sparsematrix.jl:3821
-[36] +(y::AbstractFloat, x::Bool) in Base at bool.jl:172
-[37] +(r1::OrdinalRange, r2::OrdinalRange) in Base at range.jl:1423
-[38] +(A::BitArray, B::BitArray) in Base at bitarray.jl:1184
-[39] +(x::Base.TwicePrecision, y::Number) in Base at twiceprecision.jl:290
-[40] +(x::Base.TwicePrecision{T}, y::Base.TwicePrecision{T}) where T in Base at twiceprecision.jl:296
-[41] +(x::Base.TwicePrecision, y::Base.TwicePrecision) in Base at twiceprecision.jl:301
-[42] +(A::LinearAlgebra.UnitLowerTriangular, B::LinearAlgebra.LowerTriangular) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/triangular.jl:643
-[43] +(A::LinearAlgebra.UnitLowerTriangular, B::LinearAlgebra.UnitLowerTriangular) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/triangular.jl:645
-[44] +(UL::LinearAlgebra.UnitLowerTriangular, J::LinearAlgebra.UniformScaling) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/uniformscaling.jl:181
-[45] +(A::LinearAlgebra.UnitLowerTriangular, B::LinearAlgebra.Bidiagonal) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/special.jl:98
-[46] +(x::Rational, y::Integer) in Base at rational.jl:313
-[47] +(bb1::Measures.BoundingBox, bb2::Measures.BoundingBox) in Plots at /home/runner/.julia/packages/Plots/OeNV1/src/layouts.jl:19
-[48] +(A::LinearAlgebra.UpperHessenberg, B::LinearAlgebra.UpperHessenberg) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/hessenberg.jl:101
-[49] +(H::LinearAlgebra.UpperHessenberg, x::LinearAlgebra.UniformScaling) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/hessenberg.jl:108
-[50] +(H::LinearAlgebra.UpperHessenberg, x::LinearAlgebra.Diagonal) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/hessenberg.jl:108
-[51] +(H::LinearAlgebra.UpperHessenberg, x::LinearAlgebra.Bidiagonal) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/hessenberg.jl:108
-[52] +(H::LinearAlgebra.UpperHessenberg, x::LinearAlgebra.Tridiagonal) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/hessenberg.jl:108
-[53] +(H::LinearAlgebra.UpperHessenberg, x::LinearAlgebra.SymTridiagonal) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/hessenberg.jl:108
-[54] +(H::LinearAlgebra.UpperHessenberg, x::LinearAlgebra.UpperTriangular) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/hessenberg.jl:108
-[55] +(H::LinearAlgebra.UpperHessenberg, x::LinearAlgebra.UnitUpperTriangular) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/hessenberg.jl:108
-[56] +(A::LinearAlgebra.UnitUpperTriangular, B::LinearAlgebra.UpperTriangular) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/triangular.jl:642
-[57] +(A::LinearAlgebra.UnitUpperTriangular, B::LinearAlgebra.UnitUpperTriangular) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/triangular.jl:644
-[58] +(UL::LinearAlgebra.UnitUpperTriangular, J::LinearAlgebra.UniformScaling) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/uniformscaling.jl:181
-[59] +(x::LinearAlgebra.UnitUpperTriangular, H::LinearAlgebra.UpperHessenberg) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/hessenberg.jl:109
-[60] +(A::LinearAlgebra.UnitUpperTriangular, B::LinearAlgebra.Bidiagonal) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/special.jl:98
-[61] +(Da::LinearAlgebra.Diagonal, Db::LinearAlgebra.Diagonal) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/diagonal.jl:184
-[62] +(D::LinearAlgebra.Diagonal, S::LinearAlgebra.Symmetric) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/diagonal.jl:188
-[63] +(D::LinearAlgebra.Diagonal{var&quot;#s885&quot;, V} where {var&quot;#s885&quot;&lt;:Real, V&lt;:AbstractVector{var&quot;#s885&quot;}}, H::LinearAlgebra.Hermitian) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/diagonal.jl:194
-[64] +(x::LinearAlgebra.Diagonal, H::LinearAlgebra.UpperHessenberg) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/hessenberg.jl:109
-[65] +(A::LinearAlgebra.Diagonal, B::LinearAlgebra.Bidiagonal) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/special.jl:137
-[66] +(A::LinearAlgebra.Diagonal, B::LinearAlgebra.SymTridiagonal) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/special.jl:147
-[67] +(A::LinearAlgebra.Diagonal, B::LinearAlgebra.Tridiagonal) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/special.jl:175
-[68] +(A::LinearAlgebra.Diagonal{var&quot;#s885&quot;, V} where {var&quot;#s885&quot;&lt;:Number, V&lt;:AbstractVector{var&quot;#s885&quot;}}, B::LinearAlgebra.UniformScaling) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/special.jl:253
-[69] +(x::SparseArrays.AbstractSparseVector, y::SparseArrays.AbstractSparseVector) in SparseArrays at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/SparseArrays/src/sparsevector.jl:1392
-[70] +(A::SparseArrays.AbstractSparseMatrix, B::LinearAlgebra.Hermitian{&lt;:Any, &lt;:SparseArrays.AbstractSparseMatrix}) in SparseArrays at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/SparseArrays/src/linalg.jl:14
-[71] +(A::SparseArrays.AbstractSparseMatrix, B::LinearAlgebra.Hermitian) in SparseArrays at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/SparseArrays/src/linalg.jl:17
-[72] +(A::SparseArrays.AbstractSparseMatrix, B::LinearAlgebra.Symmetric{&lt;:Any, &lt;:SparseArrays.AbstractSparseMatrix}) in SparseArrays at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/SparseArrays/src/linalg.jl:14
-[73] +(A::SparseArrays.AbstractSparseMatrix, B::LinearAlgebra.Symmetric) in SparseArrays at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/SparseArrays/src/linalg.jl:17
-[74] +(a::ColorTypes.AbstractGray{Bool}, b::Bool) in ColorVectorSpace at /home/runner/.julia/packages/ColorVectorSpace/bhkoO/src/ColorVectorSpace.jl:338
-[75] +(a::ColorTypes.AbstractGray{Bool}, b::Number) in ColorVectorSpace at /home/runner/.julia/packages/ColorVectorSpace/bhkoO/src/ColorVectorSpace.jl:337
-[76] +(a::ColorTypes.AbstractGray, b::Number) in ColorVectorSpace at /home/runner/.julia/packages/ColorVectorSpace/bhkoO/src/ColorVectorSpace.jl:336
-[77] +(a::ColorTypes.TransparentGray, b::ColorTypes.TransparentGray) in ColorVectorSpace at /home/runner/.julia/packages/ColorVectorSpace/bhkoO/src/ColorVectorSpace.jl:328
-[78] +(a::ColorTypes.TransparentColor{C, T, 4} where {C&lt;:ColorTypes.AbstractRGB, T}, b::ColorTypes.TransparentColor{C, T, 4} where {C&lt;:ColorTypes.AbstractRGB, T}) in ColorVectorSpace at /home/runner/.julia/packages/ColorVectorSpace/bhkoO/src/ColorVectorSpace.jl:279
-[79] +(c::Union{ColorTypes.TransparentColor{C, Bool}, C} where C&lt;:Union{ColorTypes.AbstractRGB{Bool}, ColorTypes.AbstractGray{Bool}}) in ColorVectorSpace at /home/runner/.julia/packages/ColorVectorSpace/bhkoO/src/ColorVectorSpace.jl:255
+[10] +(bb1::Measures.BoundingBox, bb2::Measures.BoundingBox) in Plots at /home/runner/.julia/packages/Plots/OeNV1/src/layouts.jl:19
+[11] +(r1::StepRangeLen{T, R}, r2::StepRangeLen{T, R}) where {R&lt;:Base.TwicePrecision, T} in Base at twiceprecision.jl:644
+[12] +(r1::StepRangeLen{T, S}, r2::StepRangeLen{T, S}) where {T, S} in Base at range.jl:1446
+[13] +(F::LinearAlgebra.Hessenberg, J::LinearAlgebra.UniformScaling) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/hessenberg.jl:641
+[14] +(A::LinearAlgebra.Symmetric, B::LinearAlgebra.Symmetric) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/symmetric.jl:469
+[15] +(A::LinearAlgebra.Symmetric, B::LinearAlgebra.SymTridiagonal) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/symmetric.jl:486
+[16] +(S::LinearAlgebra.Symmetric, D::LinearAlgebra.Diagonal) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/diagonal.jl:191
+[17] +(A::LinearAlgebra.Symmetric{&lt;:Any, &lt;:SparseArrays.AbstractSparseMatrix}, B::SparseArrays.AbstractSparseMatrix) in SparseArrays at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/SparseArrays/src/linalg.jl:15
+[18] +(A::LinearAlgebra.Symmetric, B::SparseArrays.AbstractSparseMatrix) in SparseArrays at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/SparseArrays/src/linalg.jl:18
+[19] +(A::LinearAlgebra.Symmetric{&lt;:Real, &lt;:SparseArrays.AbstractSparseMatrix}, B::LinearAlgebra.Hermitian{&lt;:Any, &lt;:SparseArrays.AbstractSparseMatrix}) in SparseArrays at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/SparseArrays/src/linalg.jl:25
+[20] +(A::LinearAlgebra.Symmetric{var&quot;#s884&quot;, S} where {var&quot;#s884&quot;&lt;:Real, S&lt;:(AbstractMatrix{&lt;:var&quot;#s884&quot;})}, B::LinearAlgebra.Hermitian) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/symmetric.jl:484
+[21] +(A::LinearAlgebra.Symmetric{&lt;:Any, &lt;:SparseArrays.AbstractSparseMatrix}, B::LinearAlgebra.Hermitian{&lt;:Any, &lt;:SparseArrays.AbstractSparseMatrix}) in SparseArrays at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/SparseArrays/src/linalg.jl:23
+[22] +(a::ChainRulesCore.Tangent{P}, b::ChainRulesCore.Tangent{P}) where P in ChainRulesCore at /home/runner/.julia/packages/ChainRulesCore/ctmSK/src/tangent_arithmetic.jl:129
+[23] +(a::ChainRulesCore.Tangent, b::ChainRulesCore.AbstractThunk) in ChainRulesCore at /home/runner/.julia/packages/ChainRulesCore/ctmSK/src/tangent_arithmetic.jl:123
+[24] +(a::ChainRulesCore.Tangent, ::ChainRulesCore.ZeroTangent) in ChainRulesCore at /home/runner/.julia/packages/ChainRulesCore/ctmSK/src/tangent_arithmetic.jl:100
+[25] +(a::ChainRulesCore.Tangent, ::ChainRulesCore.NoTangent) in ChainRulesCore at /home/runner/.julia/packages/ChainRulesCore/ctmSK/src/tangent_arithmetic.jl:60
+[26] +(::ChainRulesCore.Tangent, x::ChainRulesCore.NotImplemented) in ChainRulesCore at /home/runner/.julia/packages/ChainRulesCore/ctmSK/src/tangent_arithmetic.jl:25
+[27] +(a::ChainRulesCore.Tangent{P}, b::P) where P in ChainRulesCore at /home/runner/.julia/packages/ChainRulesCore/ctmSK/src/tangent_arithmetic.jl:146
+[28] +(x::T, y::Integer) where T&lt;:AbstractChar in Base at char.jl:237
+[29] +(A::SparseArrays.AbstractSparseMatrixCSC, B::SparseArrays.AbstractSparseMatrixCSC) in SparseArrays at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/SparseArrays/src/sparsematrix.jl:1829
+[30] +(A::SparseArrays.AbstractSparseMatrixCSC, B::Array) in SparseArrays at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/SparseArrays/src/sparsematrix.jl:1832
+[31] +(A::SparseArrays.AbstractSparseMatrixCSC, J::LinearAlgebra.UniformScaling) in SparseArrays at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/SparseArrays/src/sparsematrix.jl:3821
+[32] +(y::AbstractFloat, x::Bool) in Base at bool.jl:172
+[33] +(r1::OrdinalRange, r2::OrdinalRange) in Base at range.jl:1423
+[34] +(A::BitArray, B::BitArray) in Base at bitarray.jl:1184
+[35] +(x::Base.TwicePrecision, y::Number) in Base at twiceprecision.jl:290
+[36] +(x::Base.TwicePrecision{T}, y::Base.TwicePrecision{T}) where T in Base at twiceprecision.jl:296
+[37] +(x::Base.TwicePrecision, y::Base.TwicePrecision) in Base at twiceprecision.jl:301
+[38] +(A::LinearAlgebra.UnitLowerTriangular, B::LinearAlgebra.LowerTriangular) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/triangular.jl:643
+[39] +(A::LinearAlgebra.UnitLowerTriangular, B::LinearAlgebra.UnitLowerTriangular) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/triangular.jl:645
+[40] +(UL::LinearAlgebra.UnitLowerTriangular, J::LinearAlgebra.UniformScaling) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/uniformscaling.jl:181
+[41] +(A::LinearAlgebra.UnitLowerTriangular, B::LinearAlgebra.Bidiagonal) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/special.jl:98
+[42] +(x::Rational, y::Integer) in Base at rational.jl:313
+[43] +(a::StaticArraysCore.StaticArray{Tuple{N, M}, T, 2} where {N, M, T}, b::LinearAlgebra.UniformScaling) in StaticArrays at /home/runner/.julia/packages/StaticArrays/dcWsT/src/linalg.jl:29
+[44] +(a::StaticArraysCore.StaticArray) in StaticArrays at /home/runner/.julia/packages/StaticArrays/dcWsT/src/linalg.jl:7
+[45] +(a::StaticArraysCore.StaticArray, b::StaticArraysCore.StaticArray) in StaticArrays at /home/runner/.julia/packages/StaticArrays/dcWsT/src/linalg.jl:12
+[46] +(a::AbstractArray, b::StaticArraysCore.StaticArray) in StaticArrays at /home/runner/.julia/packages/StaticArrays/dcWsT/src/linalg.jl:13
+[47] +(a::StaticArraysCore.StaticArray, b::AbstractArray) in StaticArrays at /home/runner/.julia/packages/StaticArrays/dcWsT/src/linalg.jl:14
+[48] +(a::ColorTypes.AbstractRGB, b::ColorTypes.AbstractRGB) in ColorVectorSpace at /home/runner/.julia/packages/ColorVectorSpace/bhkoO/src/ColorVectorSpace.jl:277
+[49] +(A::LinearAlgebra.UpperHessenberg, B::LinearAlgebra.UpperHessenberg) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/hessenberg.jl:101
+[50] +(H::LinearAlgebra.UpperHessenberg, x::LinearAlgebra.UniformScaling) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/hessenberg.jl:108
+[51] +(H::LinearAlgebra.UpperHessenberg, x::LinearAlgebra.Diagonal) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/hessenberg.jl:108
+[52] +(H::LinearAlgebra.UpperHessenberg, x::LinearAlgebra.Bidiagonal) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/hessenberg.jl:108
+[53] +(H::LinearAlgebra.UpperHessenberg, x::LinearAlgebra.Tridiagonal) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/hessenberg.jl:108
+[54] +(H::LinearAlgebra.UpperHessenberg, x::LinearAlgebra.SymTridiagonal) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/hessenberg.jl:108
+[55] +(H::LinearAlgebra.UpperHessenberg, x::LinearAlgebra.UpperTriangular) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/hessenberg.jl:108
+[56] +(H::LinearAlgebra.UpperHessenberg, x::LinearAlgebra.UnitUpperTriangular) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/hessenberg.jl:108
+[57] +(A::LinearAlgebra.UnitUpperTriangular, B::LinearAlgebra.UpperTriangular) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/triangular.jl:642
+[58] +(A::LinearAlgebra.UnitUpperTriangular, B::LinearAlgebra.UnitUpperTriangular) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/triangular.jl:644
+[59] +(UL::LinearAlgebra.UnitUpperTriangular, J::LinearAlgebra.UniformScaling) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/uniformscaling.jl:181
+[60] +(x::LinearAlgebra.UnitUpperTriangular, H::LinearAlgebra.UpperHessenberg) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/hessenberg.jl:109
+[61] +(A::LinearAlgebra.UnitUpperTriangular, B::LinearAlgebra.Bidiagonal) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/special.jl:98
+[62] +(Da::LinearAlgebra.Diagonal, Db::LinearAlgebra.Diagonal) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/diagonal.jl:184
+[63] +(D::LinearAlgebra.Diagonal, S::LinearAlgebra.Symmetric) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/diagonal.jl:188
+[64] +(D::LinearAlgebra.Diagonal{var&quot;#s885&quot;, V} where {var&quot;#s885&quot;&lt;:Real, V&lt;:AbstractVector{var&quot;#s885&quot;}}, H::LinearAlgebra.Hermitian) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/diagonal.jl:194
+[65] +(x::LinearAlgebra.Diagonal, H::LinearAlgebra.UpperHessenberg) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/hessenberg.jl:109
+[66] +(A::LinearAlgebra.Diagonal, B::LinearAlgebra.Bidiagonal) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/special.jl:137
+[67] +(A::LinearAlgebra.Diagonal, B::LinearAlgebra.SymTridiagonal) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/special.jl:147
+[68] +(A::LinearAlgebra.Diagonal, B::LinearAlgebra.Tridiagonal) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/special.jl:175
+[69] +(A::LinearAlgebra.Diagonal{var&quot;#s885&quot;, V} where {var&quot;#s885&quot;&lt;:Number, V&lt;:AbstractVector{var&quot;#s885&quot;}}, B::LinearAlgebra.UniformScaling) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/special.jl:253
+[70] +(x::SparseArrays.AbstractSparseVector, y::SparseArrays.AbstractSparseVector) in SparseArrays at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/SparseArrays/src/sparsevector.jl:1392
+[71] +(A::SparseArrays.AbstractSparseMatrix, B::LinearAlgebra.Hermitian{&lt;:Any, &lt;:SparseArrays.AbstractSparseMatrix}) in SparseArrays at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/SparseArrays/src/linalg.jl:14
+[72] +(A::SparseArrays.AbstractSparseMatrix, B::LinearAlgebra.Hermitian) in SparseArrays at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/SparseArrays/src/linalg.jl:17
+[73] +(A::SparseArrays.AbstractSparseMatrix, B::LinearAlgebra.Symmetric{&lt;:Any, &lt;:SparseArrays.AbstractSparseMatrix}) in SparseArrays at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/SparseArrays/src/linalg.jl:14
+[74] +(A::SparseArrays.AbstractSparseMatrix, B::LinearAlgebra.Symmetric) in SparseArrays at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/SparseArrays/src/linalg.jl:17
+[75] +(a::ColorTypes.AbstractGray{Bool}, b::Bool) in ColorVectorSpace at /home/runner/.julia/packages/ColorVectorSpace/bhkoO/src/ColorVectorSpace.jl:338
+[76] +(a::ColorTypes.AbstractGray{Bool}, b::Number) in ColorVectorSpace at /home/runner/.julia/packages/ColorVectorSpace/bhkoO/src/ColorVectorSpace.jl:337
+[77] +(a::ColorTypes.AbstractGray, b::Number) in ColorVectorSpace at /home/runner/.julia/packages/ColorVectorSpace/bhkoO/src/ColorVectorSpace.jl:336
+[78] +(a::ColorTypes.AbstractGray{Bool}, b::ColorTypes.AbstractGray{Bool}) in ColorVectorSpace at /home/runner/.julia/packages/ColorVectorSpace/bhkoO/src/ColorVectorSpace.jl:327
+[79] +(a::ColorTypes.AbstractGray, b::ColorTypes.AbstractGray) in ColorVectorSpace at /home/runner/.julia/packages/ColorVectorSpace/bhkoO/src/ColorVectorSpace.jl:326
 [80] +(index1::CartesianIndex{N}, index2::CartesianIndex{N}) where N in Base.IteratorsMD at multidimensional.jl:114
 [81] +(r1::LinRange{T}, r2::LinRange{T}) where T in Base at range.jl:1430
 [82] +(r1::Union{LinRange, OrdinalRange, StepRangeLen}, r2::Union{LinRange, OrdinalRange, StepRangeLen}) in Base at range.jl:1439
-[83] +(a::ColorTypes.AbstractRGB, b::ColorTypes.AbstractRGB) in ColorVectorSpace at /home/runner/.julia/packages/ColorVectorSpace/bhkoO/src/ColorVectorSpace.jl:277
-[84] +(a::ColorTypes.AbstractGray{Bool}, b::ColorTypes.AbstractGray{Bool}) in ColorVectorSpace at /home/runner/.julia/packages/ColorVectorSpace/bhkoO/src/ColorVectorSpace.jl:327
-[85] +(c::Union{ColorTypes.TransparentColor{C, T}, C} where {T, C&lt;:Union{ColorTypes.AbstractRGB{T}, ColorTypes.AbstractGray{T}}}) in ColorVectorSpace at /home/runner/.julia/packages/ColorVectorSpace/bhkoO/src/ColorVectorSpace.jl:254
-[86] +(a::ColorTypes.AbstractGray, b::ColorTypes.AbstractGray) in ColorVectorSpace at /home/runner/.julia/packages/ColorVectorSpace/bhkoO/src/ColorVectorSpace.jl:326
-[87] +(a::Union{ColorTypes.TransparentColor{C, T}, C} where {T, C&lt;:Union{ColorTypes.AbstractRGB{T}, ColorTypes.AbstractGray{T}}}, b::Union{ColorTypes.TransparentColor{C, T}, C} where {T, C&lt;:Union{ColorTypes.AbstractRGB{T}, ColorTypes.AbstractGray{T}}}) in ColorVectorSpace at /home/runner/.julia/packages/ColorVectorSpace/bhkoO/src/ColorVectorSpace.jl:265
-[88] +(r::AbstractRange{&lt;:Dates.TimeType}, x::Dates.Period) in Dates at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/Dates/src/ranges.jl:64
-[89] +(x::AbstractArray{&lt;:Dates.TimeType}, y::Union{Dates.CompoundPeriod, Dates.Period}) in Dates at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/Dates/src/deprecated.jl:6
-[90] +(a::Tuple{Vararg{Measures.Measure, N}}, b::Tuple{Vararg{Measures.Measure, N}}) where N in Measures at /home/runner/.julia/packages/Measures/0Zkai/src/point.jl:21
-[91] +(a::Tuple{Vararg{Measures.Measure, N}} where N, b::Tuple{Vararg{Measures.Measure, N}} where N) in Measures at /home/runner/.julia/packages/Measures/0Zkai/src/point.jl:15
-[92] +(x::GeometryBasics.OffsetInteger{O}, y::GeometryBasics.OffsetInteger{O}) where O in GeometryBasics at /home/runner/.julia/packages/GeometryBasics/3PqdK/src/offsetintegers.jl:63
-[93] +(J::LinearAlgebra.UniformScaling) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/uniformscaling.jl:149
-[94] +(J::LinearAlgebra.UniformScaling, x::Number) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/uniformscaling.jl:144
-[95] +(J1::LinearAlgebra.UniformScaling, J2::LinearAlgebra.UniformScaling) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/uniformscaling.jl:150
-[96] +(J::LinearAlgebra.UniformScaling, B::BitMatrix) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/uniformscaling.jl:152
-[97] +(x::LinearAlgebra.UniformScaling, H::LinearAlgebra.UpperHessenberg) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/hessenberg.jl:109
-[98] +(J::LinearAlgebra.UniformScaling, F::LinearAlgebra.Hessenberg) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/hessenberg.jl:642
-[99] +(A::LinearAlgebra.UniformScaling, B::LinearAlgebra.Tridiagonal{var&quot;#s885&quot;, V} where {var&quot;#s885&quot;&lt;:Number, V&lt;:AbstractVector{var&quot;#s885&quot;}}) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/special.jl:257
-[100] +(A::LinearAlgebra.UniformScaling, B::LinearAlgebra.SymTridiagonal{var&quot;#s885&quot;, V} where {var&quot;#s885&quot;&lt;:Number, V&lt;:AbstractVector{var&quot;#s885&quot;}}) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/special.jl:262
-[101] +(A::LinearAlgebra.UniformScaling, B::LinearAlgebra.Bidiagonal{var&quot;#s885&quot;, V} where {var&quot;#s885&quot;&lt;:Number, V&lt;:AbstractVector{var&quot;#s885&quot;}}) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/special.jl:267
-[102] +(A::LinearAlgebra.UniformScaling, B::LinearAlgebra.Diagonal{var&quot;#s885&quot;, V} where {var&quot;#s885&quot;&lt;:Number, V&lt;:AbstractVector{var&quot;#s885&quot;}}) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/special.jl:272
-[103] +(a::LinearAlgebra.UniformScaling, b::StaticArraysCore.StaticArray{Tuple{N, M}, T, 2} where {N, M, T}) in StaticArrays at /home/runner/.julia/packages/StaticArrays/dcWsT/src/linalg.jl:30
-[104] +(J::LinearAlgebra.UniformScaling, A::AbstractMatrix) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/uniformscaling.jl:153
-[105] +(a::ChainRulesCore.AbstractThunk, b::ChainRulesCore.Tangent) in ChainRulesCore at /home/runner/.julia/packages/ChainRulesCore/ctmSK/src/tangent_arithmetic.jl:122
-[106] +(a::ChainRulesCore.AbstractThunk, b::ChainRulesCore.AbstractThunk) in ChainRulesCore at /home/runner/.julia/packages/ChainRulesCore/ctmSK/src/tangent_arithmetic.jl:119
-[107] +(a::ChainRulesCore.AbstractThunk, ::ChainRulesCore.ZeroTangent) in ChainRulesCore at /home/runner/.julia/packages/ChainRulesCore/ctmSK/src/tangent_arithmetic.jl:100
-[108] +(a::ChainRulesCore.AbstractThunk, ::ChainRulesCore.NoTangent) in ChainRulesCore at /home/runner/.julia/packages/ChainRulesCore/ctmSK/src/tangent_arithmetic.jl:60
-[109] +(::ChainRulesCore.AbstractThunk, x::ChainRulesCore.NotImplemented) in ChainRulesCore at /home/runner/.julia/packages/ChainRulesCore/ctmSK/src/tangent_arithmetic.jl:25
-[110] +(a::ChainRulesCore.AbstractThunk, b) in ChainRulesCore at /home/runner/.julia/packages/ChainRulesCore/ctmSK/src/tangent_arithmetic.jl:122
-[111] +(a::Measures.Length{U}, b::Measures.Length{U}) where U in Measures at /home/runner/.julia/packages/Measures/0Zkai/src/length.jl:28
-[112] +(a::Measures.Measure, b::Measures.Measure) in Measures at /home/runner/.julia/packages/Measures/0Zkai/src/operations.jl:41
-[113] +(A::LinearAlgebra.Bidiagonal, B::LinearAlgebra.Bidiagonal) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/bidiag.jl:365
-[114] +(x::LinearAlgebra.Bidiagonal, H::LinearAlgebra.UpperHessenberg) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/hessenberg.jl:109
-[115] +(A::LinearAlgebra.Bidiagonal, B::LinearAlgebra.UpperTriangular) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/special.jl:106
-[116] +(A::LinearAlgebra.Bidiagonal, B::LinearAlgebra.UnitUpperTriangular) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/special.jl:106
-[117] +(A::LinearAlgebra.Bidiagonal, B::LinearAlgebra.LowerTriangular) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/special.jl:106
-[118] +(A::LinearAlgebra.Bidiagonal, B::LinearAlgebra.UnitLowerTriangular) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/special.jl:106
-[119] +(A::LinearAlgebra.Bidiagonal, B::LinearAlgebra.Diagonal) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/special.jl:127
-[120] +(A::LinearAlgebra.Bidiagonal, B::LinearAlgebra.Tridiagonal) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/special.jl:195
-[121] +(A::LinearAlgebra.Bidiagonal, B::LinearAlgebra.SymTridiagonal) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/special.jl:215
-[122] +(A::LinearAlgebra.Bidiagonal{var&quot;#s885&quot;, V} where {var&quot;#s885&quot;&lt;:Number, V&lt;:AbstractVector{var&quot;#s885&quot;}}, B::LinearAlgebra.UniformScaling) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/special.jl:248
-[123] +(p::SpecialFunctions.SimplePoly{S}, q::SpecialFunctions.SimplePoly{T}) where {S, T} in SpecialFunctions at /home/runner/.julia/packages/SpecialFunctions/hefUc/src/expint.jl:11
-[124] +(x::Dates.Instant) in Dates at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/Dates/src/arithmetic.jl:4
-[125] +(x::Ptr, y::Integer) in Base at pointer.jl:159
-[126] +(A::LinearAlgebra.Tridiagonal, B::LinearAlgebra.Tridiagonal) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/tridiag.jl:741
-[127] +(x::LinearAlgebra.Tridiagonal, H::LinearAlgebra.UpperHessenberg) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/hessenberg.jl:109
-[128] +(A::LinearAlgebra.Tridiagonal, B::LinearAlgebra.SymTridiagonal) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/special.jl:169
-[129] +(A::LinearAlgebra.Tridiagonal, B::LinearAlgebra.Diagonal) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/special.jl:185
-[130] +(A::LinearAlgebra.Tridiagonal, B::LinearAlgebra.Bidiagonal) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/special.jl:205
-[131] +(A::LinearAlgebra.Tridiagonal{var&quot;#s885&quot;, V} where {var&quot;#s885&quot;&lt;:Number, V&lt;:AbstractVector{var&quot;#s885&quot;}}, B::LinearAlgebra.UniformScaling) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/special.jl:238
-[132] +(A::LinearAlgebra.Hermitian, B::LinearAlgebra.Hermitian) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/symmetric.jl:469
-[133] +(A::LinearAlgebra.Hermitian, B::LinearAlgebra.SymTridiagonal{var&quot;#s882&quot;, V} where {var&quot;#s882&quot;&lt;:Real, V&lt;:AbstractVector{var&quot;#s882&quot;}}) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/symmetric.jl:488
-[134] +(H::LinearAlgebra.Hermitian, D::LinearAlgebra.Diagonal{var&quot;#s885&quot;, V} where {var&quot;#s885&quot;&lt;:Real, V&lt;:AbstractVector{var&quot;#s885&quot;}}) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/diagonal.jl:197
-[135] +(A::LinearAlgebra.Hermitian, J::LinearAlgebra.UniformScaling{&lt;:Complex}) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/uniformscaling.jl:195
-[136] +(A::LinearAlgebra.Hermitian{&lt;:Any, &lt;:SparseArrays.AbstractSparseMatrix}, B::SparseArrays.AbstractSparseMatrix) in SparseArrays at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/SparseArrays/src/linalg.jl:15
-[137] +(A::LinearAlgebra.Hermitian, B::SparseArrays.AbstractSparseMatrix) in SparseArrays at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/SparseArrays/src/linalg.jl:18
-[138] +(A::LinearAlgebra.Hermitian{&lt;:Any, &lt;:SparseArrays.AbstractSparseMatrix}, B::LinearAlgebra.Symmetric{&lt;:Real, &lt;:SparseArrays.AbstractSparseMatrix}) in SparseArrays at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/SparseArrays/src/linalg.jl:26
-[139] +(A::LinearAlgebra.Hermitian, B::LinearAlgebra.Symmetric{var&quot;#s885&quot;, S} where {var&quot;#s885&quot;&lt;:Real, S&lt;:(AbstractMatrix{&lt;:var&quot;#s885&quot;})}) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/symmetric.jl:483
-[140] +(A::LinearAlgebra.Hermitian{&lt;:Any, &lt;:SparseArrays.AbstractSparseMatrix}, B::LinearAlgebra.Symmetric{&lt;:Any, &lt;:SparseArrays.AbstractSparseMatrix}) in SparseArrays at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/SparseArrays/src/linalg.jl:24
-[141] +(a::ColorVectorSpace.RGBRGB) in ColorVectorSpace at /home/runner/.julia/packages/ColorVectorSpace/bhkoO/src/ColorVectorSpace.jl:427
-[142] +(a::ColorVectorSpace.RGBRGB, b::ColorVectorSpace.RGBRGB) in ColorVectorSpace at /home/runner/.julia/packages/ColorVectorSpace/bhkoO/src/ColorVectorSpace.jl:429
-[143] +(x::X, y::X) where X&lt;:FixedPointNumbers.FixedPoint in FixedPointNumbers at /home/runner/.julia/packages/FixedPointNumbers/HAGk2/src/FixedPointNumbers.jl:237
-[144] +(x::P, y::P) where P&lt;:Dates.Period in Dates at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/Dates/src/periods.jl:77
-[145] +(x::Dates.Period, y::Dates.Period) in Dates at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/Dates/src/periods.jl:367
-[146] +(y::Dates.Period, x::Dates.CompoundPeriod) in Dates at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/Dates/src/periods.jl:369
-[147] +(y::Dates.Period, x::Dates.TimeType) in Dates at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/Dates/src/arithmetic.jl:85
-[148] +(x::Dates.Period, r::AbstractRange{&lt;:Dates.TimeType}) in Dates at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/Dates/src/ranges.jl:63
-[149] +(y::Union{Dates.CompoundPeriod, Dates.Period}, x::AbstractArray{&lt;:Dates.TimeType}) in Dates at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/Dates/src/deprecated.jl:14
-[150] +(z::Complex, w::Complex) in Base at complex.jl:288
-[151] +(y::Dates.TimeType, x::StridedArray{&lt;:Union{Dates.CompoundPeriod, Dates.Period}}) in Dates at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/Dates/src/deprecated.jl:18
-[152] +(h::GeometryBasics.HyperRectangle{N, T}, move::StaticArraysCore.StaticArray{Tuple{N}, T, 1} where T) where {N, T} in GeometryBasics at /home/runner/.julia/packages/GeometryBasics/3PqdK/src/primitives/rectangles.jl:273
-[153] +(h::GeometryBasics.HyperRectangle{N, T}, move::Number) where {N, T} in GeometryBasics at /home/runner/.julia/packages/GeometryBasics/3PqdK/src/primitives/rectangles.jl:267
-[154] +(a::Dict, d::ChainRulesCore.Tangent{P}) where P in ChainRulesCore at /home/runner/.julia/packages/ChainRulesCore/ctmSK/src/tangent_arithmetic.jl:145
-[155] +(A::LinearAlgebra.SymTridiagonal, B::LinearAlgebra.SymTridiagonal) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/tridiag.jl:207
-[156] +(A::LinearAlgebra.SymTridiagonal, B::LinearAlgebra.Symmetric) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/symmetric.jl:485
-[157] +(A::LinearAlgebra.SymTridiagonal{var&quot;#s883&quot;, V} where {var&quot;#s883&quot;&lt;:Real, V&lt;:AbstractVector{var&quot;#s883&quot;}}, B::LinearAlgebra.Hermitian) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/symmetric.jl:487
-[158] +(x::LinearAlgebra.SymTridiagonal, H::LinearAlgebra.UpperHessenberg) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/hessenberg.jl:109
-[159] +(A::LinearAlgebra.SymTridiagonal, B::LinearAlgebra.Diagonal) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/special.jl:157
-[160] +(A::LinearAlgebra.SymTridiagonal, B::LinearAlgebra.Tridiagonal) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/special.jl:171
-[161] +(A::LinearAlgebra.SymTridiagonal, B::LinearAlgebra.Bidiagonal) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/special.jl:225
-[162] +(A::LinearAlgebra.SymTridiagonal{var&quot;#s885&quot;, V} where {var&quot;#s885&quot;&lt;:Number, V&lt;:AbstractVector{var&quot;#s885&quot;}}, B::LinearAlgebra.UniformScaling) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/special.jl:243
+[83] +(a::ColorVectorSpace.RGBRGB) in ColorVectorSpace at /home/runner/.julia/packages/ColorVectorSpace/bhkoO/src/ColorVectorSpace.jl:427
+[84] +(a::ColorVectorSpace.RGBRGB, b::ColorVectorSpace.RGBRGB) in ColorVectorSpace at /home/runner/.julia/packages/ColorVectorSpace/bhkoO/src/ColorVectorSpace.jl:429
+[85] +(r::AbstractRange{&lt;:Dates.TimeType}, x::Dates.Period) in Dates at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/Dates/src/ranges.jl:64
+[86] +(x::AbstractArray{&lt;:Dates.TimeType}, y::Union{Dates.CompoundPeriod, Dates.Period}) in Dates at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/Dates/src/deprecated.jl:6
+[87] +(a::Measures.Length{U}, b::Measures.Length{U}) where U in Measures at /home/runner/.julia/packages/Measures/0Zkai/src/length.jl:28
+[88] +(a::Measures.Measure, b::Measures.Measure) in Measures at /home/runner/.julia/packages/Measures/0Zkai/src/operations.jl:41
+[89] +(a::Tuple{Vararg{Measures.Measure, N}}, b::Tuple{Vararg{Measures.Measure, N}}) where N in Measures at /home/runner/.julia/packages/Measures/0Zkai/src/point.jl:21
+[90] +(a::Tuple{Vararg{Measures.Measure, N}} where N, b::Tuple{Vararg{Measures.Measure, N}} where N) in Measures at /home/runner/.julia/packages/Measures/0Zkai/src/point.jl:15
+[91] +(J::LinearAlgebra.UniformScaling) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/uniformscaling.jl:149
+[92] +(J::LinearAlgebra.UniformScaling, x::Number) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/uniformscaling.jl:144
+[93] +(J1::LinearAlgebra.UniformScaling, J2::LinearAlgebra.UniformScaling) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/uniformscaling.jl:150
+[94] +(J::LinearAlgebra.UniformScaling, B::BitMatrix) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/uniformscaling.jl:152
+[95] +(x::LinearAlgebra.UniformScaling, H::LinearAlgebra.UpperHessenberg) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/hessenberg.jl:109
+[96] +(J::LinearAlgebra.UniformScaling, F::LinearAlgebra.Hessenberg) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/hessenberg.jl:642
+[97] +(A::LinearAlgebra.UniformScaling, B::LinearAlgebra.Tridiagonal{var&quot;#s885&quot;, V} where {var&quot;#s885&quot;&lt;:Number, V&lt;:AbstractVector{var&quot;#s885&quot;}}) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/special.jl:257
+[98] +(A::LinearAlgebra.UniformScaling, B::LinearAlgebra.SymTridiagonal{var&quot;#s885&quot;, V} where {var&quot;#s885&quot;&lt;:Number, V&lt;:AbstractVector{var&quot;#s885&quot;}}) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/special.jl:262
+[99] +(A::LinearAlgebra.UniformScaling, B::LinearAlgebra.Bidiagonal{var&quot;#s885&quot;, V} where {var&quot;#s885&quot;&lt;:Number, V&lt;:AbstractVector{var&quot;#s885&quot;}}) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/special.jl:267
+[100] +(A::LinearAlgebra.UniformScaling, B::LinearAlgebra.Diagonal{var&quot;#s885&quot;, V} where {var&quot;#s885&quot;&lt;:Number, V&lt;:AbstractVector{var&quot;#s885&quot;}}) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/special.jl:272
+[101] +(a::LinearAlgebra.UniformScaling, b::StaticArraysCore.StaticArray{Tuple{N, M}, T, 2} where {N, M, T}) in StaticArrays at /home/runner/.julia/packages/StaticArrays/dcWsT/src/linalg.jl:30
+[102] +(J::LinearAlgebra.UniformScaling, A::AbstractMatrix) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/uniformscaling.jl:153
+[103] +(h::GeometryBasics.HyperRectangle{N, T}, move::StaticArraysCore.StaticArray{Tuple{N}, T, 1} where T) where {N, T} in GeometryBasics at /home/runner/.julia/packages/GeometryBasics/3PqdK/src/primitives/rectangles.jl:273
+[104] +(h::GeometryBasics.HyperRectangle{N, T}, move::Number) where {N, T} in GeometryBasics at /home/runner/.julia/packages/GeometryBasics/3PqdK/src/primitives/rectangles.jl:267
+[105] +(p::SpecialFunctions.SimplePoly{S}, q::SpecialFunctions.SimplePoly{T}) where {S, T} in SpecialFunctions at /home/runner/.julia/packages/SpecialFunctions/hefUc/src/expint.jl:11
+[106] +(a::ChainRulesCore.AbstractThunk, b::ChainRulesCore.Tangent) in ChainRulesCore at /home/runner/.julia/packages/ChainRulesCore/ctmSK/src/tangent_arithmetic.jl:122
+[107] +(a::ChainRulesCore.AbstractThunk, b::ChainRulesCore.AbstractThunk) in ChainRulesCore at /home/runner/.julia/packages/ChainRulesCore/ctmSK/src/tangent_arithmetic.jl:119
+[108] +(a::ChainRulesCore.AbstractThunk, ::ChainRulesCore.ZeroTangent) in ChainRulesCore at /home/runner/.julia/packages/ChainRulesCore/ctmSK/src/tangent_arithmetic.jl:100
+[109] +(a::ChainRulesCore.AbstractThunk, ::ChainRulesCore.NoTangent) in ChainRulesCore at /home/runner/.julia/packages/ChainRulesCore/ctmSK/src/tangent_arithmetic.jl:60
+[110] +(::ChainRulesCore.AbstractThunk, x::ChainRulesCore.NotImplemented) in ChainRulesCore at /home/runner/.julia/packages/ChainRulesCore/ctmSK/src/tangent_arithmetic.jl:25
+[111] +(a::ChainRulesCore.AbstractThunk, b) in ChainRulesCore at /home/runner/.julia/packages/ChainRulesCore/ctmSK/src/tangent_arithmetic.jl:122
+[112] +(a::ColorTypes.TransparentGray, b::ColorTypes.TransparentGray) in ColorVectorSpace at /home/runner/.julia/packages/ColorVectorSpace/bhkoO/src/ColorVectorSpace.jl:328
+[113] +(a::ColorTypes.TransparentColor{C, T, 4} where {C&lt;:ColorTypes.AbstractRGB, T}, b::ColorTypes.TransparentColor{C, T, 4} where {C&lt;:ColorTypes.AbstractRGB, T}) in ColorVectorSpace at /home/runner/.julia/packages/ColorVectorSpace/bhkoO/src/ColorVectorSpace.jl:279
+[114] +(c::Union{ColorTypes.TransparentColor{C, Bool}, C} where C&lt;:Union{ColorTypes.AbstractRGB{Bool}, ColorTypes.AbstractGray{Bool}}) in ColorVectorSpace at /home/runner/.julia/packages/ColorVectorSpace/bhkoO/src/ColorVectorSpace.jl:255
+[115] +(c::Union{ColorTypes.TransparentColor{C, T}, C} where {T, C&lt;:Union{ColorTypes.AbstractRGB{T}, ColorTypes.AbstractGray{T}}}) in ColorVectorSpace at /home/runner/.julia/packages/ColorVectorSpace/bhkoO/src/ColorVectorSpace.jl:254
+[116] +(a::Union{ColorTypes.TransparentColor{C, T}, C} where {T, C&lt;:Union{ColorTypes.AbstractRGB{T}, ColorTypes.AbstractGray{T}}}, b::Union{ColorTypes.TransparentColor{C, T}, C} where {T, C&lt;:Union{ColorTypes.AbstractRGB{T}, ColorTypes.AbstractGray{T}}}) in ColorVectorSpace at /home/runner/.julia/packages/ColorVectorSpace/bhkoO/src/ColorVectorSpace.jl:265
+[117] +(A::LinearAlgebra.Bidiagonal, B::LinearAlgebra.Bidiagonal) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/bidiag.jl:365
+[118] +(x::LinearAlgebra.Bidiagonal, H::LinearAlgebra.UpperHessenberg) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/hessenberg.jl:109
+[119] +(A::LinearAlgebra.Bidiagonal, B::LinearAlgebra.UpperTriangular) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/special.jl:106
+[120] +(A::LinearAlgebra.Bidiagonal, B::LinearAlgebra.UnitUpperTriangular) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/special.jl:106
+[121] +(A::LinearAlgebra.Bidiagonal, B::LinearAlgebra.LowerTriangular) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/special.jl:106
+[122] +(A::LinearAlgebra.Bidiagonal, B::LinearAlgebra.UnitLowerTriangular) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/special.jl:106
+[123] +(A::LinearAlgebra.Bidiagonal, B::LinearAlgebra.Diagonal) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/special.jl:127
+[124] +(A::LinearAlgebra.Bidiagonal, B::LinearAlgebra.Tridiagonal) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/special.jl:195
+[125] +(A::LinearAlgebra.Bidiagonal, B::LinearAlgebra.SymTridiagonal) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/special.jl:215
+[126] +(A::LinearAlgebra.Bidiagonal{var&quot;#s885&quot;, V} where {var&quot;#s885&quot;&lt;:Number, V&lt;:AbstractVector{var&quot;#s885&quot;}}, B::LinearAlgebra.UniformScaling) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/special.jl:248
+[127] +(x::GeometryBasics.OffsetInteger{O}, y::GeometryBasics.OffsetInteger{O}) where O in GeometryBasics at /home/runner/.julia/packages/GeometryBasics/3PqdK/src/offsetintegers.jl:63
+[128] +(x::Dates.Instant) in Dates at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/Dates/src/arithmetic.jl:4
+[129] +(x::Ptr, y::Integer) in Base at pointer.jl:159
+[130] +(A::LinearAlgebra.Tridiagonal, B::LinearAlgebra.Tridiagonal) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/tridiag.jl:741
+[131] +(x::LinearAlgebra.Tridiagonal, H::LinearAlgebra.UpperHessenberg) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/hessenberg.jl:109
+[132] +(A::LinearAlgebra.Tridiagonal, B::LinearAlgebra.SymTridiagonal) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/special.jl:169
+[133] +(A::LinearAlgebra.Tridiagonal, B::LinearAlgebra.Diagonal) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/special.jl:185
+[134] +(A::LinearAlgebra.Tridiagonal, B::LinearAlgebra.Bidiagonal) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/special.jl:205
+[135] +(A::LinearAlgebra.Tridiagonal{var&quot;#s885&quot;, V} where {var&quot;#s885&quot;&lt;:Number, V&lt;:AbstractVector{var&quot;#s885&quot;}}, B::LinearAlgebra.UniformScaling) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/special.jl:238
+[136] +(A::LinearAlgebra.Hermitian, B::LinearAlgebra.Hermitian) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/symmetric.jl:469
+[137] +(A::LinearAlgebra.Hermitian, B::LinearAlgebra.SymTridiagonal{var&quot;#s882&quot;, V} where {var&quot;#s882&quot;&lt;:Real, V&lt;:AbstractVector{var&quot;#s882&quot;}}) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/symmetric.jl:488
+[138] +(H::LinearAlgebra.Hermitian, D::LinearAlgebra.Diagonal{var&quot;#s885&quot;, V} where {var&quot;#s885&quot;&lt;:Real, V&lt;:AbstractVector{var&quot;#s885&quot;}}) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/diagonal.jl:197
+[139] +(A::LinearAlgebra.Hermitian, J::LinearAlgebra.UniformScaling{&lt;:Complex}) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/uniformscaling.jl:195
+[140] +(A::LinearAlgebra.Hermitian{&lt;:Any, &lt;:SparseArrays.AbstractSparseMatrix}, B::SparseArrays.AbstractSparseMatrix) in SparseArrays at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/SparseArrays/src/linalg.jl:15
+[141] +(A::LinearAlgebra.Hermitian, B::SparseArrays.AbstractSparseMatrix) in SparseArrays at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/SparseArrays/src/linalg.jl:18
+[142] +(A::LinearAlgebra.Hermitian{&lt;:Any, &lt;:SparseArrays.AbstractSparseMatrix}, B::LinearAlgebra.Symmetric{&lt;:Real, &lt;:SparseArrays.AbstractSparseMatrix}) in SparseArrays at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/SparseArrays/src/linalg.jl:26
+[143] +(A::LinearAlgebra.Hermitian, B::LinearAlgebra.Symmetric{var&quot;#s885&quot;, S} where {var&quot;#s885&quot;&lt;:Real, S&lt;:(AbstractMatrix{&lt;:var&quot;#s885&quot;})}) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/symmetric.jl:483
+[144] +(A::LinearAlgebra.Hermitian{&lt;:Any, &lt;:SparseArrays.AbstractSparseMatrix}, B::LinearAlgebra.Symmetric{&lt;:Any, &lt;:SparseArrays.AbstractSparseMatrix}) in SparseArrays at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/SparseArrays/src/linalg.jl:24
+[145] +(x::X, y::X) where X&lt;:FixedPointNumbers.FixedPoint in FixedPointNumbers at /home/runner/.julia/packages/FixedPointNumbers/HAGk2/src/FixedPointNumbers.jl:237
+[146] +(x::P, y::P) where P&lt;:Dates.Period in Dates at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/Dates/src/periods.jl:77
+[147] +(x::Dates.Period, y::Dates.Period) in Dates at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/Dates/src/periods.jl:367
+[148] +(y::Dates.Period, x::Dates.CompoundPeriod) in Dates at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/Dates/src/periods.jl:369
+[149] +(y::Dates.Period, x::Dates.TimeType) in Dates at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/Dates/src/arithmetic.jl:85
+[150] +(x::Dates.Period, r::AbstractRange{&lt;:Dates.TimeType}) in Dates at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/Dates/src/ranges.jl:63
+[151] +(y::Union{Dates.CompoundPeriod, Dates.Period}, x::AbstractArray{&lt;:Dates.TimeType}) in Dates at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/Dates/src/deprecated.jl:14
+[152] +(z::Complex, w::Complex) in Base at complex.jl:288
+[153] +(y::Dates.TimeType, x::StridedArray{&lt;:Union{Dates.CompoundPeriod, Dates.Period}}) in Dates at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/Dates/src/deprecated.jl:18
+[154] +(A::LinearAlgebra.SymTridiagonal, B::LinearAlgebra.SymTridiagonal) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/tridiag.jl:207
+[155] +(A::LinearAlgebra.SymTridiagonal, B::LinearAlgebra.Symmetric) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/symmetric.jl:485
+[156] +(A::LinearAlgebra.SymTridiagonal{var&quot;#s883&quot;, V} where {var&quot;#s883&quot;&lt;:Real, V&lt;:AbstractVector{var&quot;#s883&quot;}}, B::LinearAlgebra.Hermitian) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/symmetric.jl:487
+[157] +(x::LinearAlgebra.SymTridiagonal, H::LinearAlgebra.UpperHessenberg) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/hessenberg.jl:109
+[158] +(A::LinearAlgebra.SymTridiagonal, B::LinearAlgebra.Diagonal) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/special.jl:157
+[159] +(A::LinearAlgebra.SymTridiagonal, B::LinearAlgebra.Tridiagonal) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/special.jl:171
+[160] +(A::LinearAlgebra.SymTridiagonal, B::LinearAlgebra.Bidiagonal) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/special.jl:225
+[161] +(A::LinearAlgebra.SymTridiagonal{var&quot;#s885&quot;, V} where {var&quot;#s885&quot;&lt;:Number, V&lt;:AbstractVector{var&quot;#s885&quot;}}, B::LinearAlgebra.UniformScaling) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/special.jl:243
+[162] +(a::Dict, d::ChainRulesCore.Tangent{P}) where P in ChainRulesCore at /home/runner/.julia/packages/ChainRulesCore/ctmSK/src/tangent_arithmetic.jl:145
 [163] +(A::LinearAlgebra.LowerTriangular, B::LinearAlgebra.LowerTriangular) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/triangular.jl:639
 [164] +(A::LinearAlgebra.LowerTriangular, B::LinearAlgebra.UnitLowerTriangular) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/triangular.jl:641
 [165] +(A::LinearAlgebra.LowerTriangular, B::LinearAlgebra.Bidiagonal) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/special.jl:98
@@ -671,12 +671,12 @@ L31:                                              ; preds = %L14, %middle.block,
 [203] +(B::BitMatrix, J::LinearAlgebra.UniformScaling) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/uniformscaling.jl:151
 [204] +(A::AbstractMatrix, J::LinearAlgebra.UniformScaling) in LinearAlgebra at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/LinearAlgebra/src/uniformscaling.jl:214
 [205] +(x::AbstractArray{&lt;:Number}) in Base at abstractarraymath.jl:220
-[206] +(::ChainRulesCore.NoTangent, b::ChainRulesCore.Tangent) in ChainRulesCore at /home/runner/.julia/packages/ChainRulesCore/ctmSK/src/tangent_arithmetic.jl:59
-[207] +(::ChainRulesCore.NoTangent, b::ChainRulesCore.AbstractThunk) in ChainRulesCore at /home/runner/.julia/packages/ChainRulesCore/ctmSK/src/tangent_arithmetic.jl:59
-[208] +(::ChainRulesCore.NoTangent, ::ChainRulesCore.ZeroTangent) in ChainRulesCore at /home/runner/.julia/packages/ChainRulesCore/ctmSK/src/tangent_arithmetic.jl:73
-[209] +(::ChainRulesCore.NoTangent, ::ChainRulesCore.NoTangent) in ChainRulesCore at /home/runner/.julia/packages/ChainRulesCore/ctmSK/src/tangent_arithmetic.jl:53
-[210] +(::ChainRulesCore.NoTangent, x::ChainRulesCore.NotImplemented) in ChainRulesCore at /home/runner/.julia/packages/ChainRulesCore/ctmSK/src/tangent_arithmetic.jl:25
-[211] +(::ChainRulesCore.NoTangent, b) in ChainRulesCore at /home/runner/.julia/packages/ChainRulesCore/ctmSK/src/tangent_arithmetic.jl:59
+[206] +(x::ChainRulesCore.NotImplemented, ::ChainRulesCore.Tangent) in ChainRulesCore at /home/runner/.julia/packages/ChainRulesCore/ctmSK/src/tangent_arithmetic.jl:24
+[207] +(x::ChainRulesCore.NotImplemented, ::ChainRulesCore.AbstractThunk) in ChainRulesCore at /home/runner/.julia/packages/ChainRulesCore/ctmSK/src/tangent_arithmetic.jl:24
+[208] +(x::ChainRulesCore.NotImplemented, ::ChainRulesCore.NoTangent) in ChainRulesCore at /home/runner/.julia/packages/ChainRulesCore/ctmSK/src/tangent_arithmetic.jl:24
+[209] +(x::ChainRulesCore.NotImplemented, ::ChainRulesCore.ZeroTangent) in ChainRulesCore at /home/runner/.julia/packages/ChainRulesCore/ctmSK/src/tangent_arithmetic.jl:24
+[210] +(x::ChainRulesCore.NotImplemented, ::ChainRulesCore.NotImplemented) in ChainRulesCore at /home/runner/.julia/packages/ChainRulesCore/ctmSK/src/tangent_arithmetic.jl:19
+[211] +(x::ChainRulesCore.NotImplemented, ::Any) in ChainRulesCore at /home/runner/.julia/packages/ChainRulesCore/ctmSK/src/tangent_arithmetic.jl:24
 [212] +(dt::Dates.Date, t::Dates.Time) in Dates at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/Dates/src/arithmetic.jl:19
 [213] +(dt::Dates.Date, y::Dates.Year) in Dates at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/Dates/src/arithmetic.jl:27
 [214] +(dt::Dates.Date, z::Dates.Month) in Dates at /opt/hostedtoolcache/julia/1.8.3/x64/share/julia/stdlib/v1.8/Dates/src/arithmetic.jl:54
@@ -707,38 +707,38 @@ L31:                                              ; preds = %L14, %middle.block,
 [239] +(::ChainRulesCore.ZeroTangent, ::ChainRulesCore.NoTangent) in ChainRulesCore at /home/runner/.julia/packages/ChainRulesCore/ctmSK/src/tangent_arithmetic.jl:74
 [240] +(::ChainRulesCore.ZeroTangent, x::ChainRulesCore.NotImplemented) in ChainRulesCore at /home/runner/.julia/packages/ChainRulesCore/ctmSK/src/tangent_arithmetic.jl:25
 [241] +(::ChainRulesCore.ZeroTangent, b) in ChainRulesCore at /home/runner/.julia/packages/ChainRulesCore/ctmSK/src/tangent_arithmetic.jl:99
-[242] +(x::BigFloat, c::Union{UInt16, UInt32, UInt64, UInt8}) in Base.MPFR at mpfr.jl:393
-[243] +(x::BigFloat, c::Union{Int16, Int32, Int64, Int8}) in Base.MPFR at mpfr.jl:401
-[244] +(x::BigFloat, c::Union{Float16, Float32, Float64}) in Base.MPFR at mpfr.jl:409
-[245] +(x::BigFloat, y::BigFloat) in Base.MPFR at mpfr.jl:386
-[246] +(x::BigFloat, c::BigInt) in Base.MPFR at mpfr.jl:417
-[247] +(a::BigFloat, b::BigFloat, c::BigFloat) in Base.MPFR at mpfr.jl:558
-[248] +(a::BigFloat, b::BigFloat, c::BigFloat, d::BigFloat) in Base.MPFR at mpfr.jl:564
-[249] +(a::BigFloat, b::BigFloat, c::BigFloat, d::BigFloat, e::BigFloat) in Base.MPFR at mpfr.jl:571
-[250] +(x::BigInt, c::Union{UInt16, UInt32, UInt64, UInt8}) in Base.GMP at gmp.jl:530
-[251] +(x::BigInt, c::Union{Int16, Int32, Int64, Int8}) in Base.GMP at gmp.jl:536
-[252] +(x::BigInt, y::BigInt) in Base.GMP at gmp.jl:482
-[253] +(a::BigInt, b::BigInt, c::BigInt) in Base.GMP at gmp.jl:522
-[254] +(a::BigInt, b::BigInt, c::BigInt, d::BigInt) in Base.GMP at gmp.jl:523
-[255] +(a::BigInt, b::BigInt, c::BigInt, d::BigInt, e::BigInt) in Base.GMP at gmp.jl:524
-[256] +(x::BigInt, y::BigInt, rest::BigInt...) in Base.GMP at gmp.jl:657
-[257] +(a::Integer, b::Integer) in Base at int.jl:987
-[258] +(c::BigInt, x::BigFloat) in Base.MPFR at mpfr.jl:422
-[259] +(x::Number) in Base at operators.jl:528
-[260] +(x::T, y::T) where T&lt;:Number in Base at promotion.jl:463
-[261] +(x::Number, y::Number) in Base at promotion.jl:388
-[262] +(x::ChainRulesCore.NotImplemented, ::ChainRulesCore.Tangent) in ChainRulesCore at /home/runner/.julia/packages/ChainRulesCore/ctmSK/src/tangent_arithmetic.jl:24
-[263] +(x::ChainRulesCore.NotImplemented, ::ChainRulesCore.AbstractThunk) in ChainRulesCore at /home/runner/.julia/packages/ChainRulesCore/ctmSK/src/tangent_arithmetic.jl:24
-[264] +(x::ChainRulesCore.NotImplemented, ::ChainRulesCore.NoTangent) in ChainRulesCore at /home/runner/.julia/packages/ChainRulesCore/ctmSK/src/tangent_arithmetic.jl:24
-[265] +(x::ChainRulesCore.NotImplemented, ::ChainRulesCore.ZeroTangent) in ChainRulesCore at /home/runner/.julia/packages/ChainRulesCore/ctmSK/src/tangent_arithmetic.jl:24
-[266] +(x::ChainRulesCore.NotImplemented, ::ChainRulesCore.NotImplemented) in ChainRulesCore at /home/runner/.julia/packages/ChainRulesCore/ctmSK/src/tangent_arithmetic.jl:19
-[267] +(x::ChainRulesCore.NotImplemented, ::Any) in ChainRulesCore at /home/runner/.julia/packages/ChainRulesCore/ctmSK/src/tangent_arithmetic.jl:24
-[268] +(x::ChainRulesCore.AbstractTangent) in ChainRulesCore at /home/runner/.julia/packages/ChainRulesCore/ctmSK/src/tangent_types/abstract_tangent.jl:38
-[269] +(a::P, d::ChainRulesCore.Tangent{P}) where P in ChainRulesCore at /home/runner/.julia/packages/ChainRulesCore/ctmSK/src/tangent_arithmetic.jl:133
-[270] +(a, b::ChainRulesCore.AbstractThunk) in ChainRulesCore at /home/runner/.julia/packages/ChainRulesCore/ctmSK/src/tangent_arithmetic.jl:123
-[271] +(a, ::ChainRulesCore.ZeroTangent) in ChainRulesCore at /home/runner/.julia/packages/ChainRulesCore/ctmSK/src/tangent_arithmetic.jl:100
-[272] +(a, ::ChainRulesCore.NoTangent) in ChainRulesCore at /home/runner/.julia/packages/ChainRulesCore/ctmSK/src/tangent_arithmetic.jl:60
-[273] +(::Any, x::ChainRulesCore.NotImplemented) in ChainRulesCore at /home/runner/.julia/packages/ChainRulesCore/ctmSK/src/tangent_arithmetic.jl:25
+[242] +(::ChainRulesCore.NoTangent, b::ChainRulesCore.Tangent) in ChainRulesCore at /home/runner/.julia/packages/ChainRulesCore/ctmSK/src/tangent_arithmetic.jl:59
+[243] +(::ChainRulesCore.NoTangent, b::ChainRulesCore.AbstractThunk) in ChainRulesCore at /home/runner/.julia/packages/ChainRulesCore/ctmSK/src/tangent_arithmetic.jl:59
+[244] +(::ChainRulesCore.NoTangent, ::ChainRulesCore.ZeroTangent) in ChainRulesCore at /home/runner/.julia/packages/ChainRulesCore/ctmSK/src/tangent_arithmetic.jl:73
+[245] +(::ChainRulesCore.NoTangent, ::ChainRulesCore.NoTangent) in ChainRulesCore at /home/runner/.julia/packages/ChainRulesCore/ctmSK/src/tangent_arithmetic.jl:53
+[246] +(::ChainRulesCore.NoTangent, x::ChainRulesCore.NotImplemented) in ChainRulesCore at /home/runner/.julia/packages/ChainRulesCore/ctmSK/src/tangent_arithmetic.jl:25
+[247] +(::ChainRulesCore.NoTangent, b) in ChainRulesCore at /home/runner/.julia/packages/ChainRulesCore/ctmSK/src/tangent_arithmetic.jl:59
+[248] +(x::ChainRulesCore.AbstractTangent) in ChainRulesCore at /home/runner/.julia/packages/ChainRulesCore/ctmSK/src/tangent_types/abstract_tangent.jl:38
+[249] +(x::BigFloat, c::Union{UInt16, UInt32, UInt64, UInt8}) in Base.MPFR at mpfr.jl:393
+[250] +(x::BigFloat, c::Union{Int16, Int32, Int64, Int8}) in Base.MPFR at mpfr.jl:401
+[251] +(x::BigFloat, c::Union{Float16, Float32, Float64}) in Base.MPFR at mpfr.jl:409
+[252] +(x::BigFloat, y::BigFloat) in Base.MPFR at mpfr.jl:386
+[253] +(x::BigFloat, c::BigInt) in Base.MPFR at mpfr.jl:417
+[254] +(a::BigFloat, b::BigFloat, c::BigFloat) in Base.MPFR at mpfr.jl:558
+[255] +(a::BigFloat, b::BigFloat, c::BigFloat, d::BigFloat) in Base.MPFR at mpfr.jl:564
+[256] +(a::BigFloat, b::BigFloat, c::BigFloat, d::BigFloat, e::BigFloat) in Base.MPFR at mpfr.jl:571
+[257] +(x::BigInt, c::Union{UInt16, UInt32, UInt64, UInt8}) in Base.GMP at gmp.jl:530
+[258] +(x::BigInt, c::Union{Int16, Int32, Int64, Int8}) in Base.GMP at gmp.jl:536
+[259] +(x::BigInt, y::BigInt) in Base.GMP at gmp.jl:482
+[260] +(a::BigInt, b::BigInt, c::BigInt) in Base.GMP at gmp.jl:522
+[261] +(a::BigInt, b::BigInt, c::BigInt, d::BigInt) in Base.GMP at gmp.jl:523
+[262] +(a::BigInt, b::BigInt, c::BigInt, d::BigInt, e::BigInt) in Base.GMP at gmp.jl:524
+[263] +(x::BigInt, y::BigInt, rest::BigInt...) in Base.GMP at gmp.jl:657
+[264] +(a::Integer, b::Integer) in Base at int.jl:987
+[265] +(c::BigInt, x::BigFloat) in Base.MPFR at mpfr.jl:422
+[266] +(x::Number) in Base at operators.jl:528
+[267] +(a::P, d::ChainRulesCore.Tangent{P}) where P in ChainRulesCore at /home/runner/.julia/packages/ChainRulesCore/ctmSK/src/tangent_arithmetic.jl:133
+[268] +(a, b::ChainRulesCore.AbstractThunk) in ChainRulesCore at /home/runner/.julia/packages/ChainRulesCore/ctmSK/src/tangent_arithmetic.jl:123
+[269] +(a, ::ChainRulesCore.ZeroTangent) in ChainRulesCore at /home/runner/.julia/packages/ChainRulesCore/ctmSK/src/tangent_arithmetic.jl:100
+[270] +(a, ::ChainRulesCore.NoTangent) in ChainRulesCore at /home/runner/.julia/packages/ChainRulesCore/ctmSK/src/tangent_arithmetic.jl:60
+[271] +(::Any, x::ChainRulesCore.NotImplemented) in ChainRulesCore at /home/runner/.julia/packages/ChainRulesCore/ctmSK/src/tangent_arithmetic.jl:25
+[272] +(x::T, y::T) where T&lt;:Number in Base at promotion.jl:463
+[273] +(x::Number, y::Number) in Base at promotion.jl:388
 [274] +(a, b, c, xs...) in Base at operators.jl:591</code></pre>
 <p>This shows us two things. First, we did not think anybody will print this workshop out or we would have gone for shorter outputs. Second, and more importantly, every time we call a function, Julia will look at the type of each argument and search for the function that fits best. As a result we can write optimized code for different types and in general this is one key stone in the excellent performance numbers of Julia. </p>
 <p>Before we continue to the other parallel computation concepts, we introduce an <a href="../pi/">example</a> that will help us along, same as the sum did for the beginning of this section. </p>

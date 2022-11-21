@@ -117,6 +117,9 @@
 <!-- Content appended here (in class franklin-content) -->
 <div class="franklin-content"><h1 id="preface"><a href="#preface" class="header-anchor">Preface</a></h1>
 <p>This workshop was originally designed for the <a href="https://www.uibk.ac.at/dk-cim/dokumente/folder_summerschool2022.pdf">DK CIM/DP DOCC Summer School 2022</a> as part of the <a href="https://www.uibk.ac.at/dk-cim/index.html.en">Doctoral College Computational Interdisciplinary Modelling &#40;DK CIM&#41;</a> and intended for roughly 12 hour workshop. </p>
+<h2 id="citation"><a href="#citation" class="header-anchor">Citation</a></h2>
+<p>In case you want to refer to this lecture material, use the following BibTex snippet:</p>
+<pre><code class="language-bibtex">@misc&#123;https://doi.org/10.48517/mt6n-pb56, doi &#61; &#123;10.48517/MT6N-PB56&#125;, url &#61; &#123;https://oer-repo.uibk.ac.at/edu-sharing/components/render/c5d1a11c-ba39-46bb-8547-dd1415509444?viewType&#61;1&#125;, author &#61; &#123;Ehrensperger, Gregor and Kandolf, Peter and Kusch, Jonas&#125;, keywords &#61; &#123;FOS: Mathematics&#125;, language &#61; &#123;en&#125;, title &#61; &#123;SS22 Scientific Programming with Julia&#125;, publisher &#61; &#123;Universität Innsbruck&#125;, year &#61; &#123;2022&#125;, copyright &#61; &#123;Creative Commons Attribution Share Alike 4.0 International&#125;&#125;</code></pre>
 <h1 id="getting_started_with_julia"><a href="#getting_started_with_julia" class="header-anchor">Getting started with Julia</a></h1>
 <p>Julia is a free and open source scientific programming language with a vast ecosystem of libraries that aim towards scientific computing. Visit <a href="https://julialang.org">julialang.org</a> for the download, documentation, learning materials and much more. Julia manages to allow the best of two worlds, high-level interpreter and low-level compiler language. It offers the high performance of compiled languages like C or Fortran by still bringing in the simplicity of dynamic languages like Python or R. Julia recently entered its teens and for this occasion a blog post was published with the title <a href="https://julialang.org/blog/2022/02/10years/">Why We Use Julia, 10 Years Later</a> as a follow up to the <a href="https://julialang.org/blog/2012/02/why-we-created-julia/">Why We Created Julia</a>. Both entries are a good read and give you an insight into the language and its creators.</p>
 <p>In this workshop we are going to take a look at Julia by starting with the basics and working our way up to advanced topics like data science and multi processor programming.</p>
@@ -149,13 +152,13 @@
 <p>Some distributions allow the installation via the package manager or the software center, note that this is often a very old version, so this method is not recommend for beginners. </p>
 <p>A convenient location for the Julia folder is <code>/opt/</code> and by creating a link to the binary in <code>/usr/local/bin/</code> we can make sure it is found in the path. </p>
 <p>In your terminal use <code>wget</code> to download the latest version</p>
-<pre><code class="bash hljs">wget https://julialang-s3.julialang.org/bin/linux/x64/1.7/julia-1.7.3-linux-x86_64.tar.gz</code></pre>
+<pre><code class="language-bash">wget https://julialang-s3.julialang.org/bin/linux/x64/1.7/julia-1.7.3-linux-x86_64.tar.gz</code></pre>
 <p>extract the tar ball with</p>
-<pre><code class="bash hljs">tar -xvzf julia-1.7.3-linux-x86_64.tar.gz</code></pre>
+<pre><code class="language-bash">tar -xvzf julia-1.7.3-linux-x86_64.tar.gz</code></pre>
 <p>copy the folder to <code>/opt/</code></p>
-<pre><code class="bash hljs">sudo <span class="hljs-built_in">cp</span> -r julia-1.7.3 /opt/</code></pre>
+<pre><code class="language-bash">sudo cp -r julia-1.7.3 /opt/</code></pre>
 <p>and link the binary</p>
-<pre><code class="bash hljs">sudo <span class="hljs-built_in">ln</span> -s /opt/julia-1.7.3/bin/julia /usr/local/bin/julia</code></pre>
+<pre><code class="language-bash">sudo ln -s /opt/julia-1.7.3/bin/julia /usr/local/bin/julia</code></pre>
 <h3 id="visual_studio_code"><a href="#visual_studio_code" class="header-anchor">Visual Studio Code</a></h3>
 <p>Follow the instructions on <a href="https://code.visualstudio.com/">https://code.visualstudio.com/</a> to install Visual Studio Code. </p>
 <p>Visual Studio Code or for short VSCode is a fully fledged Interactive Development Environment &#40;IDE&#41;, complete with code highlighting, auto complete, Debugger, git integration and so much more. In order to make VSCode fully compatible with Julia we need to install the Julia extension. </p>
@@ -187,8 +190,8 @@
     </div> <!-- end of class page-wrap-->
     
     
-      
-
+      <script src="/ss22_julia_workshop/libs/highlight/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();hljs.configure({tabReplace: '    '});</script>
 
       <script>
     (function(){
