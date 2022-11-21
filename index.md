@@ -5,6 +5,13 @@
 
 This workshop was originally designed for the [DK CIM/DP DOCC Summer School 2022](https://www.uibk.ac.at/dk-cim/dokumente/folder_summerschool2022.pdf) as part of the [Doctoral College Computational Interdisciplinary Modelling (DK CIM)](https://www.uibk.ac.at/dk-cim/index.html.en) and intended for roughly 12 hour workshop. 
 
+## Citation
+In case you want to refer to this lecture material, use the following BibTex snippet:
+```bibtex
+@misc{https://doi.org/10.48517/mt6n-pb56, doi = {10.48517/MT6N-PB56}, url = {https://oer-repo.uibk.ac.at/edu-sharing/components/render/c5d1a11c-ba39-46bb-8547-dd1415509444?viewType=1}, author = {Ehrensperger, Gregor and Kandolf, Peter and Kusch, Jonas}, keywords = {FOS: Mathematics}, language = {en}, title = {SS22 Scientific Programming with Julia}, publisher = {Universität Innsbruck}, year = {2022}, copyright = {Creative Commons Attribution Share Alike 4.0 International}}
+```
+
+
 # Getting started with Julia
 
 Julia is a free and open source scientific programming language with a vast ecosystem of libraries that aim towards scientific computing. Visit [julialang.org](https://julialang.org) for the download, documentation, learning materials and much more. Julia manages to allow the best of two worlds, high-level interpreter and low-level compiler language. It offers the high performance of compiled languages like C or Fortran by still bringing in the simplicity of dynamic languages like Python or R. Julia recently entered its teens and for this occasion a blog post was published with the title [Why We Use Julia, 10 Years Later](https://julialang.org/blog/2022/02/10years/) as a follow up to the [Why We Created Julia](https://julialang.org/blog/2012/02/why-we-created-julia/). Both entries are a good read and give you an insight into the language and its creators.
