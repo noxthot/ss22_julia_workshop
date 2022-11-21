@@ -8,7 +8,16 @@ This workshop was originally designed for the [DK CIM/DP DOCC Summer School 2022
 ## Citation
 In case you want to refer to this lecture material, use the following BibTex snippet:
 ```bibtex
-@misc{https://doi.org/10.48517/mt6n-pb56, doi = {10.48517/MT6N-PB56}, url = {https://oer-repo.uibk.ac.at/edu-sharing/components/render/c5d1a11c-ba39-46bb-8547-dd1415509444?viewType=1}, author = {Ehrensperger, Gregor and Kandolf, Peter and Kusch, Jonas}, keywords = {FOS: Mathematics}, language = {en}, title = {SS22 Scientific Programming with Julia}, publisher = {Universität Innsbruck}, year = {2022}, copyright = {Creative Commons Attribution Share Alike 4.0 International}}
+@misc{scijul2022, 
+    doi = {10.48517/MT6N-PB56},
+    url = {https://www.doi.org/10.48517/mt6n-pb56}, 
+    author = {Ehrensperger, Gregor and Kandolf, Peter and Kusch, Jonas},
+    keywords = {FOS: Mathematics},
+    language = {en},
+    title = {SS22 Scientific Programming with Julia}, 
+    publisher = {Universität Innsbruck},
+    year = {2022},
+    copyright = {Creative Commons Attribution Share Alike 4.0 International}}
 ```
 
 
