@@ -93,11 +93,11 @@ function in_unit_circle_task(N::Int64)
     len, rem = divrem(N, n)
     t = Vector{Task}(undef, n)
     
-    @sync for i in 1:N
+    @sync for i in 1:n
         t[i] = @async in_unit_circle(len)
     end
     
-    M = sum(map((x) -> fetch(t[x]), 1:4))
+    M = sum(map((x) -> fetch(t[x]), 1:n))
     
     return M
 end
