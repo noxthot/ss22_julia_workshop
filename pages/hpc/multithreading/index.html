@@ -254,8 +254,8 @@
 <pre><code class="julia hljs"><span class="hljs-keyword">using</span> Random
 
 <span class="hljs-keyword">const</span> ThreadRNG = <span class="hljs-built_in">Vector</span>{Random.MersenneTwister}(<span class="hljs-literal">undef</span>, nthreads())
-<span class="hljs-meta">@threads</span> :static <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-number">1</span>:nthreads()
-       ThreadRNG[threadid()] = Random.MersenneTwister(i)
+<span class="hljs-meta">@threads</span> <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-number">1</span>:nthreads()
+       ThreadRNG[i] = Random.MersenneTwister(i)
 <span class="hljs-keyword">end</span></code></pre>
 <p>What we do in the third line is define a <a href="https://docs.julialang.org/en/v1/base/base/#const"><code>const</code></a> variable. That is a global variable whose type will not change. In fact we define a Vector of size <code>nthreads&#40;&#41;</code> and fill it with distinct <a href="https://docs.julialang.org/en/v1/stdlib/Random/#Random.MersenneTwister"><code>Random.MersenneTwister</code></a>. This allows us to have a different random number generator for each thread by using</p>
 <pre><code class="julia hljs">rng = ThreadRNG[threadid()]
@@ -266,11 +266,11 @@ rand(rng)</code></pre>
 <pre><code class="julia hljs"><span class="hljs-keyword">using</span> Random
 
 <span class="hljs-keyword">const</span> ThreadRNG = <span class="hljs-built_in">Vector</span>{Random.MersenneTwister}(<span class="hljs-literal">undef</span>, nthreads())
-<span class="hljs-meta">@threads</span> :static <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-number">1</span>:nthreads()
+<span class="hljs-meta">@threads</span> <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-number">1</span>:nthreads()
        ThreadRNG[i] = Random.MersenneTwister(i)
 <span class="hljs-keyword">end</span>
 
-<span class="hljs-keyword">function</span> in_unit_circle_rng(N::<span class="hljs-built_in">Int64</span>, rng)
+<span class="hljs-keyword">function</span> in_unit_circle(N::<span class="hljs-built_in">Int64</span>, rng)
     M = zero(<span class="hljs-built_in">Int64</span>)
 
     <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-number">1</span>:N
@@ -287,7 +287,7 @@ rand(rng)</code></pre>
     len, rem = divrem(N, nthreads())
 
     <span class="hljs-meta">@threads</span> <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-number">1</span>:nthreads()
-      M[i] = in_unit_circle_rng(len, ThreadRNG[i])
+      M[i] = in_unit_circle(len, ThreadRNG[i])
     <span class="hljs-keyword">end</span>
 
     <span class="hljs-keyword">return</span> sum(M)
