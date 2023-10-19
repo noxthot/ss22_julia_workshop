@@ -34,7 +34,7 @@ We want to give a huge shout-out to [Stephan Antholzer](https://www.uibk.ac.at/m
 
 ## Some general words on the organization of this workshop
 
-For this workshop you do not need to be an Julia expert, not even a programming expert. We will introduce programming and Julia concepts along with examples. For this purpose you will find code blocks that you can copy if necessary (top right corner `copy`). Furthermore, if we think something is very important we will highlight it with a box:
+For this workshop you do not need to be a Julia expert, not even a programming expert. We will introduce programming and Julia concepts along with examples. For this purpose you will find code blocks that you can copy if necessary (top right corner `copy`). Furthermore, if we think something is very important we will highlight it with a box:
 
 @@important
 Pay extra attention to the content here.
