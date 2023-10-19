@@ -173,6 +173,7 @@
  4.0
  4.0</code></pre>
 <p></div>
+<div class="important">In Julia we have to be aware of the concept of <a href="https://docs.julialang.org/en/v1/manual/multi-threading/#man-task-migration">Task migration</a>. This means a task started with <code>@threads</code> might not always run on the <strong>same</strong> thread but can move threads if the the task yields. In particular this means we should no treat <code>threadid&#40;&#41;</code> as a constant and should not use it as an index in e.g. arrays. By using the <code>:static</code> schedule option we can freeze the <code>threadid&#40;&#41;</code>.</div>
 <p>Let us try to apply this concept to our <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>π</mi></mrow><annotation encoding="application/x-tex">\pi</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">π</span></span></span></span> example.</p>
 <h2 id="multithreaded_pi"><a href="#multithreaded_pi" class="header-anchor">Multithreaded <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>π</mi></mrow><annotation encoding="application/x-tex">\pi</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">π</span></span></span></span></a></h2>
 <p>The obvious first impulse is to just write a <code>@threads</code> in front of the loop in our <code>in_unit_circle</code> routine, well lets follow this impulse.</p>
@@ -230,7 +231,7 @@
 <pre><code class="julia hljs"><span class="hljs-keyword">function</span> in_unit_circle_threaded3(N::<span class="hljs-built_in">Int64</span>)
     M = zeros(<span class="hljs-built_in">Int64</span>, nthreads());
     
-    <span class="hljs-meta">@threads</span> <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-number">1</span>:N
+    <span class="hljs-meta">@threads</span> :static <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-number">1</span>:N
         <span class="hljs-keyword">if</span> (rand()^<span class="hljs-number">2</span> + rand()^<span class="hljs-number">2</span>) &lt; <span class="hljs-number">1</span>
             <span class="hljs-meta">@inbounds</span> M[threadid()] += <span class="hljs-number">1</span>
         <span class="hljs-keyword">end</span>
@@ -253,8 +254,8 @@
 <pre><code class="julia hljs"><span class="hljs-keyword">using</span> Random
 
 <span class="hljs-keyword">const</span> ThreadRNG = <span class="hljs-built_in">Vector</span>{Random.MersenneTwister}(<span class="hljs-literal">undef</span>, nthreads())
-<span class="hljs-meta">@threads</span> <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-number">1</span>:nthreads()
-       ThreadRNG[threadid()] = Random.MersenneTwister()
+<span class="hljs-meta">@threads</span> :static <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-number">1</span>:nthreads()
+       ThreadRNG[threadid()] = Random.MersenneTwister(i)
 <span class="hljs-keyword">end</span></code></pre>
 <p>What we do in the third line is define a <a href="https://docs.julialang.org/en/v1/base/base/#const"><code>const</code></a> variable. That is a global variable whose type will not change. In fact we define a Vector of size <code>nthreads&#40;&#41;</code> and fill it with distinct <a href="https://docs.julialang.org/en/v1/stdlib/Random/#Random.MersenneTwister"><code>Random.MersenneTwister</code></a>. This allows us to have a different random number generator for each thread by using</p>
 <pre><code class="julia hljs">rng = ThreadRNG[threadid()]
@@ -265,25 +266,28 @@ rand(rng)</code></pre>
 <pre><code class="julia hljs"><span class="hljs-keyword">using</span> Random
 
 <span class="hljs-keyword">const</span> ThreadRNG = <span class="hljs-built_in">Vector</span>{Random.MersenneTwister}(<span class="hljs-literal">undef</span>, nthreads())
-<span class="hljs-meta">@threads</span> <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-number">1</span>:nthreads()
-       ThreadRNG[threadid()] = Random.MersenneTwister()
+<span class="hljs-meta">@threads</span> :static <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-number">1</span>:nthreads()
+       ThreadRNG[i] = Random.MersenneTwister(i)
+<span class="hljs-keyword">end</span>
+
+<span class="hljs-keyword">function</span> in_unit_circle_rng(N::<span class="hljs-built_in">Int64</span>, rng)
+    M = zero(<span class="hljs-built_in">Int64</span>)
+
+    <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-number">1</span>:N
+        <span class="hljs-keyword">if</span> (rand(rng)^<span class="hljs-number">2</span> + rand(rng)^<span class="hljs-number">2</span>) &lt; <span class="hljs-number">1</span>
+            M += <span class="hljs-number">1</span>
+        <span class="hljs-keyword">end</span>
+    <span class="hljs-keyword">end</span>
+
+    <span class="hljs-keyword">return</span> M
 <span class="hljs-keyword">end</span>
 
 <span class="hljs-keyword">function</span> in_unit_circle_threaded4(N::<span class="hljs-built_in">Int64</span>)
     M = zeros(<span class="hljs-built_in">Int64</span>, nthreads())
     len, rem = divrem(N, nthreads())
-    
-    <span class="hljs-meta">@threads</span> <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-number">1</span>:nthreads()
-        rng = ThreadRNG[threadid()]
-        m = <span class="hljs-number">0</span>
 
-        <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-number">1</span>:len
-            <span class="hljs-keyword">if</span> (rand(rng)^<span class="hljs-number">2</span> + rand(rng)^<span class="hljs-number">2</span>) &lt; <span class="hljs-number">1</span>
-                m += <span class="hljs-number">1</span>
-            <span class="hljs-keyword">end</span>
-        <span class="hljs-keyword">end</span>
-        
-        M[threadid()] = m
+    <span class="hljs-meta">@threads</span> <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-number">1</span>:nthreads()
+      M[i] = in_unit_circle_rng(len, ThreadRNG[i])
     <span class="hljs-keyword">end</span>
 
     <span class="hljs-keyword">return</span> sum(M)
@@ -325,7 +329,7 @@ Performance:
 </li>
 </ul>
 <div class="page-foot">
-    <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> - <a href="https://ehrensperger.dev/">Gregor Ehrensperger</a>, <a href="https://lfuonline.uibk.ac.at/public/people.vcard?id=59131">Peter Kandolf</a>, <a href="https://lfuonline.uibk.ac.at/public/people.vcard?id=415344">Jonas Kusch</a>. Last modified: November 21, 2022.
+    <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> - <a href="https://ehrensperger.dev/">Gregor Ehrensperger</a>, <a href="https://lfuonline.uibk.ac.at/public/people.vcard?id=59131">Peter Kandolf</a>, <a href="https://lfuonline.uibk.ac.at/public/people.vcard?id=415344">Jonas Kusch</a>. Last modified: October 19, 2023.
     Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
 </div>
 </div><!-- CONTENT ENDS HERE -->

@@ -247,7 +247,7 @@ VPlus = Diagonal([zeros(midMinus); v[(midPlus + <span class="hljs-number">1</spa
 
 plot(x, Φ, labels=<span class="hljs-string">L&quot;\Phi&quot;</span>)
 xlabel!(<span class="hljs-string">&quot;x&quot;</span>)</code></pre>
-<p>The output that you should get is <img src="/ss22_julia_workshop/assets/pages/introduction/worksheet_1/code/output/worksheet_1.png" alt="radiation therapy"></p>
+<p>The output that you should get is <p><span style="color:red;">// Image matching '/assets/pages/introduction/worksheet_1/code/output/worksheet_1.png' not found. //</span></p></p>
 <p>What you see is the particle density <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Φ</mi></mrow><annotation encoding="application/x-tex">\Phi</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord">Φ</span></span></span></span> over the spatial domain. Congratulations, you have just computed your first radiation transport problem using Julia. If you look at your code, you will see that it looks quite messy. you can add a comment <em>test comment</em> with <code># test comment</code>. Use the comment command to explain what you did and double check if you understood everything. Also, commonly the <code>using</code> commands are executed in the first lines of the code, so move all these commands to the top.</p>
 <h2 id="element-wise_operations"><a href="#element-wise_operations" class="header-anchor">Element-wise operations</a></h2>
 <p>To better understand element-wise operations, see how we computed the scattering matrix <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold">G</mi></mrow><annotation encoding="application/x-tex">\mathbf{G}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6861em;"></span><span class="mord mathbf">G</span></span></span></span> and see if you can write this in terms of for-loops. You can use the <code>if</code> command.</p>
@@ -328,7 +328,7 @@ nT = <span class="hljs-number">40</span>
 plot(x, Φ, labels=<span class="hljs-string">L&quot;\Phi&quot;</span>)
 xlabel!(<span class="hljs-string">&quot;x&quot;</span>)</code></pre>
 <div class="page-foot">
-    <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> - <a href="https://ehrensperger.dev/">Gregor Ehrensperger</a>, <a href="https://lfuonline.uibk.ac.at/public/people.vcard?id=59131">Peter Kandolf</a>, <a href="https://lfuonline.uibk.ac.at/public/people.vcard?id=415344">Jonas Kusch</a>. Last modified: November 21, 2022.
+    <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> - <a href="https://ehrensperger.dev/">Gregor Ehrensperger</a>, <a href="https://lfuonline.uibk.ac.at/public/people.vcard?id=59131">Peter Kandolf</a>, <a href="https://lfuonline.uibk.ac.at/public/people.vcard?id=415344">Jonas Kusch</a>. Last modified: October 19, 2023.
     Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
 </div>
 </div><!-- CONTENT ENDS HERE -->
